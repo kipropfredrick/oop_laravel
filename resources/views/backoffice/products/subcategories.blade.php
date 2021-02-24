@@ -30,7 +30,7 @@
 
           <input type="hidden" name="category_id" value="{{$category->id}}">
 
-          <legend class="text-uppercase font-size-sm font-weight-bold">Add Subcategory</legend>
+          <h6 class="text-uppercase font-size-sm font-weight-bold">Add Subcategory</h6>
 
           <div class="form-group row">
             
@@ -66,7 +66,7 @@
 
         </form>
 
-        <legend class="text-uppercase font-size-sm font-weight-bold">Subcategories</legend>
+        <h6 class="text-uppercase font-size-sm font-weight-bold">Subcategories</h6>
 
         <table class="table datatable-basic  table-striped">
 						<thead>

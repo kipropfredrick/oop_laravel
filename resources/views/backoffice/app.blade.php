@@ -1,470 +1,484 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>LIPA MOS MOS</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LIPA MOSMOS | Dashboard</title>
 
-	<!-- Global stylesheets -->
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-	<link href="{{asset('global_backoffice/css/icons/icomoon/styles.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ asset('backoffice/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ asset('backoffice/css/bootstrap_limitless.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ asset('backoffice/css/layout.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ asset('backoffice/css/layout.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ asset('backoffice/css/components.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ asset('backoffice/css/colors.min.css')}}" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/af-2.3.4/b-1.6.1/b-flash-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sp-1.0.1/sl-1.3.1/datatables.min.css"/>
-	<!-- /global stylesheets -->
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/fontawesome-free/css/all.min.css')}}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css')}}">
+  <!-- Tempusdominus Bootstrap 4 -->
 
-	<style>
-            .dataTables_paginate .paginate_button.disabled, .dataTables_paginate .paginate_button.disabled:focus, .dataTables_paginate .paginate_button.disabled:hover {
-                cursor: default;
-                background-color: #FFF !important;
-                color: white !important;
-            }
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
 
-    </style>
-
-	<!-- Core JS files -->
-	<script src="{{ asset('global_backoffice/js/main/jquery.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/main/bootstrap.bundle.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/loaders/blockui.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/tables/datatables/datatables.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/demo_pages/datatables_basic.js')}}"></script>
-	<!-- /core JS files -->
-
-	<!-- Theme JS files -->
-	<script src="{{ asset('global_backoffice/js/plugins/visualization/d3/d3.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/visualization/d3/d3_tooltip.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/forms/styling/switchery.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/forms/selects/bootstrap_multiselect.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/ui/moment/moment.min.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/plugins/pickers/daterangepicker.js')}}"></script>
-
-	<script src="{{ asset('backoffice/js/app.js')}}"></script>
-	<script src="{{ asset('global_backoffice/js/demo_pages/backoffice.js')}}"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"></script>
-
-	<!-- /theme JS files -->
-
-	<style>
-        .services-icon {
-            min-height: 30px;
-            color: #00a651 !important;
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .tooltip .tooltiptext { 
-            visibility: hidden;
-            width: 120px;
-            background-color: black;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-
-            /* Position the tooltip */
-            position: absolute;
-            z-index: 1;
-            }
-
-            .tooltip:hover .tooltiptext {
-            visibility: visible;
-            }
-    </style>
-
-	@yield('extra-js')
-
-
-		<script>
-			$(document).ready(function(){
-			$('[data-toggle="tooltip"]').tooltip();   
-			});
-		</script>
-		
-
-
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/jqvmap/jqvmap.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{asset('backoffice/dist/css/adminlte.min.css')}}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/daterangepicker/daterangepicker.css')}}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/summernote/summernote-bs4.min.css')}}">
 </head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
 
-<body>
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
 
 
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+	  <div class="dropdown">
+		<a style="color:#000;margin-top:10px" class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			{{auth()->user()->name}}
+		</a>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		<a class="dropdown-item" href="{{ route('logout') }}"
+			onclick="event.preventDefault();
+							document.getElementById('logout-form').submit();"><i class="icon-switch2"></i>
+			{{ __('Logout') }}
+		</a>
 
-	<!-- Main navbar -->
-
-	<div class="navbar navbar-expand-md navbar-dark">
-		<div class="navbar-brand">
-			<a  href="" class="d-inline-block">
-				<h5 style="color:#FFF;font-weight:bold">
-				COMBINE 
-				@if(auth()->user()->role =='admin')
-				ADMIN
-				@elseif(auth()->user()->role =='vendor')
-				VENDOR
-				(VD{{auth()->user()->id}})
-				@endif
-				</h5>
-			</a>
+		<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+			@csrf
+		</form>
 		</div>
-
-		<div class="d-md-none">
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
-				<i class="icon-tree5"></i>
-			</button>
-			<button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
-				<i class="icon-paragraph-justify3"></i>
-			</button>
 		</div>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
 
-		<div class="collapse navbar-collapse" id="navbar-mobile">
-			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
-						<i class="icon-paragraph-justify3"></i>
-					</a>
-				</li>
-			</ul>
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+      <!-- <img src="{{asset('backoffice/dist/img/AdminLTELogo.png')}}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+      <span class="brand-text font-weight-light">LIPA MOS MOS</span>
+    </a>
 
-			<span class="ml-md-3 mr-md-auto"></span>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <i style="color:#FFF" class="fa fa-user-circle fa-2x"></i>
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">{{auth()->user()->name}}</a>
+        </div>
+      </div>
 
-			<ul class="navbar-nav">
+      <!-- SidebarSearch Form -->
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
 
-				<li class="nav-item dropdown">
-				</li>
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="/dashboard/home" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+              </p>
+            </a>
+          </li>
 
-				<li class="nav-item dropdown dropdown-user">
-					
-						<a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
-							<i style="color:#FFF;margin-right:10px" class="fa fa-user-circle fa-2x"></i>
-							{{auth()->user()->name}}
-						</a>
-						
-					<div class="dropdown-menu dropdown-menu-right">
-						@if(auth()->user()->role == "admin")
-							<a href="{{ route('admin.profile') }}" class="dropdown-item"><i class="icon-user-plus"></i>Profile</a>
-						@elseif(auth()->user()->role == "vendor")
-							<a href="/vendor/profile" class="dropdown-item"><i class="icon-user-plus"></i>Profile</a>
-						@endif
-						<a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i class="icon-switch2"></i>
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div>
-
-	<!-- /main navbar -->
-
-
-	<!-- Page content -->
-	<div class="page-content">
-
-		<!-- Main sidebar -->
-		<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
-
-			<!-- Sidebar mobile toggler -->
-			<div class="sidebar-mobile-toggler text-center">
-				<a href="#" class="sidebar-mobile-main-toggle">
-					<i class="icon-arrow-left8"></i>
-				</a>
-				Navigation
-				<a href="#" class="sidebar-mobile-expand">
-					<i class="icon-screen-full"></i>
-					<i class="icon-screen-normal"></i>
-				</a>
-			</div>
-			<!-- /sidebar mobile toggler -->
-
-
-			<!-- Sidebar content -->
-<div class="sidebar-content">
-
-<!-- User menu -->
-<div class="sidebar-user">
-	<div class="card-body">
-		<div class="media">
-		</div>
-	</div>
-</div>
-<!-- /user menu -->
+		  @if(auth()->user()->role =='admin')
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-shopping-basket"></i>
+              <p>
+                Products
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('admin.products')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Product List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/add-product" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Product</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/product-categories" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Categories</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
 
 
-<!-- Main navigation -->
-<div class="card card-sidebar-mobile">
-	<ul class="nav nav-sidebar" data-nav-type="accordion">
+		  <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th-large"></i>
+              <p>
+                Counties
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/counties/view-all" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View All</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/counties/locations/all" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pickup Locations</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
 
-		<!-- Main -->
-		<!-- <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i></li> -->
-		@if(auth()->user()->role =='admin')
+		  <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Nairobi Zones
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/zones/view-all" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View All</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/zones/dropoffs/all" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dropoff Locations</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
 
-		<li  class="nav-item">
-			<a href="/admin/dashboard" class="nav-link {{ (request()->is('admin/dashboard')) ? 'active' : '' }}">
-				<i class="icon-home4"></i>
-				<span>
-					Dashboard
-				</span>
-			</a>
+		  <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>
+              Vendor Products
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/vendor/approved-products" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Approved Products</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/vendor/pending-products" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pending Products</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/vendor/rejected-products" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Rejected Products</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
+
+
+		  <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-bookmark"></i>
+              <p>
+                Bookings
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/active_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Active Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/complete_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Complete Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/overdue_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Overdue Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/revoked_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Revoked Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/delivered_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Delivered Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/confirmed_deliveries" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Confirmed Deliveries</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/unserviced_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Unserviced Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/pending_bookings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pending Bookings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/transfer-order" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Transfer Order</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
+
+		  <li class="nav-item">
+			<a href="/admin/payments" class="nav-link {{ (request()->is('admin/payments')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <p>&nbsp;Payments</p></a>
 		</li>
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-shopping-basket"></i> <span>Products</span></a>
 
-			<ul class="nav nav-group-sub" data-submenu-title="Products">
-				<li class="nav-item {{ (request()->is('admin/products')) ? 'active' : '' }}"><a href="{{route('admin.products')}}" class="nav-link active"><span>Product List</span></a></li>
-				<li class="nav-item {{ (request()->is('admin/add-product')) ? 'active' : '' }}"><a href="/admin/add-product" class="nav-link"><span>Add Product</span></a></li>
-				<li class="nav-item"><a href="/admin/product-categories" class="nav-link"><span>Categories</span></a></li>
-			</ul>
-		</li>
-
-
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-list"></i> <span>Counties</span></a>
-
-			<ul class="nav nav-group-sub" data-submenu-title="Productss">
-				<li class="nav-item"><a href="/admin/counties/view-all" class="nav-link active"><span>View All</span></a></li>
-				<li class="nav-item"><a href="/admin/counties/locations/all" class="nav-link active"><span>Pickup Locations</span></a></li>
-			</ul>
-		</li>
-
-
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-list"></i> <span>Nairobi Zones</span></a>
-
-			<ul class="nav nav-group-sub" data-submenu-title="Productss">
-				<li class="nav-item"><a href="/admin/zones/view-all" class="nav-link active"><span>View All</span></a></li>
-				<li class="nav-item"><a href="/admin/zones/dropoffs/all" class="nav-link active"><span>Dropoff Locations</span></a></li>
-			</ul>
-		</li>
-
-
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-shopping-basket"></i> <span>Vendor Products</span></a>
-
-			<ul class="nav nav-group-sub" data-submenu-title="Productss">
-				<li class="nav-item"><a href="/admin/vendor/approved-products" class="nav-link active"><span>Approved Products</span></a></li>
-				<li class="nav-item"><a href="/admin/vendor/pending-products" class="nav-link active"><span>Pending Products</span></a></li>
-				<li class="nav-item"><a href="/admin/vendor/rejected-products" class="nav-link active"><span>Rejected Products</span></a></li>
-			</ul>
-		</li>
-
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>Bookings</span></a>
-
-			<ul class="nav nav-group-sub" data-submenu-title="Bookings">
-				<li class="nav-item"><a href="/admin/active_bookings" class="nav-link active"><span>Active Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/complete_bookings" class="nav-link"><span>Complete Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/overdue_bookings" class="nav-link"><span>Overdue Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/revoked_bookings" class="nav-link"><span>Revoked Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/delivered_bookings" class="nav-link"><span>Delivered Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/confirmed_deliveries" class="nav-link"><span>Confirmed Deliveries</span></a></li>
-				<li class="nav-item"><a href="/admin/unserviced_bookings" class="nav-link"><span>Unserviced Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/pending_bookings" class="nav-link"><span>Pending Bookings</span></a></li>
-				<li class="nav-item"><a href="/admin/transfer-order" class="nav-link"><span>Transfer Order</span></a></li>
-			</ul>
-		</li>
 
 		<li class="nav-item">
-			<a href="/admin/payments" class="nav-link {{ (request()->is('admin/payments')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <span>Payments</span></a>
-		</li>
-
-
-		<li class="nav-item">
-			<a href="/admin/payment-callbacks" class="nav-link {{ (request()->is('admin/payments-callbacks')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <span>Full Payment Info</span></a>
+			<a href="/admin/payment-callbacks" class="nav-link {{ (request()->is('admin/payments-callbacks')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <p>&nbsp;Full Payment Info</p></a>
 		</li>
 
 		
 		<li class="nav-item">
-			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <span>Commissions</span></a>
+			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
 		</li>
 
 		<li class="nav-item">
-			<a href="/admin/customers" class="nav-link {{ (request()->is('admin/customers')) ? 'active' : '' }}"><i class="fa fa-users"></i> <span>Customers</span></a>
+			<a href="/admin/customers" class="nav-link {{ (request()->is('admin/customers')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Customers</p></a>
 		</li>
 
 		<li class="nav-item">
-			<a href="/admin/vendors" class="nav-link {{ (request()->is('admin/vendors')) ? 'active' : '' }}"><i class="fa fa-users"></i> <span>Vendors</span></a>
+			<a href="/admin/vendors" class="nav-link {{ (request()->is('admin/vendors')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Vendors</p></a>
 		</li>
 
 		<li class="nav-item">
-			<a href="/admin/cities" class="nav-link {{ (request()->is('admin/cities')) ? 'active' : '' }}"><i class="fa fa-building"></i> <span>Cities</span></a>
+			<a href="/admin/cities" class="nav-link {{ (request()->is('admin/cities')) ? 'active' : '' }}"><i class="fa fa-building"></i> <p>&nbsp;Cities</p></a>
 		</li>
-
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-image"></i> <span>Banners</span></a>
-
-			<ul class="nav nav-group-sub" data-submenu-title="">
-				<li class="nav-item"><a href="/admin/banners" class="nav-link active"><span>Banners List</span></a></li>
-				<li class="nav-item"><a href="/admin/add_banner" class="nav-link"><span>Add Banner</span></a></li>
-			</ul>
-		</li>
-		
-		@elseif(auth()->user()->role =='vendor')
-
-		<li class="nav-item nav-item-submenu">
+		  
+		<li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-bookmark"></i>
+              <p>
+                Banners
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/banners" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Banners List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/add_banner" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Banner</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
+         @elseif(auth()->user()->role =='vendor')
+		 <li class="nav-item">
 			<a href="#" class="nav-link"><i class="fa fa-shopping-basket"></i> <span>Products</span></a>
 
-			<ul class="nav nav-group-sub" data-submenu-title="Products">
-                <li class="nav-item"><a href="/vendor/approved-products" class="nav-link active"><span>Approved Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/pending-products" class="nav-link active"><span>Pending Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link active"><span>Rejected Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/add-product" class="nav-link active"><span>Add Product</span></a></li>
+			<ul class="nav nav-treeview" data-submenu-title="Products">
+                <li class="nav-item"><a href="/vendor/approved-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Approved Products</span></a></li>
+				<li class="nav-item"><a href="/vendor/pending-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Products</span></a></li>
+				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Rejected Products</span></a></li>
+				<li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Add Product</span></a></li>
 			</ul>
 		</li>
-		<li class="nav-item nav-item-submenu">
+		<li class="nav-item">
 			<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>Bookings</span></a>
 
-			<ul class="nav nav-group-sub" data-submenu-title="Bookings">
-				<li class="nav-item"><a href="/vendor/active-bookings" class="nav-link active"><span>Active Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/complete-bookings" class="nav-link"><span>Complete Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/overdue-bookings" class="nav-link"><span>Overdue Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/revoked-bookings" class="nav-link"><span>Revoked Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><span>Delivered Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/pending-bookings" class="nav-link"><span>Pending Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><span>Transfer Order</span></a></li>
+			<ul class="nav nav-treeview" data-submenu-title="Bookings">
+				<li class="nav-item"><a href="/vendor/active-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Active Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Complete Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/overdue-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Overdue Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Revoked Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Delivered Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/pending-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
 				<!-- <li class="nav-item"><a href="/vendor/confirmed-deliveries" class="nav-link"><span>Confirmed Deliveries</span></a></li> -->
-				<li class="nav-item"><a href="/vendor/unserviced-bookings" class="nav-link"><span>Unserviced Bookings</span></a></li>
+				<li class="nav-item"><a href="/vendor/unserviced-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Unserviced Bookings</span></a></li>
 			</ul>
 		</li>
-
 		@elseif(auth()->user()->role =='user')
+			<li class="nav-item nav-item-submenu">
+				<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>My Bookings</span></a>
 
-		<li class="nav-item nav-item-submenu">
-			<a href="#" class="nav-link"><i class="fa fa-list-ol"></i> <span>My Bookings</span></a>
+				<ul class="nav nav-treeview" data-submenu-title="">
+					<li class="nav-item"><a href="/customer/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Complete Bookings</span></a></li>
+					<li class="nav-item"><a href="/customer/active-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Active Bookings</span></a></li>
+					<li class="nav-item"><a href="/customer/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Revoked Bookings</span></a></li>
+				</ul>
+			</li>
+		 @endif
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
 
-			<ul class="nav nav-group-sub" data-submenu-title="">
-				<li class="nav-item"><a href="/customer/complete-bookings" class="nav-link active"><span>Complete Bookings</span></a></li>
-				<li class="nav-item"><a href="/customer/active-bookings" class="nav-link"><span>Active Bookings</span></a></li>
-				<li class="nav-item"><a href="/customer/revoked-bookings" class="nav-link"><span>Revoked Bookings</span></a></li>
-			</ul>
-		</li>
+  <!-- Content Wrapper. Contains page content -->
+  <div  class="content-wrapper">
+    <!-- Main content -->
+    <section style="margin-top:20px" class="content">
+      <div   class="container-fluid">
+      
+	  @yield('content')
+	  
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <strong>Copyright &copy;Lipa Mos Mos</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 3.1.0-rc
+    </div>
+  </footer>
 
-
-		@endif
-
-	</ul>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
 </div>
-<!-- /main navigation -->
+<!-- ./wrapper -->
 
-</div>
-<!-- /sidebar content -->
-			
-		</div>
-		<!-- /main sidebar -->
+<!-- jQuery -->
+<script src="{{asset('backoffice/plugins/jquery/jquery.min.js')}}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{asset('backoffice/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{{asset('backoffice/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- ChartJS -->
+<script src="{{asset('backoffice/plugins/chart.js/Chart.min.js')}}"></script>
+<!-- Sparkline -->
+<script src="{{asset('backoffice/plugins/sparklines/sparkline.js')}}"></script>
+<!-- JQVMap -->
+<script src="{{asset('backoffice/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
+<!-- jQuery Knob Chart -->
+<script src="{{asset('backoffice/plugins/jquery-knob/jquery.knob.min.js')}}"></script>
+<!-- daterangepicker -->
+<script src="{{asset('backoffice/plugins/moment/moment.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/daterangepicker/daterangepicker.js')}}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{asset('backoffice/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+<!-- Summernote -->
+<script src="{{asset('backoffice/plugins/summernote/summernote-bs4.min.js')}}"></script>
+<!-- overlayScrollbars -->
+<script src="{{asset('backoffice/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{asset('backoffice/dist/js/adminlte.js')}}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{asset('backoffice/dist/js/demo.js')}}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{asset('backoffice/dist/js/pages/dashboard.js')}}"></script>
 
+<!-- DataTables  & Plugins -->
+<script src="{{asset('backoffice/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/pdfmake/vfs_fonts.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 
-		<!-- Main content -->
-		<div class="content-wrapper">
-
-			<!-- Page header -->
-			<div class="page-header page-header-light">
-				<div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
-					<div class="d-flex">
-						<div class="breadcrumb">
-							<a href="" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-							<span class="breadcrumb-item active">Dashboard</span>
-						</div>
-
-						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
-					</div>
-
-					<div class="header-elements d-none">
-					</div>
-				</div>
-			</div>
-			<!-- /page header -->
-
-
-			<!-- Content area -->
-			<div class="content">
-				
-				@yield('content')
-
-			</div>
-			<!-- /content area -->
-
-
-			<!-- Footer -->
-			<div class="navbar navbar-expand-lg navbar-light">
-				<div class="text-center d-lg-none w-100">
-					<button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-footer">
-						<i class="icon-unfold mr-2"></i>
-						Footer
-					</button>
-				</div>
-
-				<div class="navbar-collapse collapse" id="navbar-footer">
-					<span class="navbar-text">
-						&copy; {{ now()->year }}. Combine. All Rights Reserved.
-					</span>
-				</div>
-			</div>
-			<!-- /footer -->
-
-		</div>
-		<!-- /main content -->
-
-	</div>
-	<!-- /page content -->
-	<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/af-2.3.4/b-1.6.1/b-flash-1.6.1/cr-1.5.2/fc-3.3.0/fh-3.1.6/kt-2.5.1/r-2.2.3/rg-1.1.1/rr-1.2.6/sc-2.0.1/sp-1.0.1/sl-1.3.1/datatables.min.js"></script>
-
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-	
-
-	<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
-        <script>
-                CKEDITOR.replace( 'highlights' );
-				CKEDITOR.replace( 'description' );
-        </script>
-	
-	<script>
-		$(document).ready(function() {
-			$('#myTable').DataTable();
-			$('#myTable2').DataTable();
-			$('#myTable3').DataTable();
-		});
-
-
-		$(document).ready(function() {
-    $('#example').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'print',
-                text: 'Print all',
-                exportOptions: {
-                    modifier: {
-                        selected: null
-                    }
-                }
-            },
-            {
-                extend: 'print',
-                text: 'Print selected'
-            }
-        ],
-        select: true
-    } );
-} );
-
-   </script>
-
-	
+<script>
+	$(document).ready(function() {
+	$('#myTable').DataTable();
+	$('#myTable2').DataTable();
+	$('#myTable3').DataTable();
+});
+</script>
 
 </body>
 </html>

@@ -28,7 +28,7 @@
         <form action="/admin/update-category/{{$category->id}}" method="post">
           @csrf
 
-          <legend class="text-uppercase font-size-sm font-weight-bold">Update Category</legend>
+          <h6 class="text-uppercase font-size-sm font-weight-bold">Update Category</legend>
 
           <div class="form-group row">
             <label class="col-form-label col-lg-2">Name</label>

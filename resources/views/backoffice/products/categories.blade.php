@@ -6,6 +6,7 @@
 <div class="card">
 <div class="table-responsive">
         <div class="card-header header-elements-inline">
+            <br>
             <h6 style="color: #005b77;" class="card-title"><strong>Categories</strong></h6>
         </div>
 
@@ -25,11 +26,11 @@
 
         @endif
         
-        <form action="/admin/save-category" method="post">
+        <form action="/admin/save-category" enctype="multipart/form-data" method="post">
           @csrf
-
-          <legend class="text-uppercase font-size-sm font-weight-bold">Add Category</legend>
-
+          <br>
+          <h6 class="text-uppercase font-size-sm font-weight-bold">Add Category</h6>
+        <hr>
           <div class="form-group row">
             <label class="col-form-label col-lg-2">Name</label>
             <div class="col-lg-10">
@@ -44,16 +45,31 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <label class="col-form-label col-lg-2">Icon</label>
+            <div class="col-lg-10">
+            <input tclass="form-control" name="category_icon"  type="file" class="form-control @if($errors->has('category_icon')) invalid_field @endif" required>
+               
+                @error('category_name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                 @enderror
+
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary">Add</button>
 
         </form>
 
-        <legend class="text-uppercase font-size-sm font-weight-bold">Categories</legend>
+        <h6 class="text-uppercase font-size-sm font-weight-bold">Categories</h6>
 
-        <table class="table datatable-basic  table-striped">
+                <table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>
+                                <th>Image</th>
 								<th class="thead">Category Name</th>
                                 <th class="thead">Actions</th>
 							</tr>
@@ -63,6 +79,7 @@
                             @foreach($categories as $category)
 							<tr>
                                 <td>{{$index=$index+1}}.</td>
+                                <td><img src="/storage/images/{{$category->category_icon}}" style="height:30px;width:30px;object-fit:contain" alt="Product Name"></td>
 								<td>{{$category->category_name}}</td>
                                 <td>
                                  <div class="row">
@@ -74,8 +91,7 @@
                             @endforeach
 						</tbody>
 					</table>
-
-
+                    
         </div>
      </div>
     </div>
