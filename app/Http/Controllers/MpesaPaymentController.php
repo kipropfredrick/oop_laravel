@@ -706,6 +706,8 @@ class MpesaPaymentController extends Controller
 
         $access_token = $result->access_token;
 
+        \Log::info('Access token response =>'.json_encode($result));
+
         curl_close($curl);
 
         $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
@@ -721,6 +723,8 @@ class MpesaPaymentController extends Controller
             'ConfirmationURL' => 'https://mosmos.co.ke/c2b/confirm-7CavgY5gFFwzktQH6XjcS2',
             'ValidationURL' => 'https://mosmos.co.ke/c2b/validate-UjQerTLb4EM78rHBSmYgCG'
         );
+
+        \Log::info('Post data =>'.json_encode($curl_post_data));
         
         $data_string = json_encode($curl_post_data);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
