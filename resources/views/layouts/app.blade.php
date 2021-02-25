@@ -116,7 +116,6 @@
                 <div class="container">
                     <ul class="navbar-nav">
                         @foreach($lcategories as $category)
-                        @if(isset($category))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{$category->category_name}}
@@ -130,7 +129,6 @@
                                 @endforelse
                             </div>
                         </li>
-                        @endif
                         @endforeach
                     </ul>
                 </div>
@@ -175,25 +173,21 @@
 
                 <!-- handheld categories -->
                 <ul class="navbar-nav mr-auto">
+                    @foreach($lcategories as $category)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Mobile
+                        {{$category->category_name}}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Smartphones</a>
-                            <a class="dropdown-item" href="#">Feature Phones</a>
-                            <a class="dropdown-item" href="#">Tablets</a>
-                            <a class="dropdown-item" href="#">Wearables</a>
+                                <?php $subcategories = $category->subcategories; ?>
+                                @forelse($subcategories as $subcategory)
+                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->id}}">{{$subcategory->subcategory_name}}</a>
+                                @empty
+                                No Subcategories
+                                @endforelse
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="category" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Gadgets
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Computers</a>
-                        </div>
-                    </li>
+                   @endforeach
                 </ul>
 
             </div>
