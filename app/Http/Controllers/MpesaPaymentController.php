@@ -15,8 +15,8 @@ class MpesaPaymentController extends Controller
 {
     public function generate_access_token(){;
 
-        $consumer_key = 'jm2Grv0ww5WnP72EgVxaSAmXu9yHeOWd';
-        $consume_secret = 'T3AbvwSCjky7IFx8';
+        $consumer_key = env('CONSUMER_KEY');
+        $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
@@ -165,8 +165,8 @@ class MpesaPaymentController extends Controller
             // return response()->json($message);
 
 
-            $username   = "Combinesms";
-            $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
+            $username   = "Mosmossms";
+            $apiKey     = env('AT_API_KEY');
 
             // Initialize the SDK
             $AT  = new AfricasTalking($username, $apiKey);
@@ -185,7 +185,7 @@ class MpesaPaymentController extends Controller
             $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
 
             // Set your shortCode or senderId
-            $from       = "COMBINE";
+            $from       = "Mosmos";
 
             try {
                 // Thats it, hit send and we'll take care of the rest
@@ -640,8 +640,8 @@ class MpesaPaymentController extends Controller
             // return response()->json($message);
 
 
-            $username   = "Combinesms";
-            $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
+            $username   = "Mosmossms";
+            $apiKey     = env('AT_API_KEY');
 
             // Initialize the SDK
             $AT  = new AfricasTalking($username, $apiKey);
@@ -660,7 +660,7 @@ class MpesaPaymentController extends Controller
             $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
 
             // Set your shortCode or senderId
-            $from       = "COMBINE";
+            $from       = "Mosmos";
 
             try {
                 // Thats it, hit send and we'll take care of the rest
@@ -688,8 +688,8 @@ class MpesaPaymentController extends Controller
 
     public function register_url(){
 
-        $consumer_key = 'jm2Grv0ww5WnP72EgVxaSAmXu9yHeOWd';
-        $consume_secret = 'T3AbvwSCjky7IFx8';
+        $consumer_key = env('CONSUMER_KEY');
+        $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
@@ -716,10 +716,10 @@ class MpesaPaymentController extends Controller
         
         $curl_post_data = array(
             //Fill in the request parameters with valid values
-            'ShortCode' => '4029165',
+            'ShortCode' => env('MPESA_SHORT_CODE'),
             'ResponseType' => 'Completed',
-            'ConfirmationURL' => 'https://combine.co.ke/confirmation-url-Q7NMii654AqcdCNmVgE',
-            'ValidationURL' => 'https://combine.co.ke/validation-url-Q7N976AqYVcdCNmVgE'
+            'ConfirmationURL' => 'https://mosmos.co.ke/c2b/confirm-7CavgY5gFFwzktQH6XjcS2',
+            'ValidationURL' => 'https://mosmos.co.ke/c2b/validate-UjQerTLb4EM78rHBSmYgCG'
         );
         
         $data_string = json_encode($curl_post_data);
@@ -733,8 +733,8 @@ class MpesaPaymentController extends Controller
 
     public function simulate_payment(Request $request){
 
-        $consumer_key = 'jm2Grv0ww5WnP72EgVxaSAmXu9yHeOWd';
-        $consume_secret = 'T3AbvwSCjky7IFx8';
+        $consumer_key = env('CONSUMER_KEY');
+        $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
@@ -760,7 +760,7 @@ class MpesaPaymentController extends Controller
     
         $curl_post_data = array(
                 //Fill in the request parameters with valid values
-            'ShortCode' => '4029165',
+            'ShortCode' => env('MPESA_SHORT_CODE'),
             'CommandID' => 'CustomerPayBillOnline',
             'Amount' => $request->amount,
             'Msisdn' => $request->msisdn,
@@ -785,8 +785,8 @@ class MpesaPaymentController extends Controller
         public function lipaNaMpesaPassword($lipa_time)
         {
            
-            $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
-            $BusinessShortCode = '4029165';
+            $passkey = env('STK_PASSKEY');
+            $BusinessShortCode = env('MPESA_SHORT_CODE');
             $timestamp =$lipa_time;
             $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
             return $lipa_na_mpesa_password;
@@ -801,8 +801,8 @@ class MpesaPaymentController extends Controller
         $msisdn = $request->msisdn;
         $booking_ref = $request->booking_ref;
  
-        $consumer_key = 'jm2Grv0ww5WnP72EgVxaSAmXu9yHeOWd';
-        $consume_secret = 'T3AbvwSCjky7IFx8';
+        $consumer_key = env('CONSUMER_KEY');
+        $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
@@ -823,9 +823,9 @@ class MpesaPaymentController extends Controller
 
         $timestamp = date("YmdHis");
 
-        $BusinessShortCode = '4029165';
+        $BusinessShortCode = env('MPESA_SHORT_CODE');
 
-        $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
+        $passkey = env('STK_PASSKEY');
 
         // $apiPassword = $BusinessShortCode.$passkey.$timestamp;
         $lipa_time = Carbon::rawParse('now')->format('YmdHms');
@@ -842,17 +842,17 @@ class MpesaPaymentController extends Controller
 
         $curl_post_data = array(
 
-            'BusinessShortCode' => '4029165',
+            'BusinessShortCode' => env('MPESA_SHORT_CODE'),
             'Password'          => $apiPassword,
             'Timestamp'         => $lipa_time,
             'TransactionType'   => 'CustomerPayBillOnline',
             'Amount'            => $amount,
             'PartyA'            => $msisdn,
-            'PartyB'            =>'4029165',
+            'PartyB'            =>env('MPESA_SHORT_CODE'),
             'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://combine.co.ke/confirmation-url',
+            'CallBackURL'       => 'https://mosmos.co.ke/confirmation-url',
             'AccountReference'  => $booking_ref,
-            'TransactionDesc'   => 'Combine Product Payment'
+            'TransactionDesc'   => 'Mosmos Product Payment'
         );
 
         $data_string = json_encode($curl_post_data);
@@ -892,8 +892,8 @@ class MpesaPaymentController extends Controller
 
     public function sendMessage($recipients,$message){
 
-            $username   = "Combinesms";
-            $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
+            $username   = "Mosmossms";
+            $apiKey     = env('AT_API_KEY');
 
             // Initialize the SDK
             $AT  = new AfricasTalking($username, $apiKey);
@@ -901,7 +901,7 @@ class MpesaPaymentController extends Controller
             // Get the SMS service
             $sms        = $AT->sms();
        
-           $from       = "COMBINE";
+           $from       = "Mosmos";
 
             try {
                 // Thats it, hit send and we'll take care of the rest

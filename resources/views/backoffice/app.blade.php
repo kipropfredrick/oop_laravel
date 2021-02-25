@@ -471,12 +471,56 @@
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
-
+<!-- Summernote -->
+<script src="{{asset('backoffice/summernote/summernote-bs4.min.js')}}"></script>
+@yield('extra-js')
 <script>
 	$(document).ready(function() {
 	$('#myTable').DataTable();
 	$('#myTable2').DataTable();
 	$('#myTable3').DataTable();
+
+	$('#highlights').summernote()
+	$('#description').summernote()
+
+	function filter(){
+
+	var x = document.getElementById("categories");
+	var val = x.value;
+
+	console.log(x.value);
+
+	var subs = document.getElementsByClassName('subcategories');
+	var subsNames = document.getElementsByClassName('subcategoriesnames');
+	var subsIds = document.getElementsByClassName('subcategoriesid');
+	var _arrayId = [];
+	var _arrayName = [];
+	var _arraySubsId = [];
+
+	for(i =  0; i < subs.length; i++){
+		if(subs[i].innerHTML == x.value){
+			_arrayId.push(subs[i].innerHTML);
+			_arrayName.push(subsNames[i].innerHTML);
+			_arraySubsId.push(subsIds[i].innerHTML);
+		}
+		
+	}
+
+	var y = document.getElementById("subs");
+	y.innerHTML = "";
+	for(i = 0; i < _arrayId.length; i++){
+		var node = document.createElement("option");
+		// node.innerHTML = _array[i];
+		node.setAttribute('value', _arraySubsId[i]);
+		node.innerHTML = _arrayName[i];
+		y.appendChild(node);  
+	}
+
+	console.log(_arrayId);
+
+
+	}
+
 });
 </script>
 

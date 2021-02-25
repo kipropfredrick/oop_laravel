@@ -20,6 +20,8 @@ class FrontPageController extends Controller
     public function index()
     {
        $categories = \App\Categories::with('subcategories')->get();
+       $lcategories = \App\Categories::with('subcategories')->take(10)->get();
+       
        $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                     ->where(function($q){    
                         $q->where('vendor_id' , '!=', null)
@@ -58,7 +60,7 @@ class FrontPageController extends Controller
 
        }
 
-       return view('welcome',compact('products','categories','trendingProducts','bestSellers'));
+       return view('welcome',compact('products','categories','lcategories','trendingProducts','bestSellers'));
     }
 
     public function terms(){
@@ -149,7 +151,17 @@ class FrontPageController extends Controller
                                     })
                                     ->where('quantity','>',0)->where('status','=','approved')->orderBy('id','DESC')->inRandomOrder()->paginate(8);
 
-        return view('front.show_category',compact('products','categories','category'));
+        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                    ->where(function($q){    
+                                        $q->where('vendor_id' , '!=', null)
+                                        ->orWhere('agent_id' , '!=', null);
+                                        })
+                                    ->where('quantity','>',0)
+                                    ->orderBy('clicks','DESC')
+                                    ->where('category_id',$category->id)
+                                    ->inRandomOrder()->take(10)->get();
+
+        return view('front.show_category',compact('products','categories','category','trendingProducts'));
 
     }
 
@@ -177,8 +189,6 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::all();
 
-       
-
         $subcategory = \App\SubCategories::where('id','=',$id)->first();
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
@@ -189,9 +199,17 @@ class FrontPageController extends Controller
                             ->orWhere('agent_id' , '!=', null)
                             ->orWhere('influencer_id' , '!=', null);
                         })
-                        ->where('quantity','>',0)->where('status','=','approved')->orderBy('id','DESC')->paginate(4);
+                        ->where('quantity','>',0)->where('status','=','approved')->orderBy('id','DESC')->paginate(10);
 
-        return view('front.show_category',compact('products','categories','category','subcategory'));
+        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
+                        ->where(function($q){    
+                            $q->where('vendor_id' , '!=', null)
+                            ->orWhere('agent_id' , '!=', null);
+                            })
+                        ->where('subcategory_id',$subcategory->id)
+                        ->where('quantity','>',0)->orderBy('clicks','DESC')->inRandomOrder()->take(10)->get();
+
+        return view('front.show_subcategory',compact('products','trendingProducts','categories','category','subcategory'));
 
     }
 

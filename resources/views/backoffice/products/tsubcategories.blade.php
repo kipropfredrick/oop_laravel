@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Category : {{ucfirst($category->category_name)}}</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>Subcategory : {{ucfirst($subcategory->subcategory_name)}}</strong></h6>
         </div>
 
         <div class="container">
@@ -25,33 +25,23 @@
 
         @endif
         
-        <form action="/admin/save-subcategory" method="post">
+        <form action="/admin/save-tsubcategory" method="post">
           @csrf
 
-          <input type="hidden" name="category_id" value="{{$category->id}}">
+          <input type="hidden" name="subcategory_id" value="{{$subcategory->id}}">
 
-          <h6 class="text-uppercase font-size-sm font-weight-bold">Add Subcategory</h6>
+          <br>
+          <h6 class="text-uppercase font-size-sm font-weight-bold">Add Third Level Category</h6>
 
           <div class="form-group row">
             
             <div class="col-lg-10">
                 <div class="form-row">
                     <div class="col">
-                    <label >Name</label>
-                         <input tclass="form-control" name="subcategory_name" placeholder="Enter name" type="text" class="form-control @if($errors->has('subcategory_name')) invalid_field @endif" required>
+                    <!-- <label >Name</label> -->
+                         <input tclass="form-control" name="name" placeholder="Enter name" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
                         
-                        @error('subcategory_name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                            @enderror
-                    </div>
-
-                    <div class="col">
-                    <label >Commision(%)</label>
-                         <input tclass="form-control" name="commision" placeholder="E.g 5,10,20" type="number" step="0.1" class="form-control @if($errors->has('commision')) invalid_field @endif" required>
-                        
-                        @error('commision')
+                            @error('name')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -66,29 +56,30 @@
 
         </form>
 
-        <h6 class="text-uppercase font-size-sm font-weight-bold">Subcategories</h6>
+        <br>
+        <h6 class="text-uppercase font-size-sm font-weight-bold">Third Level Categories</h6>
 
         <table class="table datatable-basic  table-striped">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>
-								<th class="thead">Subcategory Name</th>
+								<th class="thead">Third Level ategory Name</th>
                                 <th class="thead">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
                             <?php $index=0; ?>
-                            @foreach($subcategories as $subcategory)
+                            @foreach($subcategory->thirdlevelcategories as $category)
 
 
                             <!-- Modal -->
-                            <form action="/admin/update-subcategory/{{$subcategory->id}}" method="post">
+                            <form action="/admin/update-tsubcategory/{{$category->id}}" method="post">
                                 @csrf
-                                <div class="modal fade" id="editModal{{$subcategory->id}}" tabindex="-1" role="dialog" aria-labelledby="editModal{{$subcategory->id}}Label" aria-hidden="true">
+                                <div class="modal fade" id="editModal{{$category->id}}" tabindex="-1" role="dialog" aria-labelledby="editModal{{$subcategory->id}}Label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editModal{{$subcategory->id}}Label">Edit Subcategory</h5>
+                                        <h5 class="modal-title" id="editModal{{$category->id}}Label">Edit Third Level Category</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
@@ -97,9 +88,9 @@
                                     <div class="form-group row">
                                         <label >Name</label>
                                         <div class="col-lg-10">
-                                            <input tclass="form-control" value="{{$subcategory->subcategory_name}}" name="subcategory_name" placeholder="Enter name" type="text" class="form-control @if($errors->has('subcategory_name')) invalid_field @endif" required>
+                                            <input tclass="form-control" value="{{$category->name}}" name="name" placeholder="Enter name" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
                                         
-                                            @error('subcategory_name')
+                                            @error('name')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
@@ -120,10 +111,9 @@
 
 							<tr>
                                 <td>{{$index=$index+1}}.</td>
-								<td>{{$subcategory->subcategory_name}}</td>
+								<td>{{$category->name}}</td>
                                 <td>
                                     <div class="row">
-                                        <a style="margin-right:10px" class="btn btn-outline-primary" href="/admin/view-subcategory/{{$subcategory->id}}"><i class="fa fa-eye"></i></a>
                                         <a class="btn btn-outline-success" data-toggle="modal" data-target="#editModal{{$subcategory->id}}">Edit</a>
                                     </div>
                                 </td>

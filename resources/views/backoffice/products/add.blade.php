@@ -51,7 +51,7 @@
     <div class="form-group row">
             <label class="col-form-label col-lg-2">Sub Category</label>
             <div class="col-lg-10">
-                <select class="form-control" name="subcategory_id" id="subs" placeholder="Enter name" type="text" class="form-control @if($errors->has('subcategory_id')) invalid_field @endif" required>
+                <select onchange="filterT()" class="form-control" name="subcategory_id" id="subs" placeholder="Enter name" type="text" class="form-control @if($errors->has('subcategory_id')) invalid_field @endif" required>
                   <option value="">Select Sub category</option>
                 </select>
                 @error('subcategory_id')
@@ -62,6 +62,32 @@
 
             </div>
         </div>
+
+        @foreach($third_level_categories as $tsubcategory)
+            <div class="third_level_categories" style="display: none">{{$tsubcategory->subcategory_id}}</div>
+        @endforeach
+
+        @foreach($third_level_categories as $tsubcategory)
+            <div class="third_level_categoriesid" style="display: none">{{$tsubcategory->id}}</div>
+        @endforeach
+
+        @foreach($third_level_categories as $tsubcategory)
+            <div class="third_level_categoriesnames" style="display: none">{{$tsubcategory->name}}</div>
+        @endforeach
+        <div class="form-group row">
+                <label class="col-form-label col-lg-2">Third Categorisation</label>
+                <div class="col-lg-10">
+                    <select class="form-control" name="tsubcategory_id" id="subs" placeholder="Enter name" type="text" class="form-control @if($errors->has('tsubcategory_id')) invalid_field @endif" required>
+                    <option value="">Select third categorization</option>
+                    </select>
+                    @error('tsubcategory_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                    @enderror
+
+                </div>
+            </div>
 
         <div class="form-group row">
             <label class="col-form-label col-lg-2">Product Name</label>
@@ -287,6 +313,54 @@
 
 
     }
+
+
+    function filterT(){
+
+var x = document.getElementById("subs");
+var val = x.value;
+
+var subs = document.getElementsByClassName('subcategories');
+var subsNames = document.getElementsByClassName('subcategoriesnames');
+var tnames = document.getElementsByClassName('third_level_categoriesnames');
+var subsIds = document.getElementsByClassName('subcategoriesid');
+var tsubsIds = document.getElementsByClassName('third_level_categoriesid'); 
+
+var _arrayId = [];
+var _arrayName = [];
+var _arraytName = [];
+var _arraySubsId = [];
+var _arraytSubsId = [];
+
+for(i =  0; i < subs.length; i++){
+    if(subs[i].innerHTML == x.value){
+        _arrayId.push(subs[i].innerHTML);
+        _arrayName.push(subsNames[i].innerHTML);
+        _arraytName.push(tnames[i].innerHTML);
+        _arraySubsId.push(subsIds[i].innerHTML);
+        _arraytSubsId.push(tsubsIds[i].innerHTML);
+    }
+    
+}
+
+var y = document.getElementById("subs");
+y.innerHTML = "";
+for(i = 0; i < _arrayId.length; i++){
+    var node = document.createElement("option");
+    // node.innerHTML = _array[i];
+    node.setAttribute('value', _arraySubsId[i]);
+    node.innerHTML = _arrayName[i];
+
+    node.setAttribute('value', _arraytSubsId[i]);
+    node.innerHTML = _arraytName[i];
+    y.appendChild(node);  
+}
+
+console.log(_arrayId);
+
+
+}
+    
 
 </script>
 

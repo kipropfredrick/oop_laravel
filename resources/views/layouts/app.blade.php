@@ -30,6 +30,11 @@
 
     </head>
     <body>
+
+    <?php 
+        $categories = \App\Categories::with('subcategories')->get();
+        $lcategories = \App\Categories::with('subcategories')->take(10)->get();
+    ?>
     
     <!-- menu area (large screens) -->
     <div class="ls-menu fixed-top">
@@ -37,7 +42,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-3 mdg-logo">
-                        <a class="navbar-brand" href="index.php">
+                        <a class="navbar-brand" href="/">
                             <img src="{{asset('assets/img/logo/web-logo.png')}}">
                         </a>
                     </div>
@@ -110,25 +115,21 @@
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
                     <ul class="navbar-nav">
+                        @foreach($lcategories as $category)
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="category.php" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Mobile
+                            <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{$category->category_name}}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="category.php">Smartphones</a>
-                                <a class="dropdown-item" href="category.php">Feature Phones</a>
-                                <a class="dropdown-item" href="category.php">Tablets</a>
-                                <a class="dropdown-item" href="category.php">Wearables</a>
+                               <?php $subcategories = $category->subcategories; ?>
+                                @forelse($subcategories as $subcategory)
+                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->id}}">{{$subcategory->subcategory_name}}</a>
+                                @empty
+                                No Subcategories
+                                @endforelse
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="category.php" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Gadgets
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="category.php">Computers</a>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </nav>
@@ -173,7 +174,7 @@
                 <!-- handheld categories -->
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="category.php" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Mobile
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

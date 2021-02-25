@@ -385,7 +385,9 @@ class AdminController extends Controller
 
         $subcategories = DB::table('sub_categories')->orderBy('id', 'DESC')->get();
 
-        return view('backoffice.products.add',compact('categories','subcategories'));
+        $third_level_categories = DB::table('third_level_categories')->orderBy('id', 'DESC')->get();
+
+        return view('backoffice.products.add',compact('categories','subcategories','third_level_categories'));
     }
 
     public function cities(){
@@ -723,6 +725,13 @@ class AdminController extends Controller
 
     }
 
+    public function view_subcategory($id){
+        $subcategory = \App\SubCategories::with('thirdlevelcategories')->find($id);
+  
+        return view('backoffice.products.tsubcategories',compact('subcategory'));
+  
+      }
+
     public function save_subcategory(Request $request){
 
         $data = $request->except('_token');
@@ -733,11 +742,35 @@ class AdminController extends Controller
 
     }
 
+    public function save_tsubcategory(Request $request){
+
+        $data = $request->except('_token');
+
+        $data['created_at'] = now();
+
+        $data['updated_at'] = now();
+
+        DB::table('third_level_categories')->insert($data);
+
+        return back()->with('success','Category added');  
+    }
+
+
     public function update_subcategory(Request $request,$id){
 
         $data = $request->except('_token');
 
-        DB::table('sub_categories')->where('id','=',$id)->update($data);
+        DB::table('third_level_categories')->where('id','=',$id)->update($data);
+
+        return back()->with('success','Category updated');
+
+    }
+
+    public function update_tsubcategory(Request $request,$id){
+
+        $data = $request->except('_token');
+
+        DB::table('third_level_categories')->where('id','=',$id)->update($data);
 
         return back()->with('success','Subcategory updated');
 

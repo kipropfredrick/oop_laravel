@@ -12,8 +12,8 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-       '/USSD-Q7NMAqYVcdCNmVgE','/ussd-Q7NMAqcdCNmVgE', '/validation-url-Q7N976AqYVcdCNmVgE',
-       '/confirmation-url-Q7NMii654AqcdCNmVgE','/stkPush','/simulate_payment','/test-accesstoken',
+       '/USSD-Q7NMAqYVcdCNmVgE','/ussd-Q7NMAqcdCNmVgE', '/c2b/validate-UjQerTLb4EM78rHBSmYgCG',
+       '/c2b/confirm-7CavgY5gFFwzktQH6XjcS2','/stkPush','/simulate_payment','/test-accesstoken',
        '/USSD-test-Q7NMAqY34'
     ];
 }

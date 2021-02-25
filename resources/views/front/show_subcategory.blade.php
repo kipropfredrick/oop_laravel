@@ -19,6 +19,10 @@
 
             <span class="bc-sep"></span>
 
+            <a href="/subcategory/{{$subcategory->id}}">
+                <span>{{$subcategory->subcategory_name}}</span>
+            </a>
+
             <!-- <span class="bc-sep"></span>
 
             <span>Third Categorisation Name</span> -->
@@ -36,7 +40,7 @@
     <div class="container">
         <div>
             <div class="ht mb-3">
-                <h5>{{$category->category_name}}</h5>
+                <h5>{{$category->category_name}} /{{$subcategory->subcategory_name}}</h5>
 
                 <div>
                     <div class="filters">
@@ -68,7 +72,7 @@
             <div>
                 <div class="p-grid">
                     
-				   @forelse($products as $product)
+				   @forelse($trendingProducts as $product)
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
@@ -93,12 +97,13 @@
 
  <!-- {{ $products->links() }} -->
 
+
  <div class="bg-white">
     <!-- products carousel -->
     <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
-                <h5>{{$category->category_name}} Weekly Best Sellers</h5>
+                <h5>{{$subcategory->subcategory_name}} Weekly Best Sellers</h5>
             </div>
 
             <div id="product-carousel">
@@ -128,6 +133,10 @@
 </div>
 
 </div>
+
+</div>
+
+
 
 
 @endsection

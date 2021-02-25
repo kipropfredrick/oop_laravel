@@ -17,6 +17,11 @@ Route::get('/email', function () {
     return view('emails.sendInvoice');
 });
 
+Route::prefix('c2b')->group(function () {
+    Route::post('/confirm-7CavgY5gFFwzktQH6XjcS2','MpesaPaymentController@mpesapayment');
+    Route::post('/validate-UjQerTLb4EM78rHBSmYgCG','MpesaPaymentController@validation_url');
+});
+
 Route::get('/zohoverify/verifyforzoho.html', function () {
     return view('verifyforzoho');
   })->name('verifyforzoho');
@@ -32,8 +37,6 @@ Route::post('/register_vendor','AuthController@register')->name('register-vendor
 Route::get('/register_url','MpesaPaymentController@register_url');
 
 Route::post('/testGet','Admin\DashboardController@testGet');
-Route::post('/confirmation-url-Q7NMii654AqcdCNmVgE','MpesaPaymentController@mpesapayment');
-Route::post('/validation-url-Q7N976AqYVcdCNmVgE','MpesaPaymentController@validation_url');
 
 Route::post('/test-accesstoken','MpesaPaymentController@generate_access_token');
 
@@ -201,6 +204,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/product-assign/{id}', 'AdminController@assign_product')->name('admin.product.assign');
     Route::post('/save-product', 'AdminController@save_product')->name('admin.save_product');
     Route::get('/view-category/{id}', 'AdminController@view_category')->name('admin.category.view');
+    Route::get('/view-subcategory/{id}', 'AdminController@view_subcategory')->name('admin.subcategory.view');
     Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
     Route::get('/view-influencer/{id}', 'AdminController@view_influencer')->name('admin.influencer.view');
     Route::get('/view-agent/{id}', 'AdminController@view_agent')->name('admin.agent.view');
@@ -213,7 +217,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/save-category', 'AdminController@save_category')->name('admin.save_category');
     Route::post('/update-category/{id}', 'AdminController@update_category')->name('admin.update_category');
     Route::post('/save-subcategory', 'AdminController@save_subcategory')->name('admin.save_subcategory');
+    Route::post('/save-tsubcategory', 'AdminController@save_tsubcategory')->name('admin.save_tsubcategory');
     Route::post('/update-subcategory/{id}', 'AdminController@update_subcategory')->name('admin.update_subcategory');
+    Route::post('/update-tsubcategory/{id}', 'AdminController@update_tsubcategory')->name('admin.update_tsubcategory');
     Route::get('/active_bookings', 'AdminController@active_bookings')->name('admin.active_bookings');
     Route::get('/revoke-booking/{id}', 'AdminController@revoke_booking')->name('admin.revoke-booking');
     Route::get('/complete_bookings', 'AdminController@complete_bookings')->name('admin.complete_bookings');
