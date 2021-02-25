@@ -36,8 +36,6 @@ Route::post('/register_vendor','AuthController@register')->name('register-vendor
 
 Route::get('/register_url','MpesaPaymentController@register_url');
 
-Route::post('/testGet','Admin\DashboardController@testGet');
-
 Route::post('/test-accesstoken','MpesaPaymentController@generate_access_token');
 
 Route::post('/simulate_payment','MpesaPaymentController@simulate_payment');
