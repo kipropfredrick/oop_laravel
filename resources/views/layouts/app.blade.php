@@ -116,6 +116,7 @@
                 <div class="container">
                     <ul class="navbar-nav">
                         @foreach($lcategories as $category)
+                        @if(isset($category))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{$category->category_name}}
@@ -129,6 +130,7 @@
                                 @endforelse
                             </div>
                         </li>
+                        @endif
                         @endforeach
                     </ul>
                 </div>
