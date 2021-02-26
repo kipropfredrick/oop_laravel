@@ -195,12 +195,15 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/profile', 'AdminController@profile')->name('admin.profile');
     Route::get('/update-profile', 'AdminController@update_profile')->name('admin.update-profile');
     Route::get('/products', 'AdminController@products')->name('admin.products');
+    Route::get('/product-brands', 'AdminController@product_brands');
     Route::get('/product-edit/{id}', 'AdminController@product_edit')->name('admin.product.edit');
     Route::get('/product-delete/{id}', 'AdminController@product_delete')->name('admin.product.delete');
     Route::get('/image-delete/{id}', 'AdminController@image_delete')->name('admin.image.delete');
     Route::get('/add-product', 'AdminController@add_product')->name('admin.product.add');
     Route::get('/product-assign/{id}', 'AdminController@assign_product')->name('admin.product.assign');
     Route::post('/save-product', 'AdminController@save_product')->name('admin.save_product');
+    Route::post('/save-brand', 'AdminController@save_brand')->name('admin.save_brand');
+    Route::post('/update-brand/{brand}', 'AdminController@update_brand')->name('admin.update_brand');
     Route::get('/view-category/{id}', 'AdminController@view_category')->name('admin.category.view');
     Route::get('/view-subcategory/{id}', 'AdminController@view_subcategory')->name('admin.subcategory.view');
     Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');

@@ -31,6 +31,20 @@
   <link rel="stylesheet" href="{{asset('backoffice/plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('backoffice/plugins/summernote/summernote-bs4.min.css')}}">
+
+  <!-- Select2 -->
+<link rel="stylesheet" href="{{asset('backoffice/plugins/select2/css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('backoffice/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+
+ <!-- Bootstrap4 Duallistbox -->
+ <link rel="stylesheet" href="{{asset('backoffice/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css')}}">
+  <!-- BS Stepper -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/bs-stepper/css/bs-stepper.min.css')}}">
+  <!-- dropzonejs -->
+  <link rel="stylesheet" href="{{asset('backoffice/plugins/dropzone/min/dropzone.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{asset('backoffice/dist/css/adminlte.min.css')}}">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -144,6 +158,12 @@
                 <a href="/admin/product-categories" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Categories</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/product-brands" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Brands</p>
                 </a>
               </li>
             </ul>
@@ -473,6 +493,10 @@
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 <!-- Summernote -->
 <script src="{{asset('backoffice/summernote/summernote-bs4.min.js')}}"></script>
+
+<!-- Select2 -->
+<script src="{{asset('backoffice/plugins/select2/js/select2.full.min.js')}}"></script>
+
 @yield('extra-js')
 <script>
 	$(document).ready(function() {
@@ -482,6 +506,15 @@
 
 	$('#highlights').summernote()
 	$('#description').summernote()
+
+   //Initialize Select2 Elements
+   $('.select2').select2()
+
+  //Initialize Select2 Elements
+  $('.select2bs4').select2({
+    theme: 'bootstrap4'
+  })
+
 
 	function filter(){
 

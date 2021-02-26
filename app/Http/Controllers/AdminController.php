@@ -364,6 +364,86 @@ class AdminController extends Controller
         return redirect('/admin/product-categories')->with('success','Category Added.');
     }
 
+    public function save_brand(Request $request)
+    {
+        $slug =  str_replace(' ', '-', $request->brand_name);
+
+        $slug =  str_replace('/','-',$slug);
+
+        $image = $request->file('brand_icon');
+    
+            if(!Storage::disk('public')->exists('thumbnail')){
+                Storage::disk('public')->makeDirectory('thumbnail');
+            }
+    
+            if(!Storage::disk('public')->exists('images')){
+                Storage::disk('public')->makeDirectory('images');
+            }
+    
+            $time = time();
+    
+            if ($files = $request->file('brand_icon')) {
+                $fileNameToStore = Image::make($files);
+                $originalPath = 'storage/images/';
+                $fileNameToStore->save($originalPath.$time.$files->getClientOriginalName());
+                $thumbnailPath = 'storage/thumbnail/';
+                $fileNameToStore->resize(250, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                });
+                $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
+    
+                $brand_icon = $time.$files->getClientOriginalName();
+            }else{
+                $brand_icon = 'noimage.jpg';
+            }
+
+        DB::table('brands')->insert(['brand_name'=>$request->brand_name,'slug'=>$slug,'brand_icon'=>$brand_icon]);
+        
+        return redirect('/admin/product-brands')->with('success','Brand Added.');
+    }
+
+    public function update_brand(Request $request,\App\Brand $brand)
+    {
+            $slug =  str_replace(' ', '-', $request->brand_name);
+
+            $slug =  str_replace('/','-',$slug);
+
+           $image = $request->file('brand_icon');
+    
+            if($image){
+                if(!Storage::disk('public')->exists('thumbnail')){
+                Storage::disk('public')->makeDirectory('thumbnail');
+            }
+    
+            if(!Storage::disk('public')->exists('images')){
+                Storage::disk('public')->makeDirectory('images');
+            }
+    
+            $time = time();
+    
+            if ($files = $request->file('brand_icon')) {
+                $fileNameToStore = Image::make($files);
+                $originalPath = 'storage/images/';
+                $fileNameToStore->save($originalPath.$time.$files->getClientOriginalName());
+                $thumbnailPath = 'storage/thumbnail/';
+                $fileNameToStore->resize(250, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                });
+                $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
+    
+                $brand_icon = $time.$files->getClientOriginalName();
+            }else{
+                $brand_icon = 'noimage.jpg';
+            }
+            }else{
+                $brand_icon = $brand->brand_icon;
+            }
+
+        DB::table('brands')->where('id',$brand->id)->update(['brand_name'=>$request->brand_name,'slug'=>$slug,'brand_icon'=>$brand_icon]);
+        
+        return redirect('/admin/product-brands')->with('success','Brand Added.');
+    }
+
     public function edit_category($id){
 
         $category = DB::table('categories')->where('id','=',$id)->first();
@@ -379,6 +459,11 @@ class AdminController extends Controller
       return redirect('/admin/product-categories')->with('success','Category Updated.');
     }
 
+    public function product_brands(){
+        $brands = \App\Brand::all();
+        return view('backoffice.products.brands',compact('brands'));
+    }
+
     public function add_product()
     {
         $categories = DB::table('categories')->orderBy('id', 'DESC')->get();
@@ -388,6 +473,48 @@ class AdminController extends Controller
         $third_level_categories = DB::table('third_level_categories')->orderBy('id', 'DESC')->get();
 
         return view('backoffice.products.add',compact('categories','subcategories','third_level_categories'));
+    }
+
+    function fetch_sub_categories(Request $request)
+    {
+        $category_id = $request->get('category_id');
+
+        $first = [
+                "id"=>'0',
+                "category_id"=>'',
+                "subcategory_name"=>"Select Subcategory",
+                "commision"=>'',
+                "created_at"=>null,
+                "updated_at"=>null
+                ];
+
+        $arr = [];
+
+        array_push($arr,$first);
+
+        $subcategories = DB::table('sub_categories')
+                        ->where('category_id', $category_id)
+                        ->get();
+        foreach($subcategories as $subcategory){
+            array_push($arr,$subcategory);
+        }
+
+        $subcategories = $arr;
+        
+        return $subcategories;
+    }
+
+    public function get_third_categories(Request $request){
+
+        $subcategory_id = $request->subcategory_id;
+
+        \Log::info("subcategory_id => ".$subcategory_id);
+
+        $tsubcategories = DB::table('third_level_categories')
+                        ->where('subcategory_id', $subcategory_id)
+                        ->get();
+        return $tsubcategories;
+
     }
 
     public function cities(){
@@ -457,6 +584,8 @@ class AdminController extends Controller
         $data['product_code'] = 'P'.rand(10,1000000);
         $data['product_image'] = $image;
         $data['slug'] = $slug;
+        // $data['vendor_id'] = 1;
+        // $data['quantity'] = 10;
         $data['status'] = 'approved';
         $data['created_at'] = now();
         $data['updated_at'] = now();

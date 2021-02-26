@@ -119,7 +119,7 @@ class FrontPageController extends Controller
     public function show($slug)
     {
         $categories = \App\Categories::all();
-        $product = \App\Products::with('category','subcategory','gallery','influencer','vendor.user','agent.user')->where('slug','=',$slug)->first();
+        $product = \App\Products::with('category','brand','subcategory','gallery','vendor.user','agent.user')->where('slug','=',$slug)->first();
         //    return($product);
         return view('front.product',compact('product','categories'));
     }
