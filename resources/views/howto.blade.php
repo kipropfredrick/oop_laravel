@@ -11,7 +11,7 @@
 
             <span class="bc-sep"></span>
 
-            <span>Frequently Asked Questions</span>
+            <span>How To Order</span>
         </div>
     </div>
 </div>
