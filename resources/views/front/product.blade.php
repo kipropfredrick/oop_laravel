@@ -231,9 +231,21 @@
             <div id="product-carousel">
                 <div class="slick">
 
-                <?php $products = \App\Product::where('category_id',$product->category_id)->orderBy('id','DESC')->skip(20)->take(20)->get();  ?>
+                <?php $products = \App\Products::where('category_id',$product->category_id)->orderBy('id','DESC')->skip(20)->take(20)->get();  ?>
 
-                   <?php echo $products;?>
+                    @foreach($products $product)
+                    <div class="p-c-sec">
+                        <div class="p-c-inner">
+                            <a href="/product/{{$product->slug}}">
+                                <img src="/storage/images/{{$product->product_image}}" alt="Product Name">
+                                <div class="p-c-name">{{$product->product_name}}</div>
+                                <div class="p-c-price">KSh.{{$product->product_price}}</div>
+
+                                <a href="/product/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                            </a>
+                        </div>
+                    </div>
+                    @endforeach
 
                     
                 </div>
