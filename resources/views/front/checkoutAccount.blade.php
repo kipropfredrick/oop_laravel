@@ -29,12 +29,11 @@
                                     </div>
 
                                 @endif
-                                <div class="">
-                                    <div  style="color:green;margin-bottom:20px"><strong> <span style="color:red">Note : </span> Minimum Deposit Amount for this Product  is : KES 200 And the Payment period is 90 Days</strong></div>
-                                    <!-- <form action="/checkout/{{$product->slug}}" method="post"> -->
-                                        @csrf
-                                       <a href="/checkout/{{$product->slug}}" style="margin-left:5px" class="btn btn-outline-warning">No Account?</a>
-                                    <!-- </form> -->
+                                <div>
+                                <p>You are placing an order for <strong>{{$product->product_name}}</strong>. Minimum deposit id <strong>KSh.500</strong>.</p>
+                                <a href="/checkout/{{$product->slug}}">No account?</a>
+
+                                <hr/>
                                 </div>
                                 
                                     <hr>

@@ -1063,7 +1063,7 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $product = \App\Product::find($request->product_id);
+        $product = \App\Products::find($request->product_id);
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -1072,7 +1072,7 @@ class FrontPageController extends Controller
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
 
-        return view('front.thanks',compact('product','product','booking_reference','categories','message','amount'));
+        return view('front.thanks',compact('product'.'customer','product','booking_reference','categories','message','amount'));
             
         }
 
@@ -1140,9 +1140,11 @@ class FrontPageController extends Controller
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
+        $product = \App\Products::find($request->product_id);
+
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
+        return view('front.thanks',compact('product','customer','booking_reference','categories','message','amount'));
             
         }
 
@@ -1245,9 +1247,11 @@ class FrontPageController extends Controller
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
+        $product = \App\Products::find($request->product_id);
+
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
+        return view('front.thanks',compact('product','customer','booking_reference','categories','message','amount'));
 
     }
 
