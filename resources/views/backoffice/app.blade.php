@@ -45,6 +45,14 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('backoffice/dist/css/adminlte.min.css')}}">
 
+  <style>
+
+  .padding{
+    padding:10px;
+  }
+  
+  </style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -143,12 +151,6 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('admin.products')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Product List</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="/admin/add-product" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Product</p>
@@ -164,6 +166,24 @@
                 <a href="/admin/product-brands" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Brands</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/vendor/approved-products" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Approved Products</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/vendor/pending-products" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pending Products</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/vendor/rejected-products" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Rejected Products</p>
                 </a>
               </li>
             </ul>
@@ -220,38 +240,6 @@
             </ul>
           </li>
           </li>
-
-		  <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-shopping-cart"></i>
-              <p>
-              Vendor Products
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/admin/vendor/approved-products" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Approved Products</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/admin/vendor/pending-products" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pending Products</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/admin/vendor/rejected-products" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Rejected Products</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          </li>
-
 
 		  <li class="nav-item">
             <a href="#" class="nav-link">
@@ -338,9 +326,34 @@
 			<a href="/admin/customers" class="nav-link {{ (request()->is('admin/customers')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Customers</p></a>
 		</li>
 
-		<li class="nav-item">
+		<!-- <li class="nav-item">
 			<a href="/admin/vendors" class="nav-link {{ (request()->is('admin/vendors')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Vendors</p></a>
-		</li>
+		</li> -->
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-users"></i>
+        <p>
+          Vendors
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="/admin/vendors" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Vendors List</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/admin/add-vendor" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Add Vendor</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    </li>
 
 		<li class="nav-item">
 			<a href="/admin/cities" class="nav-link {{ (request()->is('admin/cities')) ? 'active' : '' }}"><i class="fa fa-building"></i> <p>&nbsp;Cities</p></a>

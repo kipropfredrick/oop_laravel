@@ -286,7 +286,7 @@ class AdminController extends Controller
 
      public function vendor_product_view($id){
 
-        $product = \App\Products::where('id','=',$id)->first();
+        $product = \App\Products::with('category','subcategory','third_level_category')->where('id','=',$id)->first();
 
         return view('backoffice.products.view',compact('product'));
 
@@ -584,8 +584,8 @@ class AdminController extends Controller
         $data['product_code'] = 'P'.rand(10,1000000);
         $data['product_image'] = $image;
         $data['slug'] = $slug;
-        // $data['vendor_id'] = 1;
-        // $data['quantity'] = 10;
+        $data['vendor_id'] = 1;
+        $data['quantity'] = 10;
         $data['status'] = 'approved';
         $data['created_at'] = now();
         $data['updated_at'] = now();
@@ -780,11 +780,48 @@ class AdminController extends Controller
         
     }
 
+    public function add_vendor(){
+
+        return view('backoffice.vendors.add');
+
+    }
+
+
+    public function save_vendor(Request $request){
+
+    if(\App\User::where('email',$request->email)->exists()){
+        return back()->with('error','Email Exists');
+    }elseif(\App\Vendor::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+        return back()->with('error','Phone Exists');
+    }
+
+    $user = new \App\User();
+    $user->email = $request->input('email');
+    $user->name = $request->input('name');
+    $user->role ='vendor';
+    $user->email_verified_at = now();
+    $user->password = Hash::make($request->input('password'));
+    $user->save();
+
+    $user_id = DB::getPdo()->lastInsertId();
+
+    $vendor = new \App\Vendor();
+    $vendor->user_id = $user_id; 
+    $vendor->business_name = $request->business_name; 
+    $vendor->status = "approved";
+    $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
+    $vendor->location  = $request->input('location');
+    $vendor->city_id  = $request->input('city_id');
+    $vendor->country  = $request->input('country');
+    $vendor->save();
+
+    return redirect('/admin/vendors')->with('success','Vendor Saved');
+
+    }
+
     public function view_vendor_product($id)
     {
-        $product = \App\Products::with('category','gallery')->find($id);
-
-        // return array($product);
+        $product = \App\Products::with('category','subcategory','brand','third_level_category')->where('id','=',$id)->first();
 
         $categories = DB::table('categories')->get();
 

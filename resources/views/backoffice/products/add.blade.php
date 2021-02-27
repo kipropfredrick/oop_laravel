@@ -8,8 +8,11 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-
+    @if(auth()->user()->role == 'admin')
     <form action="/admin/save-product" method="post"  enctype="multipart/form-data">
+    @elseif(auth()->user()->role == 'vendor')
+    <form action="/vendor/save-product" method="post"  enctype="multipart/form-data">
+    @endif
        @csrf
          <div class="row">
               <div class="col-md-6">

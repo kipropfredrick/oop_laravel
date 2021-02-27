@@ -120,7 +120,8 @@ class FrontPageController extends Controller
     {
         $categories = \App\Categories::all();
         $product = \App\Products::with('category','brand','subcategory','gallery','vendor.user','agent.user')->where('slug','=',$slug)->first();
-        //    return($product);
+        $clicks = $product->clicks + 1;
+        \App\Products::where('slug','=',$slug)->update(['clicks'=>$clicks]);
         return view('front.product',compact('product','categories'));
     }
 
@@ -189,16 +190,13 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::all();
 
-        $subcategory = \App\SubCategories::where('id','=',$id)->first();
+        $subcategory = \App\SubCategories::where('id','=',$id
+        )->first();
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
 
         $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$id)
-                        ->where(function($q){    
-                            $q->where('vendor_id' , '!=', null)
-                            ->orWhere('agent_id' , '!=', null)
-                            ->orWhere('influencer_id' , '!=', null);
-                        })
+                        ->where('vendor_id' , '!=', null)
                         ->where('quantity','>',0)->where('status','=','approved')->orderBy('id','DESC')->paginate(10);
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')

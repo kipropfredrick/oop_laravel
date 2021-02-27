@@ -256,6 +256,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/influencer-logs','AdminController@influencer_logs');
     Route::post('record-influencer-payment','AdminController@influencer_pay');
 
+    Route::get('/add-vendor', 'AdminController@add_vendor')->name('admin.vendor.add');
+    Route::post('/vendor-save', 'AdminController@save_vendor')->name('admin.vendor.save');
+
     Route::get('/banners', 'AdminController@banners')->name('admin.banners');
     Route::get('/add_banner','AdminController@add_banner')->name('admin.adder-banner');
     Route::post('/banner_save','AdminController@save_banner')->name('admin.saveer-banner');

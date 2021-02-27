@@ -9,7 +9,6 @@
             <h6 style="color: #005b77;" class="card-title"><strong>Vendors</strong></h6>
 		</div>
 		
-		<div class="container">
 		@if (session()->has('success'))
 
 			<div class="alert alert-success fade show" role="alert">
@@ -23,16 +22,17 @@
 				</div>
 
 			@endif
-		</div>
-        
-        <table class="table datatable-basic  table-striped">
+
+		 <div class="padding">
+		 
+		 <table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>
 								<th class="thead">Full Name</th>
 								<th class="thead">Phone</th>
+								<th>Email</th>
 								<th class="thead">Location</th>
-								<th class="thead">Vendor Code</th>
 								<th class="thead">Status</th>
 								<th class="thead">Date Added</th>
 								<th class="thead">Actons</th>
@@ -52,10 +52,10 @@
 										{{$vendor->phone}}
 									</td>
 									<td>
-										{{$vendor->location}}
+									 {{$vendor->email}}
 									</td>
 									<td>
-										{{$vendor->vendor_code}}
+										{{$vendor->location}}
 									</td>
 									<td>
 										{{ucfirst($vendor->status)}}
@@ -75,6 +75,10 @@
                             @endforeach
 						</tbody>
 					</table>
-                </div>
-             </div>
+		 
+		 </div>
+        
+         
+		</div>
+		</div>
 @endsection
