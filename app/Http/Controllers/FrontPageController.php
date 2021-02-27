@@ -359,54 +359,12 @@ class FrontPageController extends Controller
     
             $product = \App\Products::find($request->product_id);
     
-            if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-                $discount = 200;
-            }elseif($product->price >20000) {
-                $discount = 500;
-            }else {
-                $discount = 0;
-            }
-    
-            if($discount>0){
-                $showDiscount = 1;
-            }else {
-                $showDiscount = 0;
-            }
     
             $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
     
     
             $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
     
-            // return $product;
-            
-            $vendor_code = null;
-    
-            $agent_code = null;
-
-            $influencer_code = null;
-    
-    
-            if($product->agent_id !=null){
-    
-            $agent = \App\Agents::where('id','=',$product->agent_id)->first();
-    
-            $agent_code = $agent->agent_code;
-    
-            }elseif($product->vendor_id !=null){
-    
-             $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-    
-             $vendor_code = $vendor->vendor_code;
-    
-            }elseif($product->influencer_id !=null){
-    
-            $influencer = \App\Influencer::where('id','=',$product->influencer_id)->first();
-        
-            $influencer_code = $influencer->code;
-            
-               }
-
             if($product->weight != 0){
                 $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
             }else{
@@ -473,9 +431,6 @@ class FrontPageController extends Controller
             $booking->product_id  = $request->product_id;
             $booking->county_id = $request->county_id;
             $booking->location_id = $request->location_id;
-            $booking->vendor_code  = $vendor_code;
-            $booking->agent_code  = $agent_code;
-            $booking->influencer_code = $influencer_code;
             $booking->booking_reference = $booking_reference;
             $booking->quantity  = '1';
             $booking->amount_paid = "0";
@@ -486,7 +441,6 @@ class FrontPageController extends Controller
             $booking->status = "pending";
             $booking->location_type = $location_type;
             $booking->delivery_location = $request->delivery_location;
-            $booking->discount = $discount;
             $booking->shipping_cost = $shipping_cost;
             $booking->county_id = $request->county_id;
             $booking->location_id = $request->location_id;
@@ -532,7 +486,7 @@ class FrontPageController extends Controller
             $msisdn = $valid_phone;
             $booking_ref = $booking_reference;
             
-            return view('front.thanks',compact('product','booking_reference','categories','message'));
+            return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
                 
             }
     
@@ -594,7 +548,7 @@ class FrontPageController extends Controller
             $msisdn = $valid_phone;
             $booking_ref = $booking_reference;
 
-            return view('front.thanks',compact('product','booking_reference','categories','message'));
+            return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
                 
             }
 
@@ -691,7 +645,7 @@ class FrontPageController extends Controller
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
-        return view('front.thanks',compact('product','booking_reference','categories','message'));
+        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
 
     }
     /**
@@ -903,7 +857,7 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::with('subcategories')->get();
         
-        return view('front.thanks',compact('product','booking_reference','categories','message'));
+        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
         
 
     }
@@ -914,7 +868,8 @@ class FrontPageController extends Controller
         $county_id = $request->county_id;
         $location_id = $request->location_id;
 
-        if($dropoff === null && $location_id === null){
+
+        if(is_null($dropoff) && is_null($location_id)){
             return back()->withInput()->with('error','Please Pick your preferred delivery location!');
         }
 
@@ -994,34 +949,6 @@ class FrontPageController extends Controller
          
         }
 
-        
-        $vendor_code = null;
-
-        $agent_code = null;
-
-        $influencer_code = null;
-
-
-        if($product->agent_id !=null){
-
-        $agent = \App\Agents::where('id','=',$product->agent_id)->first();
-
-        $agent_code = $agent->agent_code;
-
-        }elseif($product->vendor_id !=null){
-
-         $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-
-         $vendor_code = $vendor->vendor_code;
-
-        }elseif($product->influencer_id !=null){
-    
-            $influencer = \App\Influencer::where('id','=',$product->influencer_id)->first();
-        
-            $influencer_code = $influencer->code;
-        
-           }
-
 
         if($product->weight != 0){
             $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
@@ -1076,16 +1003,13 @@ class FrontPageController extends Controller
 
         }
 
-
+        $customer = $existingCustomer;
 
         $total_cost = $product->product_price + $shipping_cost;
 
         $booking = new \App\Bookings();
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
-        $booking->vendor_code  = $vendor_code;
-        $booking->agent_code  = $agent_code;
-        $booking->influencer_code = $influencer_code;
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = '1';
         $booking->amount_paid = "0";
@@ -1096,7 +1020,6 @@ class FrontPageController extends Controller
         $booking->status = "pending";
         $booking->location_type = $location_type;
         $booking->delivery_location = $request->delivery_location;
-        $booking->discount = $discount;
         $booking->shipping_cost = $shipping_cost;
         $booking->county_id = $request->county_id;
         $booking->location_id = $request->location_id;
@@ -1140,13 +1063,16 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
+        $product = \App\Product::find($request->product_id);
+
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
-        
-        return view('front.thanks',compact('product','booking_reference','categories','message'));
+
+
+        return view('front.thanks',compact('product','product','booking_reference','categories','message','amount'));
             
         }
 
@@ -1216,7 +1142,7 @@ class FrontPageController extends Controller
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','booking_reference','categories','message'));
+        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
             
         }
 
@@ -1237,7 +1163,7 @@ class FrontPageController extends Controller
 
         $booking_date = now();
 
-        $$booking_date = strtotime($booking_date);
+        $booking_date = strtotime($booking_date);
 
         $product = \App\Products::find($request->product_id);
 
@@ -1321,7 +1247,7 @@ class FrontPageController extends Controller
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','booking_reference','categories','message'));
+        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
 
     }
 
@@ -1536,7 +1462,7 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::with('subcategories')->get();
         
-        return view('front.thanks',compact('product','booking_reference','categories','message'));
+        return view('front.thanks',compact('product','booking_reference','categories','message','amount'));
         
 
     }
@@ -1594,8 +1520,8 @@ class FrontPageController extends Controller
 
     public function stk_push($amount,$msisdn,$booking_ref){
        
-        $consumer_key = 'jm2Grv0ww5WnP72EgVxaSAmXu9yHeOWd';
-        $consume_secret = 'T3AbvwSCjky7IFx8';
+        $consumer_key =  env('CONSUMER_KEY');
+        $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
@@ -1616,9 +1542,9 @@ class FrontPageController extends Controller
 
         $timestamp = date("YmdHis");
 
-        $BusinessShortCode = '4029165';
+        $BusinessShortCode = env('MPESA_SHORT_CODE');
 
-        $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
+        $passkey = env('STK_PASSKEY');
 
         $lipa_time = Carbon::rawParse('now')->format('YmdHms');
 

@@ -2,9 +2,31 @@
 
 @section('content')
 
+<!-- breadcrumb --> 
+<div style="margin-top:110px" class="bc-bg">
+    <div class="container">
+        <div class="bc-link">
+            <a href="index.php">
+                <i class="fas fa-home"></i>
+            </a>
+
+            <span class="bc-sep"></span>
+
+            <a href="product.php">
+                <span>Product Name</span>
+            </a>
+
+            <span class="bc-sep"></span>
+
+            <span>Checkout</span>
+        </div>
+    </div>
+</div>
+<!-- end -->
+
 <div class="container">
 
- <section>
+ <section style="margin-top:20px">
     <!-- site__body -->
     <div class="site__body">
         
@@ -29,12 +51,16 @@
 
                                 @endif
                                 <div class="">
-                                    <div  style="color:green;margin-bottom:20px"><strong><span style="color:red">Note : </span> Minimum Deposit Amount for this Product  is : KES 200 And the Payment period is 90 Days</strong></div>
-                                       <a href="/checkout-with-existing/{{$product->slug}}" style="margin-left:5px" class="btn btn-outline-warning">Have an Account?</a>
+                                <div>
+                                <p>You are placing an order for <strong>{{$product->product_name}}</strong>. Minimum deposit id <strong>KSh.500</strong>.</p>
+                                <a href="/checkout-with-existing/{{$product->slug}}">Have an account?</a>
+                                <hr/>
+                            </div>
+                                       <!-- <a href="/checkout-with-existing/{{$product->slug}}" style="margin-left:5px" class="btn btn-outline-warning">Have an Account?</a> -->
                                 </div>
                                 
                                     <hr>
-                                <h6 class="card-title">Your Details</h6>
+                                    <h4>Personal Details</h4>
                                 
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -60,7 +86,7 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="checkout-street-address">Initial Deposit</label>
-                                                <input required name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
+                                                <input min="500" required name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                              </div>
                                           </div>
 
@@ -146,10 +172,17 @@
 
                                           </div>
 
-                                             <div class="form-group">
-                                                 <input style="margin-top: 18px;" type="checkbox" name="" id="" required>
-                                                 <span  style="margin-left:5px;color:#E0A800"><a  style="color:#E0A800" target="__blank" href="/terms">By signing up for an account you agree to our Terms and Conditions</a></span>
-                                             </div>
+                                             <!-- terms -->
+                                            <div class="mb-2">
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="terms" required>
+                                                    <label class="form-check-label" for="terms">
+                                                        I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>.*
+                                                    </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                                 <button type="submit" class="btn btn-primary">Make Booking</button>
                                             </div>
                                             </form>
@@ -157,29 +190,80 @@
                                             </div>
                                             </div>
 
-                                        <div class="col-12 col-lg-6 col-xl-5 mt-4 mt-lg-0">
-                                            <div class="card mb-0">
-                                                <div class="card-body">
-                                                    <h6 class="card-title">{{$product->product_name}}</h6>
-                                                    <div class="text-center">
-                                                        <img style="height:100%;width:200px" src="/storage/images/{{$product->product_image}}" alt="image">
-                                                    </div>
-                                                    <table class="checkout__totals">
-                                                        <tbody class="checkout__totals-products">
-                                                        <td> <span><strong>Quantity : </strong></span>{{$product_quantity}} @ KSh {{number_format($product->product_price)}}</td>
-                                                        <td></td>
-                                                            <tr>
-                                                            <?php $price = $product->product_price * $product_quantity;?>
-                                                                <td> <span><strong>Total : </strong></span>KSh {{number_format($price)}}</td>
-                                                                <td></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                        
-                                                </div>
-                                             </div>
-                                            </div>
-                                        </div>
+                                      <!-- features -->
+            <div class="col-sm-4">
+                <div class="mdg-features">
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="fas fa-coins fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>Minimum deposit</span>
+                                    <h6>
+                                        Ksh.500
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="far fa-clock fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>Payment period</span>
+                                    <h6>
+                                        4 months
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="fas fa-percent fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>No extra fees</span>
+                                    <h6>
+                                        0% interest rates
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="fas fa-truck fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>Doorstep delivery</span>
+                                    <h6>
+                                        Countrywide
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
 
 

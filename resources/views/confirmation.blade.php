@@ -12,7 +12,7 @@
             <span class="bc-sep"></span>
 
             <a href="product.php">
-                <span>{{$product->product_name}}</span>
+                <span>Product Name</span>
             </a>
 
             <span class="bc-sep"></span>
@@ -35,8 +35,8 @@
                         <div class="m-4">
                             <div>
                                 <h3>Thank you</h3>
-                                <?php $user = \App\User::find($customer->user_id); ?>
-                                <p>Hello <strong>{{$user->name}}</strong>, we have received your payment of <strong>[initial-deposit]</strong> for 
+                                
+                                <p>Hello <strong>[full-name]</strong>, we have received your payment of <strong>[initial-deposit]</strong> for 
                                 <strong>[product-name]</strong>.</p>
                                 <p>Use Paybill <strong>4040299</strong> and account number <strong>[order-id]</strong> for all your next 
                                 payments.</p>
@@ -129,4 +129,5 @@
     </div>
 </div>
 <!-- end --> 
+
 @endsection

@@ -71,7 +71,7 @@
                             <div class="product-price">KSh. {{number_format($product->product_price)}}</div>
 
                             <div>
-                                <a href="checkout.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </div>
                             
                             <div class="highlights">
@@ -233,7 +233,7 @@
 
                 <?php $products = \App\Products::where('category_id',$product->category_id)->orderBy('id','DESC')->skip(20)->take(20)->get();  ?>
 
-                    @foreach($products $product)
+                @forelse($products as $product)
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
@@ -245,7 +245,9 @@
                             </a>
                         </div>
                     </div>
-                    @endforeach
+                @empty
+                <div class="text-center">No Products</div>
+                @endforelse
 
                     
                 </div>

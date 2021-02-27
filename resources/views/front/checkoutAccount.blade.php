@@ -4,8 +4,9 @@
 
 <div class="container">
 
- <section>
+ <section style="margin-top:150px">
     <!-- site__body -->
+    <div class="site__body">
     <div class="site__body">
         
         <div style="margin-top:20px" class="checkout block">
@@ -146,29 +147,80 @@
                                             </div>
                                             </div>
 
-                                        <div class="col-12 col-lg-6 col-xl-5 mt-4 mt-lg-0">
-                                            <div class="card mb-0">
-                                                <div class="card-body">
-                                                    <h6 class="card-title">{{$product->product_name}}</h6>
-                                                    <div class="text-center">
-                                                        <img style="height:100%;width:200px" src="/storage/images/{{$product->product_image}}" alt="image">
-                                                    </div>
-                                                    <table class="checkout__totals">
-                                                        <tbody class="checkout__totals-products">
-                                                        <td> <span><strong>Quantity : </strong></span>{{$product_quantity}} @ KSh {{number_format($product->product_price)}}</td>
-                                                        <td></td>
-                                                            <tr>
-                                                            <?php $price = $product->product_price * $product_quantity;?>
-                                                                <td> <span><strong>Total : </strong></span>KSh {{number_format($price)}}</td>
-                                                                <td></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                        
-                                                </div>
-                                             </div>
-                                            </div>
-                                        </div>
+                                        <!-- features -->
+            <div class="col-sm-4">
+                <div class="mdg-features">
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="fas fa-coins fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>Minimum deposit</span>
+                                    <h6>
+                                        Ksh.500
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="far fa-clock fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>Payment period</span>
+                                    <h6>
+                                        4 months
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="fas fa-percent fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>No extra fees</span>
+                                    <h6>
+                                        0% interest rates
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mdgf">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="mdgf-icon">
+                                    <span class="fas fa-truck fa-3x"></span>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <div class="mdgf-text">  
+                                    <span>Doorstep delivery</span>
+                                    <h6>
+                                        Countrywide
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         </section>
 
 </div>
