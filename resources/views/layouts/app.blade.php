@@ -249,19 +249,19 @@
                     <div class="ftr-legal">
                         <div class="mb-2">
                             <small>
-                                <span><a href="#">Terms</a></span>
+                                <span><a href="/terms">Terms</a></span>
                                 <span class="ftr-sep"></span>
-                                <span><a href="#">Privacy</a></span>
+                                <span><a href="/privacy-policy">Privacy</a></span>
                             </small>
                         </div>
 
                         <div class="mb-2">
                             <small>
-                                <span><a href="#">How to Order</a></span>
+                                <span><a href="/how-to">How to Order</a></span>
                                 <span class="ftr-sep"></span>
-                                <span><a href="#">FAQs</a></span>
+                                <span><a href="/faqs">FAQs</a></span>
                                 <span class="ftr-sep"></span>
-                                <span><a href="#">My Account</a></span>
+                                <span><a href="/login">My Account</a></span>
                             </small>
                         </div>
                     </div>

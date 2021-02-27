@@ -174,7 +174,7 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="pdesc" role="tabpanel" aria-labelledby="pdesc-tab">
                         <div class="p-desc mt-3">
-                            ...
+                          {!!$product->description!!}
                         </div>
                     </div>
 
@@ -203,7 +203,7 @@
                                         <li>Dial <strong>*544*6#</strong> on your phone</li>
                                         <li>Select <strong>make a booking</strong></li>
                                         <li>Follow the prompt to reister your account if not registered</li>
-                                        <li>Enter the product code <strong>P00001</strong></li>
+                                        <li>Enter the product code <strong>{{$product->product_code}}</strong></li>
                                         <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.500</strong> on all items</li>
                                         <li>Click on the <strong>Proceed to Pay</strong></li>
                                         <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
@@ -231,78 +231,11 @@
             <div id="product-carousel">
                 <div class="slick">
 
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="product.php">
-                                <img src="assets/img/product/1.jpg" alt="Product Name">
-                                <div class="p-c-name">Apple MacBook Air (13-inch Retina Display, 8GB RAM, 256GB SSD Storage)</div>
-                                <div class="p-c-price">KSh.100,000</div>
+                <?php $products = \App\Product::where('category_id',$product->category_id)->orderBy('id','DESC')->skip(20)->take(20)->get();  ?>
 
-                                <a href="product.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
-                        </div>
-                    </div>
+                   <?php echo $products;?>
 
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="product.php">
-                                <img src="http://www.samsutech.net/Refrigerators/RS65R5691M9.png" alt="Product Name">
-                                <div class="p-c-name">Apple MacBook Air (13-inch Retina Display, 8GB RAM, 256GB SSD Storage)</div>
-                                <div class="p-c-price">KSh.100,000</div>
-
-                                <a href="product.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="product.php">
-                                <img src="assets/img/product/1.jpg" alt="Product Name">
-                                <div class="p-c-name">Apple MacBook Air (13-inch Retina Display, 8GB RAM, 256GB SSD Storage)</div>
-                                <div class="p-c-price">KSh.100,000</div>
-
-                                <a href="product.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="product.php">
-                                <img src="http://www.samsutech.net/Refrigerators/RS65R5691M9.png" alt="Product Name">
-                                <div class="p-c-name">Apple MacBook Air (13-inch Retina Display, 8GB RAM, 256GB SSD Storage)</div>
-                                <div class="p-c-price">KSh.100,000</div>
-
-                                <a href="product.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="product.php">
-                                <img src="assets/img/product/1.jpg" alt="Product Name">
-                                <div class="p-c-name">Apple MacBook Air (13-inch Retina Display, 8GB RAM, 256GB SSD Storage)</div>
-                                <div class="p-c-price">KSh.100,000</div>
-
-                                <a href="product.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="product.php">
-                                <img src="http://www.samsutech.net/Refrigerators/RS65R5691M9.png" alt="Product Name">
-                                <div class="p-c-name">Apple MacBook Air (13-inch Retina Display, 8GB RAM, 256GB SSD Storage)</div>
-                                <div class="p-c-price">KSh.100,000</div>
-
-                                <a href="product.php" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
-                        </div>
-                    </div>
-
+                    
                 </div>
             </div>
         </div>

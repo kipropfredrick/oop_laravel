@@ -17,6 +17,22 @@ Route::get('/email', function () {
     return view('emails.sendInvoice');
 });
 
+Route::get('/faqs', function () {
+    return view('faqs');
+  });
+
+Route::get('/how-to', function () {
+return view('howto');
+});
+
+Route::get('/terms', function () {
+    return view('terms');
+});
+
+Route::get('/privacy-policy', function () {
+    return view('privacy');
+});
+
 Route::prefix('c2b')->group(function () {
     Route::post('/confirm-7CavgY5gFFwzktQH6XjcS2','MpesaPaymentController@mpesapayment');
     Route::post('/validate-UjQerTLb4EM78rHBSmYgCG','MpesaPaymentController@validation_url');
