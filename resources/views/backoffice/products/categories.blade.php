@@ -48,7 +48,7 @@
         <div class="form-group row">
             <label class="col-form-label col-lg-2">Icon</label>
             <div class="col-lg-10">
-            <input tclass="form-control" name="category_icon"  type="file" class="form-control @if($errors->has('category_icon')) invalid_field @endif">
+            <input tclass="form-control" name="category_icon"  type="file" class="form-control @if($errors->has('category_icon')) invalid_field @endif" required>
                
                 @error('category_name')
                             <div class="invalid-feedback">

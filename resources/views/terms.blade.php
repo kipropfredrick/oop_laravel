@@ -5,7 +5,7 @@
 <div class="bc-bg">
     <div class="container">
         <div class="bc-link">
-            <a href="index.php">
+            <a href="/">
                 <i class="fas fa-home"></i>
             </a>
 

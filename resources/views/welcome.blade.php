@@ -29,11 +29,11 @@
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
-                                <img src="/storage/images/{{$product->product_image}}" alt="Product Name">
+                                <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/product/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </a>
                         </div>
                     </div>
@@ -63,11 +63,11 @@
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
-                                <img src="/storage/images/{{$product->product_image}}" alt="Product Name">
+                                <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/product/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </a>
                         </div>
                     </div>
@@ -95,11 +95,11 @@
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
-                                <img src="/storage/images/{{$product->product_image}}" alt="Product Name">
+                                <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/product/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </a>
                         </div>
                     </div>

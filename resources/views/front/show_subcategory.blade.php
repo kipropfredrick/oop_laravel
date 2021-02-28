@@ -69,27 +69,28 @@
 
             </div>
             
-            <div id="product-carousel">
-                <div class="slick">
+                   
 
-				 @forelse($trendingProducts as $product)
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="/product/{{$product->slug}}">
-                                <img src="/storage/images/{{$product->product_image}}" alt="Product Name">
-                                <div class="p-c-name">{{$product->product_name}}</div>
-                                <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
+                <div class="p-grid">
+                @foreach($products as $product)
+                    <div class="p-cat">
+                        <div class="p-c-sec">
+                            <div class="p-c-inner">
+                                <a href="/product/{{$product->slug}}">
+                                    <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
+                                    <div class="p-c-name">{{$product->product_name}}</div>
+                                    <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/product/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
-                            </a>
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center">No products</div>
-                    @endforelse
-
-                </div>
-            </div>
+                    @endforeach
+           </div>
+           <div style="margin-left:5px">{{ $products->render()}}</div>
+    </div>
+    <!-- end products grid -->
 
         </div>
     </div>
@@ -114,11 +115,11 @@
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
-                                <img src="/storage/images/{{$product->product_image}}" alt="Product Name">
+                                <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/product/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </a>
                         </div>
                     </div>

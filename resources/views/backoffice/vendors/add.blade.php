@@ -104,7 +104,7 @@
 				 <div class="col-md-6">
 				 <div class="form-group">
 					<label>City</label>
-						<select class="form-control" name="city_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('city_id')) invalid_field @endif">
+						<select required class="form-control" name="city_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('city_id')) invalid_field @endif">
 							@foreach (App\City::all() as $city)
 								<option value="{{$city->id}}">{{$city->city_name}}</option>
 							@endforeach

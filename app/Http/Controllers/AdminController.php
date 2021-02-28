@@ -454,9 +454,15 @@ class AdminController extends Controller
 
     public function update_category(Request $request, $id){
 
-      DB::table('categories')->where('id','=',$id)->update(['category_name'=>$request->category_name]);
+        $slug =  str_replace(' ', '-', $request->category_name);
 
-      return redirect('/admin/product-categories')->with('success','Category Updated.');
+        $slug =  str_replace('/','-',$slug);
+
+        $data['slug'] = $slug;
+
+        DB::table('categories')->where('id','=',$id)->update(['category_name'=>$request->category_name,'slug'=>$slug]);
+
+        return redirect('/admin/product-categories')->with('success','Category Updated.');
     }
 
     public function product_brands(){
@@ -902,6 +908,12 @@ class AdminController extends Controller
 
         $data = $request->except('_token');
 
+        $slug =  str_replace(' ', '-', $request->subcategory_name);
+
+        $slug =  str_replace('/','-',$slug);
+
+        $data['slug'] = $slug;
+
         DB::table('sub_categories')->insert($data);
 
         return back()->with('success','Subcategory added');
@@ -925,6 +937,12 @@ class AdminController extends Controller
     public function update_subcategory(Request $request,$id){
 
         $data = $request->except('_token');
+
+        $slug =  str_replace(' ', '-', $request->subcategory_name);
+
+        $slug =  str_replace('/','-',$slug);
+
+        $data['slug'] = $slug;
 
         DB::table('third_level_categories')->where('id','=',$id)->update($data);
 

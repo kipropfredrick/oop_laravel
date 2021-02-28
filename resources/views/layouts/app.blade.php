@@ -30,6 +30,11 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+        <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+        <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script> -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
     </head>
     <body>
 
@@ -125,7 +130,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                <?php $subcategories = $category->subcategories; ?>
                                 @forelse($subcategories as $subcategory)
-                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->id}}">{{$subcategory->subcategory_name}}</a>
+                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                                 @empty
                                 No Subcategories
                                 @endforelse
@@ -183,7 +188,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <?php $subcategories = $category->subcategories; ?>
                                 @forelse($subcategories as $subcategory)
-                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->id}}">{{$subcategory->subcategory_name}}</a>
+                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                                 @empty
                                 No Subcategories
                                 @endforelse
@@ -372,6 +377,13 @@
                 ]
             });
         });
+
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+            $('.js-example-basic-single1').select2();
+            $('.js-example-basic-single2').select2();
+        });
+
     </script>
 
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->

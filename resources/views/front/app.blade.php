@@ -170,7 +170,7 @@
                                                                                 <a href="">{{ucfirst($category->category_name)}}</a>
                                                                                     <ul class="megamenu__links megamenu__links--level--1">
                                                                                         @forelse($category->subcategories as $subcategory)
-                                                                                         <li class="megamenu__item"><a href="/subcategory/{{$subcategory->id}}"> {{ucfirst($subcategory->subcategory_name)}}</a></li>
+                                                                                         <li class="megamenu__item"><a href="/subcategory/{{$subcategory->slug}}"> {{ucfirst($subcategory->subcategory_name)}}</a></li>
                                                                                         @empty
                                                                                          <div class="text-center" style="font-size:10px;color:gray">No subcategories</div>
                                                                                          @endforelse
@@ -445,7 +445,7 @@
                               @foreach($category->subcategories as $subcategory)  
                             <li class="mobile-links__item" data-collapse-item>
                                     <div class="mobile-links__item-title">
-                                        <a href="/subcategory/{{$subcategory->id}}" class="mobile-links__item-link">{{$subcategory->subcategory_name}}</a>
+                                        <a href="/subcategory/{{$subcategory->slug}}" class="mobile-links__item-link">{{$subcategory->subcategory_name}}</a>
                                     </div>
                             </li>
                             @endforeach

@@ -17,6 +17,25 @@ class FrontPageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function update_categories(){
+        
+        $subs = DB::table('sub_categories')->get();
+
+        foreach($subs as $sub){
+            $slug =  str_replace(' ', '-', $sub->subcategory_name);
+            $slug =  str_replace('/','-',$slug);
+            $slug = strtolower($slug);
+
+            DB::table('sub_categories')->where('id',$sub->id)->update(['slug'=>$slug]);
+        };
+
+
+        return "Success";
+       
+
+    }
+
     public function index()
     {
        $categories = \App\Categories::with('subcategories')->get();
@@ -184,18 +203,18 @@ class FrontPageController extends Controller
 
     }
 
-    public function subcategory($id){
+    public function subcategory($slug){
 
         $categories = \App\Categories::all();
 
-        $subcategory = \App\SubCategories::where('id','=',$id
+        $subcategory = \App\SubCategories::where('slug','=',$slug
         )->first();
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
 
-        $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$id)
+        $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
                         ->where('vendor_id' , '!=', null)
-                        ->where('quantity','>',0)->where('status','=','approved')->orderBy('id','DESC')->paginate(10);
+                        ->where('quantity','>',0)->where('status','=','approved')->orderBy('id','DESC')->paginate(20);
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                         ->where(function($q){    

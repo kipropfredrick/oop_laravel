@@ -69,13 +69,15 @@ Route::post('/ussd-Q7NMAqcdCNmVgE','USSDController@test');
 
 Route::get('/', 'FrontPageController@index')->name('welcome');
 
-Route::get('/update_bookings_agent_or_vendor','FrontPageController@update_bookings_agent_or_vendor');
+Route::get('/', 'FrontPageController@index');
+
+Route::get('/update_categories','FrontPageController@update_categories');
 
 Route::get('/terms', 'FrontPageController@terms');
 Route::get('/product/{slug}','FrontPageController@show');
 Route::get('/category/{slug}','FrontPageController@category');
 Route::get('/shop/{id}','FrontPageController@shop');
-Route::get('/subcategory/{id}','FrontPageController@subcategory')->name('view-subcategory');
+Route::get('/subcategory/{slug}','FrontPageController@subcategory')->name('view-subcategory');
 Route::get('/checkout/{slug}','FrontPageController@checkout');
 Route::get('/checkout/bonga/{slug}','FrontPageController@checkout_bonga');
 Route::get('/checkout-with-existing/{slug}','FrontPageController@checkout_existing');
