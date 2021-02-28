@@ -13,12 +13,13 @@
             <span class="bc-sep"></span>
 
             <a href="category.php">
-                <span>Category</span>
+             
+                <span>{{$product->category->category_name}}</span>
             </a>
 
             <span class="bc-sep"></span>
 
-            <span>Product Name</span>
+            <span>{{$product->product_name}}</span>
         </div>
     </div>
 </div>

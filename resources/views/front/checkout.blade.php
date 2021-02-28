@@ -12,8 +12,8 @@
 
             <span class="bc-sep"></span>
 
-            <a href="product.php">
-                <span>Product Name</span>
+            <a href="/product/{{$product->slug}}">
+                <span>{{$product->product_name}}</span>
             </a>
 
             <span class="bc-sep"></span>

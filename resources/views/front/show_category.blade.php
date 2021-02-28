@@ -66,9 +66,12 @@
             </div>
 
             <div>
-                <div class="p-grid">
-                    
-				   @forelse($products as $product)
+
+            
+            <div id="product-carousel">
+                <div class="slick">
+
+				 @forelse($products as $product)
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
@@ -85,6 +88,8 @@
                     @endforelse
 
                 </div>
+            </div>
+                
             </div>
         </div>
     </div>
