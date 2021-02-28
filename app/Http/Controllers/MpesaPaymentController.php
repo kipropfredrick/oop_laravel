@@ -230,6 +230,8 @@ class MpesaPaymentController extends Controller
         
         $mpesaResponse = file_get_contents('php://input');
 
+        \Log::info('mpesaResponse =>'.print_r($mpesaResponse,1));
+
         $decoded = json_decode($mpesaResponse);
 
         $valid_ips = [
@@ -735,6 +737,26 @@ class MpesaPaymentController extends Controller
         echo $curl_response;
     }
 
+    public function checkpayment(Request $request){
+
+        $payment = \DB::table('payment_logs')->where('BillRefNumber',$request->payment_ref)->first();
+
+        $out = [];
+
+
+        if($payment !=null){
+            $message = "Payment of Ksh ".number_format($payment->TransAmount,2).' has been received, Mpesa reference code is '.$payment->TransID." You'll be contacted on how you'll get your cover, Thank you!";
+            $out['status'] = 1;
+            $out['amount'] = $payment->TransAmount;
+            $out['message'] = $message;
+        }else{
+            $out['status'] = 0;
+            $out['amount'] = null;
+        }
+        return $out;
+
+    }
+
     public function simulate_payment(Request $request){
 
         $consumer_key = env('CONSUMER_KEY');
@@ -896,7 +918,7 @@ class MpesaPaymentController extends Controller
 
     public function sendMessage($recipients,$message){
 
-            $username   = "Mosmossms";
+            $username   = "Bukuswift";
             $apiKey     = env('AT_API_KEY');
 
             // Initialize the SDK
@@ -905,13 +927,13 @@ class MpesaPaymentController extends Controller
             // Get the SMS service
             $sms        = $AT->sms();
        
-           $from       = "Mosmos";
+        //    $from       = "Mosmos";
 
             try {
                 // Thats it, hit send and we'll take care of the rest
                 $result = $sms->send([
                     'to'      => $recipients,
-                    'from'=>$from,
+                    // 'from'=>$from,
                     'message' => $message,
                 ]);
 

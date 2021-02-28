@@ -33,6 +33,8 @@ Route::get('/privacy-policy', function () {
     return view('privacy');
 });
 
+Route::post('/checkpayment','MpesaPaymentController@checkpayment');
+
 Route::prefix('c2b')->group(function () {
     Route::post('/confirm-7CavgY5gFFwzktQH6XjcS2','MpesaPaymentController@mpesapayment');
     Route::post('/validate-UjQerTLb4EM78rHBSmYgCG','MpesaPaymentController@validation_url');

@@ -35,8 +35,6 @@
 
                                 <hr/>
                                 </div>
-                                
-                                    <hr>
                                 <h6 class="card-title">Your Details</h6>
                                 
                                 <div class="form-row">
@@ -45,7 +43,7 @@
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{$product_quantity}}">
                                         <input type="hidden" name="product_id" value="{{$product->id}}">
-                                        <input name="status" value="unserviced" type="hidden">
+                                        <input name="status" value="pending" type="hidden">
                                         <input name="minDeposit" value="{{$minDeposit}}" type="hidden">
                                         </div>
                                         </div>

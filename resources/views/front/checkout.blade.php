@@ -68,7 +68,7 @@
                                         @csrf
                                         <input type="hidden" name="quantity" value="{{$product_quantity}}">
                                         <input type="hidden" name="product_id" value="{{$product->id}}">
-                                        <input name="status" value="unserviced" type="hidden">
+                                        <input name="status" value="pending" type="hidden">
                                         <input name="minDeposit" value="{{$minDeposit}}" type="hidden">
                                         <label for="checkout-first-name">Full name</label>
                                         <input required name="name" type="text" class="form-control" id="checkout-first-name" placeholder="Full Name">

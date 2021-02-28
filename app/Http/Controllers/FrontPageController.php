@@ -322,6 +322,8 @@ class FrontPageController extends Controller
         $valid_phone = '254'.ltrim($request->input('phone'), '0');
 
         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
+
+        $user = \App\User::find($existingCustomer->user_id);
         
         $booking_reference = 'BKG'.rand(10,1000000);
 
@@ -330,9 +332,7 @@ class FrontPageController extends Controller
         $$booking_date = strtotime($booking_date);
 
         $product = \App\Products::find($request->product_id);
-
-        // return $product;
-
+        
         $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
 
 
@@ -361,20 +361,6 @@ class FrontPageController extends Controller
             }
         }
 
-
-        if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-            $discount = 200;
-        }elseif($product->price >20000) {
-            $discount = 500;
-        }else {
-            $discount = 0;
-        }
-
-        if($discount>0){
-            $showDiscount = 1;
-        }else {
-            $showDiscount = 0;
-        }
 
 
         if($product->weight != 0){
@@ -431,36 +417,7 @@ class FrontPageController extends Controller
         }
 
 
-        $vendor_code = null;
-
-        $agent_code = null;
-
-        $influencer_code = null;
-
-
-        if($product->agent_id !=null){
-
-        $agent = \App\Agents::where('id','=',$product->agent_id)->first();
-
-        $agent_code = $agent->agent_code;
-
-        }elseif($product->vendor_id !=null){
-
-         $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-
-         $vendor_code = $vendor->vendor_code;
-
-        }elseif($product->influencer_id !=null){
-    
-            $influencer = \App\Influencer::where('id','=',$product->influencer_id)->first();
-        
-            $influencer_code = $influencer->code;
-        
-           }
-
-        
-
-        $total_cost = ($product->product_price + $shipping_cost) - $discount;
+        $total_cost = ($product->product_price + $shipping_cost);
 
         
         $booking = new \App\Bookings();
@@ -480,12 +437,8 @@ class FrontPageController extends Controller
         $booking->status = "pending";
         $booking->location_type = $location_type;
         $booking->delivery_location = $request->delivery_location;
-        $booking->discount = $discount;
         $booking->shipping_cost = $shipping_cost;
         $booking->total_cost =  $total_cost;
-        $booking->vendor_code  = $vendor_code;
-        $booking->agent_code  = $agent_code;
-        $booking->influencer_code = $influencer_code;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
@@ -496,27 +449,24 @@ class FrontPageController extends Controller
 
         $reciepient = $valid_phone;
 
-        if($showDiscount == 1){
-            
-            $message = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2).", Product Price is ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format(( $total_cost),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2) ." Terms & Conditions Apply";
-            $this->sendMessage($message,$reciepient);
-        
-        }else{
-            $message = "Booking of : ".$product->product_name." was successful, Product price ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format($total_cost,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount Enter Amount : KES ".number_format($minDeposit,2);
-            $this->sendMessage($message,$reciepient);
-        }
-
+        $message = "Booking of : ".$product->product_name." was successful, Product price ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format($total_cost,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.", Enter Amount Enter Amount : KES ".number_format($minDeposit,2);
+        $this->sendMessage($message,$reciepient);
+       
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
         
          $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+
+         \Auth::login($user);
         
         }
 
         $categories = \App\Categories::with('subcategories')->get();
         
-        return view('front.thanks',compact('product','customer','booking_reference','categories','message','amount'));
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+
+        return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
         
 
     }
@@ -555,6 +505,8 @@ class FrontPageController extends Controller
 
         // return ($existingUser);
 
+        $user = $existingUser;
+
         $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
 
 
@@ -569,26 +521,14 @@ class FrontPageController extends Controller
             }
         }
 
+        \Auth::login($user);
+
 
         $booking_reference = 'BKG'.rand(10,1000000);
 
         $booking_date = now();
 
         $product = \App\Products::find($request->product_id);
-
-        if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-            $discount = 200;
-        }elseif($product->price >20000) {
-            $discount = 500;
-        }else {
-            $discount = 0;
-        }
-
-        if($discount>0){
-            $showDiscount = 1;
-        }else {
-            $showDiscount = 0;
-        }
 
         $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
 
@@ -672,7 +612,7 @@ class FrontPageController extends Controller
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = '1';
         $booking->amount_paid = "0";
-        $booking->balance =   $total_cost - $discount;
+        $booking->balance =   $total_cost;
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = $booking_date;
         $booking->due_date = $due_date;
@@ -684,7 +624,7 @@ class FrontPageController extends Controller
         $booking->location_id = $request->location_id;
         $booking->zone_id = $zone_id;
         $booking->dropoff_id = $request->dropoff;
-        $booking->total_cost =  $total_cost  - $discount;
+        $booking->total_cost =  $total_cost;
 
         // return $booking;
 
@@ -706,17 +646,10 @@ class FrontPageController extends Controller
             $shipping_cost = ' will be comunicated on booking completion';
         };
 
-        if($showDiscount == 1){
-            
-            $message = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2).", Product Price is ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format(( $total_cost - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2) ." Terms & Conditions Apply";
-            $this->sendMessage($message,$reciepient);
-        
-        }elseif($showDiscount == 0){
+      
 
-            $message = "Booking of : ".$product->product_name." was successful".", Product Price is ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format($total_cost,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2)." Terms & Conditions Apply";
-            $this->sendMessage($message,$reciepient);
-
-        }
+        $message = "Booking of : ".$product->product_name." was successful".", Product Price is ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format($total_cost,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2)." Terms & Conditions Apply";
+        $this->sendMessage($message,$reciepient);
 
         
 
@@ -730,7 +663,9 @@ class FrontPageController extends Controller
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','customer','product','booking_reference','categories','message','amount'));
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+
+        return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
             
         }
 
@@ -791,7 +726,7 @@ class FrontPageController extends Controller
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
         $reciepient = $valid_phone;
-        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.",Enter Amount : KES ".number_format($minDeposit,2);
+        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.",Enter Amount : KES ".number_format($minDeposit,2);
         $this->sendMessage($message,$reciepient);
 
         $amount = $request->initial_deposit;
@@ -802,7 +737,9 @@ class FrontPageController extends Controller
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','customer','booking_reference','categories','message','amount'));
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+
+        return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
             
         }
 
@@ -847,21 +784,6 @@ class FrontPageController extends Controller
          
         }
 
-        
-        if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-            $discount = 200;
-        }elseif($product->price >20000) {
-            $discount = 500;
-        }else {
-            $discount = 0;
-        }
-
-        if($discount>0){
-            $showDiscount = 1;
-        }else {
-            $showDiscount = 0;
-        }
-
         $booking = new \App\Bookings();
         $booking->customer_id = $customer_id; 
         $booking->product_id  = $request->product_id;
@@ -872,13 +794,12 @@ class FrontPageController extends Controller
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
-        $booking->balance = $product->product_price - $discount;
+        $booking->balance = $product->product_price;
         $booking->amount_paid = "0";
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = $booking_date;
         $booking->due_date = $due_date;
-        $booking->discount = $discount;
-        $booking->total_cost = $product->product_price - $discount;
+        $booking->total_cost = $product->product_price;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
@@ -889,17 +810,8 @@ class FrontPageController extends Controller
 
         $reciepient = $valid_phone;
 
-        if($showDiscount == 1){
-            
-            $message = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2) ." Terms & Conditions Apply";
-            $this->sendMessage($message,$reciepient);
-        
-        }elseif($showDiscount == 0){
-
-            $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2)." Terms & Conditions Apply";
-            $this->sendMessage($message,$reciepient);
-
-        }
+        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2)." Terms & Conditions Apply";
+        $this->sendMessage($message,$reciepient);
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -909,7 +821,9 @@ class FrontPageController extends Controller
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-        return view('front.thanks',compact('product','customer','booking_reference','categories','message','amount'));
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+
+        return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
 
     }
 
@@ -921,17 +835,17 @@ class FrontPageController extends Controller
      */
     public function lipaNaMpesaPassword($lipa_time)
     {
-       
-        $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
-        $BusinessShortCode = '4029165';
+      
+        $passkey = env('STK_PASSKEY');  
+        $BusinessShortCode = env('MPESA_SHORT_CODE');
         $timestamp =$lipa_time;
         $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
         return $lipa_na_mpesa_password;
     }
 
     public function sendMessage($message,$reciepient){
-        $username   = "Combinesms";
-        $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
+        $username   = "Bukuswift";
+        $apiKey     = env('AT_API_KEY');
 
         // Initialize the SDK
         $AT  = new AfricasTalking($username, $apiKey);
@@ -1003,17 +917,17 @@ class FrontPageController extends Controller
 
         $curl_post_data = array(
 
-            'BusinessShortCode' => '4029165',
+            'BusinessShortCode' => env('MPESA_SHORT_CODE'),
             'Password'          => $apiPassword,
             'Timestamp'         => $lipa_time,
             'TransactionType'   => 'CustomerPayBillOnline',
             'Amount'            => $amount,
             'PartyA'            => $msisdn,
-            'PartyB'            =>'4029165',
+            'PartyB'            =>env('MPESA_SHORT_CODE'),
             'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://combine.co.ke/confirmation-url-Q7NMii654AqcdCNmVgE',
+            'CallBackURL'       => 'https://mosmos.co.ke/stk-callback',
             'AccountReference'  => $booking_ref,
-            'TransactionDesc'   => 'Combine Product Payment'
+            'TransactionDesc'   => 'Mosmos Product Payment'
         );
 
         $data_string = json_encode($curl_post_data);
@@ -1033,7 +947,7 @@ class FrontPageController extends Controller
         \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
 
         if(array_key_exists("errorCode", $responseArray)){
-            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
+            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
         }else{
             $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
         }
