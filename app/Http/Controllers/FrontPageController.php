@@ -49,11 +49,7 @@ class FrontPageController extends Controller
                     ->where('quantity','>',0)->latest()->inRandomOrder()->take(20)->get();
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
-                    ->where(function($q){    
-                        $q->where('vendor_id' , '!=', null)
-                        ->orWhere('agent_id' , '!=', null);
-                        })
-                    ->where('quantity','>',0)->orderBy('clicks','DESC')->inRandomOrder()->take(20)->get();
+                            ->where('quantity','>',0)->orderBy('clicks','DESC')->inRandomOrder()->take(20)->get();
 
         $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
 
@@ -95,15 +91,10 @@ class FrontPageController extends Controller
 
         $category = \App\Categories::find($request->category_id);
 
-        $products= \App\Products::with('influencer')->where ( 'product_name', 'LIKE', '%' . $search . '%' )->where('status','=','approved')
-                                ->where(function($q){    
-                                    $q->where('vendor_id' , '!=', null)
-                                    ->orWhere('agent_id' , '!=', null)
-                                    ->orWhere('influencer_id' , '!=', null);
-                                })
+        $products= \App\Products::where ( 'product_name', 'LIKE', '%' . $search . '%' )->where('status','=','approved')
                                 ->where('quantity','>',0)->orderBy('id','DESC')->inRandomOrder()->paginate(8);
 
-        return view('front.show_category',compact('products','categories','category'));
+        return view('front.search_results',compact('products','categories','search','category'));
        
 
     }

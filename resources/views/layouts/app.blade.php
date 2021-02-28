@@ -66,13 +66,13 @@
 
                     <div class="col-sm-5">
                         <div class="mdg-search mt-2">
-                            <form class="form-inline">
+                            <form class="form-inline" action="/search" method="get"> 
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
+                                    <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                                     <div class="input-group-append">
-                                        <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
+                                        <button class="btn mdg-btn-search" type="submit" id="mdg-btn-search">
                                             <span class="fa fa-search"></span>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
