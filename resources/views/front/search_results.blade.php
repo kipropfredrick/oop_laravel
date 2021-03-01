@@ -81,8 +81,6 @@
     </div>
     <!-- end products grid -->
 
-	{{ $products->links() }}
-
         </div>
     </div>
     <!-- end products carousel -->

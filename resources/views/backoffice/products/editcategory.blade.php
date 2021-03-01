@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Categories</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>Update Category</strong></h6>
         </div>
 
         <div class="container">
@@ -25,15 +25,38 @@
 
         @endif
         
-        <form action="/admin/update-category/{{$category->id}}" method="post">
+        <form action="/admin/update-category/{{$category->id}}" enctype="multipart/form-data" method="post">
           @csrf
 
-          <h6 class="text-uppercase font-size-sm font-weight-bold">Update Category</legend>
+          <!-- <h6 class="text-uppercase font-size-sm font-weight-bold"></legend> -->
 
-          <div class="form-group row">
+          <div style="margin-top:20px" class="form-group row">
             <label class="col-form-label col-lg-2">Name</label>
             <div class="col-lg-10">
                 <input value="{{$category->category_name}}" tclass="form-control" name="category_name" placeholder="Enter name" type="text" class="form-control @if($errors->has('category_name')) invalid_field @endif" required>
+               
+                @error('category_name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                 @enderror
+
+            </div>
+        </div>
+
+        <div style="margin-top:20px" class="form-group row">
+            <label class="col-form-label col-lg-2">Current Icon</label>
+            <div class="col-lg-10">
+                <img src="/storage/images/{{$category->category_icon}}" style="height:30px;width:30px;object-fit:contain" alt="Product Name">
+            </div>
+        </div>
+
+        
+
+        <div class="form-group row">
+            <label class="col-form-label col-lg-2">Update Icon</label>
+            <div class="col-lg-10">
+            <input tclass="form-control" name="category_icon"  type="file" class="form-control @if($errors->has('category_icon')) invalid_field @endif">
                
                 @error('category_name')
                             <div class="invalid-feedback">

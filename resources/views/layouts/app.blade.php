@@ -134,7 +134,7 @@
                     <ul class="navbar-nav">
                         @foreach($lcategories as $category)
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="/category/{{$category->slug}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{$category->category_name}}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -176,7 +176,7 @@
             <div class="collapse navbar-collapse" id="hhMenu">
                 <!-- handheld search -->
                 <div class="hh-search mt-2">
-                    <form class="form-inline my-2">
+                    <form class="form-inline my-2" action="/search" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                             <div class="input-group-append">
@@ -213,7 +213,7 @@
         <!-- handheld search -->
         <div class="hh-fix-search">
             <div class="hh-search">
-                <form class="form-inline my-2">
+                <form class="form-inline my-2" action="/search" method="get">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                         <div class="input-group-append">
@@ -250,7 +250,7 @@
                             <h3>Fear of Missing Out?</h3>
                             <p>Subscribe to our newsletter to be the first to know of all the latest offers, deals and new products as they drop.</p>
 
-                            <form class="form-inline">
+                            <form class="form-inline" action="/search" method="get">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Enter your Email Address" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                                     <div class="input-group-append">
@@ -302,13 +302,20 @@
         function myFunction(x) {
         x.classList.toggle("change");
         }
+        
+        function filter(sel)
+        {
+            $('#filter-form').submit();
+        }
     </script>
     <!-- END mobile toggle -->
-    @yield('extra-js')
+    
     <!-- current year -->
     <script type="text/javascript">
         document.getElementById("currentYear").innerHTML = new Date().getFullYear();
     </script>
+
+    @yield('extra-js')
     <!-- END current year -->
 
     <!-- Slick Slider -->

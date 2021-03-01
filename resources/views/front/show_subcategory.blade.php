@@ -54,12 +54,36 @@
                                 <div class="form-group row">
                                     <label class="col-3 col-form-label">Sort by:</label>
                                     <div class="col-7">
-                                        <select id="delivery-station" class="form-control">
-                                            <option selected>ID</option>
-                                            <option>Best sellers</option>
-                                            <option>Low to high price</option>
-                                            <option>High to low price</option>
-                                        </select>
+                                        <form action="/subcategory/{{$subcategory->slug}}" id="filter-form">
+                                            <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
+                                                @if ($sort_by == "id")
+                                                    <option value="id">ID</option>
+                                                    <option value="best-sellers">Best sellers</option>
+                                                    <option value="price-asc">Low to high price</option>
+                                                    <option value="price-desc">High to low price</option> 
+                                                @elseif($sort_by == "best-sellers")
+                                                    <option value="best-sellers">Best sellers</option>
+                                                    <option value="id">ID</option>
+                                                    <option value="price-asc">Low to high price</option>
+                                                    <option value="price-desc">High to low price</option> 
+                                                @elseif($sort_by == "price-asc")
+                                                    <option value="price-asc">Low to high price</option>
+                                                    <option value="price-desc">High to low price</option> 
+                                                    <option value="best-sellers">Best sellers</option>
+                                                    <option value="id">ID</option>
+                                                @elseif($sort_by == "price-desc")
+                                                    <option value="price-desc">High to low price</option>
+                                                    <option value="best-sellers">Best sellers</option>
+                                                    <option value="id">ID</option>
+                                                    <option value="price-asc">Low to high price</option>
+                                                @else
+                                                    <option value="id">ID</option>
+                                                    <option value="best-sellers">Best sellers</option>
+                                                    <option value="price-asc">Low to high price</option>
+                                                    <option value="price-desc">High to low price</option> 
+                                                @endif
+                                            </select>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -137,8 +161,5 @@
 </div>
 
 </div>
-
-
-
 
 @endsection

@@ -76,6 +76,7 @@ Route::get('/update_categories','FrontPageController@update_categories');
 Route::get('/terms', 'FrontPageController@terms');
 Route::get('/product/{slug}','FrontPageController@show');
 Route::get('/category/{slug}','FrontPageController@category');
+Route::get('/brand/{slug}','FrontPageController@brand');
 Route::get('/shop/{id}','FrontPageController@shop');
 Route::get('/subcategory/{slug}','FrontPageController@subcategory')->name('view-subcategory');
 Route::get('/checkout/{slug}','FrontPageController@checkout');

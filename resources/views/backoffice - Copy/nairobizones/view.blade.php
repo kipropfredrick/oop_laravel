@@ -31,6 +31,7 @@
           <input type="hidden" name="zone_id" value="{{$zone->id}}">
 
           <h6 class="text-uppercase font-size-sm font-weight-bold">Add Dropoff Location</legend>
+          <hr>
 
           <div class="form-group row">
 

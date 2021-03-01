@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Categories</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>Update Category</strong></h6>
         </div>
 
         <div class="container">
@@ -25,10 +25,10 @@
 
         @endif
         
-        <form action="/admin/update-category/{{$category->id}}" method="post">
+        <form action="/admin/update-category/{{$category->id}}" enctype="multipart/form-data" method="post">
           @csrf
 
-          <h6 class="text-uppercase font-size-sm font-weight-bold">Update Category</legend>
+          <!-- <h6 class="text-uppercase font-size-sm font-weight-bold">Update Category</legend> -->
 
           <div class="form-group row">
             <label class="col-form-label col-lg-2">Name</label>

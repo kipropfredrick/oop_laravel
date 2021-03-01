@@ -12,7 +12,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
         body {
-            background-color: #ffe8d2;
+            background-color: #1E22A9;
             font-family: 'Montserrat', sans-serif
         }
 
@@ -70,7 +70,7 @@
 
 </head>
 <body>
-<h1 class="text-center">Combine</h1>
+<h1 class="text-center">Lipia Mosmos</h1>
 <div class="container mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">

@@ -13,19 +13,10 @@
 
             <span class="bc-sep"></span>
 
-            <a href="/category/{{$category->slug}}">
-                <span>{{$category->category_name}}</span>
+            <a href="/brand/{{$brand->slug}}">
+                <span>{{$brand->brand_name}}</span>
             </a>
 
-            <span class="bc-sep"></span>
-
-            <!-- <span class="bc-sep"></span>
-
-            <span>Third Categorisation Name</span> -->
-
-            <!-- this section applies for categories, sub categories, third category and brand //
-            remove some elements to fit each level // last span is not a link //
-            remove this comment after implementation -->
         </div>
     </div>
 </div>
@@ -36,7 +27,7 @@
     <div class="container">
         <div>
             <div class="ht mb-3">
-                <h5>{{$category->category_name}}</h5>
+                <h5>{{$brand->brand_name}}</h5>
 
                 <div>
                     <div class="filters">
@@ -50,7 +41,7 @@
                                 <div class="form-group row">
                                     <label class="col-3 col-form-label">Sort by:</label>
                                     <div class="col-7">
-                                         <form action="/category/{{$category->slug}}" id="filter-form">
+                                    <form action="/brand/{{$brand->slug}}" id="filter-form">
                                             <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
                                                 @if ($sort_by == "id")
                                                     <option value="id">ID</option>
@@ -126,7 +117,7 @@
     <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
-                <h5>{{$category->category_name}} Weekly Best Sellers</h5>
+                <h5>{{$brand->brand_name}} Weekly Best Sellers</h5>
             </div>
 
             <div id="product-carousel">

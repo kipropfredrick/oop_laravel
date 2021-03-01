@@ -460,7 +460,41 @@ class AdminController extends Controller
 
         $data['slug'] = $slug;
 
-        DB::table('categories')->where('id','=',$id)->update(['category_name'=>$request->category_name,'slug'=>$slug]);
+        $image = $request->file('category_icon');
+
+        if($image !=null){
+            
+            if(!Storage::disk('public')->exists('thumbnail')){
+                Storage::disk('public')->makeDirectory('thumbnail');
+            }
+    
+            if(!Storage::disk('public')->exists('images')){
+                Storage::disk('public')->makeDirectory('images');
+            }
+    
+            $time = time();
+    
+            if ($files = $request->file('category_icon')) {
+                $fileNameToStore = Image::make($files);
+                $originalPath = 'storage/images/';
+                $fileNameToStore->save($originalPath.$time.$files->getClientOriginalName());
+                $thumbnailPath = 'storage/thumbnail/';
+                $fileNameToStore->resize(250, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                });
+                $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
+    
+                $category_icon = $time.$files->getClientOriginalName();
+            }else{
+                $category_icon = 'noimage.jpg';
+            } 
+
+            $data = ['category_name'=>$request->category_name,'slug'=>$slug,'category_icon'=>$category_icon];
+        }else{
+            $data = ['category_name'=>$request->category_name,'slug'=>$slug];
+        }
+
+        DB::table('categories')->where('id','=',$id)->update($data);
 
         return redirect('/admin/product-categories')->with('success','Category Updated.');
     }
