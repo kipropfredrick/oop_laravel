@@ -129,7 +129,7 @@
                                             $counties = \App\Counties::all();
                                             $locations = \App\PickupLocation::all();
                                             ?>
-                                              <select id="counties" class="form-control js-example-basic-single1" name="county_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('county_id')) invalid_field @endif" onchange="filter()" required>
+                                              <select id="counties" class="form-control" name="county_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('county_id')) invalid_field @endif" onchange="filter()" required>
                                                 <option value="">Select county</option>
                                                 @foreach($counties as $county)
                                                     <option value="{{$county->id}}" class="counties">{{$county->county_name}}</option>
