@@ -45,7 +45,7 @@
                             <div class="message">
                               <p id="message"></p>
                               <p id="messageN"></p>
-                              <p  id="direction">Use Paybill <strong>4040299</strong> and account number <strong>{{$booking_reference}}</strong> for all your next 
+                              <p  id="direction">Use Paybill <strong>4040299</strong> and account number <strong>{{$booking_reference}}</strong> for all your next payments.
                             </div>
 
                             <a href="/login" class="btn p-btn">Visit Dashboard</a>

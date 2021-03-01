@@ -18,6 +18,7 @@ class FrontPageController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+     
     public function update_categories(){
         
         $subs = DB::table('sub_categories')->get();
@@ -748,6 +749,10 @@ class FrontPageController extends Controller
         // return $booking;
 
         $booking->save();
+        
+
+
+        $this->sendMessage($recipients,$message);
 
 
         $booking_id = DB::getPdo()->lastInsertId();
@@ -962,7 +967,8 @@ class FrontPageController extends Controller
         return $lipa_na_mpesa_password;
     }
 
-    public function sendMessage($message,$reciepient){
+    public function sendMessage($recipients,$message){
+
         $username   = "Bukuswift";
         $apiKey     = env('AT_API_KEY');
 
@@ -971,21 +977,14 @@ class FrontPageController extends Controller
 
         // Get the SMS service
         $sms        = $AT->sms();
-
-        // Set the numbers you want to send to in international format
-        $reciepients = $reciepient;
-
-        // Set your message
-        $message    = $message;
-
-        // Set your shortCode or senderId
-        $from = "Mosmos";
+   
+    //    $from       = "Mosmos";
 
         try {
             // Thats it, hit send and we'll take care of the rest
             $result = $sms->send([
-                'to'      => $reciepients,
-                'from'=>$from,
+                'to'      => $recipients,
+                // 'from'=>$from,
                 'message' => $message,
             ]);
 

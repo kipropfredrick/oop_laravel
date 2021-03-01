@@ -281,6 +281,10 @@ class MpesaPaymentController extends Controller
 
             $booking = \App\Bookings::with('product','payments','customer','customer.user','county','location')->where('booking_reference','=',$bill_ref_no)->first();
 
+            if($booking == null){
+                return "Booking Does not exist!";
+            }
+
             if($booking->status == 'pending'){
                 if($booking->agent_code !== null){
                     $agent = \App\Agents::where('agent_code','=',$booking->agent_code)->first();
@@ -745,7 +749,10 @@ class MpesaPaymentController extends Controller
 
 
         if($payment !=null){
-            $message = "Payment of Ksh ".number_format($payment->TransAmount,2).' has been received, Mpesa reference code is '.$payment->TransID." You'll be contacted on how you'll get your cover, Thank you!";
+
+            $booking = \App\Bookings::with('product')->where('booking_reference',$request->payment_ref)->first();
+
+            $message = "We have received your payment of of Ksh ".number_format($payment->TransAmount,2)." for product ".$booking->product->product_name.', Mpesa reference code is '.$payment->TransID.".";
             $out['status'] = 1;
             $out['amount'] = $payment->TransAmount;
             $out['message'] = $message;
