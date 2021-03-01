@@ -178,7 +178,7 @@
                 <div class="hh-search mt-2">
                     <form class="form-inline my-2" action="/search" method="get">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
+                            <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                             <div class="input-group-append">
                                 <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
                                     <span class="fa fa-search"></span>
@@ -215,7 +215,7 @@
             <div class="hh-search">
                 <form class="form-inline my-2" action="/search" method="get">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
+                        <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                         <div class="input-group-append">
                             <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
                                 <span class="fa fa-search"></span>
@@ -252,7 +252,7 @@
 
                             <form class="form-inline" action="/search" method="get">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Enter your Email Address" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
+                                <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                                     <div class="input-group-append">
                                         <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
                                             <span class="fa fa-envelope-o"></span>
@@ -302,7 +302,7 @@
         function myFunction(x) {
         x.classList.toggle("change");
         }
-        
+
         function filter(sel)
         {
             $('#filter-form').submit();
