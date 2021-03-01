@@ -25,6 +25,7 @@
 			@endif
 		</div>
         
+		<div class="table-responsive padding">
         <table class="table datatable-basic  table-striped">
 						<thead>
 							<tr>
@@ -88,6 +89,7 @@
                             @endforeach
 						</tbody>
 					</table>
+					</div>
                 </div>
              </div>
 @endsection

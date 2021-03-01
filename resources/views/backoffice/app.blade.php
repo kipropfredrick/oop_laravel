@@ -355,7 +355,7 @@
 		  
 		<li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-bookmark"></i>
+              <i class="fas fa-bookmark"></i>
               <p>
                 Banners
                 <i class="right fas fa-angle-left"></i>

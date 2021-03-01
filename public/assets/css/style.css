@@ -680,6 +680,9 @@ table.table.table-borderless.table-sm {
     padding-right: 5px;
     padding-left: 5px;
 }
+.padding{
+    padding: 10px;
+}
 
 .mdg-btn-search{
     background: #006de1;

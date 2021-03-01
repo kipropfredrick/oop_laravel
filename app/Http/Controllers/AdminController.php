@@ -1740,7 +1740,7 @@ class AdminController extends Controller
         $recipients = '+254'.ltrim($request->input('phone'), '0');
 
         // Set your message
-        $message    = "You have been registered as an agent on combine.co.ke. Your Username/Email is : {$request->email}. Password : {$request->input('phone')}. Agent Code : AG{$user_id}".", Terms & Conditions Apply";
+        $message    = "You have been registered as an agent on mosmos.co.ke. Your Username/Email is : {$request->email}. Password : {$request->input('phone')}. Agent Code : AG{$user_id}".", Terms & Conditions Apply";
 
         // Set your shortCode or senderId
         $from = "Mosmos";
@@ -1829,7 +1829,7 @@ class AdminController extends Controller
         $recipients = $msisdn;
         
         // Set your message
-        $message    = "You have been registered as an influencer on combine.co.ke. Your Username/Email is : {$request->email}. Password : {$request->input('phone')}. influencer Code : INF{$user_id}".", Terms & Conditions Apply";
+        $message    = "You have been registered as an influencer on mosmos.co.ke. Your Username/Email is : {$request->email}. Password : {$request->input('phone')}. influencer Code : INF{$user_id}".", Terms & Conditions Apply";
         
         // Set your shortCode or senderId
         $from = "Mosmos";

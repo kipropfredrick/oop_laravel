@@ -24,8 +24,12 @@
 
 			@endif
 		</div>
-        
-        <table class="table datatable-basic  table-striped">
+
+
+		<div class="table-responsive padding">
+
+		<div class="table-responsive padding">
+		<table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>
@@ -33,7 +37,7 @@
 								<th class="thead">Booking Reference</th>
                                 <th class="thead">Product Code</th>
                                 <th class="thead">Customer</th>
-								<th class="thead">Agent</th>
+								<th class="thead">Vendor</th>
 								<th class="thead">Delivery Location</th>
                                 <th class="thead">Phone Number</th>
 								<th class="thead">Item Cost</th>
@@ -123,6 +127,11 @@
                             @endforeach
 						</tbody>
 					</table>
-                </div>
-             </div>
+				</div>
+
+		</div>
+        
+        
+		</div>
+		</div>
 @endsection

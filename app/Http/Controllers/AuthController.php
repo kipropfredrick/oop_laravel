@@ -109,7 +109,7 @@ class AuthController extends Controller
         $recipients = '+254'.ltrim($request->input('phone'), '0');
 
         // Set your message
-        $message    = "You have been registered as a vendor on combine.co.ke. Your Username/Email is : {$request->email}. Vendor Code : VD.$user_id"."Terms & Conditions Apply";
+        $message    = "You have been registered as a vendor on mosmos.co.ke. Your Username/Email is : {$request->email}. Vendor Code : VD.$user_id"."Terms & Conditions Apply";
 
         // Set your shortCode or senderId
         $from = "COMBINE";

@@ -68,7 +68,7 @@
 
         <h6 class="text-uppercase font-size-sm font-weight-bold">Dropoff Locations</legend>
 
-        <table class="table datatable-basic  table-striped">
+        <table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>

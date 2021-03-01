@@ -10,7 +10,7 @@
     $influencer = \App\Influencer::with('user','commission_totals')->where('user_id','=',auth()->user()->id)->first();
  ?>
 
-<div class="card-body py-0">
+<div class="card-body py-0 padding">
             <div class="row">
                 <div class="col-sm-4">
                     <div class="d-flex align-items-center justify-content-center mb-2 quick-links">
@@ -47,7 +47,7 @@
 @endif
 
 @if(auth()->user()->role =='admin')
-<div class="card">
+<div class="card padding">
         <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>Quick Actions</strong></h6>
         </div>
@@ -96,7 +96,7 @@
     </div>
 <!-- /traffic sources -->
 
-<div class="card">
+<div class="card padding">
     <div class="row">
         <div class="col-md-8">
            <h6 class="headings"><strong> Bookings</strong></h6>
@@ -143,7 +143,7 @@
 </div>
 @elseif(auth()->user()->role =='user')
 
-<div class="card">
+<div class="card padding">
         <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>Quick Actions</strong></h6>
         </div>

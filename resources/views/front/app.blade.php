@@ -305,7 +305,7 @@
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in feugiat lorem. Pellentque ac placerat tellus.
                                     </div> -->
                                     <ul class="footer-contacts__contacts">
-                                        <li><i class="footer-contacts__icon far fa-envelope"></i>info@combine.co.ke</li>
+                                        <li><i class="footer-contacts__icon far fa-envelope"></i>info@mosmos.co.ke</li>
                                         <li><a href="tel:0759701616"><i class="footer-contacts__icon fas fa-mobile-alt"></i>0759 701 616</a></li>
                                         <li><i class="footer-contacts__icon far fa-clock"></i> Business Hours : 8AM - 5PM</li>
                                     </ul>

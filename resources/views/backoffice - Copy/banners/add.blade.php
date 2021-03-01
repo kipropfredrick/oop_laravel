@@ -49,7 +49,7 @@
         <div class="form-group row">
             <label class="col-form-label col-lg-2">Link</label>
             <div class="col-lg-10">
-                <input tclass="form-control" cols="30" rows="10" name="link" id="link" placeholder="E.g https://combine.co.ke/category/Electronics-&-audio-systems" type="" class="form-control @if($errors->has('link')) invalid_field @endif" required>
+                <input tclass="form-control" cols="30" rows="10" name="link" id="link" placeholder="E.g https://mosmos.co.ke/category/Electronics-&-audio-systems" type="" class="form-control @if($errors->has('link')) invalid_field @endif" required>
                 @error('link')
                             <div class="invalid-feedback">
                                 {{ $message }}
