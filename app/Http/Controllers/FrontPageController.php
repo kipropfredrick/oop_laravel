@@ -41,14 +41,12 @@ class FrontPageController extends Controller
        $categories = \App\Categories::with('subcategories')->get();
        $lcategories = \App\Categories::with('subcategories')->take(10)->get();
        
-       $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                    ->where(function($q){    
-                        $q->where('vendor_id' , '!=', null)
-                        ->orWhere('agent_id' , '!=', null);
-                        })
+       $products = \App\Products::with('category','subcategory')
+                    ->where('status','=','approved')
                     ->where('quantity','>',0)->latest()->inRandomOrder()->take(20)->get();
 
-        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
+        $trendingProducts = \App\Products::with('category','subcategory')
+                            ->where('status','=','approved')
                             ->where('quantity','>',0)->orderBy('clicks','DESC')->inRandomOrder()->take(20)->get();
 
         $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
@@ -59,7 +57,8 @@ class FrontPageController extends Controller
             array_push($product_ids,$booking->product_id);
         }
 
-        $bestSellers = \App\Products::with('category','subcategory')->where('status','=','approved')
+        $bestSellers = \App\Products::with('category','subcategory')
+                        ->where('status','=','approved')
                         ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->take(20)->get();
 
 
@@ -563,7 +562,7 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'BKG'.$booking_id;
+        $booking_reference = 'BKG'.rand(1000,9999);
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
@@ -753,7 +752,7 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'BKG'.$booking_id;
+        $booking_reference = 'BKG'.rand(1000,9999);
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
@@ -841,7 +840,7 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'BKG'.$booking_id;
+        $booking_reference = 'BKG'.rand(1000,9999);
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
@@ -924,7 +923,7 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'BKG'.$booking_id;
+        $booking_reference = 'BKG'.rand(1000,9999);
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 

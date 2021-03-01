@@ -2,9 +2,31 @@
 
 @section('content')
 
+<!-- breadcrumb --> 
+<div style="margin-top:105px" class="bc-bg">
+    <div class="container">
+        <div class="bc-link">
+            <a href="/">
+                <i class="fas fa-home"></i>
+            </a>
+
+            <span class="bc-sep"></span>
+
+            <a href="/product/{{$product->slug}}">
+                <span>{{$product->product_name}}</span>
+            </a>
+
+            <span class="bc-sep"></span>
+
+            <span>Checkout</span>
+        </div>
+    </div>
+</div>
+<!-- end -->
+
 <div class="container">
 
- <section style="margin-top:150px">
+ <section style="margin-top:20px">
     <!-- site__body -->
     <div class="site__body">
     <div class="site__body">

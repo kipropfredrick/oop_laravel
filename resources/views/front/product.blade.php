@@ -232,7 +232,7 @@
             <div id="product-carousel">
                 <div class="slick">
 
-                <?php $products = \App\Products::where('category_id',$product->category_id)->orderBy('id','DESC')->skip(20)->take(20)->get();  ?>
+                <?php $products = \App\Products::where('category_id',$product->category_id)->where('status','=','approved')->orderBy('id','DESC')->skip(20)->take(20)->get();  ?>
 
                 @forelse($products as $product)
                     <div class="p-c-sec">
