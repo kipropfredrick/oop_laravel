@@ -71,6 +71,10 @@
 
                             <div class="product-price">KSh. {{number_format($product->product_price)}}</div>
 
+                            <div class="mb-3">
+                                    <small>Book with only <strong>KSh.500</strong></small>
+                            </div>
+
                             <div>
                                 <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </div>
@@ -241,7 +245,6 @@
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{$product->product_price}}</div>
-
                                 <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
                             </a>
                         </div>
