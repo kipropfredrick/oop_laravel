@@ -25,6 +25,7 @@
 			@endif
 		</div>
         
+		<div class="padding">
         <table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -73,6 +74,7 @@
                             @endforeach
 						</tbody>
 					</table>
+					</div>
                 </div>
              </div>
 @endsection

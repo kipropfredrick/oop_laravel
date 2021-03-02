@@ -346,7 +346,9 @@ class VendorController extends Controller
             $image = 'noimage.jpg';
         }
 
-        $slug = $time."-".$request->product_name;
+        $rand = rand(100,999);
+
+        $slug = $rand."-".$request->product_name;
         
         $slug =  str_replace(' ', '-', $slug);
 

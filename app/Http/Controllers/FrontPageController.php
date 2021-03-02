@@ -466,8 +466,8 @@ class FrontPageController extends Controller
         }else {
             $minDeposit = 0.1 *$product->product_price;
         }
-        if($request->initial_deposit<200){
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(200,0));
+        if($request->initial_deposit<500){
+          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(500,0));
         }
 
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->where('status','=','active')->first();
@@ -567,14 +567,15 @@ class FrontPageController extends Controller
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
-        $reciepient = $valid_phone;
-
-        $message = "Booking of : ".$product->product_name." was successful, Product price ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format($total_cost,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.", Enter Amount Enter Amount : KES ".number_format($minDeposit,2);
-        $this->sendMessage($message,$reciepient);
+        $recipients = $valid_phone;
        
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+        
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
+
+        $this->sendMessage($recipients,$message);
         
          $message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
@@ -750,11 +751,6 @@ class FrontPageController extends Controller
 
         $booking->save();
         
-
-
-        $this->sendMessage($recipients,$message);
-
-
         $booking_id = DB::getPdo()->lastInsertId();
 
         $booking_reference = 'BKG'.rand(1000,9999);
@@ -762,7 +758,7 @@ class FrontPageController extends Controller
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
 
-        $reciepient = $valid_phone;
+       $recipients = $valid_phone;
 
          if($shipping_cost>0){
             $shipping_cost = number_format($shipping_cost,2);
@@ -771,20 +767,17 @@ class FrontPageController extends Controller
         };
 
       
-
-        $message = "Booking of : ".$product->product_name." was successful".", Product Price is ".$product->product_price.", Shipping Cost ".$shipping_cost.", Total Price is KES ".number_format($total_cost,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2)." Terms & Conditions Apply";
-        $this->sendMessage($message,$reciepient);
-
-        
-
         $booking_id = DB::getPdo()->lastInsertId();
 
         $product = \App\Products::find($request->product_id);
 
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+
+        $this->sendMessage($recipients,$message);
+
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
-
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
@@ -849,15 +842,17 @@ class FrontPageController extends Controller
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
-        $reciepient = $valid_phone;
-        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.",Enter Amount : KES ".number_format($minDeposit,2);
-        $this->sendMessage($message,$reciepient);
-
+       $recipients = $valid_phone;
+       
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
         $product = \App\Products::find($request->product_id);
+
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+
+        $this->sendMessage($recipients,$message);
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
@@ -932,10 +927,11 @@ class FrontPageController extends Controller
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
-        $reciepient = $valid_phone;
+       $recipients = $valid_phone;
 
-        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($request->initial_deposit,2)." Terms & Conditions Apply";
-        $this->sendMessage($message,$reciepient);
+       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+
+       $this->sendMessage($recipients,$message);
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -991,7 +987,7 @@ class FrontPageController extends Controller
             // return array($result);
 
         } catch (Exception $e) {
-            echo "Error: ".$e->getMessage();
+            \Log::info('SMS ERROR =>'.print_r($e->getMessage(),1));
         }
     }
 

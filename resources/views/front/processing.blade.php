@@ -162,11 +162,11 @@
         $('#message').show();
         $('#afterPaymentView').show();
         var message =  $('#msg_input').val();
-        document.getElementById("messageN").innerHTML = "No payment as been received! "+message;
+        document.getElementById("messageN").innerHTML = "No payment has been received, "+message;
         }, 30000);
 
     function checkPayment(){
-        console.log('Payment Ref =>'+payment_ref);
+        // console.log('Payment Ref =>'+payment_ref);
         $.ajax({
             /* the route pointing to the post function */
             url: '/checkpayment',

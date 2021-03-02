@@ -13,11 +13,11 @@
 
             <span class="bc-sep"></span>
 
-            <a href="/category/{{$category->slug}}">
+            <!-- <a href="/category/{{$category->slug}}"> -->
                 <span>{{$category->category_name}}</span>
-            </a>
+            <!-- </a> -->
 
-            <span class="bc-sep"></span>
+            <!-- <span class="bc-sep"></span> -->
 
             <!-- <span class="bc-sep"></span>
 

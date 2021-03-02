@@ -15,6 +15,17 @@ class CustomerController extends Controller
       return view('backoffice.index');
     }
 
+    public function pending_bookings(){
+        $user = Auth::user();
+        $customer = Customers::where('user_id','=',$user->id)->first();
+        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','pending')->get();
+        foreach($bookings as $booking){
+            $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+            $booking['progress'] = $progress;
+        }
+        return view('backoffice.customer.pending',compact('bookings')); 
+    }
+
     public function complete_bookings(){
         $user = Auth::user();
         $customer = Customers::where('user_id','=',$user->id)->first();

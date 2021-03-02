@@ -12,7 +12,7 @@
 
             <span class="bc-sep"></span>
 
-            <a href="category.php">
+            <a href="/category/{{$product->category->slug}}">
              
                 <span>{{$product->category->category_name}}</span>
             </a>
@@ -196,7 +196,7 @@
                                         <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>
                                     </ul>
                                 </div>
-                                <div class="col-sm-6">
+                                <!-- <div class="col-sm-6">
                                     <h3>
                                         How to order with USSD
                                     </h3>
@@ -210,7 +210,7 @@
                                         <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
                                         <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>
                                     </ul>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

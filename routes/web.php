@@ -106,6 +106,7 @@ Route::prefix('dashboard')->group(function () {
 Route::prefix('customer')->group(function () {
     Route::group(['middleware' => ['auth','customer']], function (){ 
         Route::get('/dashboard', 'CustomerController@index')->name('customer.dashboard');
+        Route::get('/pending-bookings','CustomerController@pending_bookings');
         Route::get('/complete-bookings','CustomerController@complete_bookings');
         Route::get('/active-bookings','CustomerController@active_bookings');
         Route::get('/revoked-bookings','CustomerController@revoked_bookings');

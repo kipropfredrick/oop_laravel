@@ -35,7 +35,7 @@
                 <li>Take note of your <strong>order ID</strong>, you will use it to make your subsequent payments</li>
             </ul>
 
-            <h3>How can I order with USSD?</h3>
+            <!-- <h3>How can I order with USSD?</h3>
             
             <ul>
                 <li>Dial <strong>*000*0#</strong> on your phone</li>
@@ -47,7 +47,7 @@
                 <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
                 <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>
                 <li>Take note of your <strong>order ID</strong>, you will use it to make your subsequent payments</li>
-            </ul>
+            </ul> -->
 
             <h3>How do I make subsequent payments?</h3>
             

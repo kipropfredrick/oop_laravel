@@ -408,6 +408,7 @@
 				<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>My Bookings</span></a>
 
 				<ul class="nav nav-treeview" data-submenu-title="">
+          <li class="nav-item"><a href="/customer/pending-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Pending Bookings</span></a></li>
 					<li class="nav-item"><a href="/customer/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Complete Bookings</span></a></li>
 					<li class="nav-item"><a href="/customer/active-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Active Bookings</span></a></li>
 					<li class="nav-item"><a href="/customer/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Revoked Bookings</span></a></li>

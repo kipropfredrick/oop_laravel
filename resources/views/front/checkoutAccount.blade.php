@@ -76,7 +76,7 @@
                                             </div>
                                                 <div class="form-group">
                                                     <label for="checkout-street-address">Initial Deposit</label>
-                                                    <input required name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
+                                                    <input required min="500" name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                                 </div>
 
                                                 <label for="location"><strong>Delivery Location</strong></label> <br>

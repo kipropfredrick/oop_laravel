@@ -19,9 +19,9 @@
 
             <span class="bc-sep"></span>
 
-            <a href="/subcategory/{{$subcategory->id}}">
+            <!-- <a href="/subcategory/{{$subcategory->id}}"> -->
                 <span>{{$subcategory->subcategory_name}}</span>
-            </a>
+            <!-- </a> -->
 
             <!-- <span class="bc-sep"></span>
 

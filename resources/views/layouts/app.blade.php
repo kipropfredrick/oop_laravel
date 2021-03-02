@@ -113,8 +113,7 @@
                                             <div class="cta-text">  
                                                 <span>My Account</span>
                                                 <h6>
-                                                    <a href="/login">Login</a>
-                                                    <!-- Visit Dashboard, if user id logged in -->
+                                                    <a href="/login">@if(auth()->user())  Visit Dashboard @else Login @endif</a>
                                                 </h6>
                                             </div>
                                         </div>

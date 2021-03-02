@@ -752,7 +752,8 @@ class MpesaPaymentController extends Controller
 
             $booking = \App\Bookings::with('product')->where('booking_reference',$request->payment_ref)->first();
 
-            $message = "We have received your payment of of Ksh ".number_format($payment->TransAmount,2)." for product ".$booking->product->product_name.', Mpesa reference code is '.$payment->TransID.".";
+            $message = "Hello ".$payment->FirstName."We have received your payment of of Ksh ".number_format($payment->TransAmount,2)." for product ".$booking->product->product_name.', Mpesa reference code is '.$payment->TransID.".";
+            
             $out['status'] = 1;
             $out['amount'] = $payment->TransAmount;
             $out['message'] = $message;
