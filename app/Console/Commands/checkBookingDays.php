@@ -46,37 +46,6 @@ class checkBookingDays extends Command
 
         foreach($bookings as $booking){
 
-            $product = \App\Products::find( $booking->product_id);
-
-            if($product !=null){
-                if($product->agent_id !=null){
-
-                    $agent = \App\Agents::where('id','=',$product->agent_id)->first();
-            
-                    $agent_code = $agent->agent_code;
-    
-                    \App\Bookings::where('id',$booking->id)->update(['agent_code'=>$agent_code]);
-            
-                }elseif($product->vendor_id !=null){
-        
-                    $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-        
-                    $vendor_code = $vendor->vendor_code;
-    
-                    \App\Bookings::where('id',$booking->id)->update(['vendor_code'=>$vendor_code]);
-        
-                }elseif($product->influencer_id !=null){
-    
-                    $influencer = \App\Influencer::where('id','=',$product->influencer_id)->first();
-
-                    $influencer_code = $influencer->code;
-    
-                    \App\Bookings::where('id',$booking->id)->update(['influencer_code'=>$influencer_code]);
-                    
-                    }
-        
-            }
-
             $now = now();
 
             $startTimeStamp = strtotime($booking->created_at);

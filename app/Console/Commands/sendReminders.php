@@ -7,6 +7,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use Illuminate\Support\Facades\Log;
 use \App\Mail\SendNotificationMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\SendSMSController;
 
 class sendReminders extends Command
 {
@@ -42,14 +43,6 @@ class sendReminders extends Command
     public function handle()
     {
         
-        $username   = "Combinesms";
-        $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
-
-        $AT  = new AfricasTalking($username, $apiKey);
-
-        // Get the SMS service
-        $sms        = $AT->sms();
-
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','pending')->orderBy('id', 'DESC')->get();
 
         Log::info('Cron Job Running, Data');
@@ -60,32 +53,12 @@ class sendReminders extends Command
 
         foreach($bookings as $booking){
 
-        $reciepients = $booking->customer->phone;
+        $recipients = $booking->customer->phone;
 
-        // Set your message
+        $message = "Complete your booking for ".$booking->product->product_name.". Paybill 4040299 and account number [order-id]. Total amount is KSh.".$booking->booking_reference.". You can pay a minimum of KSh.500.";
 
-        $message    = "You had attempted to make a booking of ".$booking->product->product_name." on combine.co.ke, The Product Price is  : KES ".number_format($booking->total_cost,2)." If you are still intrested, Go to Mpesa , Select Paybill Enter : 4029165 and Account Number : ".$booking->booking_reference.", Enter any amount you wish to pay. Terms & Conditions Apply";
-
-        Log::info('Message : ' .print_r($message,true));
-
-        // Set your shortCode or senderId
-        $from = "COMBINE";
-
-
-        try {
-            // Thats it, hit send and we'll take care of the rest
-            $result = $sms->send([
-                'to'      => $reciepients,
-                'from'=>$from,
-                'message' => $message,
-            ]);
-
-            // return array($result);
-
-        } catch (Exception $e) {
-            echo "Error: ".$e->getMessage();
-         }
-
+        SendSMSController::sendMessage($recipients,$message);
+        
         }
 
 

@@ -7,8 +7,10 @@ use File;
 use DB;
 use Carbon\Carbon;
 use Hash;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use AfricasTalking\SDK\AfricasTalking;
+use App\Http\Controllers\SendSMSController;
 
 class FrontPageController extends Controller
 {
@@ -39,6 +41,8 @@ class FrontPageController extends Controller
 
     public function index()
     {
+
+
        $categories = \App\Categories::with('subcategories')->get();
        $lcategories = \App\Categories::with('subcategories')->take(10)->get();
        
@@ -575,7 +579,7 @@ class FrontPageController extends Controller
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
-        $this->sendMessage($recipients,$message);
+        SendSMSController::sendMessage($recipients,$message);
         
          $message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
@@ -773,7 +777,7 @@ class FrontPageController extends Controller
 
         $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
 
-        $this->sendMessage($recipients,$message);
+        SendSMSController::sendMessage($recipients,$message);
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -852,7 +856,7 @@ class FrontPageController extends Controller
 
         $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
 
-        $this->sendMessage($recipients,$message);
+        SendSMSController::sendMessage($recipients,$message);
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
@@ -931,7 +935,7 @@ class FrontPageController extends Controller
 
        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
 
-       $this->sendMessage($recipients,$message);
+       SendSMSController::sendMessage($recipients,$message);
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -961,34 +965,6 @@ class FrontPageController extends Controller
         $timestamp =$lipa_time;
         $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
         return $lipa_na_mpesa_password;
-    }
-
-    public function sendMessage($recipients,$message){
-
-        $username   = "Bukuswift";
-        $apiKey     = env('AT_API_KEY');
-
-        // Initialize the SDK
-        $AT  = new AfricasTalking($username, $apiKey);
-
-        // Get the SMS service
-        $sms        = $AT->sms();
-   
-    //    $from       = "Mosmos";
-
-        try {
-            // Thats it, hit send and we'll take care of the rest
-            $result = $sms->send([
-                'to'      => $recipients,
-                // 'from'=>$from,
-                'message' => $message,
-            ]);
-
-            // return array($result);
-
-        } catch (Exception $e) {
-            \Log::info('SMS ERROR =>'.print_r($e->getMessage(),1));
-        }
     }
 
     public function stk_push($amount,$msisdn,$booking_ref){
