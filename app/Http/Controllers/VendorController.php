@@ -194,26 +194,31 @@ class VendorController extends Controller
             $image_path = $request->file('image_path');
     
             $time = now();
+
+            $time = str_replace(":", "-", $time);
+
+            $time = str_replace(" ", "-", $time);
+
     
-            // if($image_path == null){
+            if($image_path == null){
     
-            // }else{
-            //     $fileNameToStore = Image::make($image_path);
-            //     $originalPath = 'storage/gallery/images/';
-            //     $fileNameToStore->save($originalPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
-            //     $thumbnailPath = 'storage/gallery/thumbnail/';
-            //     $fileNameToStore->resize(250, null, function ($constraint) {
-            //                         $constraint->aspectRatio();
-            //                     });
-            //     $fileNameToStore = $fileNameToStore->save($thumbnailPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
+            }else{
+                $fileNameToStore = Image::make($image_path);
+                $originalPath = 'storage/gallery/images/';
+                $fileNameToStore->save($originalPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
+                $thumbnailPath = 'storage/gallery/thumbnail/';
+                $fileNameToStore->resize(250, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                });
+                $fileNameToStore = $fileNameToStore->save($thumbnailPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
     
-            //     $image = str_replace(' ', '-',$time.$image_path->getClientOriginalName());
+                $image = str_replace(' ', '-',$time.$image_path->getClientOriginalName());
     
-            //     DB::table('galleries')->insert( [
-            //         'product_id' => $id,
-            //         'image_path' => $image
-            //     ]);
-            // }
+                DB::table('galleries')->insert( [
+                    'product_id' => $id,
+                    'image_path' => $image
+                ]);
+            }
     
             if($product_image == null){
     
@@ -337,7 +342,11 @@ class VendorController extends Controller
             Storage::disk('public')->makeDirectory('images');
         }
 
-        $time = time();
+        $time = now();
+
+        $time = str_replace(":", "-", $time);
+
+        $time = str_replace(" ", "-", $time);
 
         if ($files = $request->file('product_image')) {
             $fileNameToStore = Image::make($files);
