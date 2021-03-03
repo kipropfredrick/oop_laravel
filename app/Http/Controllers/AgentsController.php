@@ -349,7 +349,7 @@ class AgentsController extends Controller
                 $vendor = \App\Vendors::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
                 $agent = $vendor->user->name.' (Vendor)';
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Combine (Admin)";
+               $agent = "Lipia Mosmos(Admin)";
             }
 
             $booking['agent'] = $agent;
@@ -374,7 +374,7 @@ class AgentsController extends Controller
                 $vendor = \App\Vendors::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
                 $agent = $vendor->user->name.' (Vendor)';
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Combine (Admin)";
+               $agent = "Lipia Mosmos(Admin)";
             }
 
             $booking['agent'] = $agent;

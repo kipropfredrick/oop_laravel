@@ -185,6 +185,7 @@ Route::prefix('vendor')->group(function () {
         Route::get('/assigned-products', 'VendorController@assigned_products');
         Route::get('/product-view/{id}','VendorController@view_product');
         Route::get('/add-product', 'VendorController@add_product');
+        Route::get('/image-delete/{id}', 'VendorController@image_delete');
         Route::post('/update-product/{id}', 'VendorController@update_product');
         Route::post('/save-product', 'VendorController@save_product');
         Route::get('/complete-bookings','VendorController@complete_bookings');

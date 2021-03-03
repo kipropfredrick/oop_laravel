@@ -40,87 +40,6 @@ class AdminController extends Controller
          return [false, false];
      }
 
-     public function testSMS(){
-
-        $username   = "Combinesms";
-        $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
-
-        // Initialize the SDK
-        $AT  = new AfricasTalking($username, $apiKey);
-
-        // Get the SMS service
-        $sms        = $AT->sms();
-
-        // Set the numbers you want to send to in international format
-        $recipients ="254713302589,254795452992";
-
-        // Set your message
-        $message    = "Hello Naomi, Your booking Reference for Elegant Bathroom Organiser Rectangle Shelf has changed to BKG626381 and your balance to KES 500.00. Use the mentioned booking reference as the new Account Number, Have a good day";
-
-        // $details  = [
-        //     'customer_name'=>"Levi",
-        //     'product_name'=>"Test Product Name",
-        //     'booking_reference'=>"BKG123",
-        //     'total_cost'=>number_format(1000,2)
-        // ];
-
-        // $details  = [
-        //     'customer_name'=>"Levi",
-        //     'product_name'=>"Test Product Name",
-        //     'booking_reference'=>"BKG123",
-        //     'total_cost'=>number_format(1000,2)
-        // ];
-
-        // Mail::to('levkisaka@gmail.com')->send(new SendNotificationMail($details));
-
-        $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('id',58)->first();
-
-        $latestPayment = \App\Payments::with('mpesapayment')->where('booking_id',$booking->id)->latest()->first();
-
-        // return $booking;
-
-        $details  = [
-            'customer_name'=>$booking->customer->user->name,
-            'product_name'=>$booking->product->product_name,
-            'booking_reference'=>$booking->booking_reference,
-            'total_cost'=>number_format($booking->total_cost,2),
-            'amount_paid'=>number_format($booking->amount_paid,2),
-            'balance'=>number_format($booking->balance,2),
-            'product_price'=>number_format($booking->product->product_price,2),
-            'payments'=>$booking->payments,
-            'latestPayment'=>$latestPayment
-        ];
-
-       
-
-
-        Mail::to('levkisaka@gmail.com')->send(new SendPaymentEmail($details));
-
-        
-
-        
-
-
-        // Set your shortCode or senderId
-        $from = "Mosmos";
-
-        try {
-            // Thats it, hit send and we'll take care of the rest
-            $result = $sms->send([
-                'to'      => $recipients,
-                'from'=>$from,
-                'message' => $message,
-            ]);
-
-            // return array($result);
-
-        } catch (Exception $e) {
-            echo "Error: ".$e->getMessage();
-            // return array($e->getMessage());
-        }
-     }
-
-     
 
     public function index()
     {
@@ -1082,7 +1001,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
 
@@ -1091,19 +1010,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1168,7 +1087,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
 
@@ -1177,19 +1096,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1249,7 +1168,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
 
@@ -1258,19 +1177,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1335,7 +1254,7 @@ class AdminController extends Controller
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
             }elseif($booking->vendor_code !== null){
@@ -1343,10 +1262,10 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1381,7 +1300,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
 
@@ -1390,19 +1309,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1460,7 +1379,7 @@ class AdminController extends Controller
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
             }elseif($booking->vendor_code !== null){
@@ -1468,19 +1387,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1551,7 +1470,7 @@ class AdminController extends Controller
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
 
             }elseif($booking->vendor_code !== null){
@@ -1559,19 +1478,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
 
@@ -1593,28 +1512,28 @@ class AdminController extends Controller
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
                 Log::info("AGENT =>".print_r($agent,1));
                 if($agent == null){
-                 $agent = "CombineMosmos (Admin)";
+                 $agent = "Lipia Mosmos (Admin)";
                 }else {
                     $agent = $agent->user->name.' (Agent)';
                 }
             }elseif($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
                 if($vendor == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                        $agent = $vendor->user->name.' (Vendor)';
                    }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "CombineMosmos (Admin)";
+                    $agent = "Lipia Mosmos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "CombineMosmos (Admin)";
+               $agent = "Lipia Mosmos (Admin)";
             }
 
             $booking['agent'] = $agent;
@@ -1727,38 +1646,6 @@ class AdminController extends Controller
         $agent->business_name  = $request->input('business_name');
         $agent->save();
 
-        $username   = "Combinesms";
-        $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
-
-        // Initialize the SDK
-        $AT  = new AfricasTalking($username, $apiKey);
-
-        // Get the SMS service
-        $sms        = $AT->sms();
-
-        // Set the numbers you want to send to in international format
-        $recipients = '+254'.ltrim($request->input('phone'), '0');
-
-        // Set your message
-        $message    = "You have been registered as an agent on mosmos.co.ke. Your Username/Email is : {$request->email}. Password : {$request->input('phone')}. Agent Code : AG{$user_id}".", Terms & Conditions Apply";
-
-        // Set your shortCode or senderId
-        $from = "Mosmos";
-
-        try {
-            // Thats it, hit send and we'll take care of the rest
-            $result = $sms->send([
-                'to'      => $recipients,
-                'from'=>$from,
-                'message' => $message,
-            ]);
-
-            // return array($result);
-
-        } catch (Exception $e) {
-            echo "Error: ".$e->getMessage();
-        }
-
         return redirect('admin/agents')->with('success','Agent Added');
 
     }
@@ -1816,38 +1703,6 @@ class AdminController extends Controller
         $influencer_t->pending_payment = '0.00';
         $influencer_t->save();
 
-        $username   = "Combinesms";
-        $apiKey     = "cf56a93a37982301267fd00af0554c068a4efeb005213e568278c9492152ca28";
-        
-        // Initialize the SDK
-        $AT  = new AfricasTalking($username, $apiKey);
-        
-        // Get the SMS service
-        $sms        = $AT->sms();
-        
-        // Set the numbers you want to send to in international format
-        $recipients = $msisdn;
-        
-        // Set your message
-        $message    = "You have been registered as an influencer on mosmos.co.ke. Your Username/Email is : {$request->email}. Password : {$request->input('phone')}. influencer Code : INF{$user_id}".", Terms & Conditions Apply";
-        
-        // Set your shortCode or senderId
-        $from = "Mosmos";
-        
-        try {
-            // Thats it, hit send and we'll take care of the rest
-            $result = $sms->send([
-                'to'      => $recipients,
-                'from'=>$from,
-                'message' => $message,
-            ]);
-        
-            // return array($result);
-        
-        } catch (Exception $e) {
-            echo "Error: ".$e->getMessage();
-        }
-        
         return redirect('admin/influencers')->with('success','Influencer Added');
         
         }

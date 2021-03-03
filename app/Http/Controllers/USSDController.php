@@ -348,12 +348,12 @@ class USSDController extends Controller
 
                     if($showDiscount == 1){
             
-                        $AFmessage = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($deposit,2);
+                        $AFmessage = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($deposit,2);
                         $this->sendMessage($AFmessage,$reciepient);
                     
                     }elseif($showDiscount == 0){
             
-                        $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($deposit,2);
+                        $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($deposit,2);
                         $this->sendMessage($AFmessage,$reciepient);
             
                     }
@@ -669,12 +669,12 @@ class USSDController extends Controller
 
                     if($showDiscount == 1){
             
-                        $message = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($minDeposit,2);
+                        $message = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($minDeposit,2);
                         $this->sendMessage($AFmessage,$reciepient);
                     
                     }elseif($showDiscount == 0){
             
-                        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($minDeposit,2);
+                        $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($minDeposit,2);
                         $this->sendMessage($AFmessage,$reciepient);
             
                     }
@@ -986,12 +986,12 @@ class USSDController extends Controller
                     if($showDiscount == 1){
 
                         $reciepient = $phoneNumber;
-                        $AFmessage = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
+                        $AFmessage = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
                         $this->sendMessage($AFmessage,$reciepient);
 
                     }else {
                         $reciepient = $phoneNumber;
-                        $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
+                        $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
                         $this->sendMessage($AFmessage,$reciepient);
                    }
     
@@ -1247,7 +1247,7 @@ class USSDController extends Controller
     }
 
     $reciepient = $phoneNumber;
-    $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
+    $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
     $this->sendMessage($AFmessage,$reciepient);
 
     $amount = $deposit;
@@ -1504,7 +1504,7 @@ class USSDController extends Controller
         $booking->save();
 
         $reciepient = $phone;
-        $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4029165) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
+        $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
         $this->sendMessage($AFmessage,$reciepient);
 
         $amount = $deposit;
@@ -1533,7 +1533,7 @@ class USSDController extends Controller
 
         $timestamp = date("YmdHis");
 
-        $BusinessShortCode = '4029165';
+        $BusinessShortCode = '4040299';
 
         $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
 
@@ -1551,13 +1551,13 @@ class USSDController extends Controller
 
         $curl_post_data = array(
 
-            'BusinessShortCode' => '4029165',
+            'BusinessShortCode' => '4040299',
             'Password'          => $apiPassword,
             'Timestamp'         => $lipa_time,
             'TransactionType'   => 'CustomerPayBillOnline',
             'Amount'            => $amount,
             'PartyA'            => $msisdn,
-            'PartyB'            =>'4029165',
+            'PartyB'            =>'4040299',
             'PhoneNumber'       => $msisdn,
             'CallBackURL'       => 'https://combine.co.ke/confirmation-url',
             'AccountReference'  => $booking_ref,
@@ -1704,7 +1704,7 @@ class USSDController extends Controller
         {
            
             $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
-            $BusinessShortCode = '4029165';
+            $BusinessShortCode = '4040299';
             $timestamp =$lipa_time;
             $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
             return $lipa_na_mpesa_password;
@@ -1768,7 +1768,7 @@ class USSDController extends Controller
             
             $timestamp = date("YmdHis");
             
-            $BusinessShortCode = '4029165';
+            $BusinessShortCode = '4040299';
             
             $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
             
@@ -1784,13 +1784,13 @@ class USSDController extends Controller
             
             $curl_post_data = array(
             
-                'BusinessShortCode' => '4029165',
+                'BusinessShortCode' => '4040299',
                 'Password'          => $apiPassword,
                 'Timestamp'         => $lipa_time,
                 'TransactionType'   => 'CustomerPayBillOnline',
                 'Amount'            => $amount,
                 'PartyA'            => $msisdn,
-                'PartyB'            =>'4029165',
+                'PartyB'            =>'4040299',
                 'PhoneNumber'       => $msisdn,
                 'CallBackURL'       => 'https://combine.co.ke/confirmation-url',
                 'AccountReference'  => $booking_ref,
@@ -1816,7 +1816,7 @@ class USSDController extends Controller
             Log::info('RESPONSE ARRAY: '.print_r($responseArray,true));
             
             if(array_key_exists("errorCode", $responseArray)){
-                $message = "END Automatic payment failed. Go to your MPESA, select Paybill Enter : (4029165) and Account Number : ".$booking_reference." Enter Amount : ".number_format($amount,2)." Thank you.";
+                $message = "END Automatic payment failed. Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference." Enter Amount : ".number_format($amount,2)." Thank you.";
             }else{
                 $message = "END A Payment Prompt has been sent to the provided Phone No. Enter MPesa PIN if Prompted.";
             }

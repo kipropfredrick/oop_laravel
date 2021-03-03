@@ -215,22 +215,22 @@ class VendorController extends Controller
             //     ]);
             // }
     
-            // if($product_image == null){
+            if($product_image == null){
     
-            // }else{
-            //     $fileNameToStore = Image::make($product_image);
-            //     $originalPath = 'storage/images/';
-            //     $fileNameToStore->save($originalPath.$time.$product_image->getClientOriginalName());
-            //     $thumbnailPath = 'storage/thumbnail/';
-            //     $fileNameToStore->resize(250, null, function ($constraint) {
-            //                         $constraint->aspectRatio();
-            //                     });
-            //     $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$product_image->getClientOriginalName());
+            }else{
+                $fileNameToStore = Image::make($product_image);
+                $originalPath = 'storage/images/';
+                $fileNameToStore->save($originalPath.$time.$product_image->getClientOriginalName());
+                $thumbnailPath = 'storage/thumbnail/';
+                $fileNameToStore->resize(250, null, function ($constraint) {
+                                    $constraint->aspectRatio();
+                                });
+                $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$product_image->getClientOriginalName());
     
-            //     $image = $time.$product_image->getClientOriginalName();
+                $image = $time.$product_image->getClientOriginalName();
     
-            //     $data['product_image'] = $image;
-            // }
+                $data['product_image'] = $image;
+            }
     
     
             DB::table('products')->where('id','=',$id)->update($data);
@@ -238,6 +238,14 @@ class VendorController extends Controller
             return redirect('/vendor/pending-products')->with('success','Product updated.');
         }
         
+        public function image_delete($id){
+
+            $image = \App\Gallery::where('id','=',$id)->first();
+            $image->delete();
+    
+            return back()->with('success','Image Deleted.');
+    
+        }
 
         public function product_delete($id){
 

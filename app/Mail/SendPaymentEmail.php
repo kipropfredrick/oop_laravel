@@ -31,7 +31,7 @@ class SendPaymentEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('combineke@gmail.com')
+        return $this->from('order@mosmos.co.ke')
                     ->subject('Payment Invoice')
                     ->view('emails.sendInvoice');
     }

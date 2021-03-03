@@ -70,7 +70,7 @@
 
 </head>
 <body>
-<h1 class="text-center">Lipia Mosmos</h1>
+<h1 style="margin-left:auto;margin-right:auto" class="text-center">Lipia Mosmos</h1>
 <div class="container mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
@@ -95,7 +95,7 @@
                         <div class="col-md-5">
                             <table id="invoice" class="table table-bordered table-striped table-hover">
 
-                                <thead class="thead-dark">
+                                <thead style="background-color:#1E22A9 !important;color:#FFF">
                                     <tr>
                                         <th scope="col">No. </th>
                                         <th scope="col">Date</th>
@@ -133,9 +133,9 @@
                             </table>
                         </div>
                     </div>
-                    <p class="font-weight-bold mb-0">Thanks for shopping with us!</p> <span>Combine Team</span>
+                    <p class="font-weight-bold mb-0">Thanks for shopping with us!</p> <span>Lipia Mosmis Team</span>
                 </div>
-                <div> <span>Need Help? Call <a>0759 701 616</a></span></div>
+                <div> <span>Need Help? Call <a>0113 980 270</a></span></div>
             </div>
         </div>
     </div>

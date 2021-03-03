@@ -11,6 +11,8 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\SendSMSController;
+use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendRegistrationEmail;
 
 class FrontPageController extends Controller
 {
@@ -556,7 +558,7 @@ class FrontPageController extends Controller
         $booking->amount_paid = "0";
         $booking->balance = $total_cost;
         $booking->payment_mode  = 'Mpesa';
-        $booking->date_started  = $booking_date;
+        $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
         $booking->location_type = $location_type;
@@ -739,7 +741,7 @@ class FrontPageController extends Controller
         $booking->amount_paid = "0";
         $booking->balance =   $total_cost;
         $booking->payment_mode  = 'Mpesa';
-        $booking->date_started  = $booking_date;
+        $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
         $booking->location_type = $location_type;
@@ -834,7 +836,7 @@ class FrontPageController extends Controller
         $booking->amount_paid = "0";
         $booking->balance = $product->product_price;
         $booking->payment_mode  = 'Mpesa';
-        $booking->date_started  = $booking_date;
+        $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
         $booking->total_cost = $product->product_price;
@@ -871,6 +873,14 @@ class FrontPageController extends Controller
         $user->name = $request->input('name');
         $user->password = Hash::make($request->input('phone'));
         $user->save();
+
+        $details = [
+                    'email' => $request->email,
+                    'name'=>$request->name,
+                    'password'=>$request->input('phone')
+                    ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         $user_id = DB::getPdo()->lastInsertId();
 
@@ -920,7 +930,7 @@ class FrontPageController extends Controller
         $booking->balance = $product->product_price;
         $booking->amount_paid = "0";
         $booking->payment_mode  = 'Mpesa';
-        $booking->date_started  = $booking_date;
+        $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->total_cost = $product->product_price;
         $booking->save();

@@ -93,7 +93,7 @@
                                             <div class="cta-text">  
                                                 <span>Customer care</span>
                                                 <h6>
-                                                    <a href="tel:+254700000000">0700 000 000</a>
+                                                    <a href="tel:0113 980 270">0113 980 270</a>
                                                 </h6>
                                             </div>
                                         </div>
@@ -407,6 +407,23 @@
     
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    <!-- GetButton.io widget -->
+    <script type="text/javascript">
+        (function () {
+            var options = {
+                whatsapp: "+254113980270", // WhatsApp number
+                call_to_action: "Message us", // Call to action
+                position: "left", // Position may be 'right' or 'left'
+                pre_filled_message: " ", // WhatsApp pre-filled message
+            };
+            var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
+            var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = url + '/widget-send-button/js/init.js';
+            s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
+            var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+        })();
+    </script>
+    <!-- /GetButton.io widget -->
 
   </body>
 </html>

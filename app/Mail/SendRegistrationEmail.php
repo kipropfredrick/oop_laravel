@@ -7,32 +7,34 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendNotificationMail extends Mailable
+class SendRegistrationEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * Create a new details instance.
+     * Create a new message instance.
      *
      * @return void
      */
     public $details;
 
-    public function __construct($details)
-  {
-      $this->details = $details;
-  }
 
+    public function __construct($details)
+    {
+       $this->details = $details;
+    }
 
     /**
-     * Build the details.
+     * Build the message.
      *
      * @return $this
+    
      */
+    
     public function build()
     {
         return $this->from('order@mosmos.co.ke')
-            ->subject('Booking Reminder')
-            ->view('emails.sendmail');
+                    ->subject('Account Created')
+                    ->view('emails.registrationmail');
     }
 }
