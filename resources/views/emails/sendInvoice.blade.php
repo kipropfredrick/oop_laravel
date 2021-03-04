@@ -70,7 +70,7 @@
 
 </head>
 <body>
-<h1 style="margin-left:auto;margin-right:auto" class="text-center">Lipia Mosmos</h1>
+<h1 style="margin-left:auto;margin-right:auto" class="text-center">Lipa Mos Mos</h1>
 <div class="container mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
@@ -133,7 +133,7 @@
                             </table>
                         </div>
                     </div>
-                    <p class="font-weight-bold mb-0">Thanks for shopping with us!</p> <span>Lipia Mosmis Team</span>
+                    <p class="font-weight-bold mb-0">Thanks for shopping with us!</p> <span>Lipia Mos Mos Team</span>
                 </div>
                 <div> <span>Need Help? Call <a>0113 980 270</a></span></div>
             </div>

@@ -33,6 +33,10 @@ Route::get('/privacy-policy', function () {
     return view('privacy');
 });
 
+Route::get('/register-email', function (){
+ return view('emails.registrationmail_test');
+});
+
 Route::get('/update_bookings_agent_or_vendor','FrontPageController@update_bookings_agent_or_vendor');
 
 Route::post('/checkpayment','MpesaPaymentController@checkpayment');

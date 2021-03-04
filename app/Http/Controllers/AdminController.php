@@ -1001,7 +1001,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
 
@@ -1010,19 +1010,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1087,7 +1087,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
 
@@ -1096,19 +1096,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1168,7 +1168,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
 
@@ -1177,19 +1177,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1254,7 +1254,7 @@ class AdminController extends Controller
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
             }elseif($booking->vendor_code !== null){
@@ -1262,10 +1262,10 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1300,7 +1300,7 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
 
@@ -1309,19 +1309,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1379,7 +1379,7 @@ class AdminController extends Controller
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
             }elseif($booking->vendor_code !== null){
@@ -1387,19 +1387,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1470,7 +1470,7 @@ class AdminController extends Controller
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
 
             }elseif($booking->vendor_code !== null){
@@ -1478,19 +1478,19 @@ class AdminController extends Controller
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
 
@@ -1512,28 +1512,28 @@ class AdminController extends Controller
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
                 Log::info("AGENT =>".print_r($agent,1));
                 if($agent == null){
-                 $agent = "Lipia Mosmos (Admin)";
+                 $agent = "Lipa Mos Mos (Admin)";
                 }else {
                     $agent = $agent->user->name.' (Agent)';
                 }
             }elseif($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
                 if($vendor == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                        $agent = $vendor->user->name.' (Vendor)';
                    }
             }elseif($booking->influencer_code !== null){
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
                 if($influencer == null){
-                    $agent = "Lipia Mosmos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin)";
                    }else {
                       if(isset($influencer->user)){
                         $agent = $influencer->user->name.' (Influencer)';
                       }
                    }
             }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipia Mosmos (Admin)";
+               $agent = "Lipa Mos Mos (Admin)";
             }
 
             $booking['agent'] = $agent;

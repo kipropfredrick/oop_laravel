@@ -54,7 +54,7 @@ class FrontPageController extends Controller
 
         $trendingProducts = \App\Products::with('category','subcategory')
                             ->where('status','=','approved')
-                            ->where('quantity','>',0)->orderBy('clicks','DESC')->inRandomOrder()->take(20)->get();
+                            ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
 
         $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
 
