@@ -45,6 +45,18 @@
         gtag('config', 'G-533QG0VQF7');
         </script>
 
+        <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:2280205,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        </script>
+
+
     </head>
     <body>
 
@@ -158,7 +170,7 @@
         <nav class="navbar navbar-expand-lg mdg-navbar-hh">
             
             <div class="mdg-logo">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <img src="{{asset('assets/img/logo/web-logo.png')}}">
                 </a>
             </div>
