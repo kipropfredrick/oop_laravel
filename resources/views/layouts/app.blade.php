@@ -240,8 +240,8 @@
                 <div class="ftr-content">
 
                     <div class="ftr-socials">
-                        <a href="#" target="_blank"><span class="fa fa-2x fa-facebook"></span></a>
-                        <a href="#" target="_blank"><span class="fa fa-2x fa-instagram"></span></a>
+                        <a href="https://facebook.com/lipamosmoske" target="_blank"><span class="fa fa-2x fa-facebook"></span></a>
+                        <a href="https://instagram.com/lipamosmoske" target="_blank"><span class="fa fa-2x fa-instagram"></span></a>
                     </div>
 
                     <div class="ftr-subscribe">
@@ -291,7 +291,7 @@
     <!-- copyrights -->
     <div class="copyrights">
         <div class="container">
-            &copy; <span id="currentYear"></span>. Lipa Mos Mos | Powered by <a href="https://rdfyne.com" target="_blank">Rdfyne Technologies</a>
+            &copy; <span id="currentYear"></span>. Lipa Mos Mos
         </div>
     </div>
     <!-- end -->
