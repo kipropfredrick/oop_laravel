@@ -33,6 +33,8 @@ Route::get('/privacy-policy', function () {
     return view('privacy');
 });
 
+Route::get('/update_bookings_agent_or_vendor','FrontPageController@update_bookings_agent_or_vendor');
+
 Route::post('/checkpayment','MpesaPaymentController@checkpayment');
 
 Route::prefix('c2b')->group(function () {

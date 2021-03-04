@@ -54,7 +54,6 @@
                                 <div>
                                 <p>You are placing an order for <strong>{{$product->product_name}}</strong>. Minimum deposit id <strong>KSh.500</strong>.</p>
                                 <a href="/checkout-with-existing/{{$product->slug}}">Have an account?</a>
-                                <hr/>
                             </div>
                                        <!-- <a href="/checkout-with-existing/{{$product->slug}}" style="margin-left:5px" class="btn btn-outline-warning">Have an Account?</a> -->
                                 </div>

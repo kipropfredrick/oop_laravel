@@ -445,6 +445,18 @@ class FrontPageController extends Controller
 
         $zone_id = null;
 
+        $vendor_code = null;
+
+        $product = \App\Products::where('id','=',$request->product_id)->first();
+
+        if($product->vendor_id!=null){
+
+            $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
+   
+            $vendor_code = $vendor->vendor_code;
+   
+        }
+
         $valid_phone = '254'.ltrim($request->input('phone'), '0');
 
         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
@@ -561,6 +573,7 @@ class FrontPageController extends Controller
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
+        $booking->vendor_code = $vendor_code;
         $booking->location_type = $location_type;
         $booking->delivery_location = $request->delivery_location;
         $booking->shipping_cost = $shipping_cost;
@@ -603,6 +616,17 @@ class FrontPageController extends Controller
         $dropoff = $request->dropoff;
         $county_id = $request->county_id;
         $location_id = $request->location_id;
+        $vendor_code = null;
+
+        $product = \App\Products::where('id','=',$request->product_id)->first();
+
+        if($product->vendor_id!=null){
+
+            $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
+   
+            $vendor_code = $vendor->vendor_code;
+   
+        }
 
 
         if(is_null($dropoff) && is_null($location_id)){
@@ -662,13 +686,7 @@ class FrontPageController extends Controller
 
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
-        if($product->product_price < 5000){
-            $minDeposit = 0.2*$product->product_price;
-        }else {
-            $minDeposit = 0.1 *$product->product_price;
-        }
-
-
+        
         if($request->initial_deposit<200){
 
           return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(200,0));
@@ -695,10 +713,10 @@ class FrontPageController extends Controller
             }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
                 $shipping_cost = 300;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
-            $extra_kg = $product_weight[0] - 5;
-            $extra_cost = (30 * $extra_kg);
-            $vat = 0.16*$extra_cost;
-            $shipping_cost = 300 + $extra_cost + $vat;
+                $extra_kg = $product_weight[0] - 5;
+                $extra_cost = (30 * $extra_kg);
+                $vat = 0.16*$extra_cost;
+                $shipping_cost = 300 + $extra_cost + $vat;
             }
 
             $location_type = 'outside_nairobi';
@@ -733,6 +751,7 @@ class FrontPageController extends Controller
 
         $total_cost = $product->product_price + $shipping_cost;
 
+
         $booking = new \App\Bookings();
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
@@ -744,6 +763,7 @@ class FrontPageController extends Controller
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
+        $booking->vendor_code = $vendor_code;
         $booking->location_type = $location_type;
         $booking->delivery_location = $request->delivery_location;
         $booking->shipping_cost = $shipping_cost;
@@ -836,6 +856,7 @@ class FrontPageController extends Controller
         $booking->amount_paid = "0";
         $booking->balance = $product->product_price;
         $booking->payment_mode  = 'Mpesa';
+        $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
@@ -927,6 +948,7 @@ class FrontPageController extends Controller
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
+        $booking->vendor_code = $vendor_code;
         $booking->balance = $product->product_price;
         $booking->amount_paid = "0";
         $booking->payment_mode  = 'Mpesa';
@@ -1057,57 +1079,29 @@ class FrontPageController extends Controller
 
     public function update_bookings_agent_or_vendor(){
 
-        $bookings = \App\Bookings::with('product')->where('status','=','complete')->get();
+        $bookings = \App\Bookings::all();
 
         foreach($bookings as $booking){
 
-            $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
+                $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
 
+                 $vendor_code = null;
 
-                if($booking->agent_code !== null){
-                    $agent = \App\Agents::where('agent_code','=',$booking->agent_code)->first();
-                    if($agent == null){
+                if($product->vendor_id!=null){
 
-                    }else {
-                        $agent_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $admin_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision)/100);
-
-                        DB::table('commissions')->insert([
-                            'product_id' => $product->id,
-                            'booking_id' => $booking->id,
-                            'agent_id' =>  $agent->id,
-                            'admin_commission' =>$admin_commission,
-                            'other_party_commission' => $agent_commission,
-                            'created_at'=>now(),
-                            'updated_at'=>now(),
-                            ]);
-                    }
-                }elseif($booking->vendor_code !== null){
-                    $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
-                    if($vendor == null){
-                        
-                       }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
-
-                        DB::table('commissions')->insert([
-                            'product_id' => $product->id,
-                            'booking_id' => $booking->id,
-                            'vendor_id' =>  $vendor->id,
-                            'admin_commission' =>$admin_commission,
-                            'other_party_commission' => $vendor_commission,
-                            'created_at'=>now(),
-                            'updated_at'=>now(),
-                            ]);
-
-                       }
+                    $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
+        
+                    $vendor_code = $vendor->vendor_code;
+        
                 }
 
+                DB::table('bookings')->where('id',$booking->id)->update(['vendor_code'=>$vendor_code]);
             
         }
 
         $out = ['Success'=>'True',
-             "Bookings"=> $bookings,];
+                "Bookings"=> $bookings
+             ];
 
          return response()->json( $out);
 

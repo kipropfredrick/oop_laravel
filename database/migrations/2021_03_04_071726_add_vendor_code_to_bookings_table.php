@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSlugToSubCategories extends Migration
+class AddVendorCodeToBookingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddSlugToSubCategories extends Migration
      */
     public function up()
     {
-        Schema::table('sub_categories', function (Blueprint $table) {
-         $table->string('slug')->nullable()->after('subcategory_name');
+        Schema::table('bookings', function (Blueprint $table) {
+         $table->string('vendor_code')->nullable()->after('agent_code');
         });
     }
 
@@ -25,8 +25,8 @@ class AddSlugToSubCategories extends Migration
      */
     public function down()
     {
-        Schema::table('sub_categories', function (Blueprint $table) {
-         $table->string('slug')->nullable()->after('subcategory_name');
+        Schema::table('bookings', function (Blueprint $table) {
+            //
         });
     }
 }
