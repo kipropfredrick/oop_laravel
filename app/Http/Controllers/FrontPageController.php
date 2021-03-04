@@ -445,17 +445,7 @@ class FrontPageController extends Controller
 
         $zone_id = null;
 
-        $vendor_code = null;
-
-        $product = \App\Products::where('id','=',$request->product_id)->first();
-
-        if($product->vendor_id!=null){
-
-            $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-   
-            $vendor_code = $vendor->vendor_code;
-   
-        }
+        $vendor_code = $request->vendor_code;
 
         $valid_phone = '254'.ltrim($request->input('phone'), '0');
 
@@ -616,17 +606,8 @@ class FrontPageController extends Controller
         $dropoff = $request->dropoff;
         $county_id = $request->county_id;
         $location_id = $request->location_id;
-        $vendor_code = null;
+        $vendor_code = $request->vendor_code;
 
-        $product = \App\Products::where('id','=',$request->product_id)->first();
-
-        if($product->vendor_id!=null){
-
-            $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-   
-            $vendor_code = $vendor->vendor_code;
-   
-        }
 
 
         if(is_null($dropoff) && is_null($location_id)){
@@ -1081,6 +1062,16 @@ class FrontPageController extends Controller
 
         $bookings = \App\Bookings::all();
 
+        $vendors = \App\Vendor::all();
+
+        foreach($vendors as $vendor){
+
+            $vendor_code = "VD".$vendor->id;
+
+            DB::table('vendors')->where('id',$vendor->id)->update(['vendor_code'=>$vendor_code]);
+
+        }
+
         foreach($bookings as $booking){
 
                 $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
@@ -1099,9 +1090,7 @@ class FrontPageController extends Controller
             
         }
 
-        $out = ['Success'=>'True',
-                "Bookings"=> $bookings
-             ];
+        $out = ['Success'=>'True'];
 
          return response()->json( $out);
 

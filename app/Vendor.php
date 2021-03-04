@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vendor extends Model
 {
-    protected $fillable = ['user_id','phone','business_name','city_id','country','location','status'];
+    protected $fillable = ['user_id','phone','vendor_code','business_name','city_id','country','location','status'];
 
     public function user(){
         return $this->belongsTo(User::class,'user_id');

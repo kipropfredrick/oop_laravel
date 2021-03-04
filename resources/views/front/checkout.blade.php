@@ -69,6 +69,15 @@
                                         <input type="hidden" name="product_id" value="{{$product->id}}">
                                         <input name="status" value="pending" type="hidden">
                                         <input name="minDeposit" value="{{$minDeposit}}" type="hidden">
+                                        <?php 
+                                        
+                                        $vendor = \App\Vendor::where('id',$product->vendor_id)->first();
+
+                                        if($vendor!=null){
+                                            $vendor_code = $vendor->vendor_code;
+                                        }
+                                        ?>
+                                        <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" type="hidden">
                                         <label for="checkout-first-name">Full name</label>
                                         <input required name="name" type="text" class="form-control" id="checkout-first-name" placeholder="Full Name">
                                         </div>
