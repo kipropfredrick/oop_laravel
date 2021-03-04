@@ -50,7 +50,7 @@ class FrontPageController extends Controller
        
        $products = \App\Products::with('category','subcategory')
                     ->where('status','=','approved')
-                    ->where('quantity','>',0)->latest()->inRandomOrder()->take(20)->get();
+                    ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
 
         $trendingProducts = \App\Products::with('category','subcategory')
                             ->where('status','=','approved')
@@ -66,7 +66,7 @@ class FrontPageController extends Controller
 
         $bestSellers = \App\Products::with('category','subcategory')
                         ->where('status','=','approved')
-                        ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->take(20)->get();
+                        ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
 
 
        foreach($products as $product){
@@ -159,7 +159,6 @@ class FrontPageController extends Controller
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('quantity','>',0)
-                                            ->orderBy('clicks','DESC')
                                             ->where('category_id',$category->id)
                                             ->inRandomOrder()->take(10)->get();
 
@@ -188,7 +187,7 @@ class FrontPageController extends Controller
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('category_id','=',$category->id)
-                                            ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->paginate(20);
+                                            ->where('quantity','>',0)->inRandomOrder()->paginate(20);
 
                 return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
             }
@@ -216,7 +215,6 @@ class FrontPageController extends Controller
         
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('quantity','>',0)
-                                    ->orderBy('clicks','DESC')
                                     ->where('brand_id',$brand->id)
                                     ->inRandomOrder()->take(10)->get();
 
@@ -245,7 +243,7 @@ class FrontPageController extends Controller
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('brand_id','=',$brand->id)
-                                            ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->paginate(20);
+                                            ->where('quantity','>',0)->inRandomOrder()->paginate(20);
 
                 return view('front.show_brand',compact('products','sort_by','sort_by','categories','brand','trendingProducts'));
             }
