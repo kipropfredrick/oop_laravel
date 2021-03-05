@@ -21,8 +21,7 @@
     }
 
     .email-header {
-        background-color: #1e22a9;
-        padding: 10px;
+        background-color: #1e22a9;padding: 10px;
     }
 
     .email-header img {
@@ -99,7 +98,7 @@
                         is <strong>{{ $details['password'] }}</strong>.</p>
 
                     <div style="background-color: #f68b1e;" class="email-btn">
-                        <a style="background-color: #1e22a9;color: #ffffff;padding: 5px 10px;border-radius: 5px;text-decoration: none;" href="https://mosmos.co.ke/login">Visit Dashboard</a>
+                        <a  href="https://mosmos.co.ke/login">Visit Dashboard</a>
                     </div>
                     
                     <p>Thank you,<br/>

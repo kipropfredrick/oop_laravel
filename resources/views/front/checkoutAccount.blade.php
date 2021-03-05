@@ -84,7 +84,7 @@
                                             <input required name="phone" type="number" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
                                             </div>
                                                 <div class="form-group">
-                                                    <label for="checkout-street-address">Initial Deposit</label>
+                                                    <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.500 minimum)</label>
                                                     <input required min="500" name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                                 </div>
 
