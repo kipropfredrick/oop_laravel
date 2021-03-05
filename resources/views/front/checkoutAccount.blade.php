@@ -306,6 +306,7 @@
                     console.log('One Checked')
                     document.getElementById('counties').removeAttribute("required"); 
                     document.getElementById('subs').removeAttribute("required");
+                    document.getElementById('id_parent').setAttribute("required", "");
                     document.getElementById('counties').value = '';
                     document.getElementById('subs').value = '';
                     var y = document.getElementById('within_nairobi');
@@ -316,9 +317,9 @@
                     var y = document.getElementById('within_nairobi');
                     y.style.display = "none"; 
                     document.getElementById('id_parent').removeAttribute("required");
+                    document.getElementById('counties').setAttribute("required", ""); 
+                    document.getElementById('subs').setAttribute("required", "");
                     document.getElementById('id_parent').value = ''; 
-                    document.getElementById('id_child').removeAttribute("required"); 
-                    document.getElementById('id_child').value = '';
                     y.removeAttribute("required");
                 }
            

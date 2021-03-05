@@ -8,7 +8,11 @@
 
     <!-- Google Fonts --> 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    
 </head>
 <style>
     body {
@@ -108,8 +112,8 @@
 
             <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
                 <div style="text-align: center;" class="ftr-socials">
-                    <a href="https://facebook.com/lipamosmoske" target="_blank"><img style="height:20px;width:20px;object-fit:contain"  src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
-                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:20px;width:20px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/insta.png" alt=""></span></a>
+                    <a href="https://facebook.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
+                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/insta.png" alt=""></a>
                 </div>
                 <div>
                     <span>

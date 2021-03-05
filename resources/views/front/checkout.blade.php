@@ -79,22 +79,22 @@
                                         ?>
                                         <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" type="hidden">
                                         <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
-                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" placeholder="Full Name">
+                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" value="{{ old('name') }}" placeholder="Full Name">
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="checkout-last-name">Email</label><span style="color:red">*</span>
-                                            <input required type="email" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address">
+                                            <input required type="email" value="{{ old('email') }}" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address">
                                             </div>
                                         </div>
                                           <div class="form-row">
                                           <div class="form-group col-md-6">
                                                 <label for="checkout-company-name">Phone Number<span style="color:red">*</span>
                                                 </label>
-                                                <input required name="phone" type="number" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
+                                                <input required name="phone" type="number" value="{{ old('phone') }}" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.500 minimum)</label>
-                                                <input min="500" required name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
+                                                <input min="500" required name="initial_deposit" value="{{ old('initial_deposit') }}" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                              </div>
                                           </div>
 
@@ -332,6 +332,7 @@
                     console.log('One Checked')
                     document.getElementById('counties').removeAttribute("required"); 
                     document.getElementById('subs').removeAttribute("required");
+                    document.getElementById('id_parent').setAttribute("required", "");
                     document.getElementById('counties').value = '';
                     document.getElementById('subs').value = '';
                     var y = document.getElementById('within_nairobi');
@@ -342,6 +343,8 @@
                     var y = document.getElementById('within_nairobi');
                     y.style.display = "none"; 
                     document.getElementById('id_parent').removeAttribute("required");
+                    document.getElementById('counties').setAttribute("required", ""); 
+                    document.getElementById('subs').setAttribute("required", "");
                     document.getElementById('id_parent').value = ''; 
                     y.removeAttribute("required");
                 }

@@ -650,8 +650,6 @@ class FrontPageController extends Controller
             return back()->withInput()->with('error','Please Pick your preferred delivery location!');
         }
 
-        // return $request->all();
-
         $zone_id = null;
 
         $categories = \App\Categories::all();

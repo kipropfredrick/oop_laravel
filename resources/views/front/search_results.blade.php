@@ -43,7 +43,8 @@
                                 <div class="form-group row">
                                     <label class="col-3 col-form-label">Sort by:</label>
                                     <div class="col-7">
-                                    <form action="" id="filter-form">
+                                    <form action="/search?/{{$search}}" id="filter-form">
+                                            <input type="hidden" name="search" value="{{$search}}">
                                             <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
                                                 @if(isset($sort_by))
                                                 @if ($sort_by == "id")
