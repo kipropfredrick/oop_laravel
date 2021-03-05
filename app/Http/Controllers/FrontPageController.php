@@ -91,12 +91,50 @@ class FrontPageController extends Controller
 
         $search =  $request->search;
 
-        $category = \App\Categories::find($request->category_id);
-
         $products= \App\Products::where ( 'product_name', 'LIKE', '%' . $search . '%' )->where('status','=','approved')
                                 ->where('quantity','>',0)->orderBy('id','DESC')->inRandomOrder()->paginate(20);
 
-        return view('front.search_results',compact('products','categories','search','category'));
+            $sort_by = $request->sort_by;
+
+            if($sort_by !=null){
+    
+                if($sort_by == "price-asc"){
+                    $p = "product_price";
+                    $o = "ASC";
+                }elseif($sort_by == "price-desc"){
+                    $p = "product_price";
+                    $o = "DESC";
+                }elseif($sort_by == "id"){
+                    $p = "id";
+                    $o = "DESC";
+                }elseif($sort_by == "best-sellers"){
+    
+                    $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
+    
+                    $product_ids = [];
+            
+                    foreach($bookings as $booking){
+                        array_push($product_ids,$booking->product_id);
+                    }
+
+                    $products =   \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
+                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+            
+    
+                        return view('front.search_results',compact('products','categories','search','sort_by'));
+                }
+    
+            }else{
+                $sort_by = "id";
+                $p = "id";
+                $o = "DESC";
+            }
+
+            $products =   \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
+                            ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
+                        
+
+        return view('front.search_results',compact('products','categories','search','sort_by'));
        
 
     }

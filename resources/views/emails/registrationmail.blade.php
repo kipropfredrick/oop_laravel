@@ -97,8 +97,8 @@
                     <p>Your email address is: <strong>{{ $details['email'] }}</strong> and the password 
                         is <strong>{{ $details['password'] }}</strong>.</p>
 
-                    <div style="background-color: #f68b1e;" class="email-btn">
-                        <a  href="https://mosmos.co.ke/login">Visit Dashboard</a>
+                    <div  class="email-btn">
+                        <a style="background-color: #1e22a9;color: #ffffff;padding: 5px 10px;border-radius: 5px;text-decoration: none;" href="https://mosmos.co.ke/login">Visit Dashboard</a>
                     </div>
                     
                     <p>Thank you,<br/>
@@ -108,8 +108,8 @@
 
             <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
                 <div style="text-align: center;" class="ftr-socials">
-                    <a href="https://facebook.com/lipamosmoske" target="_blank"><span style=" background: #4267b2;" class="fa fa-2x fa-facebook"></span></a>
-                    <a href="https://instagram.com/lipamosmoske" target="_blank"><span style="background: #e1306c;" class="fa fa-2x fa-instagram"></span></a>
+                    <a href="https://facebook.com/lipamosmoske" target="_blank"><img style="height:20px;width:20px;object-fit:contain"  src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
+                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:20px;width:20px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/insta.png" alt=""></span></a>
                 </div>
                 <div>
                     <span>
