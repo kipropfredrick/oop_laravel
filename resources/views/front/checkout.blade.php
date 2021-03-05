@@ -78,17 +78,17 @@
                                         }
                                         ?>
                                         <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" type="hidden">
-                                        <label for="checkout-first-name">Full name</label>
+                                        <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
                                         <input required name="name" type="text" class="form-control" id="checkout-first-name" placeholder="Full Name">
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="checkout-last-name">Email</label>
+                                            <label for="checkout-last-name">Email</label><span style="color:red">*</span>
                                             <input required type="email" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address">
                                             </div>
                                         </div>
                                           <div class="form-row">
                                           <div class="form-group col-md-6">
-                                                <label for="checkout-company-name">Phone Number 
+                                                <label for="checkout-company-name">Phone Number<span style="color:red">*</span>
                                                 </label>
                                                 <input required name="phone" type="number" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
                                             </div>
@@ -99,7 +99,7 @@
                                           </div>
 
 
-                                          <label for="location"><strong>Delivery Location</strong></label> <br>
+                                          <label for="location"><strong>Delivery Location</strong></label> <span style="color:red">*</span> <br>
 
                                           <div style="margin-top:10px" class="form-group">
                                             <input  type="radio" id="location_radio1" name="location" value="1"  checked> Within Nairobi <br>
@@ -117,7 +117,7 @@
                                             ?>
 
                                             <div class="form-group">
-                                                <label for="zone">Pick your preferred delivery location</label>
+                                                <label for="zone">Pick your preferred delivery location</label><span style="color:red">*</span>
                                                 <select class="form-control js-example-basic-single dependent-selects__parent" name="dropoff" id="id_parent" data-child-id="id_child" required>
                                                     <option value="">Select/Search Location</option>
                                                     @foreach($dropoffs as $dropoff)
@@ -132,7 +132,7 @@
 
                                           <div class="form-row">
                                           <div class="form-group col-md-6">
-                                            <label for="checkout-company-name">County</label>
+                                            <label for="checkout-company-name">County</label><span style="color:red">*</span>
                                             <?php 
                                             $counties = \App\Counties::all();
                                             $locations = \App\PickupLocation::all();
@@ -151,7 +151,7 @@
                                                 </div>
                                             
                                                 <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Drop Off Location</label>
+                                                <label for="checkout-street-address">Drop Off Location</label><span style="color:red">*</span>
                                                 @foreach($locations as $location)
                                                 <div class="locations" style="display: none">{{$location->county_id}}</div>
                                                 @endforeach

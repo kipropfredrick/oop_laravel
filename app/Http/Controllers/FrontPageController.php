@@ -459,7 +459,7 @@ class FrontPageController extends Controller
 
         $product = \App\Products::find($request->product_id);
         
-        $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
+       $due_date = Carbon::now()->addMonths(3);
 
 
         if($existingCustomer === null){
@@ -660,9 +660,9 @@ class FrontPageController extends Controller
 
         $product = \App\Products::find($request->product_id);
 
-        $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
+        $due_date = Carbon::now()->addMonths(3);
 
-
+        
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
         
@@ -805,7 +805,7 @@ class FrontPageController extends Controller
 
         $product = \App\Products::find($request->product_id);
 
-        $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
+       $due_date = Carbon::now()->addMonths(3);
 
 
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
@@ -897,7 +897,7 @@ class FrontPageController extends Controller
 
         $product = \App\Products::find($request->product_id);
 
-        $due_date = date('Y-m-d', strtotime($booking_date. ' + 3 months'));
+       $due_date = Carbon::now()->addMonths(3);
 
         $booking_reference = 'BKG'.rand(10,1000000);
 
