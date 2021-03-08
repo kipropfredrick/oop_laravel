@@ -232,12 +232,11 @@ class FrontPageController extends Controller
 
         }else{
             $sort_by = "id";
-            $p = "id";
-            $o = "DESC";
+            $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
+                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
         }
 
-        $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
-                                    ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
+        
 
         
 
@@ -286,14 +285,16 @@ class FrontPageController extends Controller
                 return view('front.show_brand',compact('products','sort_by','sort_by','categories','brand','trendingProducts'));
             }
 
+            $products =   \App\Products::with('category','subcategory','gallery')->where('brand_id','=',$brand->id)
+                            ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
+
         }else{
             $sort_by = "id";
-            $p = "id";
-            $o = "DESC";
+            $products =   \App\Products::with('category','subcategory','gallery')->where('brand_id','=',$brand->id)
+                            ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
         }
 
-        $products =   \App\Products::with('category','subcategory','gallery')->where('brand_id','=',$brand->id)
-                      ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
+        
         
         return view('front.show_brand',compact('products','sort_by','categories','brand','trendingProducts'));
         
@@ -355,17 +356,19 @@ class FrontPageController extends Controller
                 return view('front.show_subcategory',compact('products','sort_by','trendingProducts','categories','category','subcategory'));
             }
 
+            $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
+                            ->where('vendor_id' , '!=', null)
+                            ->where('quantity','>',0)->where('status','=','approved')
+                            ->orderBy($p,$o)->paginate(20);
+
         }else{
             $sort_by = "id";
-            $p = "id";
-            $o = "DESC";
+            $products =   \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
+                             ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
         }
 
 
-        $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
-                                    ->where('vendor_id' , '!=', null)
-                                    ->where('quantity','>',0)->where('status','=','approved')
-                                    ->orderBy($p,$o)->paginate(20);
+       
 
         return view('front.show_subcategory',compact('products','sort_by','trendingProducts','categories','category','subcategory'));
 

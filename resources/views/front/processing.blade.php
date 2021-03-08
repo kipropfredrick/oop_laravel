@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', "Processing Payment")
+
 @section('content')
 <!-- breadcrumb --> 
 <div class="bc-bg">

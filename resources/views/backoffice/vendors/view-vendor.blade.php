@@ -24,7 +24,7 @@ div.scrollmenu a:hover {
 
 <!-- Traffic sources -->
 <div class="card">
-<div class="table-responsive">
+<div class="table-responsive padding">
         <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>View Vendor</strong></h6>
 			
@@ -204,7 +204,7 @@ div.scrollmenu a:hover {
         </div>
 
 		
-		<div class="table-responsive">
+		<div class="table-responsive padding">
 
 		<table class="table datatable-basic  table-striped table-hover">
 						<thead>

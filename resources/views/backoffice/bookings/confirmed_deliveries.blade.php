@@ -4,7 +4,7 @@
 
 <!-- Traffic sources -->
 <div class="card">
-<div class="table-responsive">
+<div class="table-responsive padding">
         <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>Confirmed Deliveries</strong></h6>
 		</div>

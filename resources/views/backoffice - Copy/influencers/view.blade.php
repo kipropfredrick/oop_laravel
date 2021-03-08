@@ -94,7 +94,7 @@ div.scrollmenu a:hover {
 <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>Influencer Bookings</strong></h6>
 </div>
-<div class="table-responsive">
+<div class="table-responsive padding">
         
 		<div class="scrollmenu">
 			<a target="_blank" href="/admin/influencer/products-report/{{$influencer->id}}">Products</a>
@@ -198,7 +198,7 @@ div.scrollmenu a:hover {
 							<h6 style="color: #005b77;" class="card-title"><strong>Influencer Products</strong></h6>
 				</div>
 				
-				<div class="table-responsive">
+				<div class="table-responsive padding">
 
 			<table class="table datatable-basic  table-striped table-hover">
 						<thead>

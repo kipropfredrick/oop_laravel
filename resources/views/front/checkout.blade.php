@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $product->product_name.' - Checkout')
+
 @section('content')
 
 <!-- breadcrumb --> 

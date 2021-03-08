@@ -8,7 +8,7 @@
         <meta name="keywords" content="Lipa Pole Pole, Lipa Mos Mos , Lipa Later, Lipa Mdogo Mdogo">
         <meta name="author" content="Rdfyne Technologies Limited">
         
-        <title>Lipa Mos Mos</title>
+        <title>@yield('title') - Lipa Mos Mos</title>
         <link rel="icon" href="{{asset('assets/img/logo/favicon.png')}}" type="image/png"/>
 
         <!-- Fontawesome -->
