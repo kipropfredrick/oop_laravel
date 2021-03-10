@@ -27,8 +27,6 @@
 
 
 		<div class="table-responsive padding">
-
-		<div class="table-responsive padding">
 		<table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
