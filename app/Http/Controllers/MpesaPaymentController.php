@@ -755,7 +755,10 @@ class MpesaPaymentController extends Controller
             $message = "Hello ".$payment->FirstName."We have received your payment of of Ksh ".number_format($payment->TransAmount,2)." for product ".$booking->product->product_name.', Mpesa reference code is '.$payment->TransID.".";
             
             $out['status'] = 1;
-            $out['amount'] = $payment->TransAmount;
+            $out['amount'] = number_format($payment->TransAmount,2);
+            $out['name'] = $payment->FirstName;
+            $out['product'] = $booking->product->product_name;
+            $out['mpesa_ref'] = $payment->TransID;
             $out['message'] = $message;
         }else{
             $out['status'] = 0;

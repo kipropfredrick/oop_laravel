@@ -482,13 +482,22 @@ class FrontPageController extends Controller
     public function make_booking_account(Request $request)
     {
 
-        $zone_id = null;
-
         $vendor_code = $request->vendor_code;
 
-        $valid_phone = '254'.ltrim($request->input('phone'), '0');
+        list($msisdn, $network) = $this->get_msisdn_network($request->phone);
 
+        if (!$msisdn){
+
+            return redirect()->back()->with('error',"Please enter a valid phone number!");
+        }else{
+            $valid_phone = $msisdn;
+        }
+        
         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
+
+        if($existingCustomer === null){
+            return redirect()->back()->with('error',"You have no account");
+        }else{
 
         $user = \App\User::find($existingCustomer->user_id);
         
@@ -502,20 +511,9 @@ class FrontPageController extends Controller
         
        $due_date = Carbon::now()->addMonths(3);
 
-
-        if($existingCustomer === null){
-            return redirect()->back()->with('error',"You have no account");
-        }else{
+        
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
-        if($product->product_price < 5000){
-            $minDeposit = 0.2*$product->product_price;
-        }else {
-            $minDeposit = 0.1 *$product->product_price;
-        }
-        if($request->initial_deposit<500){
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(500,0));
-        }
 
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->where('status','=','active')->first();
 
@@ -536,84 +534,46 @@ class FrontPageController extends Controller
             $weight_array = (['0','g']);
         }
 
-       
-        
-        if(!empty($request->county_id)){
-            // For Other counties
             $county = \App\Counties::find($request->county_id);
 
             $product_weight = $weight_array;
 
             if($product_weight[1] == 'g'){
-                $shipping_cost = 300;
+                $shipping_cost = 500;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-                $shipping_cost = 300;
+                $shipping_cost = 500;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
             $extra_kg = $product_weight[0] - 5;
             $extra_cost = (30 * $extra_kg);
             $vat = 0.16*$extra_cost;
-            $shipping_cost = 300 + $extra_cost + $vat;
+            $shipping_cost = 500 + $extra_cost + $vat;
             }
 
-            $location_type = 'outside_nairobi';
+           $total_cost = ($product->product_price + $shipping_cost);
 
-        }else if(!empty($request->dropoff)) {
-            // For Nairobi county
-
-            $dropoff = \App\NairobiDropOffs::find($request->dropoff);
-
-            $zone = \App\NairobiZones::find($dropoff->zone_id);
-
-            $zone_id = $zone->id;
-
-            $product_weight = $weight_array;
-
-            if($product_weight[1] == 'g'){
-                $shipping_cost =$zone->price_one_way;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-                $shipping_cost = $zone->price_one_way;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
-            $extra_kg = $product_weight[0] - 5;
-            $extra_cost = (20 * $extra_kg);
-            $shipping_cost = $zone->price_one_way + $extra_cost;
-
-            }
-
-            $location_type = 'within_nairobi';
-
-        }
-
-
-        $total_cost = ($product->product_price + $shipping_cost);
+           $booking_reference = 'BKG'.rand(1000,9999);
 
         
-        $booking = new \App\Bookings();
-        $booking->customer_id = $existingCustomer->id; 
-        $booking->product_id  = $request->product_id;
-        $booking->county_id = $request->county_id;
-        $booking->location_id = $request->location_id;
-        $booking->zone_id = $zone_id;
-        $booking->dropoff_id = $request->dropoff;
-        $booking->booking_reference = $booking_reference;
-        $booking->quantity  = '1';
-        $booking->amount_paid = "0";
-        $booking->balance = $total_cost;
-        $booking->payment_mode  = 'Mpesa';
-        $booking->date_started  = now();
-        $booking->due_date = $due_date;
-        $booking->status = "pending";
-        $booking->vendor_code = $vendor_code;
-        $booking->location_type = $location_type;
-        $booking->delivery_location = $request->delivery_location;
-        $booking->shipping_cost = $shipping_cost;
-        $booking->total_cost =  $total_cost;
-        $booking->save();
+            $booking = new \App\Bookings();
+            $booking->customer_id = $existingCustomer->id; 
+            $booking->product_id  = $request->product_id;
+            $booking->county_id = $request->county_id;
+            $booking->exact_location = $request->exact_location;
+            $booking->booking_reference = $booking_reference;
+            $booking->quantity  = '1';
+            $booking->amount_paid = "0";
+            $booking->balance = $total_cost;
+            $booking->payment_mode  = 'Mpesa';
+            $booking->date_started  = now();
+            $booking->due_date = $due_date;
+            $booking->status = "pending";
+            $booking->vendor_code = $vendor_code;
+            $booking->location_type = "Exact Location";
+            $booking->shipping_cost = $shipping_cost;
+            $booking->total_cost =  $total_cost;
+            $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
-
-        $booking_reference = 'BKG'.rand(1000,9999);
-
-        \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
         $recipients = $valid_phone;
        
@@ -642,18 +602,10 @@ class FrontPageController extends Controller
 
     public function make_booking(Request $request){
 
-        $dropoff = $request->dropoff;
         $county_id = $request->county_id;
-        $location_id = $request->location_id;
+        $exact_location = $request->exact_location;
         $vendor_code = $request->vendor_code;
 
-
-
-        if(is_null($dropoff) && is_null($location_id)){
-            return back()->withInput()->with('error','Please Pick your preferred delivery location!');
-        }
-
-        $zone_id = null;
 
         $categories = \App\Categories::all();
 
@@ -717,53 +669,23 @@ class FrontPageController extends Controller
         }else{
             $weight_array = (['0','g']);
         }
-
-       
         
-        if(!empty($request->county_id)){
             // For Other counties
             $county = \App\Counties::find($request->county_id);
 
             $product_weight = $weight_array;
 
             if($product_weight[1] == 'g'){
-                $shipping_cost = 300;
+                $shipping_cost = 500;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-                $shipping_cost = 300;
+                $shipping_cost = 500;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
                 $extra_kg = $product_weight[0] - 5;
                 $extra_cost = (30 * $extra_kg);
                 $vat = 0.16*$extra_cost;
-                $shipping_cost = 300 + $extra_cost + $vat;
+                $shipping_cost = 500 + $extra_cost + $vat;
             }
 
-            $location_type = 'outside_nairobi';
-
-        }else if(!empty($request->dropoff)) {
-            // For Nairobi county
-
-            $dropoff = \App\NairobiDropOffs::find($request->dropoff);
-
-            $zone = \App\NairobiZones::find($dropoff->zone_id);
-
-            $zone_id = $zone->id;
-
-            $product_weight = $weight_array;
-
-            if($product_weight[1] == 'g'){
-                $shipping_cost =$zone->price_one_way;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-                $shipping_cost = $zone->price_one_way;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
-            $extra_kg = $product_weight[0] - 5;
-            $extra_cost = (20 * $extra_kg);
-            $shipping_cost = $zone->price_one_way + $extra_cost;
-
-            }
-
-            $location_type = 'within_nairobi';
-
-        }
 
         $customer = $existingCustomer;
 
@@ -782,13 +704,10 @@ class FrontPageController extends Controller
         $booking->due_date = $due_date;
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
-        $booking->location_type = $location_type;
-        $booking->delivery_location = $request->delivery_location;
+        $booking->location_type = "Exact Location";
         $booking->shipping_cost = $shipping_cost;
         $booking->county_id = $request->county_id;
-        $booking->location_id = $request->location_id;
-        $booking->zone_id = $zone_id;
-        $booking->dropoff_id = $request->dropoff;
+        $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
 
         // return $booking;
@@ -846,19 +765,9 @@ class FrontPageController extends Controller
 
        $due_date = Carbon::now()->addMonths(3);
 
+        if($request->initial_deposit<500){
 
-        $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
-
-        if($product->product_price < 5000){
-            $minDeposit = 0.2*$product->product_price;
-        }else {
-            $minDeposit = 0.1 *$product->product_price;
-        }
-
-
-        if($request->initial_deposit<200){
-
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(200,0));
+          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(500,0));
          
         }
 
@@ -866,19 +775,17 @@ class FrontPageController extends Controller
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
-        $booking->location_id = $request->location_id;
-        $booking->zone_id = $zone_id;
-        $booking->dropoff_id = $request->dropoff;
+        $booking->exact_location = $exact_location;
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
-        $booking->balance = $product->product_price;
+        $booking->balance = $total_cost;
         $booking->payment_mode  = 'Mpesa';
         $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
-        $booking->total_cost = $product->product_price;
+        $booking->total_cost = $total_cost;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
@@ -943,36 +850,22 @@ class FrontPageController extends Controller
 
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
-        if($product->product_price < 5000){
-            $minDeposit = 0.2*$product->product_price;
-        }else {
-            $minDeposit = 0.1 *$product->product_price;
-        }
-
-
-        if($request->initial_deposit<200){
-
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(200,0));
-         
-        }
 
         $booking = new \App\Bookings();
         $booking->customer_id = $customer_id; 
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
-        $booking->location_id = $request->location_id;
-        $booking->zone_id = $zone_id;
-        $booking->dropoff_id = $request->dropoff;
+        $booking->exact_location = $exact_location;
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
-        $booking->balance = $product->product_price;
+        $booking->balance = $total_cost;
         $booking->amount_paid = "0";
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
         $booking->due_date = $due_date;
-        $booking->total_cost = $product->product_price;
+        $booking->total_cost = $total_cost;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();

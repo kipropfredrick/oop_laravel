@@ -57,7 +57,7 @@
 
                                 <hr/>
                                 </div>
-                                <h6 class="card-title">Your Details</h6>
+                                <h4 class="card-title">Your Details</h4>
                                 
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -88,84 +88,41 @@
                                                     <input required min="500" name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                                 </div>
 
-                                                <label for="location"><strong>Delivery Location</strong></label> <span style="color:red">*</span> <br>
+                                                <h5>Delivery Location</h5>
 
-                                          <div style="margin-top:10px" class="form-group">
-                                            <input  type="radio" id="location_radio1" name="location" value="1"  checked> Within Nairobi <br>
-                                            <input class="margin_top" type="radio" id="location_radio2" name="location" value="2" > Outside Nairobi
-                                          </div>
-                                          
+                                         
+                                                <div  id="location-fields" class="location-fields">
 
-                                            <div id="within_nairobi" class="within_nairobi">
-
-                                                <?php 
-                                                $zones = \App\NairobiZones::with('dropoffs')->get(); 
-                                                $dropoffs = \App\NairobiDropOffs::all(); 
-                                                ?>
-
-                                                <div class="form-group">
-                                                    <label for="zone">Pick your preferred delivery location</label><span style="color:red">*</span>
-                                                    <select class="form-control js-example-basic-single dependent-selects__parent" name="dropoff" id="id_parent" data-child-id="id_child" required>
-                                                        <option value="">Select/Search Location</option>
-                                                        @foreach($dropoffs as $dropoff)
-                                                        <option value="{{$dropoff->id}}"  >{{$dropoff->dropoff_name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                             </div>
-
-                                          
-                                          <div  id="location-fields" class="location-fields">
-
-                                          <div class="form-row">
-                                          <div class="form-group col-md-6">
-                                            <label for="checkout-company-name">County 
-                                            </label><span style="color:red">*</span>
-                                            <?php 
-                                            $counties = \App\Counties::all();
-                                            $locations = \App\PickupLocation::all();
-                                            
-                                            ?>
-                                              <select id="counties" class="form-control" name="county_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('county_id')) invalid_field @endif" required onchange="filter()">
-                                                <option value="">Select county</option>
-                                                @foreach($counties as $county)
-                                                    <option value="{{$county->id}}" class="counties">{{$county->county_name}}</option>
-                                                    
-                                                @endforeach
-                                                </select>
-                                                @error('county_id')
-                                                            <div class="invalid-feedback">
-                                                                {{ $message }}
-                                                            </div>
-                                                @enderror
-                                                </div>
-                                            
+                                                <div class="form-row">
                                                 <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Drop Off Location</label><span style="color:red">*</span>
-                                                @foreach($locations as $location)
-                                                <div class="locations" style="display: none">{{$location->county_id}}</div>
-                                                @endforeach
-
-                                                @foreach($locations as $location)
-                                                    <div class="locationsid" style="display: none">{{$location->id}}</div>
-                                                @endforeach
-
-                                                @foreach($locations as $location)
-                                                    <div class="locationsnames" style="display: none">{{$location->center_name}}</div>
-                                                @endforeach
-                                                <select class="form-control" name="location_id" id="subs" placeholder="Enter name" type="text" class="form-control @if($errors->has('location_id')) invalid_field @endif" required>
-                                                        <option value="">Select Pickup Location</option>
+                                                <label for="checkout-company-name">County</label><span style="color:red">*</span>
+                                                <?php 
+                                                $counties = \App\Counties::all();
+                                                $locations = \App\PickupLocation::all();
+                                                ?>
+                                                    <select id="counties" class="form-control" name="county_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('county_id')) invalid_field @endif" onchange="filter()" required>
+                                                    <option value="">Select county</option>
+                                                    @foreach($counties as $county)
+                                                        <option value="{{$county->id}}" class="counties">{{$county->county_name}}</option>
+                                                    @endforeach
                                                     </select>
-                                                    @error('location_id')
+                                                    @error('county_id')
                                                                 <div class="invalid-feedback">
                                                                     {{ $message }}
                                                                 </div>
                                                     @enderror
-                                                <div class="col-lg-10">
-                                                   
-                                            </div>
-                                             </div>
-                                          </div>
+                                                    </div>
+                                                
+                                                    <div class="form-group col-md-6">
+                                                    <label for="checkout-street-address">Exact Location</label><span style="color:red">*</span>
+                                                    
+                                                    <input min="500" required name="exact_location" value="{{ old('exact_location') }}" type="" class="form-control" id="checkout-street-address" placeholder="Enter your Exact Location">
+
+                                                    <div class="col-lg-10">
+                                                        
+                                                </div>
+                                                </div>
+                                                </div>
                                           </div>
 
                                                 <button type="submit" class="btn btn-primary">Make Booking</button>

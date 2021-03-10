@@ -61,7 +61,7 @@
                                 </div>
                                 
                                     <hr>
-                                    <h4>Personal Details</h4>
+                                    <h5>Personal Details</h5>
                                 
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -92,7 +92,7 @@
                                           <div class="form-group col-md-6">
                                                 <label for="checkout-company-name">Phone Number<span style="color:red">*</span>
                                                 </label>
-                                                <input required name="phone" type="number" value="{{ old('phone') }}" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
+                                                <input required name="phone" type="" value="{{ old('phone') }}" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.500 minimum)</label>
@@ -101,35 +101,9 @@
                                           </div>
 
 
-                                          <label for="location"><strong>Delivery Location</strong></label> <span style="color:red">*</span> <br>
+                                          <h5>Delivery Location</h5>
 
-                                          <div style="margin-top:10px" class="form-group">
-                                            <input  type="radio" id="location_radio1" name="location" value="1"  checked> Within Nairobi <br>
-                                            <input class="margin_top" type="radio" id="location_radio2" name="location" value="2" > Outside Nairobi
-                                          </div>
-
-
-
-
-                                          <div id="within_nairobi" class="within_nairobi">
-
-                                            <?php 
-                                            $zones = \App\NairobiZones::with('dropoffs')->get(); 
-                                            $dropoffs = \App\NairobiDropOffs::all(); 
-                                            ?>
-
-                                            <div class="form-group">
-                                                <label for="zone">Pick your preferred delivery location</label><span style="color:red">*</span>
-                                                <select class="form-control js-example-basic-single dependent-selects__parent" name="dropoff" id="id_parent" data-child-id="id_child" required>
-                                                    <option value="">Select/Search Location</option>
-                                                    @foreach($dropoffs as $dropoff)
-                                                    <option value="{{$dropoff->id}}"  >{{$dropoff->dropoff_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                          </div>
-
-                                          
+                                         
                                           <div  id="location-fields" class="location-fields">
 
                                           <div class="form-row">
@@ -153,26 +127,10 @@
                                                 </div>
                                             
                                                 <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Drop Off Location</label><span style="color:red">*</span>
-                                                @foreach($locations as $location)
-                                                <div class="locations" style="display: none">{{$location->county_id}}</div>
-                                                @endforeach
+                                                <label for="checkout-street-address">Exact Location</label><span style="color:red">*</span>
+                                                
+                                                <input min="500" required name="exact_location" value="{{ old('exact_location') }}" type="" class="form-control" id="checkout-street-address" placeholder="Enter your Exact Location">
 
-                                                @foreach($locations as $location)
-                                                    <div class="locationsid" style="display: none">{{$location->id}}</div>
-                                                @endforeach
-
-                                                @foreach($locations as $location)
-                                                    <div class="locationsnames" style="display: none">{{$location->center_name}}</div>
-                                                @endforeach
-                                                <select class="form-control" name="location_id" id="subs" placeholder="Enter name" type="text" class="form-control @if($errors->has('location_id')) invalid_field @endif" required>
-                                                        <option value="">Select Pickup Location</option>
-                                                    </select>
-                                                    @error('location_id')
-                                                                <div class="invalid-feedback">
-                                                                    {{ $message }}
-                                                                </div>
-                                                    @enderror
                                                 <div class="col-lg-10">
                                                    
                                             </div>
@@ -186,7 +144,7 @@
                                             <div class="mb-2">
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="terms" required>
+                                                    <input class="form-check-input" type="checkbox" checked id="terms" required>
                                                     <label class="form-check-label" for="terms">
                                                         I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>.*
                                                     </label>
