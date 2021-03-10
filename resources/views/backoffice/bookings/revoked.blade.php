@@ -26,7 +26,7 @@
 		</div>
         
 		<div class="table-responsive padding">
-        <table class="table datatable-basic  table-striped">
+		<table id="myTable" class="table table-bordered table-striped">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>
