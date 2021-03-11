@@ -1560,14 +1560,39 @@ class AdminController extends Controller
     }
 
     public function customers(){
-        // $customers =  \App\Customers::with('user')->get();
         $customers  = DB::table('customers')
-                ->select('customers.*','users.*')
-                ->join('users', 'customers.user_id', '=', 'users.id')
-                ->orderBy('customers.id', 'DESC')
-                 ->get();
-        // return($customers);
+                        ->select('customers.*','customers.id AS customer_id','users.*')
+                        ->join('users', 'customers.user_id', '=', 'users.id')
+                        ->orderBy('customers.id', 'DESC')
+                        ->get();
+        foreach($customers as $customer){
+            
+            $bookingsCount = \App\Bookings::where('customer_id',$customer->customer_id)->where('status','!=','revoked')->count();
+
+            $customer->bookingsCount = $bookingsCount;
+
+        }
+
         return view('backoffice.customers.index',compact('customers'));
+    }
+
+    public function delete_customer($id){
+
+        \App\Bookings::where('customer_id',$id)->where('status','revoked')->delete();
+
+        $customer  = DB::table('customers')
+                        ->where('id',$id)
+                        ->first();
+
+        \App\User::where('id',$customer->user_id)->delete();
+
+
+        $customers  = DB::table('customers')
+                        ->where('id',$id)
+                        ->delete();
+
+        return back()->with('success', 'Customer as been deleted!');
+
     }
 
     public function agents(){
