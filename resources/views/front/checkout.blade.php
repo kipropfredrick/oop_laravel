@@ -113,8 +113,8 @@
                                             $counties = \App\Counties::all();
                                             $locations = \App\PickupLocation::all();
                                             ?>
-                                              <select id="counties" class="form-control" name="county_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('county_id')) invalid_field @endif" onchange="filter()" required>
-                                                <option value="">Select county</option>
+                                              <select id="counties" class="form-control js-example-basic-single" name="county_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('county_id')) invalid_field @endif" onchange="filter()" required>
+                                                <option value="">Select/search county</option>
                                                 @foreach($counties as $county)
                                                     <option value="{{$county->id}}" class="counties">{{$county->county_name}}</option>
                                                 @endforeach
@@ -129,7 +129,7 @@
                                                 <div class="form-group col-md-6">
                                                 <label for="checkout-street-address">Exact Location</label><span style="color:red">*</span>
                                                 
-                                                <input min="500" required name="exact_location" value="{{ old('exact_location') }}" type="" class="form-control" id="checkout-street-address" placeholder="Enter your Exact Location">
+                                                <input min="500" required name="exact_location" value="{{ old('exact_location') }}" type="" class="form-control" id="checkout-street-address" placeholder="Eg. City, Town, street name">
 
                                                 <div class="col-lg-10">
                                                    

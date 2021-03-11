@@ -28,7 +28,7 @@
         <form action="/admin/counties/save" method="post">
           @csrf
 
-          <h6 class="text-uppercase font-size-sm font-weight-bold">Add County</legend>
+          <h6 class="text-uppercase font-size-sm font-weight-bold">Add County</h6>
 
           <div class="form-group row">
             <label class="col-form-label col-lg-2">County Name</label>

@@ -15,11 +15,11 @@
 
             <span class="bc-sep"></span>
 
-            <a href="">
+            <!-- <a href=""> -->
                 <span>{{ucfirst($search)}}</span>
-            </a>
+            <!-- </a> -->
 
-            <span class="bc-sep"></span>
+            <!-- <span class="bc-sep"></span> -->
 
         </div>
     </div>

@@ -28,7 +28,7 @@
         <form action="/admin/counties/save" method="post">
           @csrf
 
-          <h6 class="text-uppercase font-size-sm font-weight-bold">Add County</legend>
+          <h6 style="margin-top:10px" class="text-uppercase font-size-sm font-weight-bold">Add County</h6>
 
           <div class="form-group row">
             <label class="col-form-label col-lg-2">County Name</label>
@@ -48,7 +48,7 @@
 
         </form>
 
-        <h6 class="text-uppercase font-size-sm font-weight-bold">Counties</legend>
+        <h6 style="margin-top:10px" class="text-uppercase font-size-sm font-weight-bold">Counties</h6>
 
         <table id="myTable" class="table table-bordered table-striped">
 						<thead>
@@ -103,9 +103,9 @@
 							<tr>
                                 <td>{{$index=$index+1}}.</td>
 								<td>{{$county->county_name}}</td>
-                                <td>
+                                <td class="text-center">
                                  <div class="row">
-                                    <a style="margin-right:10px" class="btn btn-outline-success" href="/admin/counties/view/{{$county->id}}"><i class="fa fa-eye"></i></a>
+                                    <!-- <a style="margin-right:10px" class="btn btn-outline-success" href="/admin/counties/view/{{$county->id}}"><i class="fa fa-eye"></i></a> -->
                                     <a class="btn btn-outline-success" data-toggle="modal" data-target="#editModal{{$county->id}}"><i class="fa fa-edit"></i></a>
                                  </div>
                                 </td>
