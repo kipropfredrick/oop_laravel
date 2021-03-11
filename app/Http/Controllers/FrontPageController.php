@@ -512,10 +512,10 @@ class FrontPageController extends Controller
        $due_date = Carbon::now()->addMonths(3);
 
         
-        $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
+        $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first(); 
 
 
-        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->where('status','=','active')->first();
+        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
 
         if($booking){
@@ -631,7 +631,7 @@ class FrontPageController extends Controller
         $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
 
 
-        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->where('status','=','active')->first();
+        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
 
         if($booking){

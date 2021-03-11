@@ -1055,7 +1055,7 @@ class AdminController extends Controller
     }
 
     public function revoke_booking($id){
-        DB::table('bookings')->where('id','=',$id)->update(['status'=>'revoked']);
+        DB::table('bookings')->where('id','=',$id)->delete();
         return back()->with('success','Booking revoked.');
     }
 
