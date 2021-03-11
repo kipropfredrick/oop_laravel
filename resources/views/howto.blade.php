@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'How To')
+
 @section('content')
 <!-- breadcrumb --> 
 <div class="bc-bg">

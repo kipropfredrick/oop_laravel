@@ -25,7 +25,7 @@
 			@endif
 		</div>
 		
-		<div style="margin-bottom:20px" class="container">
+		<div style="margin-bottom:20px" class="container padding">
 			<form action="/admin/banner_save" method="post" enctype="multipart/form-data">
 
 			@csrf
@@ -49,7 +49,7 @@
         <div class="form-group row">
             <label class="col-form-label col-lg-2">Link</label>
             <div class="col-lg-10">
-                <input tclass="form-control" cols="30" rows="10" name="link" id="link" placeholder="E.g https://combine.co.ke/category/Electronics-&-audio-systems" type="" class="form-control @if($errors->has('link')) invalid_field @endif" required>
+                <input tclass="form-control" cols="30" rows="10" name="link" id="link" placeholder="E.g https://mosmos.co.ke/category/Electronics-&-audio-systems" type="" class="form-control @if($errors->has('link')) invalid_field @endif" required>
                 @error('link')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -60,20 +60,6 @@
 
         </div>
 
-        <div class="form-group row">
-            <label class="col-form-label col-lg-2">Caption</label>
-            <div class="col-lg-10">
-                <textarea tclass="form-control" cols="30" rows="10" name="description" id="description" placeholder="description" type="" class="form-control @if($errors->has('description')) invalid_field @endif" required>
-                </textarea>
-                @error('description')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                 @enderror
-
-            </div>
-
-        </div>
         
     <div class="form-group row">
             <label class="col-form-label col-lg-2">Image</label>

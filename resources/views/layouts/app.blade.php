@@ -191,9 +191,9 @@
                         <div class="input-group">
                             <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                             <div class="input-group-append">
-                                <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
-                                    <span class="fa fa-search"></span>
-                                </a>
+                            <button class="btn mdg-btn-search" type="submit" id="mdg-btn-search">
+                                <span class="fa fa-search"></span>
+                            </button>
                             </div>
                         </div>
                     </form>
@@ -228,9 +228,9 @@
                     <div class="input-group">
                         <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                         <div class="input-group-append">
-                            <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
+                            <button class="btn mdg-btn-search" type="submit" id="mdg-btn-search">
                                 <span class="fa fa-search"></span>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -265,9 +265,9 @@
                                 <div class="input-group">
                                 <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                                     <div class="input-group-append">
-                                        <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
-                                            <span class="fa fa-envelope-o"></span>
-                                        </a>
+                                    <button class="btn mdg-btn-search" type="submit" id="mdg-btn-search">
+                                        <span class="fa fa-search"></span>
+                                    </button>
                                     </div>
                                 </div>
                             </form>

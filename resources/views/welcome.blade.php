@@ -8,7 +8,12 @@
 <div class="bg-white-alt">
     <div class="">
         <div class="home-banner">
-            <img src="assets/img/extra/mm-hb.jpg" alt="Lipa Mos Mos">
+             <?php $banner = \App\Banners::latest()->first(); ?>
+             @if(empty($banner))
+                <img src="assets/img/extra/mm-hb.jpg" alt="Lipa Mos Mos">
+            @else
+            <img src="/storage/banners/{{$banner->image}}" alt="Lipa Mos Mos">
+            @endif
         </div>
     </div>
 </div>

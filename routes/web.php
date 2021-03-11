@@ -291,7 +291,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
 
     Route::get('/banners', 'AdminController@banners')->name('admin.banners');
     Route::get('/add_banner','AdminController@add_banner')->name('admin.adder-banner');
-    Route::post('/banner_save','AdminController@save_banner')->name('admin.saveer-banner');
+    Route::post('/banner_save','AdminController@save_banner')->name('admin.save-banner');
     Route::get('/delete-banner/{id}', 'AdminController@banner_delete')->name('admin.banner.delete');
     Route::get('/view-banner/{id}', 'AdminController@banner_view')->name('admin.banner.view');
     Route::get('/edit-banner/{id}', 'AdminController@banner_edit')->name('admin.banner.edit');

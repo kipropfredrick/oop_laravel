@@ -31,7 +31,6 @@
                                 <th class="thead">No.</th>
 								<th class="thead">Image</th>
 								<th class="thead">Title</th>
-								<th class="thead">Description</th>
 								<th class="thead">Actions</th>
 							</tr>
 						</thead>
@@ -47,11 +46,6 @@
 									</td>
 									<td>
 										{{$banner->title}}
-									</td>
-									<td style="width: 500px;">
-										<div style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-											{!!$banner->description!!}
-										</div>
 									</td>
 									<td>
 								      <div class="row">

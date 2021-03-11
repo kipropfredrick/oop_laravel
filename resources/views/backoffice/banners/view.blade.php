@@ -4,7 +4,7 @@
 
 <!-- Traffic sources -->
 <div class="card">
-<div class="table-responsive padding">
+<div class="">
         <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>View Banner</strong></legend>
 		</div>
@@ -25,7 +25,7 @@
 			@endif
 		</div>
 		
-		<div style="margin-bottom:20px" class="container">
+		<div style="margin-bottom:20px;padding:10px;" class="container">
 			<form action="/admin/banner_save" method="post" enctype="multipart/form-data">
 
 			@csrf
@@ -39,21 +39,6 @@
 
         </div>
 
-			<div class="form-group row">
-            <label class="col-form-label col-lg-2">Description</label>
-            <div class="col-lg-10">
-                <textarea disabled  class="form-control" cols="30" rows="10" name="description" id="description" placeholder="Description" type="number" class="form-control @if($errors->has('description')) invalid_field @endif" required>
-                  {!!$banner->description!!}
-                </textarea>
-                @error('description')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                 @enderror
-
-            </div>
-
-        </div>
         
     <div class="form-group row">
             <label class="col-form-label col-lg-2">Image</label>

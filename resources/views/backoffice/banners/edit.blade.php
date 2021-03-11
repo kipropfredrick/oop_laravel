@@ -4,12 +4,12 @@
 
 <!-- Traffic sources -->
 <div class="card">
-<div class="table-responsive padding">
+<div class="table-responsive">
         <div class="card-header header-elements-inline">
             <h6 style="color: #005b77;" class="card-title"><strong>Edit Banner</strong></legend>
 		</div>
 		
-		<div class="container">
+		<div class="container padding">
 		@if (session()->has('success'))
 
 			<div class="alert alert-success fade show" role="alert">
@@ -36,22 +36,6 @@
             <div class="col-lg-10">
                 <input tclass="form-control" value="{{$banner->title}}" cols="30" rows="10" name="title" id="title" placeholder="Title" type="" class="form-control @if($errors->has('title')) invalid_field @endif" required>
                 @error('title')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                 @enderror
-
-            </div>
-
-        </div>
-
-			<div class="form-group row">
-            <label class="col-form-label col-lg-2">Description</label>
-            <div class="col-lg-10">
-                <textarea tclass="form-control" cols="30" rows="10" name="description" id="description" placeholder="Description" type="number" class="form-control @if($errors->has('description')) invalid_field @endif" required>
-                 {!!$banner->description!!}
-                </textarea>
-                @error('description')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
