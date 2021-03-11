@@ -17,6 +17,7 @@ $overdueBookingAmount = \App\Bookings::where('status','=','overdue')->sum('total
 $completeBookingAmount = \App\Bookings::where('status','=','complete')->sum('total_cost');
 $completeBookingCount = \App\Bookings::where('status','=','complete')->count();
 $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
+$pendingBookingCount = \App\Bookings::where('status','=','pending')->count();
 
 $customersCount = \App\Customers::count();
 $vendorsCount = \App\Vendor::count();
@@ -80,7 +81,7 @@ $vendorsCount = \App\Vendor::count();
     <!-- small box -->
     <div class="small-box bg-success">
       <div class="inner">
-        <h3>{{number_format($pendingBookingAmount)}}</h3>
+        <h3>{{number_format($pendingBookingCount)}}</h3>
 
         <h5>KES {{number_format($pendingBookingAmount)}}</h5>
 
