@@ -10,6 +10,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
 use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendBookingMail;
 
 class MpesaPaymentController extends Controller
 {
@@ -294,7 +295,13 @@ class MpesaPaymentController extends Controller
 
                         $recipients = $agent->phone;
 
-                        $message = $booking->customer->user->name . " has booked your product,  booking ref ".$booking->booking_reference;
+                        $details = [
+                            'customer'=> $booking->customer->user->name,
+                            'booking_reference'=>$booking->booking_reference
+
+                        ];
+
+                        Mail::to($vendor->user->email)->send(new SendBookingMail($details));
 
                         $this->sendMessage($recipients,$message);
 
@@ -307,9 +314,15 @@ class MpesaPaymentController extends Controller
 
                         $recipients = $vendor->phone;
 
-                        $message = $booking->customer->user->name . " has booked your product,  booking ref ".$booking->booking_reference;
+                        // $message = $booking->customer->user->name . " has booked your product,  booking ref ".$booking->booking_reference;
 
-                        $this->sendMessage($recipients,$message);
+                        $details = [
+                            'customer'=> $booking->customer->user->name,
+                            'booking_reference'=>$booking->booking_reference
+
+                        ];
+
+                        Mail::to($vendor->user->email)->send(new SendBookingMail($details));
 
                      }
                 }

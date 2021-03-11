@@ -12,7 +12,9 @@
              @if(empty($banner))
                 <img src="assets/img/extra/mm-hb.jpg" alt="Lipa Mos Mos">
             @else
-            <img src="/storage/banners/{{$banner->image}}" alt="Lipa Mos Mos">
+             <a href="{{$banner->link}}">
+                <img src="/storage/banners/{{$banner->image}}" alt="Lipa Mos Mos">
+             </a>
             @endif
         </div>
     </div>
