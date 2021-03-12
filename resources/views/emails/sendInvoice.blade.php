@@ -101,11 +101,15 @@
 
 </head>
 <body>
-<h1 class="text-center">Lipa Mos mos</h1>
+
+<div class="email-header">
+    <img src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
+</div>
+
 <div class="container mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" style="padding:10px;">
             <p>Hello, {{ucfirst($details['customer_name'])}}.</p>
 
             <p>Your payment of <strong>KSh. {{number_format($details['latestPayment']->transaction_amount,2)}}</strong> for <strong>{{$details['product_name']}}</strong> has been received.</p>
@@ -116,9 +120,6 @@
 
             <!-- Payment history table -->
 
-                <div class="email-header">
-                    <img src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
-                </div>
 
                     <h3><strong>Payment History</strong></h3>
 

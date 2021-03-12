@@ -10,7 +10,8 @@ use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
 use Illuminate\Support\Facades\Mail;
-use \App\Mail\SendBookingMail;
+use App\Mail\SendBookingMail;
+use App\Mail\SendPaymentMailToAdmin;
 
 class MpesaPaymentController extends Controller
 {
@@ -285,6 +286,7 @@ class MpesaPaymentController extends Controller
             if($booking == null){
                 return "Booking Does not exist!";
             }
+       
 
             if($booking->status == 'pending'){
                 if($booking->agent_code !== null){
@@ -303,8 +305,6 @@ class MpesaPaymentController extends Controller
 
                         Mail::to($vendor->user->email)->send(new SendBookingMail($details));
 
-                        $this->sendMessage($recipients,$message);
-
                     }
                 }elseif($booking->vendor_code !== null){
                     $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
@@ -313,8 +313,6 @@ class MpesaPaymentController extends Controller
                        }else {
 
                         $recipients = $vendor->phone;
-
-                        // $message = $booking->customer->user->name . " has booked your product,  booking ref ".$booking->booking_reference;
 
                         $details = [
                             'customer'=> $booking->customer->user->name,
@@ -446,6 +444,7 @@ class MpesaPaymentController extends Controller
                 ->where('booking_reference','=',$bill_ref_no)
                 ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
             }
+            
 
             DB::table('mpesapayments')
                 ->insert([
@@ -470,11 +469,34 @@ class MpesaPaymentController extends Controller
             $balance =number_format($balance,2);
 
             // Set your message
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+
+            $payment_count = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->count();
+
+            if($payment_count<2){
+                $shipping_cost = $booking->shipping_cost;
+                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
+
+            }else{
+
+                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+
+            }   
 
             // Set your shortCode or senderId
 
             $this->sendMessage($recipients,$message);
+
+            $details = [
+                'customer'=> $booking->customer->user->name,
+                'booking_reference'=>$booking->booking_reference,
+                'amount_paid'=>$transaction_amount,
+                'product'=>$booking->product->product_name,
+                'mpesa_ref'=>$transaction_id,
+                'balance'=> $booking->balance
+
+            ];
+
+            Mail::to('order@mosmos.co.ke')->send(new SendPaymentMailToAdmin($details));
 
             $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$bill_ref_no)->first();
 

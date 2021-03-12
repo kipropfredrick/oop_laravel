@@ -13,7 +13,7 @@
 
             <span class="bc-sep"></span>
 
-            <a href="product.php">
+            <a href="/product/{{$product->slug}}">
                 <span>{{$product->product_name}}</span>
             </a>
 

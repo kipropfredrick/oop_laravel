@@ -109,7 +109,7 @@
 <div class="container mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" style="padding:10px;">
                         <p>Hello, <strong>{{ucfirst($details['customer'])}}</strong> has booked your product, The booking reference is  <strong>{{$details['booking_reference']}}</strong>.</p>
                 </div>
 

@@ -519,11 +519,7 @@ class FrontPageController extends Controller
 
 
         if($booking){
-            return back()->with('error','You have an ongoing booking. You cannot make another booking until you finish the existing one.');
-            $pendingbooking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->where('status','=','pending')->first();
-            if($pendingbooking){
-                return back()->with('error','You have an ongoing booking. You cannot make another booking until you finish the existing one.');
-            }
+            return view('front.exists',compact('booking'));
         }
 
 
@@ -635,11 +631,7 @@ class FrontPageController extends Controller
 
 
         if($booking){
-            return back()->with('error','You have an ongoing booking. You cannot make another booking until you finish the existing one.');
-            $pendingbooking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->where('status','=','pending')->first();
-            if($pendingbooking){
-                return back()->with('error','You have an ongoing booking. You cannot make another booking until you finish the existing one.');
-            }
+            return view('front.exists',compact('booking'));
         }
 
         \Auth::login($user);

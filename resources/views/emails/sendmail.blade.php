@@ -94,7 +94,7 @@
                     <img src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
                 </div>
 
-                <div class="email-text">
+                <div class="email-text" style="padding:10px;">
                     <p>Hello, {{ $details['customer_name'] }}.</p>
                     
                     <p>Thank you for your interest in using <strong>Lipa Mos Mos</strong>.</p>

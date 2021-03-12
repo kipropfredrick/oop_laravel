@@ -137,13 +137,15 @@ class AdminController extends Controller
      }
 
      public function vendor_pending_products(){
+        $status = "Pending";
        $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"pending")->orderBy('id', 'DESC')->get();
-       return view('backoffice.products.vendor',compact('products')); 
+       return view('backoffice.products.vendor',compact('products','status')); 
      }
 
      public function vendor_approved_products(){
+        $status = "Approved";
         $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"approved")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.vendor',compact('products')); 
+        return view('backoffice.products.vendor',compact('products','status')); 
       }
 
       public function agent_approved_products(){
@@ -162,8 +164,9 @@ class AdminController extends Controller
       }
 
       public function vendor_rejected_products(){
+        $status = "Rejected";
         $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"rejected")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.vendor',compact('products')); 
+        return view('backoffice.products.vendor',compact('products','status')); 
       }
 
      public function approve_product($id){

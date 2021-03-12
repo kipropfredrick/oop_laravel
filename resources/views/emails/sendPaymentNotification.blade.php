@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- title -->
-    <title>New Account Created</title>
-    <!-- Fontawesome -->
-    <script src="https://kit.fontawesome.com/3e5f9a0a23.js"></script>
-
-    <!-- Google Fonts --> 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <title>New Payment | Lipa Mos mos</title>
     <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    
-</head>
-<style>
-    body {
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+        body {
         background-color: #f8f8f8;
         font-family: 'Source Sans Pro', sans-serif;
     }
@@ -25,7 +21,8 @@
     }
 
     .email-header {
-        background-color: #1e22a9;padding: 10px;
+        background-color: #1e22a9;
+        padding: 10px;
     }
 
     .email-header img {
@@ -49,6 +46,20 @@
 
     .email-btn a:hover {
         background-color: #f68b1e;
+    }
+
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        td, th {
+        border: 1px solid #dddddd;text-align: left;padding: 8px;
+    }
+
+        tr:nth-child(even) {
+        background-color: #dddddd;
     }
 
     .email-footer {
@@ -85,30 +96,23 @@
     .ftr-socials a .fa:hover {
         background: #007bff;
     }
-</style>
-    <body>
-        <div class="main-body">
-            <div class="email-body">
-                <div style="background-color: #1e22a9;padding: 10px;" class="email-header">
-                    <img style="width: 200px;" src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
-                </div>
 
-                <div class="email-text" style="padding:10px;">
-                    <p>Hello, {{ $details['name'] }}</p>
-                    
-                    <p>Your <strong>Lipa Mos Mos</strong> account has been created successfully.</p>
+    </style>
 
-                    <p>Your email address is: <strong>{{ $details['email'] }}</strong> and the password 
-                        is <strong>{{ $details['password'] }}</strong>.</p>
+</head>
+<body>
 
-                    <div  class="email-btn">
-                        <a style="background-color: #1e22a9;color: #ffffff;padding: 5px 10px;border-radius: 5px;text-decoration: none;" href="https://mosmos.co.ke/login">Visit Dashboard</a>
-                    </div>
-                    
-                    <p>Thank you,<br/>
-                        Lipa Mos Mos Team</p>
-                </div>
-            </div>
+<div class="email-header">
+    <img src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="padding:10px;">
+            <p>You have received a new payment of <strong>{{number_format($details['amount_paid'])}}</strong> from {{$details['customer']}} for <strong>{{$details['product']}}</strong></p>
+            <p>Payment reference is <strong>{{$details['mpesa_ref']}}</strong>, booking reference is <strong>{{$details['booking_reference']}}</strong> balance is {{number_format($details['balance'])}}.</p>
+
 
             <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
                 <div style="text-align: center;" class="ftr-socials">
@@ -125,7 +129,11 @@
                 </div>
                 <p>&copy; Lipa Mos Mos | All Rights Reserved</p>
             </div>
-        </div>
 
-    </body>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>   
+</body>
 </html>

@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive padding">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Products</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>@if(isset($status)) {{$status}} @endif Products</strong></h6>
 		</div>
 		
 		<div class="container">
@@ -32,6 +32,7 @@
 								<th class="thead">Product Name</th>
 								<th class="thead">Product Code</th>
 								<th class="thead">Item Price</th>
+								<th>Weight</th>
 								<th class="thead">Vendor</th>
 								<th class="text-center thead">Actions</th>
 							</tr>
@@ -44,6 +45,7 @@
 								<td>{{$product->product_name}}</td>
 								<td>{{$product->product_code}}</td>
 								<td>{{$product->product_price}}</td>
+								<td>{{$product->weight}}</td>
 								<td>{{$product->vendor->user->name}}</td>
 								<td class="text-center">
 									<div class="row">
