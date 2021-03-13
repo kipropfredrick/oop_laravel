@@ -37,6 +37,8 @@ Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
 
+Route::get('/testSendSMS','FrontPageController@testSendSMS');
+
 Route::get('/update_bookings_agent_or_vendor','FrontPageController@update_bookings_agent_or_vendor');
 
 Route::post('/checkpayment','MpesaPaymentController@checkpayment');

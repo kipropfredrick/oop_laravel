@@ -350,23 +350,22 @@ class FrontPageController extends Controller
                 }
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                                ->where('subcategory_id',$subcategory->id)
-                                ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->paginate(20);
+                                            ->where('subcategory_id',$subcategory->id)
+                                            ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->paginate(20);
 
                 return view('front.show_subcategory',compact('products','sort_by','trendingProducts','categories','category','subcategory'));
             }
 
             $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
-                            ->where('vendor_id' , '!=', null)
-                            ->where('quantity','>',0)->where('status','=','approved')
-                            ->orderBy($p,$o)->paginate(20);
+                                        ->where('vendor_id' , '!=', null)
+                                        ->where('quantity','>',0)->where('status','=','approved')
+                                        ->orderBy($p,$o)->paginate(20);
 
         }else{
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
                              ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
         }
-
 
        
 
@@ -613,8 +612,34 @@ class FrontPageController extends Controller
         $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $request->phone, $p_matches);
 
         $valid_phone = $valid_phone != 1 ? $request->get('phone') : '254' . $p_matches[1];
+        
+        $product = \App\Products::find($request->product_id);
 
-        $user = $request->isMethod('put') ? \App\User::findOrFail($request->user_id) : new \App\User;
+        if($product->weight != 0){
+            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
+        }else{
+            $weight_array = (['0','g']);
+        }
+        
+        // For Other counties
+        $county = \App\Counties::find($request->county_id);
+
+        $product_weight = $weight_array;
+
+        if($product_weight[1] == 'g'){
+            $shipping_cost = 500;
+        }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+            $shipping_cost = 500;
+        }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+            $extra_kg = $product_weight[0] - 5;
+            $extra_cost = (30 * $extra_kg);
+            $vat = 0.16*$extra_cost;
+            $shipping_cost = 500 + $extra_cost + $vat;
+        }
+
+        $total_cost = $product->product_price + $shipping_cost;
+
+
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
 
         if($existingUser)
@@ -641,7 +666,6 @@ class FrontPageController extends Controller
 
         $booking_date = now();
 
-        $product = \App\Products::find($request->product_id);
 
         $due_date = Carbon::now()->addMonths(3);
 
@@ -654,34 +678,6 @@ class FrontPageController extends Controller
           return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(200,0));
          
         }
-
-
-        if($product->weight != 0){
-            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
-        }else{
-            $weight_array = (['0','g']);
-        }
-        
-            // For Other counties
-            $county = \App\Counties::find($request->county_id);
-
-            $product_weight = $weight_array;
-
-            if($product_weight[1] == 'g'){
-                $shipping_cost = 500;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-                $shipping_cost = 500;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
-                $extra_kg = $product_weight[0] - 5;
-                $extra_cost = (30 * $extra_kg);
-                $vat = 0.16*$extra_cost;
-                $shipping_cost = 500 + $extra_cost + $vat;
-            }
-
-
-        $customer = $existingCustomer;
-
-        $total_cost = $product->product_price + $shipping_cost;
 
 
         $booking = new \App\Bookings();
@@ -1017,6 +1013,21 @@ class FrontPageController extends Controller
          return response()->json( $out);
 
             
+    }
+
+
+    public function testSendSMS(){
+
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number BKG5126 And amount Ksh. 500";
+        
+       $recipients = "254725569054";
+
+       if(SendSMSController::sendMessage($recipients,$message)){
+           return redirect('/');
+       }else{
+           return "Error";
+       }
+
     }
 
     
