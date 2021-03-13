@@ -604,14 +604,19 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::all();
 
-        $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $request->phone,$p_matches);
+        list($msisdn, $network) = $this->get_msisdn_network($request->phone);
+
+        if (!$msisdn){
+
+            return redirect()->back()->with('error',"Please enter a valid phone number!");
+        }else{
+            $valid_phone = $msisdn;
+        }
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
         //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred. 
 
         $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $request->phone, $p_matches);
-
-        $valid_phone = $valid_phone != 1 ? $request->get('phone') : '254' . $p_matches[1];
         
         $product = \App\Products::find($request->product_id);
 
