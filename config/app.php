@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -233,6 +234,7 @@ return [
         'ExcelReport' => Jimmyjs\ReportGenerator\Facades\ExcelReportFacade::class,
         'CSVReport' => Jimmyjs\ReportGenerator\Facades\CSVReportFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

@@ -9,8 +9,6 @@
 
     <style>
 
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-
         body {
         background-color: #f8f8f8;
         font-family: 'Source Sans Pro', sans-serif;
@@ -110,36 +108,61 @@
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
             <div class="card" style="padding:10px;">
-            <p>Hello, {{ucfirst($details['customer_name'])}}.</p>
 
-            <p>Your payment of <strong>KSh. {{number_format($details['latestPayment']->transaction_amount,2)}}</strong> for <strong>{{$details['product_name']}}</strong> has been received. The balance remaining is <strong>Ksh. {{$details['balance']}}</strong></p>
+             <?php $now = now(); ?>
 
-            <p>Booking Code: <strong>{{$details['booking_reference']}}</strong><br>
-                M-PESA Reference: <strong>{{$details['latestPayment']->mpesapayment->transac_code}}</strong><br>
-                Payment Date: <strong>{{date('M d'.', '.'Y', strtotime($details['latestPayment']->mpesapayment->date_paid))}}</strong></p>
+                {{date('M d'.', '.'Y', strtotime($now))}}
+        
+                    <h3><strong>{{ucfirst($details['customer_name'])}} Payment History</strong></h3>
 
-            <p>Find the attached Invoice.</p>
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-md-5">
+                            <table id="invoice" class="table table-striped table-hover">
 
+                                <thead class="">
+                                    <tr>
+                                        <th scope="col">No. </th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Mpesa Code</th>
+                                        <th scope="col">Amount Paid (KES)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="totals">
+                                <?php $index = 0; ?>
+                                 @foreach($details['payments'] as $payment)
+                                    <tr>
+                                        <td scope="row"><strong>{{$index = $index+1}}.</strong></td>
+                                        <td>{{date('M d'.', '.'Y', strtotime($payment->mpesapayment->date_paid))}}</td>
+                                        <td>{{$payment->mpesapayment->transac_code}}</td>
+                                        <td>{{number_format($payment->transaction_amount,2)}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <h4>Summary</h4>
+                    
+                    <table>
+                        <tr>
+                            <td>Total Paid</td>
+                            <td>KSh.{{$details['amount_paid']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Product Cost</td>
+                            <td>KSh.{{$details['total_cost']}}</td>
+                        </tr>
+                        <tr>
+                            <td>Balance</td>
+                            <td>KSh.{{$details['balance']}}</td>
+                        </tr>
+                  </table>
+                    <!-- end -->
+                    
                 </div>
-
-                <p>Thank you,<br/>
-                        Lipa Mos Mos Team</p>
-
-            <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
-                <div style="text-align: center;" class="ftr-socials">
-                    <a href="https://facebook.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
-                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/insta.png" alt=""></a>
-                </div>
-                <div>
-                    <span>
-                        <a href="https://mosmos.co.ke">Visit Website</a>
-                    </span> |
-                    <span>
-                        <a href="mailto:support@mosmos.co.ke">Email Support</a>
-                    </span>
-                </div>
-                <p>&copy; Lipa Mos Mos | All Rights Reserved</p>
-            </div>
 
             </div>
         </div>
