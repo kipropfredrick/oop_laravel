@@ -35,9 +35,13 @@
                                 <th class="thead">Product Code</th>
 								@if(auth()->user()->role !== 'influencer')
                                 <th class="thead">Customer</th>
-								<th class="thead">Agent</th>
+								@if(auth()->user()->role !== 'vendor')
+								<th class="thead">Vendor</th>
+								@endif
 								<th class="thead">Delivery Location</th>
+								@if(auth()->user()->role !== 'vendor')
                                 <th class="thead">Phone Number</th>
+								@endif
 								<th class="thead">Item Cost</th>
 								<th class="thead">Shipping Cost</th>
 								<th class="thead">Discount</th>
@@ -48,7 +52,6 @@
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
                                 <th class="thead">Status</th>
-								<th class="thead">Date Completed</th>
 								@else
 								<th class="thead">Commission</th>
 								@endif
@@ -67,7 +70,9 @@
 									<td>{{$booking->product->product_code}}</td>
 									@if(auth()->user()->role !== 'influencer')
 									<td>{{ucfirst($booking->customer->user->name)}}</td>
+									@if(auth()->user()->role !== 'vendor')
 									<td>{{ucfirst($booking->agent)}}</td>
+									@endif
 									<td>
 										@if($booking->county !=null)
 										{{$booking->county->county_name}} County,{{$booking->location['town']}} @if(isset($booking->location['center_name'])) Town ({{$booking->location['center_name']}}) @else {{ $booking->exact_location}} @endif
@@ -77,7 +82,9 @@
 										 No Location
 										@endif
 									</td>
+									@if(auth()->user()->role !== 'vendor')
 									<td>{{ucfirst($booking->customer->phone)}}</td>
+									@endif
 									<td>Ksh {{number_format($booking->product->product_price)}}</td>
 									<td>Ksh {{number_format($booking->shipping_cost)}}</td>
 									<td>KSh {{number_format($booking->discount)}}</td>
@@ -95,7 +102,6 @@
 									</div>
 									</td>
 									<td>{{$booking->status}}</td>
-									<td>{{date('M d'.', '.'Y', strtotime($booking->date_completed))}}</td> 
 									@if(auth()->user()->role == "agent")
 									<td><a class="btn btn-outline-primary" href="/agent/deliver-booking/{{$booking->id}}">Deliver</a></td>
 									@endif

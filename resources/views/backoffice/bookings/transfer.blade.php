@@ -34,9 +34,13 @@
 								<th class="thead">Booking Reference</th>
                                 <th class="thead">Product Code</th>
                                 <th class="thead">Customer</th>
-								<th class="thead">Agent</th>
+								@if(auth()->user()->role !== 'vendor')
+								<th class="thead">Vendor</th>
+								@endif
 								<th class="thead">Delivery Location</th>
+								@if(auth()->user()->role !== 'vendor')
                                 <th class="thead">Phone Number</th>
+								@endif
                                 <th class="thead">Item Cost</th>
 								<th class="thead">Shipping Cost</th>
 								<th class="thead">Discount</th>
@@ -63,7 +67,9 @@
 									 {{ucfirst($booking->customer->user->name)}}
 									@endif
 									</td>
+									@if(auth()->user()->role !== 'vendor')
 									<td>{{ucfirst($booking->agent)}}</td>
+									@endif
 									<td>
 										@if($booking->county !=null)
 										{{$booking->county->county_name}} County,{{$booking->location['town']}} @if(isset($booking->location['center_name'])) Town ({{$booking->location['center_name']}}) @else {{ $booking->exact_location}} @endif
@@ -73,9 +79,11 @@
 										 No Location
 										@endif
 									</td>
+									@if(auth()->user()->role !== 'vendor')
 									<td>
 									 @if(isset($booking->customer))
 									{{ucfirst($booking->customer->phone)}}
+									@endif
 									@endif
 									</td>
 									<td>Ksh {{number_format($booking->product->product_price)}}</td>
