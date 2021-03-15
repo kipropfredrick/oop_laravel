@@ -711,13 +711,6 @@ class FrontPageController extends Controller
 
 
        $recipients = $valid_phone;
-
-         if($shipping_cost>0){
-            $shipping_cost = number_format($shipping_cost,2);
-        }else{
-            $shipping_cost = ' will be comunicated on booking completion';
-        };
-
       
         $booking_id = DB::getPdo()->lastInsertId();
 
@@ -770,6 +763,7 @@ class FrontPageController extends Controller
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = $total_cost;
+        $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
         $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
@@ -780,11 +774,7 @@ class FrontPageController extends Controller
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'BKG'.rand(1000,9999);
-
-        \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
-
-       $recipients = $valid_phone;
+        $recipients = $valid_phone;
        
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -822,7 +812,7 @@ class FrontPageController extends Controller
 
         $customer = new \App\Customers();
         $customer->user_id = $user_id; 
-        $customer->phone  = '254'.ltrim($request->input('phone'), '0');
+        $customer->phone  = $valid_phone;
         $customer->save();
 
         $customer_id = DB::getPdo()->lastInsertId();
@@ -851,6 +841,7 @@ class FrontPageController extends Controller
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
         $booking->balance = $total_cost;
+        $booking->shipping_cost = $shipping_cost;
         $booking->amount_paid = "0";
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
