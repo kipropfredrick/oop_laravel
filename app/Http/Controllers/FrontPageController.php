@@ -234,11 +234,14 @@ class FrontPageController extends Controller
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
                                     ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+
+            return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
         }
 
-        
 
-        
+        $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                            ->where('category_id','=',$category->id)
+                            ->where('quantity','>',0)->orderBy($p,$o)->paginate(20);
 
         return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
 
