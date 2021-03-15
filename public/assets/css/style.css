@@ -16,6 +16,19 @@ h1, h2, h3, h4, h5, h6 {
     background: #1e22a9;
     padding-top: 5px;
 }
+.load-more-btn{
+    background-color: #FFF;
+    color: #006de1;
+    border: solid 2px #006de1;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.load-more-btn:hover{
+    background-color: #f68b1e;
+    color: #FFF;
+    border: solid 2px #f68b1e;
+}
 
 .mdg-search {
     padding: 0 20px;

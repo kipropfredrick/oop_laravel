@@ -115,21 +115,23 @@
              
             </div>
 
-            <?php 
-        $currentP = $products->currentPage();
-        $nextP = $currentP+1;
-        $lastp = $products->lastPage();
-        $baseUrl = \URL::to('/');
-        $url = $baseUrl.'/category/'.$category->slug;
-        $loadUrl = $url."?page=".$nextP;
-        ?>
-        @if($currentP!=$lastp)
-            <div style="margin-right:auto;margin-left:auto" class="text-center">
-                <a style="width:100px" class="btn btn-block p-btn" href="{{$loadUrl}}">Load more</a>
-            </div>
-        @endif
 
         </div>
+
+        <?php 
+            $currentP = $products->currentPage();
+            $nextP = $currentP+1;
+            $lastp = $products->lastPage();
+            $baseUrl = \URL::to('/');
+            $url = $baseUrl.'/category/'.$category->slug;
+            $loadUrl = $url."?page=".$nextP;
+        ?>
+
+        @if($currentP!=$lastp)
+        <div class="row justify-content-center">
+            <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a>
+        </div>
+        @endif
 
     </div>
     <!-- end products carousel -->
