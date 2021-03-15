@@ -647,10 +647,8 @@ class FrontPageController extends Controller
 
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
 
-        if($existingUser)
+        if($existingUser!=null)
         {
-
-        // return ($existingUser);
 
         $user = $existingUser;
 
