@@ -3,8 +3,6 @@
 @section('title', $category->category_name)
 
 @section('content')
-
-
 <!-- breadcrumb --> 
 <div class="bc-bg">
     <div class="container">
@@ -113,13 +111,32 @@
                     @endforeach
            </div>
 
-           <div style="margin-left:5px">{{ $products->render()}}</div>
-                
+           <!-- <div style="margin-left:5px">{{ $products->render()}}</div> -->
+             
             </div>
+
+            <?php 
+        $currentP = $products->currentPage();
+        $nextP = $currentP+1;
+        $lastp = $products->lastPage();
+        $baseUrl = \URL::to('/');
+        $url = $baseUrl.'/category/'.$category->slug;
+        $loadUrl = $url."?page=".$nextP;
+        ?>
+        @if($currentP!=$lastp)
+            <div style="margin-right:auto;margin-left:auto" class="text-center">
+                <a style="width:100px" class="btn btn-block p-btn" href="{{$loadUrl}}">Load more</a>
+            </div>
+        @endif
+
         </div>
+
     </div>
     <!-- end products carousel -->
+
 </div>
+
+
 
  <!-- {{ $products->links() }} -->
 
