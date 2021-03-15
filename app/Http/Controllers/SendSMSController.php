@@ -8,10 +8,12 @@ use Exception;
 
 class SendSMSController extends Controller
 {
-    public static function sendMessage($recipients,$message){
+    public static function sendMessage($recipients,$message,$type){
 
         $username   = "Bukuswift";
         $apiKey     = env('AT_API_KEY');
+
+        $data = [];
 
         // Initialize the SDK
         $AT  = new AfricasTalking($username, $apiKey);
@@ -29,10 +31,22 @@ class SendSMSController extends Controller
                 'message' => $message,
             ]);
 
-            // return array($result);
+            $data['receiver'] = $recipients;
+            $data['message'] = $message;
+            $data['type'] = $type;
+            $data['cost'] = $result['data']->SMSMessageData->Recipients[0]->cost;
+            $data['status'] =$result['status'];
+            $data['created_at'] = now();
+            $data['updated_at'] = now();
+
+            \DB::table('s_m_s_logs')->insert($data);
 
         } catch (Exception $e) {
             \Log::info('SMS ERROR =>'.print_r($e->getMessage(),1));
         }
+
+        
+
+
     }
 }

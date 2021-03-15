@@ -54,15 +54,8 @@ class PaymentReminder extends Command
                 $recipients = $booking->customer->phone;
                 $message = "Complete your booking for ".$booking->product->product_name.". Paybill 4040299 and account number [order-id]. Total amount is KSh.".$booking->booking_reference.". You can pay a minimum of KSh.500.";
 
-                SendSMSController::sendMessage($recipients,$message);
+                SendSMSController::sendMessage($recipients,$message,$type="payment_reminder_48hrs");
 
-                $data['receiver'] = $recipients;
-                $data['type'] = 'payment_reminder_48hrs';
-                $data['message'] = $message;
-                $data['created_at'] = now();
-                $data['updated_at'] = now();
-
-                \DB::table('s_m_s_logs')->insert($data);
             }
 
 
@@ -87,15 +80,8 @@ class PaymentReminder extends Command
                 $recipients = $booking->customer->phone;
                 $message =  "Hello, it’s been a while. Keep paying for ".$booking->product->product_name.". Paybill 4040299 and account number ".$booking->booking_reference.". Amount is KSh.".number_format($booking->balance).".";
                
-                SendSMSController::sendMessage($recipients,$message);
+                SendSMSController::sendMessage($recipients,$message,$type="inactive_payment_reminder");
 
-                $data['receiver'] = $recipients;
-                $data['type'] = 'inactive_payment_reminder';
-                $data['message'] = $message;
-                $data['created_at'] = now();
-                $data['updated_at'] = now();
-
-                \DB::table('s_m_s_logs')->insert($data);
             }
             }
 

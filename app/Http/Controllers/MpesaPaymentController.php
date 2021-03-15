@@ -466,7 +466,7 @@ class MpesaPaymentController extends Controller
 
             }   
 
-            SendSMSController::sendMessage($recipients,$message);
+            SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
             $data['receiver'] = $recipients;
             $data['type'] = 'payment_notification';

@@ -1917,17 +1917,8 @@ class AdminController extends Controller
         
       $recipients = $request->receiver;
       $message = $request->message;
-      
-      $data = $request->except('_token');
 
-      SendSMSController::sendMessage($recipients,$message);
-
-      $data['type'] = 'composed_message';
-      $data['created_at'] = now();
-      $data['updated_at'] = now();
-      
-
-      DB::table('s_m_s_logs')->insert($data);
+      SendSMSController::sendMessage($recipients,$message,$type = 'composed_message');
 
       return back()->with('success','Message has been sent!');
           
