@@ -164,17 +164,7 @@ class MpesaPaymentController extends Controller
                           ]);
 
             $message = "Success";
-            // return response()->json($message);
-
-
-            $username   = "Mosmossms";
-            $apiKey     = env('AT_API_KEY');
-
-            // Initialize the SDK
-            $AT  = new AfricasTalking($username, $apiKey);
-
-            // Get the SMS service
-            $sms        = $AT->sms();
+            
 
             // Set the numbers you want to send to in international format
             $recipients =$msisdn;
@@ -275,7 +265,6 @@ class MpesaPaymentController extends Controller
 
             $log_id = DB::getPdo()->lastInsertId();
 
-        // if (in_array($serve_ip, $valid_ips)) {
 
           \App\PaymentLog::where('id',$log_id)->update(['status'=>"valid"]);
 
@@ -460,15 +449,10 @@ class MpesaPaymentController extends Controller
 
             $message = 'Success';
 
-            // return response()->json($message);
-
-            // Set the numbers you want to send to in international format
             $recipients =$msisdn;
 
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
-
-            // Set your message
 
             $payment_count = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->count();
 
@@ -482,9 +466,15 @@ class MpesaPaymentController extends Controller
 
             }   
 
-            // Set your shortCode or senderId
+            SendSMSController::sendMessage($recipients,$message);
 
-            $this->sendMessage($recipients,$message);
+            $data['receiver'] = $recipients;
+            $data['type'] = 'payment_notification';
+            $data['message'] = $message;
+            $data['created_at'] = now();
+            $data['updated_at'] = now();
+
+            DB::table('s_m_s_logs')->insert($data);
 
             $details = [
                 'customer'=> $booking->customer->user->name,
@@ -519,10 +509,6 @@ class MpesaPaymentController extends Controller
             
         $message = "Success!";
 
-        // }else{
-        //     $message = "Invalid Request";
-        //     Log::info($message);
-        // }
 
     }else{
         $message = "No Data from Safaricom";

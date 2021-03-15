@@ -14,6 +14,7 @@ use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\SendSMSController;
 
 
 class AdminController extends Controller
@@ -1896,6 +1897,40 @@ class AdminController extends Controller
         
          return back()->with('success','agent deleted');
         
+    }
+
+    public function sms_log(){
+
+        $logs = DB::table('s_m_s_logs')->orderBy('id','DESC')->get();
+
+        return view('backoffice.sms.index',compact('logs'));
+
+    }
+
+    public function send_sms(){
+
+      return view('backoffice.sms.send');
+        
+    }
+
+    public function send_sms_save(Request $request){
+        
+      $recipients = $request->receiver;
+      $message = $request->message;
+      
+      $data = $request->except('_token');
+
+      SendSMSController::sendMessage($recipients,$message);
+
+      $data['type'] = 'composed_message';
+      $data['created_at'] = now();
+      $data['updated_at'] = now();
+      
+
+      DB::table('s_m_s_logs')->insert($data);
+
+      return back()->with('success','Message has been sent!');
+          
     }
 
     public function update_product_bookings(){

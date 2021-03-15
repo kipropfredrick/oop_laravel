@@ -377,6 +377,32 @@
             </ul>
           </li>
           </li>
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-envelope"></i>
+              <p>
+                SMS
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/sms-log" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>SMS Log</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/send-sms" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Send SMS</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          </li>
+
          @elseif(auth()->user()->role =='vendor')
 		 <li class="nav-item">
 			<a href="#" class="nav-link"><i class="fa fa-shopping-basket"></i> <span>Products</span><i class="right fas fa-angle-left"></i></a>

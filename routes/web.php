@@ -299,6 +299,10 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/edit-banner/{id}', 'AdminController@banner_edit')->name('admin.banner.edit');
     Route::post('/banner_update/{id}','AdminController@update_banner')->name('admin.updateer-banner');
 
+    Route::get('/sms-log', 'AdminController@sms_log')->name('admin.sms-log');
+    Route::get('/send-sms','AdminController@send_sms')->name('admin.send-sms');
+    Route::post('/send-sms-save','AdminController@send_sms_save')->name('admin.send-sms-save');
+    
     Route::prefix('influencer')->group(function () {
 
         Route::get('/active-bookings','AdminController@influencer_active_bookings');

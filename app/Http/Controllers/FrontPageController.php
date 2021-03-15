@@ -582,6 +582,14 @@ class FrontPageController extends Controller
         $booking_ref = $booking_reference;
 
         SendSMSController::sendMessage($recipients,$message);
+
+        $data['receiver'] = $recipients;
+        $data['type'] = 'on_booking_notification';
+        $data['message'] = $message;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        \DB::table('s_m_s_logs')->insert($data);
         
          $message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
@@ -617,9 +625,6 @@ class FrontPageController extends Controller
         }
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
-        //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred. 
-
-        $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $request->phone, $p_matches);
         
         $product = \App\Products::find($request->product_id);
 
@@ -704,8 +709,6 @@ class FrontPageController extends Controller
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
 
-        // return $booking;
-
         $booking->save();
         
         $booking_id = DB::getPdo()->lastInsertId();
@@ -732,9 +735,18 @@ class FrontPageController extends Controller
 
         SendSMSController::sendMessage($recipients,$message);
 
+        $data['receiver'] = $recipients;
+        $data['type'] = 'after_booking_notification';
+        $data['message'] = $message;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        \DB::table('s_m_s_logs')->insert($data);
+
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
+        
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
@@ -799,6 +811,14 @@ class FrontPageController extends Controller
         $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
 
         SendSMSController::sendMessage($recipients,$message);
+
+        $data['receiver'] = $recipients;
+        $data['type'] = 'after_booking_notification';
+        $data['message'] = $message;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        \DB::table('s_m_s_logs')->insert($data);
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
@@ -873,6 +893,14 @@ class FrontPageController extends Controller
        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
 
        SendSMSController::sendMessage($recipients,$message);
+
+        $data['receiver'] = $recipients;
+        $data['type'] = 'after_booking_notification';
+        $data['message'] = $message;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        \DB::table('s_m_s_logs')->insert($data);
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
