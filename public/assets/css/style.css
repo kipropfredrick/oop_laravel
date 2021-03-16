@@ -23,7 +23,12 @@ h1, h2, h3, h4, h5, h6 {
     padding-left: 20px;
     padding-right: 20px;
 }
-
+.list_no_bullets{
+    list-style-type:none;
+}
+.justify-content-space-between{
+    justify-content: space-between !important;
+}
 .load-more-btn:hover{
     background-color: #f68b1e;
     color: #FFF;
@@ -164,6 +169,13 @@ a.nav-link {
     -webkit-transform: rotate(45deg) translate(-8px, -8px);
     transform: rotate(45deg) translate(-8px, -8px);
 }
+a.nav-link {
+    color: #FFF;
+    opacity: 0.82;
+}
+a.nav-link:hover {
+    font-weight: bold;
+}
 
 /* menu slide from left */
 
@@ -174,9 +186,11 @@ a.nav-link {
         left: 0;
         padding: 15px;
         width: 100%;
-        background: #f8f8f8;
+        background: #1e22a9;
         z-index: 1000;
+        color: #FFF;
         margin-top: 14px;
+        justify-content: center;
     }
     .navbar-collapse.collapsing {
         height: auto;
@@ -185,6 +199,9 @@ a.nav-link {
         -moz-transition: left 0.3s ease;
         transition: left 0.3s ease;
         left: -100%;
+    }
+    .mobile-menu{
+        text-align:center;  
     }
     .navbar-collapse.show {
         left: 0;

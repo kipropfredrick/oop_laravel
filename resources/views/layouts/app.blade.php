@@ -185,38 +185,43 @@
             </button>
 
             <div class="collapse navbar-collapse" id="hhMenu">
-                <!-- handheld search -->
+                <!-- handheld menu -->
                 <div class="hh-search mt-2">
-                    <form class="form-inline my-2" action="/search" method="get">
-                        <div class="input-group">
-                            <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
-                            <div class="input-group-append">
-                            <button class="btn mdg-btn-search" type="submit" id="mdg-btn-search">
-                                <span class="fa fa-search"></span>
-                            </button>
-                            </div>
-                        </div>
-                    </form>
+
+                    <div class="justify-content-center">
+                        <ul class="list_no_bullets mobile-menu">
+                            <li class="nav-item">
+                                <a class="nav-link"  href="tel:0113 980 270"><span class="fas fa-phone-square-alt"></span> &nbsp; 0113 980 270</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login"><span class="fas fa-user-circle"></span> &nbsp;@if(auth()->user())  Visit Dashboard @else Login @endif</a>
+                            </li>
+                            @foreach($lcategories as $category)
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{$category->category_name}}
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <?php $subcategories = $category->subcategories; ?>
+                                            @forelse($subcategories as $subcategory)
+                                            <a class="dropdown-item" href="/subcategory/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                            @empty
+                                            No Subcategories
+                                            @endforelse
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+
+
                 </div>
 
                 <!-- handheld categories -->
-                <ul class="navbar-nav mr-auto">
-                    @foreach($lcategories as $category)
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{$category->category_name}}
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <?php $subcategories = $category->subcategories; ?>
-                                @forelse($subcategories as $subcategory)
-                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
-                                @empty
-                                No Subcategories
-                                @endforelse
-                        </div>
-                    </li>
-                   @endforeach
-                </ul>
+                <!-- <ul class="navbar-nav mr-auto">
+                   
+                </ul> -->
 
             </div>
         </nav>
