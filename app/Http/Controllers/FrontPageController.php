@@ -503,7 +503,7 @@ class FrontPageController extends Controller
 
         $user = \App\User::find($existingCustomer->user_id);
         
-        $booking_reference = 'BKG'.rand(10,1000000);
+        $booking_reference = 'MM'.rand(10000,99999);
 
         $booking_date = now();
 
@@ -547,7 +547,8 @@ class FrontPageController extends Controller
 
            $total_cost = ($product->product_price + $shipping_cost);
 
-           $booking_reference = 'BKG'.rand(1000,9999);
+
+           $booking_reference = 'MM'.rand(10000,99999);
 
         
             $booking = new \App\Bookings();
@@ -663,7 +664,7 @@ class FrontPageController extends Controller
         \Auth::login($user);
 
 
-        $booking_reference = 'BKG'.rand(10,1000000);
+        $booking_reference = 'MM'.rand(10000,99999);
 
         $booking_date = now();
 
@@ -703,7 +704,7 @@ class FrontPageController extends Controller
         
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'BKG'.rand(1000,9999);
+        $booking_reference = 'MM'.rand(10000,99999);
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
@@ -736,7 +737,7 @@ class FrontPageController extends Controller
         if($existingCustomer)
         {
 
-        $booking_reference = 'BKG'.rand(10,1000000);
+        $booking_reference = 'MM'.rand(10000,99999);
 
         $booking_date = now();
 
@@ -823,7 +824,7 @@ class FrontPageController extends Controller
 
        $due_date = Carbon::now()->addMonths(3);
 
-        $booking_reference = 'BKG'.rand(10,1000000);
+        $booking_reference = 'MM'.rand(10000,99999);
 
 
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
