@@ -193,9 +193,6 @@ a.nav-link {
         transition: left 0.3s ease;
         left: -100%;
     }
-    .mobile-menu{
-        text-align:center;  
-    }
     .navbar-collapse.show {
         left: 0;
         -webkit-transition: left 0.3s ease-in;
