@@ -169,14 +169,6 @@ a.nav-link {
     -webkit-transform: rotate(45deg) translate(-8px, -8px);
     transform: rotate(45deg) translate(-8px, -8px);
 }
-a.nav-link {
-    color: #FFF;
-    opacity: 0.82;
-}
-a.nav-link:hover {
-    font-weight: bold;
-}
-
 /* menu slide from left */
 
 @media (max-width: 768px) {
@@ -199,6 +191,13 @@ a.nav-link:hover {
         -moz-transition: left 0.3s ease;
         transition: left 0.3s ease;
         left: -100%;
+    }
+    a.nav-link {
+        color: #FFF;
+        opacity: 0.82;
+    }
+    a.nav-link:hover {
+        font-weight: bold;
     }
     .mobile-menu{
         text-align:center;  
