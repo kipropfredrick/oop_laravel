@@ -169,6 +169,7 @@ a.nav-link {
     -webkit-transform: rotate(45deg) translate(-8px, -8px);
     transform: rotate(45deg) translate(-8px, -8px);
 }
+
 /* menu slide from left */
 
 @media (max-width: 768px) {
@@ -178,9 +179,9 @@ a.nav-link {
         left: 0;
         padding: 15px;
         width: 100%;
-        background: #1e22a9;
+        background: #FFF;
         z-index: 1000;
-        color: #FFF;
+        color: #1e22a9;
         margin-top: 14px;
         justify-content: center;
     }
@@ -191,13 +192,6 @@ a.nav-link {
         -moz-transition: left 0.3s ease;
         transition: left 0.3s ease;
         left: -100%;
-    }
-    a.nav-link {
-        color: #FFF;
-        opacity: 0.82;
-    }
-    a.nav-link:hover {
-        font-weight: bold;
     }
     .mobile-menu{
         text-align:center;  
