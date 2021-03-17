@@ -1443,9 +1443,30 @@ class AdminController extends Controller
             return back()->with('error','Sorry Product Code does not exist.');
         }
 
+            if($newProduct->weight != 0){
+                $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
+            }else{
+                $weight_array = (['0','g']);
+            }
+
+            $product_weight = $weight_array;
+
+            if($product_weight[1] == 'g'){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+            $extra_kg = $product_weight[0] - 5;
+            $extra_cost = (30 * $extra_kg);
+            $vat = 0.16*$extra_cost;
+            $shipping_cost = 500 + $extra_cost + $vat;
+            }
+
+        $total_cost = ($newProduct->product_price + $shipping_cost);
+
         $booking = \App\Bookings::where('product_id','=',$id)->first();
 
-        $balance = $newProduct->product_price - $booking->amount_paid;
+        $balance = $total_cost - $booking->amount_paid;
 
         \App\Bookings::where('id','=',$booking->id)->update([
                         "product_id"=>$newProduct->id,

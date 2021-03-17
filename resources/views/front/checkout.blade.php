@@ -190,7 +190,7 @@
                                 <div class="mdgf-text">  
                                     <span>Payment period</span>
                                     <h6>
-                                        4 months
+                                        Pay at your own pace
                                     </h6>
                                 </div>
                             </div>
