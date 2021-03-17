@@ -97,7 +97,7 @@
                                 <div class="mdgf-text">  
                                     <span>Payment period</span>
                                     <h6>
-                                        4 months
+                                       Pay at your own pace
                                     </h6>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                                 <div class="mdgf-text">  
                                     <span>Doorstep delivery</span>
                                     <h6>
-                                        Countrywide
+                                        Countrywide delivery Upon completion of payment
                                     </h6>
                                 </div>
                             </div>

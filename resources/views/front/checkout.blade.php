@@ -226,7 +226,7 @@
                                 <div class="mdgf-text">  
                                     <span>Doorstep delivery</span>
                                     <h6>
-                                        Countrywide
+                                        Countrywide delivery Upon completion of payment
                                     </h6>
                                 </div>
                             </div>

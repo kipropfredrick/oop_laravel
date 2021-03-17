@@ -85,7 +85,7 @@
             <h3>Do you deliver?</h3>
 
             <p>
-            Yes, we deliver countrywide through our delivery partners.
+            Yes, we deliver Countrywide delivery Upon completion of payment through our delivery partners.
             </p>
 
         </div>
