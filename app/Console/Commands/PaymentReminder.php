@@ -52,7 +52,7 @@ class PaymentReminder extends Command
             if($diff_in_hours == 48){
 
                 $recipients = $booking->customer->phone;
-                $message = "Complete your booking for ".$booking->product->product_name.". Paybill 4040299 and account number [order-id]. Total amount is KSh.".$booking->booking_reference.". You can pay a minimum of KSh.500.";
+                $message = "Complete your booking for ".$booking->product->product_name.". Paybill 4040299 and account number".$booking->booking_reference.". Total amount is KSh.".$booking->booking_reference.". You can pay a minimum of KSh.500.";
 
                 SendSMSController::sendMessage($recipients,$message,$type="payment_reminder_48hrs");
 
