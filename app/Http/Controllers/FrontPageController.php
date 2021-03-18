@@ -714,7 +714,7 @@ class FrontPageController extends Controller
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit);
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
