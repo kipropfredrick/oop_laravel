@@ -518,7 +518,7 @@ class FrontPageController extends Controller
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
 
-        if($booking){
+        if($booking!=null){
             return view('front.exists',compact('booking'));
         }
 
@@ -656,8 +656,7 @@ class FrontPageController extends Controller
 
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
-
-        if($booking){
+        if($booking!=null){
             return view('front.exists',compact('booking'));
         }
 

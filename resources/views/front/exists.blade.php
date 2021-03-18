@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "Processing Payment")
+@section('title', "Booking Exists")
 
 @section('content')
 <!-- breadcrumb --> 
