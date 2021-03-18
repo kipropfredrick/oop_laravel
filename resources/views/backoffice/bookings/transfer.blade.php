@@ -119,7 +119,7 @@
 
 							<!-- Modal -->
 						<div class="modal fade" id="transferorder{{$booking->id}}" tabindex="-1" role="dialog" aria-labelledby="transferorderLabel" aria-hidden="true">
-						<div class="modal-dialog" role="document">
+						<div class="modal-dialog padding" role="document">
 							<div class="modal-content">
 							<h6 class="text-center"><h5><strong>Transfer An Item</strong></h5></legend>
 							<div class="modal-header">
@@ -129,11 +129,11 @@
 								</button>
 							</div>
 							@if(auth()->user()->role == "agent")
-							<form action="/agent/transfer-order/{{$booking->product_id}}" method="post">
+							<form action="/agent/transfer-order/{{$booking->id}}" method="post">
 							@elseif(auth()->user()->role == "admin")
-							<form action="/admin/transfer-order/{{$booking->product_id}}" method="post">
+							<form action="/admin/transfer-order/{{$booking->id}}" method="post">
 							@elseif(auth()->user()->role == "vendor")
-							<form action="/vendor/transfer-order/{{$booking->product_id}}" method="post">
+							<form action="/vendor/transfer-order/{{$booking->id}}" method="post">
 							@endif
 
 							@csrf

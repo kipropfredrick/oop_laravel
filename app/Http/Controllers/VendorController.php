@@ -131,7 +131,9 @@ class VendorController extends Controller
 
      public function transfer_orderID(Request $request, $id){
 
-        $product = \App\Products::find($id);
+        $booking = \App\Bookings::where('id','=',$id)->first();
+
+        $product = \App\Products::find($booking->product_id);
 
         if($product->product_code == $request->product_code){
             return back()->with('error','You cannot exchange with the same item');
@@ -171,10 +173,11 @@ class VendorController extends Controller
         \App\Bookings::where('id','=',$booking->id)->update([
                         "product_id"=>$newProduct->id,
                         "balance"=>$balance,
+                        "shipping_cost"=>$shipping_cost,
                         "total_cost"=>$newProduct->product_price
                         ]);
 
-                        return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
+        return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 
         
 

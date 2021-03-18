@@ -1431,7 +1431,9 @@ class AdminController extends Controller
 
     public function transfer_orderID(Request $request, $id){
 
-        $product = \App\Products::find($id);
+        $booking = \App\Bookings::where('id','=',$id)->first();
+
+        $product = \App\Products::find($booking->product_id);
 
         if($product->product_code == $request->product_code){
             return back()->with('error','You cannot exchange with the same item');
@@ -1464,13 +1466,12 @@ class AdminController extends Controller
 
         $total_cost = ($newProduct->product_price + $shipping_cost);
 
-        $booking = \App\Bookings::where('product_id','=',$id)->first();
-
         $balance = $total_cost - $booking->amount_paid;
 
         \App\Bookings::where('id','=',$booking->id)->update([
                         "product_id"=>$newProduct->id,
                         "balance"=>$balance,
+                        "shipping_cost"=>$shipping_cost,
                         "total_cost"=>$newProduct->product_price
                         ]);
 
