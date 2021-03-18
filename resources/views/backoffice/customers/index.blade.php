@@ -33,7 +33,7 @@
 								<th class="thead">Phone</th>
 								<th>Bookings</th>
 								<th class="thead">Date created</th>
-								<th>Action</th>
+								<th>Action/Booking Status</th>
 							</tr>
 						</thead>
 
@@ -49,6 +49,8 @@
 								<td>
 									@if($customer->bookingsCount == 0)
 										<a class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this customer?') ? true : false" href="/admin/delete-customer/{{$customer->customer_id}}"><i class="fa fa-trash"></i> Delete</a>
+									@else
+									<h6 style="text-transform: uppercase">{{$customer->booking_status}}</h6>
 									@endif
 								</td>
 							</tr>

@@ -1595,6 +1595,14 @@ class AdminController extends Controller
             
             $bookingsCount = \App\Bookings::where('customer_id',$customer->customer_id)->where('status','!=','revoked')->count();
 
+            $booking = \App\Bookings::where('customer_id',$customer->customer_id)->latest()->first();
+
+            if($booking!=null){
+                $customer->booking_status = $booking->status;
+            }else{
+                $customer->booking_status = "NO BOOKING"; 
+            }
+
             $customer->bookingsCount = $bookingsCount;
 
         }

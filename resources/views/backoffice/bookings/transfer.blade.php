@@ -118,10 +118,10 @@
 
 
 							<!-- Modal -->
-						<div class="modal fade" id="transferorder{{$booking->id}}" tabindex="-1" role="dialog" aria-labelledby="transferorderLabel" aria-hidden="true">
-						<div class="modal-dialog padding" role="document">
+						<div class="modal fade"  id="transferorder{{$booking->id}}" tabindex="-1" role="dialog" aria-labelledby="transferorderLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
 							<div class="modal-content">
-							<h6 class="text-center"><h5><strong>Transfer An Item</strong></h5></legend>
+							<h5 style="padding:10px !important;" class="text-center"><strong>Transfer An Item</strong></h5>
 							<div class="modal-header">
 								<h5 class="modal-title" id="transferorderLabel">{{$booking->product->product_name}} ({{$booking->product->product_code}})</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
