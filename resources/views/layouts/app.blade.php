@@ -261,7 +261,7 @@
                         <a href="https://instagram.com/lipamosmoske" target="_blank"><span class="fa fa-2x fa-instagram"></span></a>
                     </div>
 
-                    <div class="ftr-subscribe">
+                    <!-- <div class="ftr-subscribe">
                         <div class="ftr-search mt-2">
                             <h3>Fear of Missing Out?</h3>
                             <p>Subscribe to our newsletter to be the first to know of all the latest offers, deals and new products as they drop.</p>
@@ -277,7 +277,7 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="ftr-legal">
                         <div class="mb-2">
@@ -308,7 +308,7 @@
     <!-- copyrights -->
     <div class="copyrights">
         <div class="container">
-            &copy; <span id="currentYear"></span>. Lipa Mos Mos
+            &copy; <span id="currentYear"></span>. Lipa Mos Mos | Powered by <a href="https://rdfyne.com" target="_blank">Rdfyne Technologies</a>
         </div>
     </div>
     <!-- end -->
