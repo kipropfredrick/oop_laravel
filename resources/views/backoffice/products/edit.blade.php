@@ -46,7 +46,7 @@
                 <div class="form-group">
                  <label>Third level Category</label>
                   <select name="third_level_category_id" id="third_level_category_id" class="form-control select2 dynamic"  style="width: 100%;">
-                    <option value="">Select Third level Category</option>
+                    <option value="{{$product->third_level_category_id}}">{{$product->third_level_category->name}}</option>
                   </select>
                 </div>
                 </div>
