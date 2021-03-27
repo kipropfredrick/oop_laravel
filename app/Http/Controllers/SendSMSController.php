@@ -21,13 +21,13 @@ class SendSMSController extends Controller
         // Get the SMS service
         $sms        = $AT->sms();
    
-    //    $from       = "Mosmos";
+       $from       = "RDFYNE";
 
         try {
             // Thats it, hit send and we'll take care of the rest
             $result = $sms->send([
                 'to'      => $recipients,
-                // 'from'=>$from,
+                'from'=>$from,
                 'message' => $message,
             ]);
 
