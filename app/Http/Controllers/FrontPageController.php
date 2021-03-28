@@ -798,14 +798,6 @@ class FrontPageController extends Controller
         $user->password = Hash::make($request->input('phone'));
         $user->save();
 
-        $details = [
-                    'email' => $request->email,
-                    'name'=>$request->name,
-                    'password'=>$request->input('phone')
-                    ];
-
-        Mail::to($request->email)->send(new SendRegistrationEmail($details));
-
         $user_id = DB::getPdo()->lastInsertId();
 
         $customer = new \App\Customers();
@@ -854,6 +846,16 @@ class FrontPageController extends Controller
        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
 
        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+       $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone')
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;

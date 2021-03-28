@@ -101,6 +101,10 @@
                     <p>Your email address is: <strong>{{ $details['email'] }}</strong> and the password 
                         is <strong>{{ $details['password'] }}</strong>.</p>
 
+                        <hr>
+
+                    <p>Please Complete your booking. Use Paybill 4040299, account number <strong> {{$details['booking_reference']}}</strong> and amount <strong>Ksh. {{$details['initial_deposit']}}</strong></p>
+
                     <div  class="email-btn">
                         <a style="background-color: #1e22a9;color: #ffffff;padding: 5px 10px;border-radius: 5px;text-decoration: none;" href="https://mosmos.co.ke/login">Visit Dashboard</a>
                     </div>
