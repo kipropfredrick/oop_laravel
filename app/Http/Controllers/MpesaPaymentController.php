@@ -12,6 +12,7 @@ use \App\Mail\SendPaymentEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
+use App\Http\Controllers\SendSMSController;
 
 class MpesaPaymentController extends Controller
 {
@@ -373,7 +374,7 @@ class MpesaPaymentController extends Controller
 
                 $message = "Congratulations, You have completed Payment of ".$booking->product->product_name.$location.", You will be contacted for more information.";
 
-                $this->sendMessage($recipients,$message);
+                SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 
                 $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
 
@@ -390,7 +391,7 @@ class MpesaPaymentController extends Controller
 
                         $message = $booking->customer->user->name . " has completed payment of booking ref ".$booking->booking_reference;
 
-                        $this->sendMessage($recipients,$message);
+                        SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 
                         DB::table('commissions')->insert([
                             'product_id' => $product->id,
@@ -412,7 +413,7 @@ class MpesaPaymentController extends Controller
 
                         $message = $booking->customer->user->name . " has completed payment of booking ref ".$booking->booking_reference;
 
-                        $this->sendMessage($recipients,$message);
+                        SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 
                         DB::table('commissions')->insert([
                             'product_id' => $product->id,
@@ -664,44 +665,15 @@ class MpesaPaymentController extends Controller
                           ]);
 
             $message = "Success";
-            // return response()->json($message);
-
-
-            $username   = "Mosmossms";
-            $apiKey     = env('AT_API_KEY');
-
-            // Initialize the SDK
-            $AT  = new AfricasTalking($username, $apiKey);
-
-            // Get the SMS service
-            $sms        = $AT->sms();
-
-            // Set the numbers you want to send to in international format
+            
             $recipients =$msisdn;
-
-            // Set your message
+            
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
-
-            // Set your message
+            
             $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
-
-            // Set your shortCode or senderId
-            $from       = "Mosmos";
-
-            try {
-                // Thats it, hit send and we'll take care of the rest
-                $result = $sms->send([
-                    'to'      => $recipients,
-                    'from'=>$from,
-                    'message' => $message,
-                ]);
-
-            } catch (Exception $e) {
-                echo "Error: ".$e->getMessage();
-            }
-
-
+           
+            SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
         }else{
             $message = "No Data from Safaricom";
@@ -948,31 +920,4 @@ class MpesaPaymentController extends Controller
         return response()->json($out);
     }
 
-    public function sendMessage($recipients,$message){
-
-            $username   = "Bukuswift";
-            $apiKey     = env('AT_API_KEY');
-
-            // Initialize the SDK
-            $AT  = new AfricasTalking($username, $apiKey);
-
-            // Get the SMS service
-            $sms        = $AT->sms();
-       
-        //    $from       = "Mosmos";
-
-            try {
-                // Thats it, hit send and we'll take care of the rest
-                $result = $sms->send([
-                    'to'      => $recipients,
-                    // 'from'=>$from,
-                    'message' => $message,
-                ]);
-
-                // return array($result);
-
-            } catch (Exception $e) {
-                echo "Error: ".$e->getMessage();
-            }
-    }
 }
