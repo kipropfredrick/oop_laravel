@@ -337,7 +337,7 @@ class MpesaPaymentController extends Controller
                 ->where('booking_reference','=',$bill_ref_no)
                 ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'complete','updated_at'=>now()]);
 
-                $recipients = $msisdn;
+                $recipients = $booking->customer->phone;
 
                 if($booking->location_type = 'store_pickup'){
 
@@ -450,7 +450,7 @@ class MpesaPaymentController extends Controller
 
             $message = 'Success';
 
-            $recipients =$msisdn;
+            $recipients = $recipients = $booking->customer->phone;
 
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
