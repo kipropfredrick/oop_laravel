@@ -164,18 +164,19 @@ class VendorController extends Controller
         $shipping_cost = 500 + $extra_cost + $vat;
         }
 
-        $total_cost = ($newProduct->product_price + $shipping_cost);
-
         $booking = \App\Bookings::where('product_id','=',$id)->first();
+
+        $total_cost = ($newProduct->product_price + $shipping_cost);
 
         $balance = $total_cost - $booking->amount_paid;
 
         \App\Bookings::where('id','=',$booking->id)->update([
-                        "product_id"=>$newProduct->id,
-                        "balance"=>$balance,
-                        "shipping_cost"=>$shipping_cost,
-                        "total_cost"=>$newProduct->product_price
-                        ]);
+                                    "product_id"=>$newProduct->id,
+                                    "balance"=>$balance,
+                                    "shipping_cost"=>$shipping_cost,
+                                    "item_cost"=>$newProduct->product_price,
+                                    "total_cost"=>$total_cost
+                                    ]);
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 

@@ -450,17 +450,40 @@ class AgentsController extends Controller
             return back()->with('error','Sorry Product Code does not exist.');
         }
 
+        if($newProduct->weight != 0){
+            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
+        }else{
+            $weight_array = (['0','g']);
+        }
+
+        $product_weight = $weight_array;
+
+        if($product_weight[1] == 'g'){
+            $shipping_cost = 500;
+        }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+            $shipping_cost = 500;
+        }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+        $extra_kg = $product_weight[0] - 5;
+        $extra_cost = (30 * $extra_kg);
+        $vat = 0.16*$extra_cost;
+        $shipping_cost = 500 + $extra_cost + $vat;
+        }
+
         $booking = \App\Bookings::where('product_id','=',$id)->first();
 
-        $balance = $newProduct->product_price - $booking->amount_paid;
+        $total_cost = ($newProduct->product_price + $shipping_cost);
+
+        $balance = $total_cost - $booking->amount_paid;
 
         \App\Bookings::where('id','=',$booking->id)->update([
-                        "product_id"=>$newProduct->id,
-                        "balance"=>$balance,
-                        "total_cost"=>$newProduct->product_price
-                        ]);
+                                    "product_id"=>$newProduct->id,
+                                    "balance"=>$balance,
+                                    "shipping_cost"=>$shipping_cost,
+                                    "item_cost"=>$newProduct->product_price,
+                                    "total_cost"=>$total_cost
+                                    ]);
 
-                        return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
+    return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 
         
 

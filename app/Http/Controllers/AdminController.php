@@ -1472,7 +1472,8 @@ class AdminController extends Controller
                         "product_id"=>$newProduct->id,
                         "balance"=>$balance,
                         "shipping_cost"=>$shipping_cost,
-                        "total_cost"=>$newProduct->product_price
+                        "item_cost"=>$newProduct->product_price,
+                        "total_cost"=>$total_cost
                         ]);
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
