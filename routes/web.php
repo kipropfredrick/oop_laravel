@@ -245,6 +245,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/assign-product/{id}', 'AdminController@assign_save_product')->name('admin.assign_product');
     Route::get('/transfer-order','AdminController@transfer_order');
     Route::post('/transfer-order/{id}','AdminController@transfer_orderID');
+    Route::post('/record-payment/{id}','AdminController@record_payment');
     Route::get('/product-categories', 'AdminController@categories')->name('admin.categories');
     Route::post('/save-category', 'AdminController@save_category')->name('admin.save_category');
     Route::post('/update-category/{id}', 'AdminController@update_category')->name('admin.update_category');

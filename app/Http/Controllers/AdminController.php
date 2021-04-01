@@ -1482,6 +1482,12 @@ class AdminController extends Controller
 
     }
 
+    public function record_payment(Request $request){
+
+        return $request->all();
+
+    }
+
     public function unserviced_bookings(){
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 

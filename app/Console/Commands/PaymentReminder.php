@@ -80,7 +80,7 @@ class PaymentReminder extends Command
                 $recipients = $booking->customer->phone;
                 $message =  "Hello, it’s been a while. Keep paying for ".$booking->product->product_name.". Paybill 4040299 and account number ".$booking->booking_reference.". Amount is KSh.".number_format($booking->balance).".";
                
-                SendSMSController::sendMessage($recipients,$message,$type="inactive_payment_reminder");
+                // SendSMSController::sendMessage($recipients,$message,$type="inactive_payment_reminder");
 
             }
             }
