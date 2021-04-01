@@ -86,7 +86,7 @@
 									@endif
 									@endif
 									</td>
-									<td>Ksh {{number_format($booking->product->product_price)}}</td>
+									<td>Ksh {{number_format($booking->item_cost ?:$booking->product->product_price)}}</td>
 									<td>Ksh {{number_format($booking->shipping_cost)}}</td>
 									<td>KSh {{number_format($booking->discount)}}</td>
 									<td>KSh {{number_format($booking->total_cost)}}</td>

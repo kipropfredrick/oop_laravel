@@ -559,6 +559,7 @@ class FrontPageController extends Controller
             $booking->booking_reference = $booking_reference;
             $booking->quantity  = '1';
             $booking->amount_paid = "0";
+            $booking->item_cost = $product->product_price;
             $booking->balance = $total_cost;
             $booking->payment_mode  = 'Mpesa';
             $booking->date_started  = now();
@@ -687,6 +688,7 @@ class FrontPageController extends Controller
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = '1';
         $booking->amount_paid = "0";
+        $booking->item_cost = $product->product_price;
         $booking->balance =   $total_cost;
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
@@ -694,6 +696,7 @@ class FrontPageController extends Controller
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
         $booking->location_type = "Exact Location";
+        $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
@@ -761,6 +764,7 @@ class FrontPageController extends Controller
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = $total_cost;
+        $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
         $booking->vendor_code = $vendor_code;
@@ -830,6 +834,7 @@ class FrontPageController extends Controller
         $booking->quantity  = "1";
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
+        $booking->item_cost = $product->product_price;
         $booking->balance = $total_cost;
         $booking->shipping_cost = $shipping_cost;
         $booking->amount_paid = "0";
