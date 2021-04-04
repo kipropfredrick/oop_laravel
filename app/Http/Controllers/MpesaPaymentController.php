@@ -467,7 +467,7 @@ class MpesaPaymentController extends Controller
 
             }   
 
-            SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+            // SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
             $data['receiver'] = $recipients;
             $data['type'] = 'payment_notification';
@@ -483,7 +483,7 @@ class MpesaPaymentController extends Controller
                 'amount_paid'=>$transaction_amount,
                 'product'=>$booking->product->product_name,
                 'mpesa_ref'=>$transaction_id,
-                'balance'=> $booking->balance
+                'balance'=> $balance
 
             ];
 
@@ -499,7 +499,7 @@ class MpesaPaymentController extends Controller
                 'booking_reference'=>$booking->booking_reference,
                 'total_cost'=>number_format($booking->total_cost,2),
                 'amount_paid'=>number_format($booking->amount_paid),
-                'balance'=>number_format($booking->balance),
+                'balance'=>$balance,
                 'product_price'=>number_format($booking->product->product_price),
                 'payments'=>$booking->payments,
                 'latestPayment'=>$latestPayment

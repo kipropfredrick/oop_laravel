@@ -111,7 +111,7 @@
         <div class="col-md-8">
             <div class="card" style="padding:10px;">
             <p>You have received a new payment of <strong>{{number_format($details['amount_paid'])}}</strong> from {{$details['customer']}} for <strong>{{$details['product']}}</strong></p>
-            <p>Payment reference is <strong>{{$details['mpesa_ref']}}</strong>, booking reference is <strong>{{$details['booking_reference']}}</strong> balance is {{number_format($details['balance'])}}.</p>
+            <p>Payment reference is <strong>{{$details['mpesa_ref']}}</strong>, booking reference is <strong>{{$details['booking_reference']}}</strong> balance is {{$details['balance']}}.</p>
 
 
             <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
