@@ -15,6 +15,9 @@ use \App\Mail\SendPaymentEmail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendSMSController;
+use App\Mail\SendBookingMail;
+use App\Mail\SendPaymentMailToAdmin;
+
 
 
 class AdminController extends Controller
@@ -1482,9 +1485,202 @@ class AdminController extends Controller
 
     }
 
-    public function record_payment(Request $request){
+    public function record_payment(Request $request,$id){
 
-        return $request->all();
+        $bill_ref_no = $request->booking_reference;
+
+        $date_paid = Carbon::today()->toDateString();
+
+        $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$bill_ref_no)->first();
+
+
+        if($booking == null){
+            return back()->with('error', 'Booking Does not exist!');
+        }
+   
+       $payment_log = \App\PaymentLog::find($id);
+
+       \App\PaymentLog::where('id',$id)->update(['BillRefNumber'=>$bill_ref_no]);
+
+        if($booking->status == 'pending'){
+
+           if($booking->vendor_code !== null){
+                $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
+                if($vendor == null){
+                    
+                   }else {
+
+                    $recipients = $vendor->phone;
+
+                    $details = [
+                        'customer'=> $booking->customer->user->name,
+                        'booking_reference'=>$booking->booking_reference
+
+                    ];
+
+                    Mail::to($vendor->user->email)->send(new SendBookingMail($details));
+
+                 }
+            }
+        }
+
+        $payment = new \App\Payments();
+        $payment->booking_id = $booking->id;
+        $payment->customer_id = $booking->customer_id; 
+        $payment->product_id  = $booking->product_id;
+        $payment->transaction_amount = $request->amount;
+        $payment->booking_status = 'active';
+        $payment->date_paid = now();
+        $payment->save();
+
+        $payment_id = DB::getPdo()->lastInsertId();
+
+        $amount_paid = $booking->amount_paid + $request->amount;
+
+        $balance = $booking->total_cost - $amount_paid;
+
+        if($balance<1){
+
+            DB::table('bookings')
+            ->where('booking_reference','=',$bill_ref_no)
+            ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'complete','updated_at'=>now()]);
+
+            $recipients = $booking->customer->phone;
+
+            if($booking->location_type = 'store_pickup'){
+
+                if($booking->vendor_code !== null){
+
+                    if($vendor == null){
+                    
+                    }else {
+                        $location = " Your will pick your product at ".$vendor->location;
+                    }
+
+                }elseif($booking->agent_code !== null){
+
+                    $agent = \App\Agents::where('agent_code','=',$booking->agent_code)->first();
+                    if($agent == null){
+
+                    }else {
+                     $location = " Your will pick your product at ".$agent->location;
+                    }
+
+                }
+
+            }
+
+
+            $message = "Congratulations, You have completed Payment of ".$booking->product->product_name.$location.", You will be contacted for more information.";
+
+            SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
+
+            $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
+
+            if($booking->vendor_code !== null){
+                $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
+                if($vendor == null){
+                    
+                   }else {
+                    $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                    $recipients = $vendor->phone;
+
+                    $message = $booking->customer->user->name . " has completed payment of booking ref ".$booking->booking_reference;
+
+                    SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
+
+                    DB::table('commissions')->insert([
+                        'product_id' => $product->id,
+                        'booking_id' => $booking->id,
+                        'vendor_id' =>  $vendor->id,
+                        'admin_commission' =>$admin_commission,
+                        'other_party_commission' => $vendor_commission,
+                        'created_at'=>now(),
+                        'updated_at'=>now(),
+                        ]);
+
+                   }
+            }
+            
+        }else{
+
+            DB::table('bookings')
+            ->where('booking_reference','=',$bill_ref_no)
+            ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
+        }
+        
+
+        DB::table('mpesapayments')
+            ->insert([
+                      'payment_id'=>$payment_id,
+                      'amount_paid'=>$request->amount,
+                      'phone'=>$payment_log->MSISDN,
+                      'transac_code'=>$payment_log->TransID,
+                      'date_paid'=>$date_paid,
+                      'created_at'=>now(),
+                      'updated_at'=>now()
+                      ]);
+
+        $message = 'Success';
+
+        $recipients = $recipients = $booking->customer->phone;
+
+        $request->amount = number_format($request->amount,2);
+        $balance =number_format($balance,2);
+
+        $payment_count = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->count();
+
+        if($payment_count<2){
+            $shipping_cost = $booking->shipping_cost;
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
+
+        }else{
+
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. " ;
+
+        }   
+
+        SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+        $data['receiver'] = $recipients;
+        $data['type'] = 'payment_notification';
+        $data['message'] = $message;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        DB::table('s_m_s_logs')->insert($data);
+
+        $details = [
+            'customer'=> $booking->customer->user->name,
+            'booking_reference'=>$booking->booking_reference,
+            'amount_paid'=>$request->amount,
+            'product'=>$booking->product->product_name,
+            'mpesa_ref'=>$payment_log->TransID,
+            'balance'=> $booking->balance
+
+        ];
+
+        Mail::to('order@mosmos.co.ke')->send(new SendPaymentMailToAdmin($details));
+   
+
+        $latestPayment = \App\Payments::with('mpesapayment')->where('booking_id',$booking->id)->latest()->first();
+
+        $details  = [
+            'customer_name'=>$booking->customer->user->name,
+            'product_name'=>$booking->product->product_name,
+            'booking_reference'=>$booking->booking_reference,
+            'total_cost'=>number_format($booking->total_cost,2),
+            'amount_paid'=>number_format($booking->amount_paid),
+            'balance'=>number_format($booking->balance),
+            'date_paid'=>$date_paid,
+            'product_price'=>number_format($booking->product->product_price),
+            'payments'=>$booking->payments,
+            'latestPayment'=>$latestPayment
+        ];
+
+        Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
 
     }
 
@@ -1716,13 +1912,13 @@ class AdminController extends Controller
 
     public function influencer_save(Request $request){
 
-        list($msisdn, $network) = $this->get_msisdn_network($request->phone);
+        list($payment_log->MSISDN, $network) = $this->get_msisdn_network($request->phone);
         
-        $valid_phone = $msisdn;
+        $valid_phone = $payment_log->MSISDN;
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
         //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred. 
-        if (!$msisdn) {
+        if (!$payment_log->MSISDN) {
         
             return back()->withInput()->with('error', 'Please enter a valid  Phone Number!');
             
@@ -1753,7 +1949,7 @@ class AdminController extends Controller
         $influencer= new \App\Influencer();
         $influencer->user_id = $user_id; 
         $influencer->code ='INF'.$user_id; 
-        $influencer->phone  = $msisdn;
+        $influencer->phone  = $payment_log->MSISDN;
         $influencer->commission = $request->commission;
         $influencer->store_name  = $request->input('store_name');
         $influencer->save();
