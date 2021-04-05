@@ -126,7 +126,7 @@
                                                 <span>My Account</span>
                                                 <h6>
                                                     @if(auth()->user())
-                                                    <a href="/home">  Visit Dashboard </a>
+                                                    <a href="/dashboard/home">  Visit Dashboard </a>
                                                     @else
                                                     <a href="/login"> Login </a>
                                                     @endif

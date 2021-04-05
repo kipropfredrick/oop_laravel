@@ -52,15 +52,15 @@ class LoginController extends Controller
     {
         if ($user->role = 'admin') {
 
-            $this->redirectTo = route('home');
+            $this->redirectTo = route('home.dashboard');
 
         } elseif ($user->role = 'customer') {
 
-            $this->redirectTo = route('home');
+            $this->redirectTo = route('home.dashboard');
 
         }elseif ($user->role = 'agent') {
 
-            $this->redirectTo = route('home');
+            $this->redirectTo = route('home.dashboard');
 
         }else{
 
