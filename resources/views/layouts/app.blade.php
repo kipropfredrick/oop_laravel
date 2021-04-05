@@ -125,7 +125,11 @@
                                             <div class="cta-text">  
                                                 <span>My Account</span>
                                                 <h6>
-                                                    <a href="/login">@if(auth()->user())  Visit Dashboard @else Login @endif</a>
+                                                    @if(auth()->user())
+                                                    <a href="/home">  Visit Dashboard </a>
+                                                    @else
+                                                    <a href="/login"> Login </a>
+                                                    @endif
                                                 </h6>
                                             </div>
                                         </div>
