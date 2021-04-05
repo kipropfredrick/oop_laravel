@@ -126,10 +126,10 @@
                                                 <span>My Account</span>
                                                 <h6>
                                                     @if(auth()->user())
-                                                    <a href="/dashboard/home">  Visit Dashboard </a>
+                                                    <a href="{{route('dashboard')}}">  Visit Dashboard </a>
                                                     @else
                                                     <a href="/login"> Login </a>
-                                                    @endif
+                                                    @endif  
                                                 </h6>
                                             </div>
                                         </div>

@@ -66,7 +66,7 @@ class AdminController extends Controller
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
 
         $customersCount = \App\Customers::count();
-
+        
       return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount'));
 
     }

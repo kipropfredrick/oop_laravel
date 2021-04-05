@@ -24,7 +24,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // return view('backoffice.index');
+        $totalBookingAmount = \App\Bookings::sum('total_cost');
+        $activeBookingAmount = \App\Bookings::where('status','=','active')->sum('total_cost');
+        $overdueBookingAmount = \App\Bookings::where('status','=','overdue')->sum('total_cost');
+        $completeBookingAmount = \App\Bookings::where('status','=','complete')->sum('total_cost');
+        $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
+
+        $customersCount = \App\Customers::count();
+        
+        return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount'));
     }
 
     public function edit_profile(){
