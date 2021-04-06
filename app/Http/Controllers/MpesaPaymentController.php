@@ -469,14 +469,6 @@ class MpesaPaymentController extends Controller
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
-            $data['receiver'] = $recipients;
-            $data['type'] = 'payment_notification';
-            $data['message'] = $message;
-            $data['created_at'] = now();
-            $data['updated_at'] = now();
-
-            DB::table('s_m_s_logs')->insert($data);
-
             $details = [
                 'customer'=> $booking->customer->user->name,
                 'booking_reference'=>$booking->booking_reference,
