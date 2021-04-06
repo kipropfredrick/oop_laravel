@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Hash;
 use Image;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\SendSMSController;
 
 class VendorController extends Controller
 {
@@ -177,6 +178,14 @@ class VendorController extends Controller
                                     "item_cost"=>$newProduct->product_price,
                                     "total_cost"=>$total_cost
                                     ]);
+
+        $customer = \App\Customers::where('id',$booking->customer_id)->first();
+
+        $message = "Product exchanged successfully to ".$newProduct->product_name.", New Balance is KES ".number_format($balance,2)."Use Paybill 4040299 and Account Number ".$booking->booking_reference.", Thank you.";
+
+        $recipients = $customer->phone;
+
+        SendSMSController::sendMessage($recipients,$message,$type="booking_transfered_notification");
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 
