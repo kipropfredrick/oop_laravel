@@ -193,6 +193,9 @@ a.nav-link {
         transition: left 0.3s ease;
         left: -100%;
     }
+    .img-404{
+        margin-top: 120px !important;
+    }
     .navbar-collapse.show {
         left: 0;
         -webkit-transition: left 0.3s ease-in;

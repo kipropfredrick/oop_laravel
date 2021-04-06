@@ -17,6 +17,23 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+
+    private function get_msisdn_network($msisdn){
+        $regex =  [
+             'airtel' =>'/^\+?(254|0|)7(?:[38]\d{7}|5[0-6]\d{6})\b/',
+             'equitel' => '/^\+?(254|0|)76[0-7]\d{6}\b/',
+             'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
+             'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
+         ];
+     
+         foreach ($regex as $operator => $re ) {
+             if (preg_match($re, $msisdn)) {
+                 return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
+             }
+         }
+         return [false, false];
+     }
+
     /**
      * Show the application backoffice.
      *
@@ -40,9 +57,10 @@ class HomeController extends Controller
         return view('profile',compact('profile'));
     }
 
-    public function update_profile(Request $request){
-        $data = $request->except('_token','password');
+    public function update_profile(Request $request,$role){
+        $data = $request->except('_token','password','phone');
         $password = $request->password;
+        $phone = $request->phone;
 
 
         if($password!=null){
@@ -50,6 +68,27 @@ class HomeController extends Controller
         }
 
         \App\User::where('id',auth()->user()->id)->update($data);
+
+        
+
+         if($phone!=null){
+
+                list($msisdn, $network) = $this->get_msisdn_network($phone);
+
+                if (!$msisdn){
+
+                    return redirect()->back()->with('error',"Please enter a valid phone number!");
+                }else{
+                    $valid_phone = $msisdn;
+                }
+
+                if($role === "user"){
+                    \App\Customers::where('user_id',auth()->user()->id)->update(['phone'=>$msisdn]);
+                }elseif($role === "vendor"){
+                    \App\Vendor::where('user_id',auth()->user()->id)->update(['phone'=>$msisdn]);
+                }
+
+        }
 
         return back()->with('success','Profile Updated!');
 

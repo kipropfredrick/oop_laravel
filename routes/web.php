@@ -106,12 +106,13 @@ Route::get('/search', 'FrontPageController@search')->name('search');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::prefix('dashboard')->group(function () {
-    Route::group(['middleware' => ['auth']], function (){ 
+
+  Route::group(['middleware' => ['auth']], function (){ 
+    Route::prefix('dashboard')->group(function () {
         Route::get('/home', 'AdminController@dashboard')->name('dashboard');
     });
     Route::get('/edit-profile', 'HomeController@edit_profile');
-    Route::post('/update-profile', 'HomeController@update_profile');
+    Route::post('/update-profile/{role}', 'HomeController@update_profile');
  });
 
 Route::prefix('customer')->group(function () {
