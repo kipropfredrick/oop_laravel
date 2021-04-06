@@ -110,7 +110,8 @@
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
             <div class="card" style="padding:10px;">
-                        <p>Hello, <strong>{{ucfirst($details['customer'])}}</strong> Product exchanged successfully to <strong>{{$details['product']}}</strong>, New Balance is <strong> KES {{number_format($details['balance'])}}</strong> Use Paybill 4040299 and Account Number <strong>{{$details['booking_reference']}}</strong></p>
+                        <p>Hello, <strong>{{ucfirst($details['customer'])}}</strong> Product exchanged successfully to <strong>{{$details['product']}}</strong>,</p>
+                        <p>New Balance is <strong> KES {{number_format($details['balance'])}}</strong> Use Paybill 4040299 and Account Number <strong>{{$details['booking_reference']}}</strong></p>
                 </div>
 
                 <p>Thank you,<br/>

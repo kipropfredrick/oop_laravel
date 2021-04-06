@@ -12,6 +12,8 @@ use Hash;
 use Image;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\SendSMSController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendOrderTransferedMail;
 
 class VendorController extends Controller
 {
@@ -186,6 +188,17 @@ class VendorController extends Controller
         $recipients = $customer->phone;
 
         SendSMSController::sendMessage($recipients,$message,$type="booking_transfered_notification");
+
+        $details = [
+            'customer'=> $booking->customer->user->name,
+            'booking_reference'=>$booking->booking_reference,
+            'amount_paid'=>$request->amount,
+            'product'=>$newProduct->product_name,
+            'balance'=> $balance
+
+        ];
+
+        Mail::to($booking->customer->user->email)->send(new SendOrderTransferedMail($details));
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 

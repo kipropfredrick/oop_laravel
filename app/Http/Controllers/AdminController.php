@@ -13,10 +13,10 @@ use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendSMSController;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
 
 
