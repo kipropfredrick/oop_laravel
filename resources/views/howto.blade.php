@@ -30,7 +30,7 @@
             <ul>
                 <li>On your selected item, click on the Lipa Mos Mos button</li>
                 <li>Enter your name, phone number and email address</li>
-                <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.500</strong> on all items for your first order</li>
+                <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.100</strong> on all items for your first order</li>
                 <li>Click on the Proceed to Pay button</li>
                 <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
                 <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>
@@ -44,7 +44,7 @@
                 <li>Select make a booking</li>
                 <li>Follow the prompt to register your account if not registered</li>
                 <li>Enter the product code of the item you want to order (available on every item on the website) e.g.<strong>P0001</strong></li>
-                <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.500</strong> on all items for the first order</li>
+                <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.100</strong> on all items for the first order</li>
                 <li>Click on the Proceed to Pay</li>
                 <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
                 <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>
@@ -67,7 +67,7 @@
             <h3>How do I make subsequent payments?</h3>
 
             <p>
-            We recommend a minimum amount of KSh.500 for the first installment. You can pay any amount for the other installments within your order total amount.
+            We recommend a minimum amount of KSh.100 for the first installment. You can pay any amount for the other installments within your order total amount.
             </p>
 
             <h3>How long do I have to complete payment for my order?</h3>

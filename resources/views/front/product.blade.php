@@ -74,7 +74,7 @@
                             <div class="product-price">KSh. {{number_format($product->product_price)}}</div>
 
                             <div class="mb-3">
-                                    <small>Book with only <strong>KSh.500</strong></small>
+                                    <small>Book with only <strong>KSh.100</strong></small>
                             </div>
 
                             <div>
@@ -102,7 +102,7 @@
                                         <div class="mdgf-text">  
                                             <span>Minimum deposit</span>
                                             <h6>
-                                                Ksh.500
+                                                KSh.100
                                             </h6>
                                         </div>
                                     </div>
@@ -196,7 +196,7 @@
                                     <ul>
                                         <li>On your selected item, click on the <strong>Lipa Pole Pole</strong> button</li>
                                         <li>Enter your name, phone number and email address</li>
-                                        <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.500</strong> on all items</li>
+                                        <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.100</strong> on all items</li>
                                         <li>Click on the <strong>Proceed to Pay</strong> button</li>
                                         <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
                                         <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>
@@ -211,7 +211,7 @@
                                         <li>Select <strong>make a booking</strong></li>
                                         <li>Follow the prompt to reister your account if not registered</li>
                                         <li>Enter the product code <strong>{{$product->product_code}}</strong></li>
-                                        <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.500</strong> on all items</li>
+                                        <li>Enter the amount you want to pay. We accept a minimum of <strong>KSh.100</strong> on all items</li>
                                         <li>Click on the <strong>Proceed to Pay</strong></li>
                                         <li>You'll be prompted to enter your M-Pesa pin to pay automatically</li>
                                         <li>If you don't receive the prompt, follow the steps sent to you on SMS to activate your booking</li>

@@ -66,7 +66,7 @@
                                 <div class="mdgf-text">  
                                     <span>Minimum deposit</span>
                                     <h6>
-                                        Ksh.500
+                                        KSh.100
                                     </h6>
                                 </div>
                             </div>

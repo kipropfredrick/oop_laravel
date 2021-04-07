@@ -48,7 +48,7 @@
             <h3>Payment</h3>
 
             <p>
-            The minimum amount allowed for any order is KSh.500. There are no limitations to how many installments you can make until you fully pay for your order.
+            The minimum amount allowed for any order is KSh.100. There are no limitations to how many installments you can make until you fully pay for your order.
             </p>
 
             <p>

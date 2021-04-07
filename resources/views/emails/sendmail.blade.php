@@ -102,7 +102,7 @@
                     <p>Complete your booking for <strong>{{ $details['product_name'] }}</strong>.<br>
                         Use Paybill Number <strong>4040299</strong> and account number <strong>{{$details['booking_reference']}}</strong>.<br>
                         Total amount is <strong>KSh.{{ $details['total_cost'] }}</strong>.<br>
-                        You can book with a minimum of <strong>KSh.500</strong>.</p>
+                        You can book with a minimum of <strong>KSh.100</strong>.</p>
 
                     <!-- For those who have not made a subsequent payment in 3 weeks -->
                     <p>Hello, {{ $details['customer_name']}}.</p>

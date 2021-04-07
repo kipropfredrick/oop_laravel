@@ -54,7 +54,7 @@
                                 @endif
                                 <div class="">
                                 <div>
-                                <p>You are placing an order for <strong>{{$product->product_name}}</strong>. Minimum deposit id <strong>KSh.500</strong>.</p>
+                                <p>You are placing an order for <strong>{{$product->product_name}}</strong>. Minimum deposit id <strong>KSh.100</strong>.</p>
                                 <a href="/checkout-with-existing/{{$product->slug}}">Have an account?</a>
                             </div>
                                        <!-- <a href="/checkout-with-existing/{{$product->slug}}" style="margin-left:5px" class="btn btn-outline-warning">Have an Account?</a> -->
@@ -95,8 +95,8 @@
                                                 <input required name="phone" type="" value="{{ old('phone') }}" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.500 minimum)</label>
-                                                <input min="500" required name="initial_deposit" value="{{ old('initial_deposit') }}" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
+                                                <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.100 minimum)</label>
+                                                <input min="100" required name="initial_deposit" value="{{ old('initial_deposit') }}" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                              </div>
                                           </div>
 
@@ -129,7 +129,7 @@
                                                 <div class="form-group col-md-6">
                                                 <label for="checkout-street-address">Exact Location</label><span style="color:red">*</span>
                                                 
-                                                <input min="500" required name="exact_location" value="{{ old('exact_location') }}" type="" class="form-control" id="checkout-street-address" placeholder="Eg. City, Town, street name">
+                                                <input min="100" required name="exact_location" value="{{ old('exact_location') }}" type="" class="form-control" id="checkout-street-address" placeholder="Eg. City, Town, street name">
 
                                                 <div class="col-lg-10">
                                                    
@@ -172,7 +172,7 @@
                                 <div class="mdgf-text">  
                                     <span>Minimum deposit</span>
                                     <h6>
-                                        Ksh.500
+                                        Ksh.100
                                     </h6>
                                 </div>
                             </div>

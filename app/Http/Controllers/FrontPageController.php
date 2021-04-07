@@ -675,9 +675,9 @@ class FrontPageController extends Controller
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
         
-        if($request->initial_deposit<200){
+        if($request->initial_deposit<100){
 
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(200,0));
+          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(100,0));
          
         }
 
@@ -749,9 +749,9 @@ class FrontPageController extends Controller
 
        $due_date = Carbon::now()->addMonths(3);
 
-        if($request->initial_deposit<500){
+        if($request->initial_deposit<100){
 
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(500,0));
+          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(100));
          
         }
 
