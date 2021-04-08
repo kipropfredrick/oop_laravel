@@ -93,9 +93,9 @@
             <div>
 
             
-            <div class="p-grid">
+            <div class="p-grid product-list">
                 @foreach($products as $product)
-                    <div class="p-cat">
+                    <div class="p-cat product-box">
                         <div class="p-c-sec">
                             <div class="p-c-inner">
                                 <a href="/product/{{$product->slug}}">
@@ -129,7 +129,8 @@
 
         @if($currentP!=$lastp)
         <div class="row justify-content-center">
-            <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a>
+            <!-- <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a> -->
+            <button  style="width:150px;margin-top:20px" class="btn btn-block load-more-btn">Load more</button>
         </div>
         @endif
 
@@ -178,5 +179,65 @@
 
 </div>
 
+
+@endsection
+
+@section('extra-js')
+
+<script type="text/javascript">
+    var current_url = window.location.href;
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".load-more-btn").on('click',function(){
+            var _totalCurrentResult=$(".product-box").length;
+            // Ajax Reuqest
+            $.ajax({
+                url:current_url,
+                type:'post',
+                dataType:'json',
+                data:{
+                    skip:_totalCurrentResult,
+                    _token:"{{ csrf_token() }}"
+                },
+                beforeSend:function(){
+                    $(".load-more-btn").html('Loading...');
+                },
+                success:function(response){
+                    console.log('response => '+JSON.stringify(response));
+                    var _html='';
+                    var image="/storage/images/";
+                    var p_url ="/product/";
+                    var c_url ="/checkout/";
+                    $.each(response,function(index,value){
+                        _html+='<div class="p-cat product-box">';
+                        _html+='<div class="p-c-sec">';
+                            _html+='<div class="p-c-inner">';
+                                _html+='<a href="'+p_url+value.slug+'">';
+                                    _html+='<img src="'+image+value.product_image+'" alt="'+value.product_name+'">';
+                                    _html+='<div class="p-c-name">'+value.product_name+'</div>';
+                                    _html+='<div class="p-c-price">KSh.'+value.product_price+'</div>';
+                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-block p-btn">Lipa Mos Mos</a>';
+                                _html+='</a>';
+                            _html+='</div>';
+                        _html+='</div>';
+                    _html+='</div>';
+                    });
+                    $(".product-list").append(_html);
+                    // Change Load More When No Further result
+                    var _totalCurrentResult=$(".product-box").length;
+                    var _totalResult=parseInt($(".load-more-btn").attr('data-totalResult'));
+                    console.log(_totalCurrentResult);
+                    console.log(_totalResult);
+                    if(_totalCurrentResult==_totalResult){
+                        $(".load-more-btn").remove();
+                    }else{
+                        $(".load-more-btn").html('Load More');
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

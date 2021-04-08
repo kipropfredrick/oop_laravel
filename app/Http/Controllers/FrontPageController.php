@@ -169,7 +169,10 @@ class FrontPageController extends Controller
     public function show($slug)
     {
         $categories = \App\Categories::all();
-        $product = \App\Products::with('category','brand','subcategory','gallery','vendor.user','agent.user')->where('slug','=',$slug)->first();
+        $product = \App\Products::with('category','brand','subcategory','gallery','vendor.user','agent.user')
+                                ->where('slug','=',$slug)
+                                ->orWhere('slug', 'like', $slug . '%')
+                                ->first();
         $clicks = $product->clicks + 1;
         \App\Products::where('slug','=',$slug)->update(['clicks'=>$clicks]);
         return view('front.product',compact('product','categories'));
@@ -190,6 +193,9 @@ class FrontPageController extends Controller
 
     public function category(Request $request,$slug){
 
+        $sort_by = $request->sort_by;
+
+
         $categories = \App\Categories::all();
 
         $category = \App\Categories::where('slug','=',$slug)->first();
@@ -200,7 +206,6 @@ class FrontPageController extends Controller
                                             ->where('category_id',$category->id)
                                             ->inRandomOrder()->take(10)->get();
 
-        $sort_by = $request->sort_by;
 
         if($sort_by !=null){
 
@@ -233,7 +238,7 @@ class FrontPageController extends Controller
         }else{
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
-                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(5);
             return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
         }
 
@@ -245,6 +250,41 @@ class FrontPageController extends Controller
 
         return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
 
+    }
+
+
+    public function category_load_more(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+
+        $categories = \App\Categories::all();
+
+        $category = \App\Categories::where('slug','=',$slug)->first();
+
+        if($request->ajax()){
+
+            $skip=$request->skip;
+            $take=5;
+
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('category_id','=',$category->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->inRandomOrder()
+                                        ->skip($skip)
+                                        ->take($take)
+                                        ->get();
+
+            foreach($products as $product){
+
+                $product->product_price = number_format($product->product_price);
+                
+            }
+
+            return response()->json($products);
+        }else{
+            return response()->json('Direct Access Not Allowed!!');
+        }
     }
 
     public function brand(Request $request, $slug){
