@@ -37,13 +37,13 @@
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-533QG0VQF7"></script>
-        <!-- <script>
+        <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
         gtag('config', 'G-533QG0VQF7');
-        </script> -->
+        </script>
 
         <script>
             (function(h,o,t,j,a,r){
