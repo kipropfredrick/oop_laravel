@@ -91,8 +91,12 @@ class FrontPageController extends Controller
 
         $search =  $request->search;
 
-        $products= \App\Products::where ( 'product_name', 'LIKE', '%' . $search . '%' )->where('status','=','approved')
-                                ->where('quantity','>',0)->orderBy('id','DESC')->inRandomOrder()->paginate(20);
+        $products= \App\Products::where('product_name', 'LIKE', '%' . $search . '%' )
+                                ->where('status','=','approved')
+                                ->where('quantity','>',0)
+                                ->orderBy('id','DESC')
+                                ->inRandomOrder()
+                                ->paginate(20);
 
             $sort_by = $request->sort_by;
 
@@ -137,6 +141,38 @@ class FrontPageController extends Controller
         return view('front.search_results',compact('products','categories','search','sort_by'));
        
 
+    }
+
+    public function search_load_more(Request $request){
+
+        $sort_by = $request->sort_by;
+        
+        $search =  $request->search;
+
+        if($request->ajax()){
+
+            $skip=$request->skip;
+            $take=20;
+
+            $products= \App\Products::where('product_name', 'LIKE', '%' . $search . '%' )
+                                        ->where('status','=','approved')
+                                        ->where('quantity','>',0)
+                                        ->orderBy('id','DESC')
+                                        ->inRandomOrder()
+                                        ->skip($skip)
+                                        ->take($take)
+                                        ->get();
+
+            foreach($products as $product){
+
+                $product->product_price = number_format($product->product_price);
+                
+            }
+
+            return response()->json($products);
+        }else{
+            return response()->json('Direct Access Not Allowed!!');
+        }
     }
 
     /**
@@ -201,10 +237,12 @@ class FrontPageController extends Controller
         $category = \App\Categories::where('slug','=',$slug)->first();
 
 
-        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
+        $trendingProducts = \App\Products::with('category','subcategory')
+                                            ->where('status','=','approved')
                                             ->where('quantity','>',0)
                                             ->where('category_id',$category->id)
-                                            ->inRandomOrder()->take(10)->get();
+                                            ->inRandomOrder()
+                                            ->take(10)->get();
 
 
         if($sort_by !=null){
@@ -238,7 +276,7 @@ class FrontPageController extends Controller
         }else{
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
-                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(5);
+                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
             return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
         }
 
@@ -264,7 +302,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=5;
+            $take=20;
 
             $products =   \App\Products::with('category','subcategory','gallery')
                                         ->where('category_id','=',$category->id)
@@ -343,6 +381,40 @@ class FrontPageController extends Controller
         
     }
 
+    public function brand_load_more(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+
+        $categories = \App\Categories::all();
+
+        $brand = \App\Brand::where('slug','=',$slug)->first();
+
+        if($request->ajax()){
+
+            $skip=$request->skip;
+            $take=20;
+
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('brand_id','=',$brand->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->inRandomOrder()
+                                        ->skip($skip)
+                                        ->take($take)
+                                        ->get();
+
+            foreach($products as $product){
+
+                $product->product_price = number_format($product->product_price);
+                
+            }
+
+            return response()->json($products);
+        }else{
+            return response()->json('Direct Access Not Allowed!!');
+        }
+    }
+
     public function shop($id){
 
         $categories = \App\Categories::all();
@@ -360,8 +432,7 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::all();
 
-        $subcategory = \App\SubCategories::where('slug','=',$slug
-        )->first();
+        $subcategory = \App\SubCategories::where('slug','=',$slug)->first();
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
 
@@ -416,6 +487,40 @@ class FrontPageController extends Controller
 
     }
 
+    public function subcategory_load_more(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+
+        $categories = \App\Categories::all();
+
+        $subcategory = \App\SubCategories::where('slug','=',$slug)->first();
+
+        if($request->ajax()){
+
+            $skip=$request->skip;
+            $take=20;
+
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('subcategory_id','=',$subcategory->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->inRandomOrder()
+                                        ->skip($skip)
+                                        ->take($take)
+                                        ->get();
+
+            foreach($products as $product){
+
+                $product->product_price = number_format($product->product_price);
+                
+            }
+
+            return response()->json($products);
+        }else{
+            return response()->json('Direct Access Not Allowed!!');
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -427,7 +532,10 @@ class FrontPageController extends Controller
         $categories = \App\Categories::all();
         $product_quantity = "1";
 
-        $product = \App\Products::with('category','subcategory','gallery')->where('slug','=',$slug)->first();
+        $product = \App\Products::with('category','subcategory','gallery')
+                                  ->where('slug','=',$slug)
+                                  ->orWhere('slug', 'like', $slug . '%')
+                                  ->first();
 
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
@@ -445,7 +553,10 @@ class FrontPageController extends Controller
         $categories = \App\Categories::all();
         $product_quantity = "1";
 
-        $product = \App\Products::with('category','subcategory','gallery')->where('slug','=',$slug)->first();
+        $product = \App\Products::with('category','subcategory','gallery')
+                                  ->where('slug','=',$slug)
+                                  ->orWhere('slug', 'like', $slug . '%')
+                                  ->first();
 
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
@@ -463,7 +574,10 @@ class FrontPageController extends Controller
         $categories = \App\Categories::all();
         $product_quantity = "1";
 
-        $product = \App\Products::with('category','subcategory','gallery')->where('slug','=',$slug)->first();
+        $product = \App\Products::with('category','subcategory','gallery')
+                                  ->where('slug','=',$slug)
+                                  ->orWhere('slug', 'like', $slug . '%')
+                                  ->first();
 
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
@@ -480,7 +594,10 @@ class FrontPageController extends Controller
         $categories = \App\Categories::all();
         $product_quantity = "1";
 
-        $product = \App\Products::with('category','subcategory','gallery')->where('slug','=',$slug)->first();
+        $product = \App\Products::with('category','subcategory','gallery')
+                                  ->where('slug','=',$slug)
+                                  ->orWhere('slug', 'like', $slug . '%')
+                                  ->first();
 
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
@@ -552,7 +669,7 @@ class FrontPageController extends Controller
        $due_date = Carbon::now()->addMonths(3);
 
         
-        $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first(); 
+       $product = \App\Products::find($request->product_id);
 
 
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();

@@ -31,10 +31,12 @@
             <div class="ht mb-3">
                 <h5>{{$brand->brand_name}}</h5>
 
+                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('brand_id',$brand->id)->count(); ?>
+
                 <div>
                     <div class="filters">
                         <div class="p-count">
-                            <label class="col-form-label">{{count($products)}} product(s) found</label>
+                            <label class="col-form-label">{{number_format($count)}} product(s) found</label>
                         </div>
 
                         <div class="p-filter">
@@ -86,9 +88,9 @@
             <div>
 
             
-            <div class="p-grid">
+            <div class="p-grid product-list">
                 @foreach($products as $product)
-                    <div class="p-cat">
+                    <div class="p-cat product-box">
                         <div class="p-c-sec">
                             <div class="p-c-inner">
                                 <a href="/product/{{$product->slug}}">
@@ -115,11 +117,12 @@
             $loadUrl = $url."?page=".$nextP;
             ?>
 
-            @if($currentP!=$lastp)
-            <div class="row justify-content-center">
-                <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a>
-            </div>
-            @endif
+        @if($currentP!=$lastp)
+        <div class="row justify-content-center">
+            <!-- <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a> -->
+            <button data-totalResult="{{$count}}" style="width:150px;margin-top:20px" class="btn btn-block load-more-btn">Load more</button>
+        </div>
+        @endif
                 
             </div>
         </div>
@@ -165,5 +168,66 @@
 
 </div>
 
+
+@endsection
+
+
+@section('extra-js')
+
+<script type="text/javascript">
+    var current_url = window.location.href;
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".load-more-btn").on('click',function(){
+            var _totalCurrentResult=$(".product-box").length;
+            // Ajax Reuqest
+            $.ajax({
+                url:current_url,
+                type:'post',
+                dataType:'json',
+                data:{
+                    skip:_totalCurrentResult,
+                    _token:"{{ csrf_token() }}"
+                },
+                beforeSend:function(){
+                    $(".load-more-btn").html('Loading...');
+                },
+                success:function(response){
+                    
+                    var _html='';
+                    var image="/storage/images/";
+                    var p_url ="/product/";
+                    var c_url ="/checkout/";
+                    $.each(response,function(index,value){
+                        _html+='<div class="p-cat product-box">';
+                        _html+='<div class="p-c-sec">';
+                            _html+='<div class="p-c-inner">';
+                                _html+='<a href="'+p_url+value.slug+'">';
+                                    _html+='<img src="'+image+value.product_image+'" alt="'+value.product_name+'">';
+                                    _html+='<div class="p-c-name">'+value.product_name+'</div>';
+                                    _html+='<div class="p-c-price">KSh.'+value.product_price+'</div>';
+                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-block p-btn">Lipa Mos Mos</a>';
+                                _html+='</a>';
+                            _html+='</div>';
+                        _html+='</div>';
+                    _html+='</div>';
+                    });
+                    $(".product-list").append(_html);
+                    // Change Load More When No Further result
+                    var _totalCurrentResult=$(".product-box").length;
+                    var _totalResult=parseInt($(".load-more-btn").attr('data-totalResult'));
+                    console.log(_totalCurrentResult);
+                    console.log(_totalResult);
+                    if(_totalCurrentResult==_totalResult){
+                        $(".load-more-btn").remove();
+                    }else{
+                        $(".load-more-btn").html('Load More');
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

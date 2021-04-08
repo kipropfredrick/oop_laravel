@@ -86,8 +86,10 @@ Route::get('/product/{slug}','FrontPageController@show');
 Route::get('/category/{slug}','FrontPageController@category');
 Route::post('/category/{slug}','FrontPageController@category_load_more');
 Route::get('/brand/{slug}','FrontPageController@brand');
+Route::post('/brand/{slug}','FrontPageController@brand_load_more');
 Route::get('/shop/{id}','FrontPageController@shop');
 Route::get('/subcategory/{slug}','FrontPageController@subcategory')->name('view-subcategory');
+Route::post('/subcategory/{slug}','FrontPageController@subcategory_load_more');
 Route::get('/checkout/{slug}','FrontPageController@checkout');
 Route::get('/checkout/bonga/{slug}','FrontPageController@checkout_bonga');
 Route::get('/checkout-with-existing/{slug}','FrontPageController@checkout_existing');
@@ -102,6 +104,8 @@ Route::get('image/{filename}', 'FrontPageController@displayImage')->name('image.
 Auth::routes();
 
 Route::get('/search', 'FrontPageController@search')->name('search');
+
+Route::post('/search', 'FrontPageController@search_load_more');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

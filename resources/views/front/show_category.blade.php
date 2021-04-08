@@ -38,10 +38,12 @@
             <div class="ht mb-3">
                 <h5>{{$category->category_name}}</h5>
 
+                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('category_id',$category->id)->count(); ?>
+
                 <div>
                     <div class="filters">
                         <div class="p-count">
-                            <label class="col-form-label">{{count($products)}} product(s) found</label>
+                            <label class="col-form-label">{{number_format($count)}} product(s) found</label>
                         </div>
 
                         <div class="p-filter">
@@ -127,15 +129,17 @@
             $loadUrl = $url."?page=".$nextP;
         ?>
 
+
         @if($currentP!=$lastp)
         <div class="row justify-content-center">
             <!-- <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a> -->
-            <button  style="width:150px;margin-top:20px" class="btn btn-block load-more-btn">Load more</button>
+            <button data-totalResult="{{$count}}" style="width:150px;margin-top:20px" class="btn btn-block load-more-btn">Load more</button>
         </div>
         @endif
 
     </div>
     <!-- end products carousel -->
+
 
 </div>
 
@@ -204,7 +208,7 @@
                     $(".load-more-btn").html('Loading...');
                 },
                 success:function(response){
-                    console.log('response => '+JSON.stringify(response));
+                    
                     var _html='';
                     var image="/storage/images/";
                     var p_url ="/product/";
@@ -227,10 +231,11 @@
                     // Change Load More When No Further result
                     var _totalCurrentResult=$(".product-box").length;
                     var _totalResult=parseInt($(".load-more-btn").attr('data-totalResult'));
-                    console.log(_totalCurrentResult);
-                    console.log(_totalResult);
+                    console.log("_totalCurrentResult => "+_totalCurrentResult);
+                    console.log("_totalResult => "+_totalResult);
                     if(_totalCurrentResult==_totalResult){
                         $(".load-more-btn").remove();
+                        console.log('End of list');
                     }else{
                         $(".load-more-btn").html('Load More');
                     }
