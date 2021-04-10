@@ -1482,7 +1482,7 @@ class AdminController extends Controller
 
         $customer = \App\Customers::where('id',$booking->customer_id)->first();
 
-        $message = "Product exchanged successfully to ".$newProduct->product_name.", New Balance is KES ".number_format($balance,2)."Use Paybill 4040299 and Account Number ".$booking->booking_reference.", Thank you.";
+        $message = "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).". Use Paybill 4040299 and Account Number ".$booking->booking_reference.". Thank you.";
 
         $recipients = $customer->phone;
 

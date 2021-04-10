@@ -152,7 +152,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=20;
+            $take=10;
 
             $products= \App\Products::where('product_name', 'LIKE', '%' . $search . '%' )
                                         ->where('status','=','approved')
@@ -302,7 +302,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=20;
+            $take=10;
 
             $products =   \App\Products::with('category','subcategory','gallery')
                                         ->where('category_id','=',$category->id)
@@ -392,7 +392,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=20;
+            $take=10;
 
             $products =   \App\Products::with('category','subcategory','gallery')
                                         ->where('brand_id','=',$brand->id)
@@ -498,7 +498,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=20;
+            $take=10;
 
             $products =   \App\Products::with('category','subcategory','gallery')
                                         ->where('subcategory_id','=',$subcategory->id)
