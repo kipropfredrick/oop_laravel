@@ -262,6 +262,14 @@ class MpesaPaymentController extends Controller
 
             $paymentLog = (array) $decoded;
 
+            $existingLog = \App\PaymentLog::where('TransID',$transaction_id)->first();
+
+            if($existingLog!=null){
+
+                return "Duplicate Transaction";
+
+            }
+
             \App\PaymentLog::insert($paymentLog);
 
             $log_id = DB::getPdo()->lastInsertId();
@@ -544,6 +552,15 @@ class MpesaPaymentController extends Controller
             $middle_name = $decoded->MiddleName;
             $last_name = $decoded->LastName;
             $code = $decoded->TransID;
+
+            $existingLog = \App\PaymentLog::where('TransID',$code)->first();
+
+            if($existingLog!=null){
+
+                return "Duplicate Transaction";
+
+            }
+
 
             $booking = \App\Bookings::where('booking_reference','=',$bill_ref_no)->first();
 
