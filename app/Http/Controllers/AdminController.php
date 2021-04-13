@@ -1519,6 +1519,12 @@ class AdminController extends Controller
    
        $payment_log = \App\PaymentLog::find($id);
 
+       $existingLog = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->first();
+
+        if($existingLog!=null){
+            return back()->with('error', 'Duplicate Transaction!');
+        }
+
        \App\PaymentLog::where('id',$id)->update(['BillRefNumber'=>$bill_ref_no]);
 
         if($booking->status == 'pending'){
@@ -1700,6 +1706,8 @@ class AdminController extends Controller
         ];
 
         Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
+
+        return back()->with('success', 'Payment Updated');
 
     }
 
