@@ -54,7 +54,7 @@
 								<th class="thead">
 									Status/Action
 								</th>
-                                <th class="thead">Date Paid</th>
+                                <th  class="thead">Date Paid</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -117,8 +117,8 @@
 									
 									@endif
 									</td>
-									<td>
-									{{date('M d'.', '.'Y', strtotime($payment->TransTime))}}
+									<td width="200">
+									 {{date('M d'.', '.'Y'.' '.'h'.':'.'i'.':'.'s', strtotime($payment->TransTime))}}
 									</td>
 
                                 </tr>
