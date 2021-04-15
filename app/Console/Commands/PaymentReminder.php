@@ -72,15 +72,17 @@ class PaymentReminder extends Command
 
             $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $now);
             $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $latestpayment->created_at);
-            $diff_in_weeks = $to->diffInWeeks($from);
+           
+            $diff_in_hours = $to->diffInHours($from);
 
-            \Log::info('weeks => '.$diff_in_weeks);
+            \Log::info('Hours => '.$diff_in_hours);
 
-            if($diff_in_weeks == 3){
+
+            if($diff_in_hours == 504){
                 $recipients = $booking->customer->phone;
                 $message =  "Hello, it’s been a while. Keep paying for ".$booking->product->product_name.". Paybill 4040299 and account number ".$booking->booking_reference.". Amount is KSh.".number_format($booking->balance).".";
                
-                // SendSMSController::sendMessage($recipients,$message,$type="inactive_payment_reminder");
+                SendSMSController::sendMessage($recipients,$message,$type="inactive_payment_reminder");
 
             }
             }
