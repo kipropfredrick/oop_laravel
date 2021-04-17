@@ -84,6 +84,8 @@ Route::get('/update_categories','FrontPageController@update_categories');
 Route::get('/terms', 'FrontPageController@terms');
 Route::get('/product/{slug}','FrontPageController@show');
 Route::get('/category/{slug}','FrontPageController@category');
+Route::get('/thirdlevelcategory/{slug}','FrontPageController@thirdlevelcategory');
+Route::post('/thirdlevelcategory/{slug}','FrontPageController@thirdlevelcategory_load_more');
 Route::post('/category/{slug}','FrontPageController@category_load_more');
 Route::get('/brand/{slug}','FrontPageController@brand');
 Route::post('/brand/{slug}','FrontPageController@brand_load_more');

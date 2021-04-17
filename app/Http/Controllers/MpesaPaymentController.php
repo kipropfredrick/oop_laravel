@@ -380,7 +380,7 @@ class MpesaPaymentController extends Controller
                     $location = " Your product will be delivered at ". $booking->delivery_location;
                 }
 
-                $message = "Congratulations, You have completed Payment of ".$booking->product->product_name.$location.", You will be contacted for more information.";
+                $message = "Congratulations, You have completed Payment for ".$booking->product->product_name.", You will be contacted to finalise your delivery.";
 
                 SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 

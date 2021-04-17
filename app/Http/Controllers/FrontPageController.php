@@ -44,10 +44,21 @@ class FrontPageController extends Controller
     public function index()
     {
 
+       $third_level_categories = \App\ThirdLevelCategory::all();
 
-       $categories = \App\Categories::with('subcategories')->get();
-       $lcategories = \App\Categories::with('subcategories')->take(10)->get();
-       
+       foreach($third_level_categories as $category){
+
+        $slug = rand(100,900).'-'.$category->name;
+
+        if(!isset($category->slug)){
+            \App\ThirdLevelCategory::where('id',$category->id)->update(['slug'=>$slug]);
+        }
+
+       }
+
+       $categories = \App\Categories::with('subcategories.thirdlevelcategories')->get();
+       $lcategories = \App\Categories::with('subcategories.thirdlevelcategories')->take(10)->get();
+
        $products = \App\Products::with('category','subcategory')
                     ->where('status','=','approved')
                     ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
@@ -350,6 +361,74 @@ class FrontPageController extends Controller
             return response()->json('Direct Access Not Allowed!!');
         }
     }
+
+    public function thirdlevelcategory(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+        
+        $categories = \App\Categories::all();
+
+        $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
+
+        $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
+
+        $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
+        
+        
+        $trendingProducts = \App\Products::with('category','subcategory')
+                                            ->where('status','=','approved')
+                                            ->where('quantity','>',0)
+                                            ->where('category_id',$thirdlevel_category->id)
+                                            // ->inRandomOrder()
+                                            ->orderBy('id','DESC')
+                                            ->take(10)->get();
+        
+        
+        if($sort_by !=null){
+        
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }elseif($sort_by == "id"){
+                $p = "id";
+                $o = "DESC";
+            }elseif($sort_by == "best-sellers"){
+        
+                $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
+        
+                $product_ids = [];
+        
+                foreach($bookings as $booking){
+                    array_push($product_ids,$booking->product_id);
+                }
+        
+                $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                            ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                            ->where('quantity','>',0)->inRandomOrder()->paginate(20);
+        
+                return view('front.show_third_category',compact('products','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
+            }
+        
+        }else{
+            $sort_by = "id";
+            $products =   \App\Products::with('category','subcategory','gallery')->where('third_level_category_id','=',$thirdlevel_category->id)
+                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+            return view('front.show_third_category',compact('products','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
+        }
+        
+        
+        $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                            ->where('third_level_category_id','=',$thirdlevel_category->id)
+                            ->where('quantity','>',0)
+                            ->orderBy($p,$o)
+                            ->paginate(20);
+        
+        return view('front.show_third_category',compact('products','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
+        
+        }
 
     public function brand(Request $request, $slug){
 

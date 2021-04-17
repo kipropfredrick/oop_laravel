@@ -151,19 +151,33 @@
         <div class="mdg-cm">
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
-                    <ul class="navbar-nav">
+                <ul class="navbar-nav">
+                        <!-- mega menu -->
                         @foreach($lcategories as $category)
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="/category/{{$category->slug}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{$category->category_name}}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                               <?php $subcategories = $category->subcategories; ?>
-                                @forelse($subcategories as $subcategory)
-                                 <a class="dropdown-item" href="/subcategory/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
-                                @empty
-                                No Subcategories
-                                @endforelse
+                        <li class="nav-item dropdown megamenu-li">
+                            <a class="nav-link dropdown-toggle" href="/category/{{$category->slug}}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{$category->category_name}}</a>
+                            
+                            <div class="dropdown-menu megamenu" aria-labelledby="dropdown01">
+                                <div class="row">
+                                   <?php $subcategories = $category->subcategories; ?>
+                                    @forelse($subcategories as $subcategory)
+                                    <div class="col-sm-6 col-lg-2">
+                                        <!-- second level cat -->
+                                        <a class="sec-lev" href="/subcategory/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                        
+                                        <?php $thirdlevelcategories = $subcategory->thirdlevelcategories; ?>
+                                        @forelse($thirdlevelcategories->slice(0, 10) as $thirdlevelcategory)
+                                        <!-- third level cat (max 10) -->
+                                        <a class="dropdown-item" href="/thirdlevelcategory/{{$thirdlevelcategory->slug}}">{{$thirdlevelcategory->name}}</a>
+                                        @empty
+                                        <br>
+                                        @endforelse
+                                        
+                                        <a class="mm-explore" href="/subcategory/{{$subcategory->slug}}"><span class="fa fa-long-arrow-right"></span> Explore All</a>
+                                    </div>
+                                    @empty
+                                    No Subcategories
+                                    @endforelse
                             </div>
                         </li>
                         @endforeach
