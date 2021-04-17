@@ -1529,9 +1529,9 @@ class AdminController extends Controller
    
        $payment_log = \App\PaymentLog::find($id);
 
-       $existingLog = \App\PaymentLog::where('TransID',$payment_log->TransID)->first();
+       $existingLogCount = \App\PaymentLog::where('TransID',$payment_log->TransID)->count();
 
-        if($existingLog!=null){
+        if($existingLogCount>1){
             return back()->with('error', 'Duplicate Transaction!');
         }
 
