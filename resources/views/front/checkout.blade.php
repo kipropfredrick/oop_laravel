@@ -101,7 +101,7 @@
                                           </div>
 
 
-                                          <h5>Delivery Location</h5>
+                                          <h5>Delivery Details</h5>
 
                                          
                                           <div  id="location-fields" class="location-fields">

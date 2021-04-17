@@ -88,7 +88,7 @@
                                                     <input required min="100" name="initial_deposit" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
                                                 </div>
 
-                                                <h5>Delivery Location</h5>
+                                                <h5>Delivery Details</h5>
 
                                          
                                                 <div  id="location-fields" class="location-fields">

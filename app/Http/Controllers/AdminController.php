@@ -735,8 +735,6 @@ class AdminController extends Controller
 
         $product['weight'] = $weight_array;
 
-        // return $product;
-
         $categories = DB::table('categories')->get();
 
         $subcategories = DB::table('sub_categories')->get();

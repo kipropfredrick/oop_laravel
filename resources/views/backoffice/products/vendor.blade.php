@@ -49,12 +49,12 @@
 								<td>{{$product->vendor->user->name}}</td>
 								<td class="text-center">
 									<div class="row">
-										<a data-toggle="tooltip" title="View Product" href="/admin/vendor/product-view/{{$product->id}}" class="btn btn-outline-primary"><i class="fa fa-eye"></i></a>
+										<a data-toggle="tooltip" title="Edit Product" href="/admin/vendor/product-view/{{$product->id}}" class="btn mr-2 btn-outline-primary"><i class="fa fa-edit"></i></a>
 										@if($product->status !== "approved")
-											<a data-toggle="tooltip" title="Approve Product" href="/admin/vendor-product-approve/{{$product->id}}" class="btn btn-outline-success"><i class="fa fa-check"></i></a>
+											<a data-toggle="tooltip" title="Approve Product" href="/admin/vendor-product-approve/{{$product->id}}" class="btn mr-2 btn-outline-success"><i class="fa fa-check"></i></a>
 										@endif
 										@if($product->status !== "rejected")
-										 <a data-toggle="tooltip" title="Reject Product" href="/admin/vendor-product-reject/{{$product->id}}" class="btn btn-outline-danger"><i class="fa fa-thumbs-down"></i></a>
+										 <a data-toggle="tooltip" title="Reject Product" href="/admin/vendor-product-reject/{{$product->id}}" class="btn mr-2 btn-outline-danger"><i class="fa fa-thumbs-down"></i></a>
 										@endif
 									</div>
 								</td>

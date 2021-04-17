@@ -34,7 +34,7 @@
 
           <div class="form-group row">
             
-            <div class="col-lg-10">
+            <div class="col-lg-12">
                 <div class="form-row">
                     <div class="col">
                     <label >Name</label>
@@ -47,7 +47,7 @@
                             @enderror
                     </div>
 
-                    <div class="col">
+                    <!-- <div class="col">
                     <label >Commision(%)</label>
                          <input tclass="form-control" name="commision" placeholder="E.g 5,10,20" type="number" step="0.1" class="form-control @if($errors->has('commision')) invalid_field @endif" required>
                         
@@ -56,7 +56,7 @@
                                         {{ $message }}
                                     </div>
                             @enderror
-                    </div>
+                    </div> -->
 
                 </div>
             </div>
