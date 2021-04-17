@@ -1529,11 +1529,11 @@ class AdminController extends Controller
    
        $payment_log = \App\PaymentLog::find($id);
 
-    //    $existingLog = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->first();
+       $existingLog = \App\PaymentLog::where('TransID',$payment_log->TransID)->first();
 
-    //     if($existingLog!=null){
-    //         return back()->with('error', 'Duplicate Transaction!');
-    //     }
+        if($existingLog!=null){
+            return back()->with('error', 'Duplicate Transaction!');
+        }
 
        \App\PaymentLog::where('id',$id)->update(['BillRefNumber'=>$bill_ref_no]);
 
