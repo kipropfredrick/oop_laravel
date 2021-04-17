@@ -194,6 +194,7 @@
     $(document).ready(function(){
         $(".load-more-btn").on('click',function(){
             var _totalCurrentResult=$(".product-box").length;
+            var sort_by = $('#sort_by').val();
             // Ajax Reuqest
             $.ajax({
                 url:current_url,
@@ -201,13 +202,13 @@
                 dataType:'json',
                 data:{
                     skip:_totalCurrentResult,
-                    _token:"{{ csrf_token() }}"
+                    _token:"{{ csrf_token() }}",
+                    sort_by:sort_by
                 },
                 beforeSend:function(){
                     $(".load-more-btn").html('Loading...');
                 },
                 success:function(response){
-                    
                     var _html='';
                     var image="/storage/images/";
                     var p_url ="/product/";

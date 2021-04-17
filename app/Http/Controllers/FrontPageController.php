@@ -95,7 +95,8 @@ class FrontPageController extends Controller
                                 ->where('status','=','approved')
                                 ->where('quantity','>',0)
                                 ->orderBy('id','DESC')
-                                ->inRandomOrder()
+                                // ->inRandomOrder()
+                                ->orderBy('id','DESC')
                                 ->paginate(20);
 
             $sort_by = $request->sort_by;
@@ -154,11 +155,23 @@ class FrontPageController extends Controller
             $skip=$request->skip;
             $take=10;
 
-            $products= \App\Products::where('product_name', 'LIKE', '%' . $search . '%' )
-                                        ->where('status','=','approved')
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }else{
+                $p = "id";
+                $o = "DESC";
+            }
+
+
+        $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('product_name', 'LIKE', '%' . $search . '%' )
                                         ->where('quantity','>',0)
-                                        ->orderBy('id','DESC')
-                                        ->inRandomOrder()
+                                        ->where('status','=','approved')
+                                        ->orderBy($p,$o)
                                         ->skip($skip)
                                         ->take($take)
                                         ->get();
@@ -241,7 +254,8 @@ class FrontPageController extends Controller
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
                                             ->where('category_id',$category->id)
-                                            ->inRandomOrder()
+                                            // ->inRandomOrder()
+                                            ->orderBy('id','DESC')
                                             ->take(10)->get();
 
 
@@ -304,11 +318,23 @@ class FrontPageController extends Controller
             $skip=$request->skip;
             $take=10;
 
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }else{
+                $p = "id";
+                $o = "DESC";
+            }
+
+
             $products =   \App\Products::with('category','subcategory','gallery')
                                         ->where('category_id','=',$category->id)
                                         ->where('quantity','>',0)
                                         ->where('status','=','approved')
-                                        ->inRandomOrder()
+                                        ->orderBy($p,$o)
                                         ->skip($skip)
                                         ->take($take)
                                         ->get();
@@ -334,7 +360,8 @@ class FrontPageController extends Controller
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('quantity','>',0)
                                     ->where('brand_id',$brand->id)
-                                    ->inRandomOrder()->take(10)->get();
+                                    // ->inRandomOrder()
+                                    ->orderBy('id','DESC')->take(10)->get();
 
         $sort_by = $request->sort_by;
 
@@ -394,11 +421,23 @@ class FrontPageController extends Controller
             $skip=$request->skip;
             $take=10;
 
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }else{
+                $p = "id";
+                $o = "DESC";
+            }
+
+
             $products =   \App\Products::with('category','subcategory','gallery')
                                         ->where('brand_id','=',$brand->id)
                                         ->where('quantity','>',0)
                                         ->where('status','=','approved')
-                                        ->inRandomOrder()
+                                        ->orderBy($p,$o)
                                         ->skip($skip)
                                         ->take($take)
                                         ->get();
@@ -463,22 +502,35 @@ class FrontPageController extends Controller
                     array_push($product_ids,$booking->product_id);
                 }
         
-                $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                $products = \App\Products::with('category','subcategory')
+                                            ->where('status','=','approved')
                                             ->where('subcategory_id',$subcategory->id)
-                                            ->where('quantity','>',0)->whereIn('id',$product_ids)->inRandomOrder()->paginate(20);
+                                            ->where('quantity','>',0)
+                                            ->whereIn('id',$product_ids)
+                                            // ->inRandomOrder()
+                                            ->orderBy('id','DESC')
+                                            ->paginate(20);
 
                 return view('front.show_subcategory',compact('products','sort_by','trendingProducts','categories','category','subcategory'));
             }
 
-            $products = \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
+            $products = \App\Products::with('category','subcategory','gallery')
+                                        ->where('subcategory_id','=',$subcategory->id)
                                         ->where('vendor_id' , '!=', null)
-                                        ->where('quantity','>',0)->where('status','=','approved')
-                                        ->orderBy($p,$o)->paginate(20);
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->orderBy($p,$o)
+                                        ->paginate(20);
 
         }else{
             $sort_by = "id";
-            $products =   \App\Products::with('category','subcategory','gallery')->where('subcategory_id','=',$subcategory->id)
-                             ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                         ->where('subcategory_id','=',$subcategory->id)
+                                         ->where('quantity','>',0)
+                                         ->where('status','=','approved')
+                                        //  ->inRandomOrder()
+                                        ->orderBy('id','DESC')
+                                         ->paginate(20);
         }
 
        
@@ -489,36 +541,49 @@ class FrontPageController extends Controller
 
     public function subcategory_load_more(Request $request,$slug){
 
-        $sort_by = $request->sort_by;
+            $sort_by = $request->sort_by;
 
-        $categories = \App\Categories::all();
+            $categories = \App\Categories::all();
 
-        $subcategory = \App\SubCategories::where('slug','=',$slug)->first();
-
-        if($request->ajax()){
+            $subcategory = \App\SubCategories::where('slug','=',$slug)->first();
 
             $skip=$request->skip;
+
             $take=10;
 
-            $products =   \App\Products::with('category','subcategory','gallery')
-                                        ->where('subcategory_id','=',$subcategory->id)
-                                        ->where('quantity','>',0)
-                                        ->where('status','=','approved')
-                                        ->inRandomOrder()
-                                        ->skip($skip)
-                                        ->take($take)
-                                        ->get();
+            if($request->ajax()){
 
-            foreach($products as $product){
+                        if($sort_by == "price-asc"){
+                            $p = "product_price";
+                            $o = "ASC";
+                        }elseif($sort_by == "price-desc"){
+                            $p = "product_price";
+                            $o = "DESC";
+                        }else{
+                            $p = "id";
+                            $o = "DESC";
+                        }
 
-                $product->product_price = number_format($product->product_price);
-                
-            }
 
-            return response()->json($products);
-        }else{
-            return response()->json('Direct Access Not Allowed!!');
-        }
+                    $products =   \App\Products::with('category','subcategory','gallery')
+                                                    ->where('subcategory_id','=',$subcategory->id)
+                                                    ->where('quantity','>',0)
+                                                    ->where('status','=','approved')
+                                                    ->orderBy($p,$o)
+                                                    ->skip($skip)
+                                                    ->take($take)
+                                                    ->get();
+
+                    foreach($products as $product){
+
+                        $product->product_price = number_format($product->product_price);
+                        
+                    }
+
+                    return response()->json($products);
+                }else{
+                    return response()->json('Direct Access Not Allowed!!');
+                }
     }
 
     /**
