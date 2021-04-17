@@ -883,6 +883,12 @@ class AdminController extends Controller
 
         $data = $request->except('_token');
 
+        $slug =  str_replace(' ', '-', $request->name);
+
+        $slug =  str_replace('/','-',$slug);
+
+        $data['slug'] = $slug;
+
         $data['created_at'] = now();
 
         $data['updated_at'] = now();
@@ -912,6 +918,12 @@ class AdminController extends Controller
     public function update_tsubcategory(Request $request,$id){
 
         $data = $request->except('_token');
+
+        $slug =  str_replace(' ', '-', $request->name);
+
+        $slug =  str_replace('/','-',$slug);
+
+        $data['slug'] = $slug;
 
         DB::table('third_level_categories')->where('id','=',$id)->update($data);
 

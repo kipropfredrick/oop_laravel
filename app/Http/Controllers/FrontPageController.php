@@ -48,11 +48,13 @@ class FrontPageController extends Controller
 
        foreach($third_level_categories as $category){
 
-        $slug = rand(100,900).'-'.$category->name;
+        $slug =  str_replace(' ', '-', $category->name);
 
-        if(!isset($category->slug)){
+        $slug =  str_replace('/','-',$slug);
+
+        // if(!isset($category->slug)){
             \App\ThirdLevelCategory::where('id',$category->id)->update(['slug'=>$slug]);
-        }
+        // }
 
        }
 
