@@ -1,0 +1,529 @@
+/* HEADER */
+.main-nav {
+    background: #1e22a9;
+}
+
+.mm-logo img{
+    max-width: 170px;
+}
+
+/* navbar */
+.nav-link {
+    color: #ffffff;
+    margin-left: 5px;
+}
+
+.nav-link:hover {
+    color: #f68b1e;
+}
+
+@media only screen and (max-width: 768px) {
+    .d-flex a {
+        margin-bottom: 10px;
+    }
+}
+
+/* mobile toggle navigation */
+
+.mobile-toggle {
+    display: inline-block;
+    cursor: pointer;
+}
+  
+.bar1, .bar2, .bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: #ffffff;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+  
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
+}
+  
+.change .bar2 {opacity: 0;}
+  
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
+}
+
+/* search form */
+.main-search {
+    color: #fff;
+    width: 100%;
+    background-image: linear-gradient(270deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url("https://www.incimages.com/uploaded_files/image/1920x1080/getty_675172642_371567.jpg");
+    background-repeat:no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 150px 0 100px;
+    margin-bottom: 10px;
+}
+
+.ms-text {
+    padding-bottom: 20px;
+    max-width: 500px;
+}
+
+.ms-form {
+    text-align: center;
+}
+
+.ms-form .form-inline .input-group {
+    width: 100%;
+}
+
+.mm-btn-search {
+    background: #006de1;
+    color: #ffffff;
+}
+
+.mm-btn-search:hover {
+    background: #f68b1e;
+    color: #ffffff;
+    animation: none;
+}
+
+/* PAGE CONTENT */
+.bg {
+    padding: 20px 0;
+    background: #ffffff;
+}
+
+.bg-alt {
+    padding: 20px;
+    background: #f5f8f9;
+    border-radius: 20px;
+}
+
+.bg-gray {
+    padding: 20px 0;
+    background: #e4f4ff;
+}
+
+.main-title {
+    padding-bottom: 10px;
+}
+
+/* destinations */
+.single-dest img {
+    width: 100%;
+    height: 200px;
+
+    object-fit: cover;
+    object-position: 50% 50%;
+
+    border-radius: 20px 20px 0 0;
+}
+
+.dest-name {
+    background: #1e22a9;
+    padding: 10px;
+    border-radius: 0 0 20px 20px;
+}
+
+a .dest-name {
+    color: #ffffff;
+}
+
+.dest-name:hover::after {
+    content: "\27F6";
+}
+
+.single-dest a:hover {
+    text-decoration: none;
+}
+
+.single-dest {
+    padding-bottom: 10px;
+}
+
+/* single destination */
+.p-c-sec {
+    padding: 0 5px;
+    margin-bottom: 10px;
+    background: #e4f4ff;
+    border-radius: 20px;
+}
+
+.p-c-inner {
+    padding: 20px;
+}
+
+.p-c-sec a:hover {
+    text-decoration: none;
+}
+
+.p-c-sec img {
+    width: 100%;
+    height: 200px;
+
+    padding-bottom: 10px;
+
+    object-fit: cover;
+    object-position: 50% 50%;
+
+    border-radius: 20px;
+}
+
+.p-c-name {
+    display: block;
+    display: -webkit-box;
+    max-width: 100%;
+    height: 26px;
+    margin: 0 auto;
+    line-height: inherit;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+}
+
+.p-c-name {
+    color: #333333;
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.p-c-agent {
+    display: block;
+    text-align: left;
+    display: -webkit-box;
+    max-width: 100%;
+    margin: 0 auto;
+    line-height: inherit;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+}
+
+.p-c-agent {
+    color: #333333;
+}
+
+.p-c-loc {
+    color: #ffffff;
+    background: #333333;
+    border-radius: 10px;
+    padding: 1px 10px;
+}
+
+
+.p-c-start {
+    color: #333333;
+}
+
+.p-c-days {
+    color: #333333;
+    padding: 5px 0;
+
+}
+
+.p-c-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333333;
+    padding-bottom: 5px;
+}
+
+/* details page */
+.p-img img {
+    width: 100%;
+    height: 450px;
+
+    padding-bottom: 10px;
+
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.mdg-f {
+    margin-top: 20px;
+}
+
+.mdg-features {
+    background: #333;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    border-bottom: 5px solid #f68b1e;
+}
+
+.mdgf {
+    padding: 10px 0;
+}
+
+.mdgf-icon>.fa-3x {
+    font-size: 2.3em;
+}
+
+.mdgf-text {
+    padding-left: 20px;
+}
+
+.highlights {
+    padding: 10px 0;
+}
+
+/* breadcrumb */
+.bc-bg {
+    background: #e4f4ff;
+    color: #333333;
+    padding: 4px 0;
+}
+bg-white {
+    background: #ffffff;
+    padding: 40px 0;
+}
+
+.bg-white-alt {
+    background: #ffffff;
+    padding: 0;
+}
+
+@media only screen and (min-width: 600px) {
+    .bc-bg {
+        margin-top: 38px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .bc-bg {
+        margin-top: 68px;
+    }
+}
+
+span.bc-sep::before {
+    content: ">";
+    padding: 0 4px;
+}
+
+.bc-link a {
+    color: #006de1;
+}
+
+.bc-link a:hover {
+    text-decoration: none;
+    color: #333333;
+}
+
+.bc-link span:last-child {
+    font-weight: bold;
+}
+
+/* full description */
+.det-lead {
+    background: #f5f8f9;
+    padding: 20px;
+    margin: 10px 0 20px 0;
+    border-radius: 20px;
+}
+
+.det-sec {
+    margin: 10px 0;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+}
+
+.nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-bottom: 4px solid #1e22a9;
+}
+
+.p-desc img {
+    width: 100%;
+}
+
+/* booking form */
+.card {
+    border-radius: 20px;
+}
+
+.card-bg {
+    background: #e4f4ff;
+    border-radius: 20px;
+}
+
+.live-results {
+    background: #f68b1e;
+    color: #ffffff;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+}
+
+.full-det {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-bottom: 9px solid #1e22a9;
+}
+
+/* explore */
+.bg-explore {
+    color: #fff;
+    background-image: linear-gradient(270deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url("https://www.incimages.com/uploaded_files/image/1920x1080/getty_675172642_371567.jpg");
+    background-repeat:no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 60px 20px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+/* features */
+.feature-l-bg {
+    padding: 10px;
+    margin: 15px 0;
+}
+
+.feature-l-bg .fa, .feature-l-bg .fas {
+    color: #006de1;
+    padding-bottom: 20px;
+}
+
+/* destinations */
+.dest-search {
+    color: #fff;
+    width: 100%;
+    background-image: linear-gradient(270deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url("https://www.incimages.com/uploaded_files/image/1920x1080/getty_675172642_371567.jpg");
+    background-repeat:no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 80px 0 10px;
+    margin-bottom: 10px;
+}
+
+.load-more {
+    margin: 20px;
+    text-align: center;
+}
+
+/* FOOTER */
+span.truly-african {
+    background-image: url("../img/extra/truly-african.png");
+    padding: 0 100% 0 0;
+}
+
+.ftr-bg {
+    background: #333333;
+    padding: 40px 0;
+}
+
+.ftr-container {
+    margin: auto;
+    max-width: 500px;
+}
+
+.ftr-content {
+    color: #ffffff;
+}
+
+.ftr-socials {
+    text-align: center;
+}
+
+.ftr-socials a .fa {
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 10px;
+    margin: 10px;
+}
+
+.fa-facebook {
+    background: #4267b2;
+}
+
+.fa-instagram {
+    background: #e1306c;
+}
+
+.ftr-socials a .fa:hover {
+    background: #007bff;
+}
+
+.ftr-search {
+    text-align: center;
+}
+
+.ftr-search .form-inline .input-group {
+    width: 100%;
+}
+
+.ftr-legal {
+    padding-top: 15px;
+    text-align: center;
+}
+
+.ftr-sep::before {
+    content: "/";
+    padding: 0 4px;
+}
+
+.ftr-legal a {
+    color: #ffffff;
+}
+
+
+/* copyrights */
+.copyrights {
+    text-align: center;
+    background: #1e22a9;
+    color: #ffffff;
+    padding: 10px 0;
+}
+
+.copyrights a {
+    color: #f8f8f8;
+}
+
+/* FORMS */
+.form-control {
+    border-radius: 0;
+}
+.padding{
+    padding: 12px;
+}
+
+/* BUTTONS */
+a {
+    outline-style: none;
+}
+
+.p-btn {
+    background: #006de1;
+    color: #ffffff;
+    border-radius: 10px;
+    margin: 0 5px;
+}
+
+.p-btn:hover {
+    background: #f68b1e;
+    color: #ffffff;
+    animation: none;
+}
+
+.p-btn-out {
+    border: 1px solid #006de1;
+    color: #ffffff;
+    border-radius: 10px;
+    margin: 0 5px;
+}
+
+.p-btn-out:hover {
+    background: #f68b1e;
+    border: 1px solid #f68b1e;
+    color: #ffffff;
+    animation: none;
+}

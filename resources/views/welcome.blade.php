@@ -140,7 +140,7 @@
                             <div class="mdg-c">
                                 <img src="/storage/images/{{$category->category_icon}}" alt="Category Name">
                                 <span class="cat-name">
-                                    <a href="/category/{{$category->slug}}">{{$category->category_name}}</a>
+                                    <a href="/{{$category->slug}}">{{$category->category_name}}</a>
                                 </span>
                             </div>
                      </div>

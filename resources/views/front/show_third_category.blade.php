@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $category->name)
+@section('title', $thirdlevel_category->name)
 
 @section('content')
 <!-- breadcrumb --> 
@@ -13,15 +13,15 @@
 
             <span class="bc-sep"></span>
 
-                <a href="/category/{{$category->slug}}">
+                <a href="/{{$category->slug}}">
                     <span><strong>{{$category->category_name}}</strong></span>
                 </a>
                 <span class="bc-sep"></span>
-                <a href="/subcategory/{{$subcategory->slug}}">
+                <a href="/{{$category->slug}}/{{$subcategory->slug}}">
                     <span>{{$subcategory->subcategory_name}}</span>
                 </a>
                 <span class="bc-sep"></span>
-            <!-- <a href="/category/{{$category->slug}}"> -->
+            <!-- <a href="/{{$category->slug}}"> -->
                 <span>{{$thirdlevel_category->name}}</span>
             <!-- </a> -->
 
@@ -60,7 +60,7 @@
                                 <div class="form-group row">
                                     <label class="col-3 col-form-label">Sort by:</label>
                                     <div class="col-7">
-                                         <form action="/category/{{$category->slug}}" id="filter-form">
+                                         <form action="/{{$category->slug}}/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form">
                                             <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
                                                 @if ($sort_by == "id")
                                                     <option value="id">ID</option>
