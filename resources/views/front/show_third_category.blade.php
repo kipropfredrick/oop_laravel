@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $category->name)
+@section('title', $thirdlevel_category->name)
 
 @section('content')
 <!-- breadcrumb --> 
