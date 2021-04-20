@@ -168,7 +168,7 @@
                                         <?php $thirdlevelcategories = $subcategory->thirdlevelcategories; ?>
                                         @forelse($thirdlevelcategories->slice(0, 10) as $thirdlevelcategory)
                                         <!-- third level cat (max 10) -->
-                                        <a class="dropdown-item" href="/tls/{{$thirdlevelcategory->slug}}">{{$thirdlevelcategory->name}}</a>
+                                        <a class="dropdown-item" href="/tlc/{{$thirdlevelcategory->slug}}">{{$thirdlevelcategory->name}}</a>
                                         @empty
                                         <br>
                                         @endforelse
