@@ -155,7 +155,7 @@
                         <!-- mega menu -->
                         @foreach($lcategories as $category)
                         <li class="nav-item dropdown megamenu-li">
-                            <a class="nav-link dropdown-toggle" href="/{{$category->slug}}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{$category->category_name}}</a>
+                            <a class="nav-link dropdown-toggle" href="/cat/{{$category->slug}}" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{$category->category_name}}</a>
                             
                             <div class="dropdown-menu megamenu" aria-labelledby="dropdown01">
                                 <div class="row">
@@ -163,17 +163,17 @@
                                     @forelse($subcategories as $subcategory)
                                     <div class="col-sm-6 col-lg-2">
                                         <!-- second level cat -->
-                                        <a class="sec-lev" href="/{{$category->slug}}/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                        <a class="sec-lev" href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                                         
                                         <?php $thirdlevelcategories = $subcategory->thirdlevelcategories; ?>
                                         @forelse($thirdlevelcategories->slice(0, 10) as $thirdlevelcategory)
                                         <!-- third level cat (max 10) -->
-                                        <a class="dropdown-item" href="/{{$category->slug}}/{{$subcategory->slug}}/{{$thirdlevelcategory->slug}}">{{$thirdlevelcategory->name}}</a>
+                                        <a class="dropdown-item" href="/tls/{{$thirdlevelcategory->slug}}">{{$thirdlevelcategory->name}}</a>
                                         @empty
                                         <br>
                                         @endforelse
                                         
-                                        <a class="mm-explore" href="/{{$category->slug}}/{{$subcategory->slug}}"><span class="fa fa-long-arrow-right"></span> Explore All</a>
+                                        <a class="mm-explore" href="/sub/{{$subcategory->slug}}"><span class="fa fa-long-arrow-right"></span> Explore All</a>
                                     </div>
                                     @empty
                                     No Subcategories
@@ -221,13 +221,13 @@
                             </li>
                             @foreach($lcategories as $category)
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="/{{$category->slug}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle" href="{{$category->id}}" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{$category->category_name}}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                             <?php $subcategories = $category->subcategories; ?>
                                             @forelse($subcategories as $subcategory)
-                                            <a class="dropdown-item" href="/{{$category->slug}}/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                            <a class="dropdown-item" href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                                             @empty
                                             No Subcategories
                                             @endforelse

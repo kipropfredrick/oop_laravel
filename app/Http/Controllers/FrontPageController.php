@@ -364,7 +364,7 @@ class FrontPageController extends Controller
         }
     }
 
-    public function thirdlevelcategory(Request $request,$category,$subcategory,$slug){
+    public function thirdlevelcategory(Request $request,$slug){
 
         $sort_by = $request->sort_by;
         
@@ -380,7 +380,7 @@ class FrontPageController extends Controller
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
-                                            ->where('third_level_category_id',$thirdlevel_category->id)
+                                            ->where('category_id',$thirdlevel_category->id)
                                             // ->inRandomOrder()
                                             ->orderBy('id','DESC')
                                             ->take(10)->get();
@@ -430,59 +430,6 @@ class FrontPageController extends Controller
         
         return view('front.show_third_category',compact('products','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
         
-        }
-
-
-
-        public function thirdlevelcategory_load_more(Request $request,$category,$subcategory,$slug){
-
-            $sort_by = $request->sort_by;
-
-            $categories = \App\Categories::all();
-                
-                $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
-            
-                $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
-            
-                $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
-            
-                    if($request->ajax()){
-            
-                        $skip=$request->skip;
-                        $take=10;
-            
-                        if($sort_by == "price-asc"){
-                            $p = "product_price";
-                            $o = "ASC";
-                        }elseif($sort_by == "price-desc"){
-                            $p = "product_price";
-                            $o = "DESC";
-                        }else{
-                            $p = "id";
-                            $o = "DESC";
-                        }
-            
-            
-                        $products =   \App\Products::with('category','subcategory','gallery')
-                                                    ->where('third_level_category_id','=',$thirdlevel_category->id)
-                                                    ->where('quantity','>',0)
-                                                    ->where('status','=','approved')
-                                                    ->orderBy($p,$o)
-                                                    ->skip($skip)
-                                                    ->take($take)
-                                                    ->get();
-            
-                        foreach($products as $product){
-            
-                            $product->product_price = number_format($product->product_price);
-                            
-                        }
-            
-                        return response()->json($products);
-                    }else{
-                        return response()->json('Direct Access Not Allowed!!');
-                    } 
-            
         }
 
     public function brand(Request $request, $slug){
@@ -601,7 +548,58 @@ class FrontPageController extends Controller
 
     }
 
-    public function subcategory(Request $request,$category, $slug){
+    public function thirdlevelcategory_load_more(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+
+        $categories = \App\Categories::all();
+            
+            $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
+        
+            $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
+        
+            $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
+        
+                if($request->ajax()){
+        
+                    $skip=$request->skip;
+                    $take=10;
+        
+                    if($sort_by == "price-asc"){
+                        $p = "product_price";
+                        $o = "ASC";
+                    }elseif($sort_by == "price-desc"){
+                        $p = "product_price";
+                        $o = "DESC";
+                    }else{
+                        $p = "id";
+                        $o = "DESC";
+                    }
+        
+        
+                    $products =   \App\Products::with('category','subcategory','gallery')
+                                                ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                                ->where('quantity','>',0)
+                                                ->where('status','=','approved')
+                                                ->orderBy($p,$o)
+                                                ->skip($skip)
+                                                ->take($take)
+                                                ->get();
+        
+                    foreach($products as $product){
+        
+                        $product->product_price = number_format($product->product_price);
+                        
+                    }
+        
+                    return response()->json($products);
+                }else{
+                    return response()->json('Direct Access Not Allowed!!');
+                } 
+        
+    }
+
+    public function subcategory(Request $request, $slug){
 
         $categories = \App\Categories::all();
 
@@ -673,7 +671,7 @@ class FrontPageController extends Controller
 
     }
 
-    public function subcategory_load_more(Request $request,$category, $slug){
+    public function subcategory_load_more(Request $request,$slug){
 
             $sort_by = $request->sort_by;
 
