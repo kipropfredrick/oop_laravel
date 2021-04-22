@@ -270,6 +270,18 @@ class MpesaPaymentController extends Controller
 
             }
 
+            $travelPattern = "/tt/i";
+    
+            $travelTrue = preg_match($travelPattern,$bill_ref_no);
+
+            if($travelTrue ==1){
+
+               $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code);
+
+               return $message;
+
+            }
+
             \App\PaymentLog::insert($paymentLog);
 
             $log_id = DB::getPdo()->lastInsertId();
@@ -277,7 +289,7 @@ class MpesaPaymentController extends Controller
 
           \App\PaymentLog::where('id',$log_id)->update(['status'=>"valid"]);
 
-          Log::info(print_r($mpesaResponse,true));
+        //   Log::info(print_r($mpesaResponse,true));
 
             $booking = \App\Bookings::with('product','payments','customer','customer.user','county','location')->where('booking_reference','=',$bill_ref_no)->first();
 
@@ -927,6 +939,45 @@ class MpesaPaymentController extends Controller
             ];   
 
         return response()->json($out);
+    }
+
+    public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code){
+
+       $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
+       
+       if($booking == null){
+           return "Booking Does not exist!";
+       }else{
+
+          $recipients = $msisdn;
+
+          $package = DB::connection('mysql2')->table('travel_packages')->where('id',$booking->package_id)->first();
+
+          $amount_paid = $booking->amount_paid + $transaction_amount;
+
+          $balance = $booking->balance - $transaction_amount;
+
+          $data = ['amount_paid'=>$amount_paid,'balance'=>$balance];
+
+          DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
+
+          $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.";
+          SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+          if($balance<1){
+
+            $message = "Congratulations, You have completed Payment for ".$package->package_name.".";
+
+            SendSMSController::sendMessage($recipients,$message,$type="payment_completion_notification");
+
+          }
+
+          
+
+          return "Success";
+
+       }
+
     }
 
 }
