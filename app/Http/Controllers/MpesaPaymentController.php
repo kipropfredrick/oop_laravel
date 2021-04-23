@@ -270,6 +270,9 @@ class MpesaPaymentController extends Controller
 
             }
 
+
+            \App\PaymentLog::insert($paymentLog);
+
             $travelPattern = "/tt/i";
     
             $travelTrue = preg_match($travelPattern,$bill_ref_no);
@@ -281,8 +284,6 @@ class MpesaPaymentController extends Controller
                return $message;
 
             }
-
-            \App\PaymentLog::insert($paymentLog);
 
             $log_id = DB::getPdo()->lastInsertId();
 
@@ -957,11 +958,10 @@ class MpesaPaymentController extends Controller
 
           $balance = $booking->balance - $transaction_amount;
 
-          $data = ['amount_paid'=>$amount_paid,'balance'=>$balance];
-
-          DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
+          $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
           $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.";
+         
           SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
           if($balance<1){
@@ -970,9 +970,11 @@ class MpesaPaymentController extends Controller
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_completion_notification");
 
+            $data['status'] = 'complete';
+
           }
 
-          
+          DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
 
           return "Success";
 
