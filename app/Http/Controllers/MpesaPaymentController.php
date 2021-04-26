@@ -262,6 +262,34 @@ class MpesaPaymentController extends Controller
 
             $paymentLog = (array) $decoded;
 
+            
+            $travelPattern = "/tt/i";
+    
+            $travelTrue = preg_match($travelPattern,$bill_ref_no);
+
+            if($travelTrue ==1){
+
+                $existingLog = \DB::connection('mysql2')->table('payment_logs')->where('TransID',$transaction_id)->first();
+
+                if($existingLog!=null){
+    
+                    return "Duplicate Transaction";
+    
+                }
+
+                $paymentLog['created_at'] = now();
+                $paymentLog['updated_at'] = now();
+
+                \DB::connection('mysql2')->table('payment_logs')->insert( $paymentLog);
+
+                $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
+
+                $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id);
+
+                return $message;
+
+            }
+
             $existingLog = \App\PaymentLog::where('TransID',$transaction_id)->first();
 
             if($existingLog!=null){
@@ -270,20 +298,7 @@ class MpesaPaymentController extends Controller
 
             }
 
-
             \App\PaymentLog::insert($paymentLog);
-
-            $travelPattern = "/tt/i";
-    
-            $travelTrue = preg_match($travelPattern,$bill_ref_no);
-
-            if($travelTrue ==1){
-
-               $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code);
-
-               return $message;
-
-            }
 
             $log_id = DB::getPdo()->lastInsertId();
 
@@ -942,15 +957,29 @@ class MpesaPaymentController extends Controller
         return response()->json($out);
     }
 
-    public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code){
+    public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
 
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
        if($booking == null){
            return "Booking Does not exist!";
        }else{
+           
+        
+          $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
-          $recipients = $msisdn;
+          $recipients = $customer->phone;
+
+          $payment_data = [
+                            'payment_log_id'=>$log_id,
+                            'customer_id'=>$customer->id,
+                            'booking_id'=>$booking->id,
+                            'amount'=>$transaction_amount,
+                            'created_at'=>now(),
+                            'updated_at'=>now()
+                          ];
+
+          DB::connection('mysql2')->table('payments')->insert($payment_data);
 
           $package = DB::connection('mysql2')->table('travel_packages')->where('id',$booking->package_id)->first();
 
