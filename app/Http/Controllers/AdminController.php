@@ -1428,9 +1428,9 @@ class AdminController extends Controller
 
     public function transfer_order(){
 
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->orderBy('id', 'DESC')->get();
-
-        
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')
+                                    ->where('status','!=','complete')
+                                    ->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
