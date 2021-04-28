@@ -1430,6 +1430,8 @@ class AdminController extends Controller
 
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->orderBy('id', 'DESC')->get();
 
+        
+
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;

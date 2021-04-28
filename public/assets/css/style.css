@@ -8,8 +8,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* main header */
-.mdg-logo img{
-    max-width: 250px;
+
+
+/* logo size on large screens */
+@media screen and (min-width:769px) {
+    .mdg-logo img{
+        max-width: 250px;
+    }
+}
+
+/* logo size on handheld-devices */
+@media screen and (max-width:769px) {
+    .mdg-logo img{
+        max-width: 170px;
+    }
 }
 
 .mdg-navbar {
