@@ -242,6 +242,9 @@ class FrontPageController extends Controller
                                 ->where('slug','=',$slug)
                                 ->orWhere('slug', 'like', $slug . '%')
                                 ->first();
+            if($product->status!='approved'){
+                return redirect('/sub/'.$product->subcategory->slug);
+            }
         $clicks = $product->clicks + 1;
         \App\Products::where('slug','=',$slug)->update(['clicks'=>$clicks]);
         return view('front.product',compact('product','categories'));
@@ -741,6 +744,10 @@ class FrontPageController extends Controller
                                   ->orWhere('slug', 'like', $slug . '%')
                                   ->first();
 
+        if($product->status!='approved'){
+            return redirect('/sub/'.$product->subcategory->slug);
+        }
+
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
         }else {
@@ -762,6 +769,10 @@ class FrontPageController extends Controller
                                   ->orWhere('slug', 'like', $slug . '%')
                                   ->first();
 
+        if($product->status!='approved'){
+            return redirect('/sub/'.$product->subcategory->slug);
+        }
+
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
         }else {
@@ -782,6 +793,10 @@ class FrontPageController extends Controller
                                   ->where('slug','=',$slug)
                                   ->orWhere('slug', 'like', $slug . '%')
                                   ->first();
+
+        if($product->status!='approved'){
+            return redirect('/sub/'.$product->subcategory->slug);
+        }
 
         if($product->product_price < 5000){
             $minDeposit = 0.2*$product->product_price;
