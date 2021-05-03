@@ -213,6 +213,14 @@ class AdminController extends Controller
 
         $product = \App\Products::with('category','subcategory','third_level_category')->where('id','=',$id)->first();
 
+        if($product->weight != 0){
+            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
+        }else{
+            $weight_array = (['0','g']);
+        }
+
+        $product['weight'] = $weight_array;
+
         return view('backoffice.products.view',compact('product'));
 
      }
@@ -796,6 +804,14 @@ class AdminController extends Controller
     {
         $product = \App\Products::with('category','subcategory','brand','third_level_category')->where('id','=',$id)->first();
 
+        if($product->weight != 0){
+            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
+        }else{
+            $weight_array = (['0','g']);
+        }
+
+        $product['weight'] = $weight_array;
+        
         $categories = DB::table('categories')->get();
 
         $subcategories = DB::table('sub_categories')->get();

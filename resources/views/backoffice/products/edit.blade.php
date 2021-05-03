@@ -155,7 +155,7 @@
            <div class="col-md-6">
            <div class="form-group">
             <label class="">Product Weight</label>
-                <input min="1" tclass="form-control" value="{{$product->weight[0]}}" name="weight" placeholder="Enter Product weight" type="number" class="form-control @if($errors->has('weight')) invalid_field @endif" required>
+                <input min="1" step=".01" tclass="form-control" value="{{$product->weight[0]}}" name="weight" placeholder="Enter Product weight" type="number" class="form-control @if($errors->has('weight')) invalid_field @endif" required>
                
                 @error('weight')
                             <div class="invalid-feedback">
