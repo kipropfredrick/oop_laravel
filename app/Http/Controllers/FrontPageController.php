@@ -22,6 +22,13 @@ class FrontPageController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+    private function roundToTheNearestAnything($value, $roundTo)
+    {
+        $mod = $value%$roundTo;
+        return $value+($mod<($roundTo/2)?-$mod:$roundTo-$mod);
+    }
+
      
     public function update_categories(){
         
@@ -900,6 +907,7 @@ class FrontPageController extends Controller
 
            $total_cost = ($product->product_price + $shipping_cost);
 
+           $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
 
            $booking_reference = 'MM'.rand(10000,99999);
 
@@ -995,7 +1003,8 @@ class FrontPageController extends Controller
 
         $total_cost = $product->product_price + $shipping_cost;
 
-
+        $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
+        
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
 
         if($existingUser!=null)
