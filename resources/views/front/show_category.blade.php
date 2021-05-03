@@ -113,7 +113,14 @@
                     @endforeach
            </div>
 
-           <!-- <div style="margin-left:5px">{{ $products->render()}}</div> -->
+           
+           @if($count==0)
+                <div class="text-center">
+                    <img class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                    <h6 class="text-center">No Products Found!</h6>
+                </div>
+            @endif
+           
              
             </div>
 
@@ -171,7 +178,12 @@
                         </div>
                     </div>
                     @empty
-                    <div class="text-center">No products</div>
+                    
+                    <div class="text-center">
+                        <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                        <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
+                    </div>
+
                     @endforelse
 
                 </div>

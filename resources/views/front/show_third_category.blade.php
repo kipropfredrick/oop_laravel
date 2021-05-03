@@ -46,7 +46,7 @@
             <div class="ht mb-3">
                 <h5>{{$thirdlevel_category->name}}</h5>
 
-                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('third_level_category_id',$category->id)->count(); ?>
+                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('third_level_category_id',$thirdlevel_category->id)->count(); ?>
 
                 <div>
                     <div class="filters">
@@ -121,6 +121,13 @@
                     @endforeach
            </div>
 
+            @if($count==0)
+                <div class="text-center">
+                    <img class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                    <h6 class="text-center">No Products Found!</h6>
+                </div>
+            @endif
+
            <!-- <div style="margin-left:5px">{{ $products->render()}}</div> -->
              
             </div>
@@ -179,7 +186,10 @@
                         </div>
                     </div>
                     @empty
-                    <div class="text-center">No products</div>
+                        <div class="text-center">
+                            <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                            <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
+                        </div>
                     @endforelse
 
                 </div>

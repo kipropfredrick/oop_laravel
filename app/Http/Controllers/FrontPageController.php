@@ -371,7 +371,7 @@ class FrontPageController extends Controller
         }
     }
 
-    public function thirdlevelcategory(Request $request,$slug){
+    public function thirdlevelcategory(Request $request,$subcategory,$slug){
 
         $sort_by = $request->sort_by;
         
@@ -555,7 +555,7 @@ class FrontPageController extends Controller
 
     }
 
-    public function thirdlevelcategory_load_more(Request $request,$slug){
+    public function thirdlevelcategory_load_more(Request $request,$subcategory,$slug){
 
         $sort_by = $request->sort_by;
 

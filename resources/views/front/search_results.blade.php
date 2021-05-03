@@ -31,7 +31,7 @@
     <div class="container">
         <div>
             <div class="ht mb-3">
-                <h5>{{ucfirst($search)}} Search Results</h5>
+                <h5>Search Results for : "{{ucfirst($search)}}"</h5>
 
                 <?php 
                 
@@ -120,6 +120,15 @@
                     </div>
                     @endforeach
            </div>
+
+
+           @if($count==0)
+                <div class="text-center">
+                    <img class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                    <h6 class="text-center">No Products Found!</h6>
+                </div>
+            @endif
+
            <!-- <div style="margin-left:5px">{{ $products->render()}}</div> -->
 
            <?php 

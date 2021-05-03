@@ -53,6 +53,11 @@ class Handler extends ExceptionHandler
 
         // return response()->view('errors.default');
 
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) 
+        {
+            return redirect('/');
+        } 
+
         return parent::render($request, $exception);
     }
 }
