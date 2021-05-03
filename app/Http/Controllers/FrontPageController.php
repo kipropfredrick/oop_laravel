@@ -894,9 +894,8 @@ class FrontPageController extends Controller
                 $shipping_cost = 500;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
             $extra_kg = $product_weight[0] - 5;
-            $extra_cost = (30 * $extra_kg);
-            $vat = 0.16*$extra_cost;
-            $shipping_cost = 500 + $extra_cost + $vat;
+            $extra_cost = (50 * $extra_kg);
+            $shipping_cost = 500 + $extra_cost;
             }
 
            $total_cost = ($product->product_price + $shipping_cost);
@@ -979,7 +978,6 @@ class FrontPageController extends Controller
         }else{
             $weight_array = (['0','g']);
         }
-        
         // For Other counties
         $county = \App\Counties::find($request->county_id);
 
@@ -991,9 +989,8 @@ class FrontPageController extends Controller
             $shipping_cost = 500;
         }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
             $extra_kg = $product_weight[0] - 5;
-            $extra_cost = (30 * $extra_kg);
-            $vat = 0.16*$extra_cost;
-            $shipping_cost = 500 + $extra_cost + $vat;
+            $extra_cost = (50 * $extra_kg);
+            $shipping_cost = 500 + $extra_cost;
         }
 
         $total_cost = $product->product_price + $shipping_cost;
