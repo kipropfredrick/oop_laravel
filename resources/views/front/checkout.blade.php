@@ -63,7 +63,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="checkout-last-name">Email</label><span style="color:red">*</span>
-                                        <input required type="email" value="{{ old('email') }}" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address">
+                                        <input  type="email" value="{{ old('email') }}" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="checkout-company-name">Phone Number<span style="color:red">*</span>

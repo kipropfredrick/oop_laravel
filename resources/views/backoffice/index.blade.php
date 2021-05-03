@@ -296,7 +296,7 @@
                 <!-- small box -->
                 <div class="small-box bg-primary">
                   <div class="inner">
-                    <h3>{{number_format($activeBookingAmount)}}</h3>
+                    <h3>{{number_format($activeBookingsCount)}}</h3>
 
                     <h5>KES {{number_format($activeBookingAmount)}}</h5>
 
