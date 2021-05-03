@@ -418,6 +418,8 @@ class VendorController extends Controller
 
         $slug =  str_replace('/','-',$slug);
 
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
         $data['product_code'] = 'P'.rand(10,1000000);
         $data['product_image'] = $image;
         $data['slug'] = $slug;

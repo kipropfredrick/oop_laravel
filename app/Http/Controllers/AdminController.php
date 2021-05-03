@@ -257,6 +257,8 @@ class AdminController extends Controller
 
         $slug =  str_replace('/','-',$slug);
 
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
         $image = $request->file('category_icon');
     
             if(!Storage::disk('public')->exists('thumbnail')){
@@ -295,6 +297,8 @@ class AdminController extends Controller
 
         $slug =  str_replace('/','-',$slug);
 
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
         $image = $request->file('brand_icon');
     
             if(!Storage::disk('public')->exists('thumbnail')){
@@ -332,6 +336,8 @@ class AdminController extends Controller
             $slug =  str_replace(' ', '-', $request->brand_name);
 
             $slug =  str_replace('/','-',$slug);
+
+             $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
            $image = $request->file('brand_icon');
     
@@ -382,6 +388,8 @@ class AdminController extends Controller
         $slug =  str_replace(' ', '-', $request->category_name);
 
         $slug =  str_replace('/','-',$slug);
+
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
         $data['slug'] = $slug;
 
@@ -545,6 +553,8 @@ class AdminController extends Controller
         $slug =  str_replace(' ', '-', $slug);
 
         $slug =  str_replace('/','-',$slug);
+
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
         $data['product_code'] = 'P'.rand(10,1000000);
         $data['product_image'] = $image;
@@ -869,6 +879,8 @@ class AdminController extends Controller
 
         $slug =  str_replace('/','-',$slug);
 
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
         $data['slug'] = $slug;
 
         DB::table('sub_categories')->insert($data);
@@ -884,6 +896,8 @@ class AdminController extends Controller
         $slug =  str_replace(' ', '-', $request->name);
 
         $slug =  str_replace('/','-',$slug);
+
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
         $data['slug'] = $slug;
 
@@ -905,6 +919,8 @@ class AdminController extends Controller
 
         $slug =  str_replace('/','-',$slug);
 
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
         $data['slug'] = $slug;
 
         DB::table('third_level_categories')->where('id','=',$id)->update($data);
@@ -920,6 +936,8 @@ class AdminController extends Controller
         $slug =  str_replace(' ', '-', $request->name);
 
         $slug =  str_replace('/','-',$slug);
+
+         $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
         $data['slug'] = $slug;
 
