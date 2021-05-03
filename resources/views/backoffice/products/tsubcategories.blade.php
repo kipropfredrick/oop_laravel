@@ -106,15 +106,16 @@
                                     </div>
                                     </div>
                                 </div>
-                                </form>
                                 </div>
+                             </form>
+
 
 							<tr>
                                 <td>{{$index=$index+1}}.</td>
 								<td>{{$category->name}}</td>
                                 <td>
                                     <div class="row">
-                                        <a class="btn btn-outline-success" data-toggle="modal" data-target="#editModal{{$subcategory->id}}">Edit</a>
+                                        <a class="btn btn-outline-success" data-toggle="modal" data-target="#editModal{{$category->id}}">Edit</a>
                                     </div>
                                 </td>
                             </tr>
