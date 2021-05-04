@@ -60,7 +60,7 @@
                                 <div class="form-group row">
                                     <label class="col-3 col-form-label">Sort by:</label>
                                     <div class="col-7">
-                                         <form action="/tlc/{{$thirdlevel_category->slug}}" id="filter-form">
+                                         <form action="/tlc/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form">
                                             <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
                                                 @if ($sort_by == "id")
                                                     <option value="id">ID</option>
