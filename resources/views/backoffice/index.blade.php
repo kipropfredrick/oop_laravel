@@ -125,7 +125,7 @@ $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','
               <div class="icon">
                 <i class="ion ion-person"></i>
               </div>
-              <a href="/admin/customers" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/admin/customers/active" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
