@@ -128,7 +128,7 @@
 									</div>
 									</td>
 									<td>{{$booking->status}}</td>
-									<td><a class="btn btn-outline-danger" href="/admin/revoke-booking/{{$booking->id}}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a></td>
+									<td><a class="btn btn-outline-danger" href="/admin/remove-booking/{{$booking->id}}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a></td>
                                 </tr>
                             @endforeach
 						</tbody>

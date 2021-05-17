@@ -1113,6 +1113,11 @@ class AdminController extends Controller
         DB::table("users")->whereId($customers->user_id)->update(["balance"=>DB::table('bookings')->where('id','=',$id)->first()->amount_paid]);
         return back()->with('success','Booking revoked.');
     }
+      public function remove_booking($id){
+        DB::table('bookings')->where('id','=',$id)->delete();
+        
+        return back()->with('success','Booking removed.');
+    }
 
     public function complete_bookings(){
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('id', 'DESC')->limit(1)->get();

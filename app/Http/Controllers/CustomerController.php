@@ -81,17 +81,9 @@ else{
 }
 
 
-
-
-
-
-
-
-
-
-
-
 }
+
+
     public function pending_bookings(){
         $user = Auth::user();
         $customer = Customers::where('user_id','=',$user->id)->first();
