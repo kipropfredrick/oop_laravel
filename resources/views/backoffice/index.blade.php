@@ -198,7 +198,7 @@ $phone=$customer->phone;
         {{csrf_field()}}
          <div class="modal-body">
 <p> My Wallet Balance: KES {{$balance}} </p>
-<p >A service fee of 10 % will be charged</p>
+<p >A service fee of 30 % will be charged</p>
                      <div class="form-group col-12 m-0">
                         <label for="title">Phone Number</label>
                         <input type="text" name="phone" id="phone"

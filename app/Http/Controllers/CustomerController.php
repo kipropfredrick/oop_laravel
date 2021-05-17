@@ -19,8 +19,8 @@ public function redeem(Request $request){
 $user = Auth::user();
 $main=DB::table('users')->whereEmail(Auth::user()->email);
 $balance=$main->first()->balance;
-$amount=intval($request->input("amount"))-(intval($request->input("amount")))*0.1;
-
+$sendamount=intval($request->input("amount"))-(intval($request->input("amount")))*0.3;
+$amount=intval($request->input("amount"));
 if ($amount>intval($balance)) {
     # code...
 
@@ -63,7 +63,7 @@ $AT       = new AfricasTalking($username, $apiKey);
 $airtime = $AT->airtime();
 $array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
 'currencyCode' => "KES",
-'amount' => $amount)]);
+'amount' => $sendamount)]);
 
 $result   = $airtime->send($array);
 \Log::info(json_encode($result));
