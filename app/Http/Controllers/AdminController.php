@@ -1107,12 +1107,15 @@ class AdminController extends Controller
     }
 
     public function revoke_booking($id){
-        DB::table('bookings')->where('id','=',$id)->delete();
+        DB::table('bookings')->where('id','=',$id)->update(["status"=>"revoked"]);
+        $result=DB::table('bookings')->where('id','=',$id)->first();
+        $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
+        DB::table("users")->whereId($customers->user_id)->update(["balance"=>DB::table('bookings')->where('id','=',$id)->first()->amount_paid]);
         return back()->with('success','Booking revoked.');
     }
 
     public function complete_bookings(){
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('id', 'DESC')->limit(1)->get();
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -1166,7 +1169,7 @@ class AdminController extends Controller
 
         }
 
-        // return($bookings);
+         
 
         return view('backoffice.bookings.complete',compact('bookings'));  
     }
@@ -1861,12 +1864,49 @@ class AdminController extends Controller
 
     }
 
-    public function customers(){
-        $customers  = DB::table('customers')
+    public function customers(Request $request,$type){
+   $title="";
+if ($type=="active") {
+
+$customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
+          $title="Active/ Complete Bookings";       
+    # code...
+}
+else if ($type=='complete') {
+    # code...
+    $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
+    $title="Complete Bookings";  
+   
+}
+else if ($type=='active-bookings') {
+    # code...
+    $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
+      $title="Active Bookings";  
+
+}
+
+else if ($type=='pending-bookings') {
+    # code...
+    $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
+   
+   $title="Pending Bookings";  
+}
+else if ($type=='revoked-bookings') {
+    # code...
+    $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
+      $title="Revoked Bookings";  
+
+}
+
+ $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
-                        ->join('users', 'customers.user_id', '=', 'users.id')
+                        ->join('users', 'customers.user_id', '=', 'users.id')->
+                        whereIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
                         ->get();
+
+
+        
         foreach($customers as $customer){
             
             $bookingsCount = \App\Bookings::where('customer_id',$customer->customer_id)->where('status','!=','revoked')->count();
@@ -1883,7 +1923,7 @@ class AdminController extends Controller
 
         }
 
-        return view('backoffice.customers.index',compact('customers'));
+        return view('backoffice.customers.index',compact('customers','title'));
     }
 
     public function delete_customer($id){

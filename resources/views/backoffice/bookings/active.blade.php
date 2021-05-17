@@ -56,6 +56,7 @@
 								@else
 								<th class="thead">Commission</th>
 								@endif
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -109,6 +110,7 @@
 									?>
 									<td>KES {{number_format($commission)}}</td>
 									@endif
+									<td><a class="btn btn-outline-danger" href="/admin/revoke-booking/{{$booking->id}}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a></td>
 									</tr>
                             @endforeach
 						</tbody>

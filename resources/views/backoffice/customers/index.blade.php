@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive padding">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Customers</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>{{$title}}</strong></h6>
 		</div>
 		
 		<div class="container">

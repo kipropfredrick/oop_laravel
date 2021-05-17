@@ -316,18 +316,49 @@
 		<li class="nav-item">
 			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
 		</li>
-
+<!-- 
 		<li class="nav-item">
 			<a href="/admin/customers" class="nav-link {{ (request()->is('admin/customers')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Customers</p></a>
 		</li>
-
+ -->
 		<!-- <li class="nav-item">
 			<a href="/admin/vendors" class="nav-link {{ (request()->is('admin/vendors')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Vendors</p></a>
 		</li> -->
 
+
     <li class="nav-item">
       <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-users"></i>
+        <i class="fas fa-users"></i>
+        <p>
+          Customers
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+      
+         <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'active'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;Active Customers</p></a>
+        </li>
+         <li class="nav-item {{ (request()->is('admin/customers/complete')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'complete'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;CB Customers</p></a>
+        </li>
+         <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'active-bookings'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;AB Customers</p></a>
+        </li>
+         <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'pending-bookings'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;PB Customers</p></a>
+        </li>
+         <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'revoked-bookings'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;RB customers</p></a>
+        </li>
+ 
+      </ul>
+    </li>
+
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="fas fa-users"></i>
         <p>
           Vendors
           <i class="right fas fa-angle-left"></i>

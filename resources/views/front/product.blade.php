@@ -73,12 +73,26 @@
 
                             <div class="product-price">KSh. {{number_format($product->product_price)}}</div>
 
-                            <div class="mb-3">
-                                    <small>Book with only <strong>KSh.100</strong></small>
+                           <div class="mb-3">
+                                <div>
+                                    <span class="fa fa-check-circle"></span>
+                                    <small>Book with as little as <strong>KSh.100</strong></small>
+                                </div>
+
+                                <div>
+                                    <span class="fa fa-check-circle"></span>
+                                    <small>Pay the balance at <strong>your own pace</strong></small>
+                                </div>
+
+                                <div>
+                                    <span class="fa fa-check-circle"></span>
+                                    <small>Countrywide deliver upon <strong>completion of payment</strong></small>
+                                </div>
                             </div>
 
+
                             <div>
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Click to Order</a>
                             </div>
                             
                             <div class="highlights">

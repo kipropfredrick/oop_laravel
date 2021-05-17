@@ -21,7 +21,8 @@
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->count();
 
-        $customersCount = \App\Customers::count();
+$customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
+        $customersCount = \App\Customers::whereIn("id",$customers)->count();
         $vendorsCount = \App\Vendor::count();
                 
         ?>
@@ -119,7 +120,7 @@
               <div class="inner">
                 <h3>{{number_format($customersCount)}}</h3>
 
-                <p>Customers</p>
+                <p>Active Customers</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person"></i>
@@ -153,7 +154,7 @@
 
         $customer = auth()->user()->customer;
         $customer_id = $customer->id;;
-
+$phone=$customer->phone;
         $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->sum('total_cost');
         $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->count();
         $activeBookingAmount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->sum('total_cost');
@@ -164,11 +165,66 @@
         $completeBookingCount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->count();
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
+        $customers=DB::table('customers')->where('id','=',$customer_id)->first();
+        $balance=DB::table("users")->whereId($customers->user_id)->first()->balance;
                 
         ?>
-        
-
+       
         <div class="row">
+     <div style="float:right; width: 100%;">
+    @if(Session::has("success"))
+    <div class="alert alert-info float-right" role="alert">
+  {{Session::get("success")}}. 
+</div>
+
+    @endif
+
+    @if(Session::has("error"))
+    <div class="alert alert-danger float-right" role="alert">
+{{Session::get("error")}}. 
+</div>
+
+    @endif </div>
+         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Redeem Cash To Airtime</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form id="form" action="{{route('customer.redeem')}}" method="POST" class="form">
+        {{csrf_field()}}
+         <div class="modal-body">
+<p> My Wallet Balance: KES {{$balance}} </p>
+<p >A service fee of 10 % will be charged</p>
+                     <div class="form-group col-12 m-0">
+                        <label for="title">Phone Number</label>
+                        <input type="text" name="phone" id="phone"
+                               class="form-control"
+                               data-rule-maxlength="255"
+                               data-rule-required="true" value="{{$phone}}">
+                       
+                    </div>
+                     <div class="form-group col-12 m-0">
+                        <label for="title">Amount</label>
+                        <input type="text" name="amount" id="amount"
+                               class="form-control"
+                               data-rule-maxlength="255"
+                               data-rule-required="true" required="">
+                       
+                    </div>
+                    </div>
+                       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Reedem</button>
+      </div>
+       </form>
+ 
+    </div>
+  </div>
+</div>
 
 
         <div class="col-lg-3 col-6">
@@ -247,6 +303,27 @@
         
         
         </div>
+          <div class="row">
+             <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-secondary">
+              <div class="inner">
+                
+
+                <h5>KES  @if($activeBookingsCount=0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
+
+
+                <p>My Wallet Balance</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-wallet"></i>
+              </div>
+             @if($activeBookingAmount==0)  
+               <a href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter" class="small-box-footer mt-3">Redeem <i class="fas fa-arrow-circle-right"></i></a> @endif
+            </div>
+          </div>
+          </div>
+
 
         @elseif(auth()->user()->role == "vendor")
 

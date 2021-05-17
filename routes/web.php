@@ -128,6 +128,8 @@ Route::prefix('customer')->group(function () {
         Route::get('/complete-bookings','CustomerController@complete_bookings');
         Route::get('/active-bookings','CustomerController@active_bookings');
         Route::get('/revoked-bookings','CustomerController@revoked_bookings');
+        Route::post('/customer/redeem','CustomerController@redeem')->name('customer.redeem');
+        
     });
 });
 
@@ -278,7 +280,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/pending_bookings', 'AdminController@pending_bookings')->name('admin.pending_bookings');
     Route::get('/payments', 'AdminController@payments')->name('admin.payments');
     Route::get('/payment-callbacks', 'AdminController@payments_callbacks');
-    Route::get('/customers', 'AdminController@customers')->name('admin.customers');
+    Route::get('/customers/{type}', 'AdminController@customers')->name('admin.customers');
     Route::get('/delete-customer/{id}', 'AdminController@delete_customer');
     Route::get('/agents', 'AdminController@agents')->name('admin.agents');
     Route::get('/vendors', 'AdminController@vendors')->name('admin.vendors');
