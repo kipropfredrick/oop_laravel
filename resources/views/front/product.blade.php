@@ -86,7 +86,7 @@
 
                                 <div>
                                     <span class="fa fa-check-circle"></span>
-                                    <small>Countrywide deliver upon <strong>completion of payment</strong></small>
+                                    <small>Countrywide delivery upon <strong>completion of payment</strong></small>
                                 </div>
                             </div>
 
