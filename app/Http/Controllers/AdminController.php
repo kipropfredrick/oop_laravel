@@ -1902,11 +1902,18 @@ else if ($type=='revoked-bookings') {
       $title="Revoked Bookings";  
 
 }
+else if ($type=='inactive') {
+    # code...
+    $customers=\App\Bookings::->pluck('customer_id')->toArray();
+      $title="Inactive Customers";  
+
+}
+
 
  $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
                         ->join('users', 'customers.user_id', '=', 'users.id')->
-                        whereIn("customers.id",$customers)
+                        whereNotIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
                         ->get();
 

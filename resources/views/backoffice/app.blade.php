@@ -351,6 +351,9 @@
          <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'revoked-bookings'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;RB customers</p></a>
         </li>
+          <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'inactive'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;Inactive customers</p></a>
+        </li>
  
       </ul>
     </li>
