@@ -1904,7 +1904,7 @@ else if ($type=='revoked-bookings') {
 }
 else if ($type=='inactive') {
     # code...
-    $customers=\App\Bookings::->pluck('customer_id')->toArray();
+    $customers=\App\Bookings::pluck('customer_id')->toArray();
       $title="Inactive Customers";  
 
 }
