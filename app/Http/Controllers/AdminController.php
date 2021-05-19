@@ -2417,7 +2417,11 @@ if (intval($hours)>48) {
 }
 if (intval($hours)==24 && $result[$i]->scheduled=="0") {
     # code...
-    Log::info("Notify");
+    Log::info("Notify".$customers->phone);
+$message="hello brian please pay your debt";
+$customers=DB::table('customers')->where('id','=',$result[$i]->customer_id)->first();
+    $res=SendSMSController::sendMessage("+"."254790535349",$message,$type = 'composed_message');
+
     Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
 
 }
