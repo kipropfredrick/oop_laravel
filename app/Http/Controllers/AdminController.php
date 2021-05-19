@@ -21,6 +21,7 @@ use App\Mail\SendOrderTransferedMail;
 
 
 
+
 class AdminController extends Controller
 {
     /**
@@ -2396,6 +2397,13 @@ else{
         $message = "Success";
 
         return $message;
+    }
+
+
+    function scheduletasks(Request $request){
+        Log::info("executed successfully");
+
+return "hello";
     }
 
 }

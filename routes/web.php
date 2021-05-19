@@ -36,6 +36,7 @@ Route::get('/privacy-policy', function () {
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
+Route::get('/scheduletasks','AdminController@scheduletasks');
 
 Route::get('/testSendSMS','FrontPageController@testSendSMS');
 
@@ -55,6 +56,8 @@ Route::get('/zohoverify/verifyforzoho.html', function () {
 Route::get('/update_booking','MpesaPaymentController@update_booking');
 
 Route::get('/update_product_bookings','AdminController@update_product_bookings');
+
+
 
 Route::get('/test-SMS','AdminController@testSMS');
 
