@@ -11,7 +11,7 @@
         <?php 
 
         $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->sum('total_cost');
-        $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->count();
+        $totalBookingCount = \App\Bookings::distinct('customer_id')->where('amount_paid','>',0)->count();
         $productsCount = \App\Products::where('status','=','approved')->count();
         $activeBookingAmount = \App\Bookings::where('status','=','active')->sum('total_cost');
         $activeBookingsCount = \App\Bookings::distinct('customer_id')->where('status','=','active')->count();
