@@ -2410,7 +2410,7 @@ else{
     $today =  Carbon::now();
 $createdDate = Carbon::parse($result[$i]->created_at);
 $hours=$today->diffInHours($createdDate);
-Log::info($hours."     " .$createdDate);
+Log::info($hours."     " .$createdDate ."  " .$today);
 
 
 
