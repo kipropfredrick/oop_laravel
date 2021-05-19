@@ -2418,6 +2418,8 @@ if (intval($hours)>48) {
 if (intval($hours)==24 && $result[$i]->scheduled=="0") {
     # code...
     Log::info("Notify");
+    Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
+
 }
 //Log::info($hours."     " .$createdDate ."  " .$today);
 
