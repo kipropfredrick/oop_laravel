@@ -2410,6 +2410,7 @@ else{
    
 $createdDate = Carbon::parse($result[$i]->created_at);
 $hours=$today->diffInHours($createdDate);
+Log::info($hours."     " .$createdDate ."  " .$today);
 if (intval($hours)>48) {
     Bookings::whereId($result[$i]->id)->delete();
     # code...
