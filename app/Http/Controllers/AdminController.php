@@ -2403,6 +2403,9 @@ else{
 
     function scheduletasks(Request $request){
         //Log::info("executed successfully");
+
+        // use cron jobs for linux/ubuntu to schedule task update 
+        
    $result=Bookings::whereStatus("pending")->latest()->get();
  $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) { 
