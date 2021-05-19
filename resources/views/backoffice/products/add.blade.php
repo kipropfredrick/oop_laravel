@@ -221,7 +221,7 @@
             <label class="">Highlights</label>
                 
                
-                 <textarea name="highlights" id="highlights1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('highlights')) invalid_field @endif" required></textarea> 
+                 <textarea name="highlights" id="highlights1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('highlights')) invalid_field @endif" ></textarea> 
                   @error('highlights')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -236,7 +236,7 @@
 
 
                                
-                     <textarea name="description" id="description1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('description')) invalid_field @endif" required></textarea> 
+                     <textarea name="description" id="description1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('description')) invalid_field @endif" ></textarea> 
                 @error('description')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -271,11 +271,11 @@ new Vue({
             }),
             mounted() {
                 ClassicEditor
-                    .create(document.querySelector('#highlights'))
+                    .create(document.querySelector('#highlights1'))
                     .then( editor => console.log( editor ))
                     .catch( error => console.error( error ));
                         ClassicEditor
-                    .create(document.querySelector('#description'))
+                    .create(document.querySelector('#description1'))
                     .then( editor => console.log( editor ))
                     .catch( error => console.error( error ))
 
