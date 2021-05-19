@@ -18,6 +18,7 @@ use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
+use \App\Bookings;
 
 
 
@@ -2401,8 +2402,21 @@ else{
 
 
     function scheduletasks(Request $request){
-        Log::info("executed successfully");
+        //Log::info("executed successfully");
+   $result=Bookings::whereStatus("pending")->latest()->get();
 
+   for ($i=0; $i <count($result) ; $i++) { 
+       # code...
+    $today =  Carbon::now();
+$createdDate = Carbon::parse($result[$i]->created_at);
+$hours=$today->diffInHours($createdDate);
+Log::info($hours);
+
+
+
+   }
+        // $result=DB::table('bookings')->where('id','=',$id)->first();
+        // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
 return "hello";
     }
 
