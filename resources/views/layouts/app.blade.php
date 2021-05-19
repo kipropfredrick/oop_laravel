@@ -4,7 +4,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="Lipia your favourite items Mos Mos and get them delivered to your doorstep upon payment completion.">
+        <meta name="description" content="Order your favourite product, lipa pole pole at 0% interest, get your order delivered upon completion of payment.">
         <meta name="keywords" content="Lipa Pole Pole, Lipa Mos Mos , Lipa Later, Lipa Mdogo Mdogo">
         <meta name="author" content="Rdfyne Technologies Limited">
         

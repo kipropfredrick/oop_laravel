@@ -951,7 +951,7 @@ class FrontPageController extends Controller
 
         $recipients = $valid_phone;
        
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
         
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -1124,7 +1124,7 @@ $booking->status = "active";
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit);
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
@@ -1191,7 +1191,7 @@ $booking->status = "active";
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
@@ -1255,7 +1255,7 @@ $booking->status = "active";
 
        $recipients = $valid_phone;
 
-       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit);
+       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
