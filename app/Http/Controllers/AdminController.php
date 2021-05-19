@@ -1871,6 +1871,7 @@ class AdminController extends Controller
 
     public function customers(Request $request,$type){
    $title="";
+
 if ($type=="active") {
 
 $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
@@ -1909,13 +1910,25 @@ else if ($type=='inactive') {
 
 }
 
-
- $customers  = DB::table('customers')
+if ($type=="inactive") {
+     $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
                         ->join('users', 'customers.user_id', '=', 'users.id')->
                         whereNotIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
                         ->get();
+    # code...
+}
+else{
+      $customers  = DB::table('customers')
+                        ->select('customers.*','customers.id AS customer_id','users.*')
+                        ->join('users', 'customers.user_id', '=', 'users.id')->
+                        whereIn("customers.id",$customers)
+                        ->orderBy('customers.id', 'DESC')
+                        ->get(); 
+}
+
+
 
 
         

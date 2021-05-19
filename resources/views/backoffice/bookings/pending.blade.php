@@ -90,13 +90,7 @@
 									<td>{{$booking->agent}}</td>
 									@endif
 									<td>
-										@if($booking->county !=null)
-										 {{$booking->county->county_name}} County,{{$booking->location['town']}} @if(isset($booking->location['center_name'])) Town ({{$booking->location['center_name']}}) @else {{ $booking->exact_location}} @endif
-										@elseif(isset($booking->zone))
-										 {{$booking->zone->zone_name}} ({{$booking->dropoff['dropoff_name']}})
-										@else
-										 No Location
-										@endif
+									
 									</td>
 									@if(auth()->user()->role !== 'vendor')
 									<td>
