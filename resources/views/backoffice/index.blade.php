@@ -14,7 +14,7 @@
         $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->count();
         $productsCount = \App\Products::where('status','=','approved')->count();
         $activeBookingAmount = \App\Bookings::where('status','=','active')->sum('total_cost');
-        $activeBookingsCount = \App\Bookings::where('status','=','active')->count();
+        $activeBookingsCount = \App\Bookings::distinct('customer_id')->where('status','=','active')->count();
         $overdueBookingAmount = \App\Bookings::where('status','=','overdue')->sum('total_cost');
         $completeBookingAmount = \App\Bookings::where('status','=','complete')->sum('total_cost');
         $completeBookingCount = \App\Bookings::where('status','=','complete')->count();
