@@ -2404,13 +2404,20 @@ else{
     function scheduletasks(Request $request){
         //Log::info("executed successfully");
    $result=Bookings::whereStatus("pending")->latest()->get();
-
+ $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) { 
        # code...
-    $today =  Carbon::now();
+   
 $createdDate = Carbon::parse($result[$i]->created_at);
 $hours=$today->diffInHours($createdDate);
-
+if (intval($hours)>48) {
+    Bookings::whereId($result[$i]->id)->delete();
+    # code...
+}
+if (intval($hours)==24 && $result[$i]->scheduled=="0") {
+    # code...
+    Log::info("Notify");
+}
 //Log::info($hours."     " .$createdDate ."  " .$today);
 
 
