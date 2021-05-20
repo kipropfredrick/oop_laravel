@@ -275,7 +275,7 @@
                   <p>Revoked Bookings</p>
                 </a>
               </li>
-              <li class="nav-item">
+            <!--   <li class="nav-item">
                 <a href="/admin/delivered_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Delivered Bookings</p>
@@ -286,7 +286,7 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>Confirmed Deliveries</p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="/admin/unserviced_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>

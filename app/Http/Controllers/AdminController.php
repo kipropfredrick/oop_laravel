@@ -1026,9 +1026,9 @@ class AdminController extends Controller
 
     public function active_bookings(){
 
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC')->limit(1)->get();
 
-        // return $bookings;
+
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -1344,6 +1344,8 @@ class AdminController extends Controller
     }
 
     public function overdue_bookings(){
+
+        $this->updateunservicedoverdue();
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
@@ -1768,6 +1770,11 @@ class AdminController extends Controller
     }
 
     public function unserviced_bookings(){
+
+$this->updateunservicedoverdue();
+
+
+// $bookings=\App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->orderBy('id', 'DESC')->limit(1)->get();
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
@@ -2433,5 +2440,20 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
         // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
 return "hello";
     }
+    function updateunservicedoverdue(){
+        $result=Bookings::whereIn("status",["active","unserviced"])->get();
+for ($i=0; $i <count($result) ; $i++) { 
+    # code..
+    $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
+   if ($res==1) {
+       # code...
+     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->orderBy('id', 'DESC')->update(["status"=>"unserviced"]);
+   }
+   else{
+     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->orderBy('id', 'DESC')->update(["status"=>"overdue"]);
+   
+   }
 
+}
+    }
 }
