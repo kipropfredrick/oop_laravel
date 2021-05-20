@@ -1347,7 +1347,7 @@ class AdminController extends Controller
 
         $this->updateunservicedoverdue();
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->orderBy('id', 'DESC')->get();
-return $bookings;
+
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
