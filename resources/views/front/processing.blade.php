@@ -185,7 +185,7 @@
             document.getElementById('amntMsg').innerHTML = amount;
             document.getElementById('bkgRefMsgIntro').innerHTML = " and Account Number : ";
             document.getElementById('bkgRefMsg').innerHTML = payment_ref;
-            document.getElementById('thankMsgBp').innerHTML = " , Thank you.";
+            document.getElementById('thankMsgBp').innerHTML = " , No payment received.";
         }
 
         }, 30000);

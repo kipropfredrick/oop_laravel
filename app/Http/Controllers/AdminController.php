@@ -796,8 +796,10 @@ class AdminController extends Controller
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
     $vendor->country  = $request->input('country');
-    $vendor->save();
 
+    $vendor->save();
+    $id = DB::getPdo()->lastInsertId();
+\App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
     return redirect('/admin/vendors')->with('success','Vendor Saved');
 
     }
@@ -1053,15 +1055,17 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "Lipa Mos Mos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin) agent";
                 }
 
 
             }elseif($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
+                    return $vendor;
                     $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){

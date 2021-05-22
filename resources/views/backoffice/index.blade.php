@@ -167,6 +167,25 @@ $phone=$customer->phone;
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
         $customers=DB::table('customers')->where('id','=',$customer_id)->first();
         $balance=DB::table("users")->whereId($customers->user_id)->first()->balance;
+
+        $existingUser = \App\User::where('email',  auth()->user()->email)->first();
+$email=auth()->user()->email;
+$hasbooking=false;
+        if($existingUser!=null)
+        {
+
+        $user = $existingUser;
+
+        $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
+
+
+        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+      }
                 
         ?>
        
@@ -225,6 +244,43 @@ $phone=$customer->phone;
     </div>
   </div>
 </div>
+
+  <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-secondary">
+              <div class="inner">
+                
+
+                <h5>KES  @if($activeBookingsCount=0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
+
+
+                <p>My Wallet Balance</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-wallet"></i>
+              </div>
+             @if($activeBookingAmount==0)  
+               <a href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter" class="small-box-footer mt-3">Redeem <i class="fas fa-arrow-circle-right"></i></a> @endif
+            </div>
+          </div>
+
+   <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h5>  KES @if($hasbooking) {{number_format($booking->amount_paid)}} @else 0 @endif</h5>
+
+                <h6>Balance KES @if($hasbooking) {{number_format($booking->balance)}} @else 0 @endif </h6>
+
+
+                <p>Payments</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-check-circle"></i>
+              </div>
+             <!--  <a href="/customer/complete-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+            </div>
+          </div>
 
 
         <div class="col-lg-3 col-6">
@@ -301,28 +357,9 @@ $phone=$customer->phone;
             </div>
           </div>
         
-        
+         
         </div>
-          <div class="row">
-             <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-secondary">
-              <div class="inner">
-                
-
-                <h5>KES  @if($activeBookingsCount=0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
-
-
-                <p>My Wallet Balance</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-wallet"></i>
-              </div>
-             @if($activeBookingAmount==0)  
-               <a href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter" class="small-box-footer mt-3">Redeem <i class="fas fa-arrow-circle-right"></i></a> @endif
-            </div>
-          </div>
-          </div>
+         
 
 
         @elseif(auth()->user()->role == "vendor")

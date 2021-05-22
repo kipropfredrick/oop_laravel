@@ -79,7 +79,7 @@
                                             $vendor_code = $vendor->vendor_code;
                                         }
                                         ?>
-                                        <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" type="hidden">
+                                        <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" >
                                         <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
                                         <input required name="name" type="text" class="form-control" id="checkout-first-name" value="{{ old('name') }}" placeholder="Full Name">
                                         </div>
