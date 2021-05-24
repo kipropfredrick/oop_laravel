@@ -279,7 +279,7 @@ $hasbooking=false;
                 <h6>Balance KES @if($hasbooking) {{number_format($booking->balance)}} @else 0 @endif </h6>
 
 
-                <p>Order Booking Summary</p>
+                <p>Payments</p>
               </div>
               <div class="icon">
                 <i class="fa fa-check-circle"></i>
@@ -296,7 +296,7 @@ $hasbooking=false;
 <div class="col-12 card ">
 <div class="table-responsive padding">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Payments</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>Order Booking Summary</strong></h6>
     </div>
     <div class="row mt-1">
 
