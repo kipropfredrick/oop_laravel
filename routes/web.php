@@ -132,6 +132,7 @@ Route::prefix('customer')->group(function () {
         Route::get('/active-bookings','CustomerController@active_bookings');
         Route::get('/revoked-bookings','CustomerController@revoked_bookings');
         Route::post('/customer/redeem','CustomerController@redeem')->name('customer.redeem');
+        Route::get('/payments', 'FrontPageController@payments')->name('customer.payments');
         
     });
 });

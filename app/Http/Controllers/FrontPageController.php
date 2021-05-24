@@ -1468,6 +1468,22 @@ $booking->status = "active";
 
     }
 
+    public function payments(){
+        // $payments =  DB::table('payments')->get();
+        if ((auth()->user())==null) {
+            # code...
+            return back();
+        }
+$id=auth()->user()->id;
+
+$customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+
+         
+
+        return view('backoffice.payments.index',compact('payments'));
+    }
+
     
 
 }

@@ -1893,7 +1893,7 @@ $this->updateunservicedoverdue();
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->orderBy('id', 'DESC')->get();
 
-        // return($payments);
+         
 
         return view('backoffice.payments.index',compact('payments'));
     }
