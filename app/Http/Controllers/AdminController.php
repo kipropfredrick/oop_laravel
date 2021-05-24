@@ -1127,7 +1127,7 @@ $balance=DB::table('bookings')->find($customerbookings->id)->balance;
 
 $newamount_paid=intval($amount_paid)+ intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
 $newbalance=intval(DB::table('bookings')->find($customerbookings->id)->balance) -intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
-DB::table('bookings')->find($customerbookings->id)->update(["balance"=>$newbalance,"amount_paid"=>$newamount_paid]);
+DB::table('bookings')->whereId($customerbookings->id)->update(["balance"=>$newbalance,"amount_paid"=>$newamount_paid]);
 
 
 
