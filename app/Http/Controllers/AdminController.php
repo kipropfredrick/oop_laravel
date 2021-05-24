@@ -1116,7 +1116,31 @@ class AdminController extends Controller
         DB::table('bookings')->where('id','=',$id)->update(["status"=>"revoked"]);
         $result=DB::table('bookings')->where('id','=',$id)->first();
         $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
-        DB::table("users")->whereId($customers->user_id)->update(["balance"=>DB::table('bookings')->where('id','=',$id)->first()->amount_paid]);
+
+$customerbookings=DB::table('bookings')->where('customer_id','=',$result->customer_id)->where("status","=","active")->first();
+
+if ($customerbookings!=null) {
+    # code...
+
+$amount_paid=DB::table('bookings')->find($customerbookings->id)->amount_paid;
+$balance=DB::table('bookings')->find($customerbookings->id)->balance;
+
+$newamount_paid=intval($amount_paid)+ intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+$newbalance=intval(DB::table('bookings')->find($customerbookings->id)->balance) -intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+DB::table('bookings')->find($customerbookings->id)->update(["balance"=>$newbalance,"amount_paid"=>$newamount_paid]);
+
+
+
+}
+else{
+$balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance) +intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+     DB::table("users")->whereId($customers->user_id)->update(["balance"=>$balance]);
+}
+
+       
+
+
+
         return back()->with('success','Booking revoked.');
     }
       public function remove_booking($id){
