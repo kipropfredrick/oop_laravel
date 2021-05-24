@@ -473,6 +473,7 @@
           <li class="nav-item"><a href="/customer/active-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Active Bookings</span></a></li>
 					<li class="nav-item"><a href="/customer/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Complete Bookings</span></a></li>
 					<li class="nav-item"><a href="/customer/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Revoked Bookings</span></a></li>
+            <li class="nav-item"><a href="/customer/payments" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Payments</span></a></li>
 				</ul>
 			</li>
 		 @endif

@@ -245,7 +245,13 @@ $hasbooking=false;
   </div>
 </div>
 
-  <div class="col-lg-3 col-6">
+<div class="col-12 card ">
+<div class="table-responsive padding">
+        <div class="card-header header-elements-inline">
+            <h6 style="color: #005b77;" class="card-title"><strong>Wallet and Payments</strong></h6>
+    </div>
+    <div class="row mt-1">
+      <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-secondary">
               <div class="inner">
@@ -273,15 +279,26 @@ $hasbooking=false;
                 <h6>Balance KES @if($hasbooking) {{number_format($booking->balance)}} @else 0 @endif </h6>
 
 
-                <p>Payments</p>
+                <p>Order Booking Summary</p>
               </div>
               <div class="icon">
                 <i class="fa fa-check-circle"></i>
               </div>
-             <!--  <a href="/customer/complete-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+              <a href="/customer/payments" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+    </div>
+    
+  
+                </div>
+             </div>
 
+<div class="col-12 card ">
+<div class="table-responsive padding">
+        <div class="card-header header-elements-inline">
+            <h6 style="color: #005b77;" class="card-title"><strong>Payments</strong></h6>
+    </div>
+    <div class="row mt-1">
 
         <div class="col-lg-3 col-6">
             <!-- small box -->
@@ -356,6 +373,11 @@ $hasbooking=false;
               <a href="/customer/revoked-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+             </div>
+    
+  
+                </div>
+             </div>
         
          
         </div>
