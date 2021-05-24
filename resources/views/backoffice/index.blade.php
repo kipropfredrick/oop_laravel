@@ -251,7 +251,7 @@ $hasbooking=false;
               <div class="inner">
                 
 
-                <h5>KES  @if($activeBookingsCount=0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
+                <h5>KES  @if($activeBookingsCount==0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
 
 
                 <p>My Wallet Balance</p>
