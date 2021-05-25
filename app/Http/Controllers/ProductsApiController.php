@@ -42,6 +42,15 @@ $bestSellers = \App\Products::with('category','subcategory')
 
      }
 
+     function  trendingProducts(Request $request){
+         $trendingProducts = \App\Products::with('category','subcategory')
+                            ->where('status','=','approved')
+                            ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+
+
+        return $trendingProducts;
+     }
+
 
   
 }
