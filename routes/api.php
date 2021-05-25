@@ -22,3 +22,5 @@ Route::post('/get-categories','AdminController@fetch_sub_categories');
 Route::post('/get-third-categories','AdminController@get_third_categories');
 
 Route::get('/productcategory','ProductsApiController@productCategories');
+
+Route::get('/weeklybestsellers','ProductsApiController@weeklybestsellers');

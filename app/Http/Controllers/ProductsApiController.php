@@ -33,6 +33,15 @@ $result=Categories::get();
 return $result;
      }
 
+     function weeklybestsellers(Request $request){
+$bestSellers = \App\Products::with('category','subcategory')
+                        ->where('status','=','approved')
+                        ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+
+    return $bestSellers;
+
+     }
+
 
   
 }
