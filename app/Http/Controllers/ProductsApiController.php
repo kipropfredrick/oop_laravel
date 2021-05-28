@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Categories;
+use App\SubCategories;
 class ProductsApiController extends Controller
 {
     /**
@@ -52,7 +53,7 @@ $bestSellers = \App\Products::with('category','subcategory')
      }
 
      function subcategories(Request $request){
-$result=Categories::whereCategory_id($request->id)->get();
+$result=SubCategories::whereCategory_id($request->id)->get();
 return $result;
        
 
