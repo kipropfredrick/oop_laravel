@@ -36,7 +36,7 @@ return $result;
      function weeklybestsellers(Request $request){
 $bestSellers = \App\Products::with('category','subcategory')
                         ->where('status','=','approved')
-                        ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+                        ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
 
     return $bestSellers;
 
@@ -45,10 +45,22 @@ $bestSellers = \App\Products::with('category','subcategory')
      function  trendingProducts(Request $request){
          $trendingProducts = \App\Products::with('category','subcategory')
                             ->where('status','=','approved')
-                            ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+                            ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
 
 
         return $trendingProducts;
+     }
+
+     function subcategories(Request $request){
+$result=Categories::whereCategory_id($request->id)->get();
+return $result;
+       
+
+     }
+
+     function subcategoriesProducts(Request $request){
+       $result=Products::whereSubcategory_id($request->id)->get();
+return $result; 
      }
 
 
