@@ -61,7 +61,7 @@ return $result;
      }
 
      function subcategoriesProducts(Request $request){
-       $result=Products::whereSubcategory_id($request->id)->get();
+       $result=Products::whereSubcategory_id($request->id)->limit(6)->get();
 return $result; 
      }
 
