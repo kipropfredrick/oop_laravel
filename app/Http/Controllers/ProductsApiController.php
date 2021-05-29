@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Categories;
 use App\SubCategories;
+use App\Products;
 class ProductsApiController extends Controller
 {
     /**
