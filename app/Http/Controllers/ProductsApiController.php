@@ -47,8 +47,7 @@ for ($i=0; $i <count($result) ; $i++) {
     $cat['icon']=$result[$i]->category_icon;
     $cat['slug']=$result[$i]->slug;
     $res['category']=$cat;
-return $result[$i];
-    $subcategories=SubCategories::whereCategory_id($result[$i])->get();
+    $subcategories=SubCategories::whereCategory_id($result[$i]->id)->get();
 
     $midres=Array();
     $midresult=[];
