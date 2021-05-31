@@ -42,11 +42,11 @@ for ($i=0; $i <count($result) ; $i++) {
     $res=Array();
     //cat for category
     $cat=Array();
-    $cat->name=$result[$i]->category_name;
-    $cat->id=$result[$i]->id;
-    $cat->icon=$result[$i]->category_icon;
-    $cat->slug=$result[$i]->slug;
-    $res->category=$cat;
+    $cat['name']=$result[$i]->category_name;
+    $cat['id']=$result[$i]->id;
+    $cat['icon'=$result[$i]->category_icon;
+    $cat['slug']=$result[$i]->slug;
+    $res['category']=$cat;
 
     $subcategories=SubCategories::whereCategory_id($request->id)->get();
 
@@ -58,18 +58,18 @@ for ($i=0; $i <count($result) ; $i++) {
         //subcat defines sub category
 
         $subcat=Array();
-        $subcat->id=$subcategories[$i]->id;
-        $subcat->name=$subcategories[$i]->subcategory_name;
-        $subcat->slug=$subcategories[$i]->slug;
-        $subcat->subcategory=$subcat;
+        $subcat['id']=$subcategories[$i]->id;
+        $subcat['name']=$subcategories[$i]->subcategory_name;
+        $subcat['slug']=$subcategories[$i]->slug;
+        $subcat['subcategory']=$subcat;
 
-        $subcat->products=Products::whereSubcategory_id($subcategories[$i]->id)->limit(6)->get();
+        $subcat['products']=Products::whereSubcategory_id($subcategories[$i]->id)->limit(6)->get();
 array_push($midresult, $subcat);
 
 
     }
 
-    $res->data=$midresult;
+    $res['data']=$midresult;
     array_push($finalResult,$res);
 
 
