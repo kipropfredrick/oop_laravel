@@ -57,12 +57,12 @@ for ($i=0; $i <count($result) ; $i++) {
         //subcat defines sub category
 
         $subcat=Array();
-        $subcat['id']=$subcategories[$i]->id;
-        $subcat['name']=$subcategories[$i]->subcategory_name;
-        $subcat['slug']=$subcategories[$i]->slug;
+        $subcat['id']=$subcategories[$j]->id;
+        $subcat['name']=$subcategories[$j]->subcategory_name;
+        $subcat['slug']=$subcategories[$j]->slug;
         $subcat['subcategory']=$subcat;
 
-        $subcat['products']=Products::whereSubcategory_id($subcategories[$i]->id)->limit(6)->get();
+        $subcat['products']=Products::whereSubcategory_id($subcategories[$j]->id)->limit(6)->get();
 array_push($midresult, $subcat);
 
 
