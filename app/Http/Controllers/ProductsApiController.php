@@ -44,7 +44,7 @@ for ($i=0; $i <count($result) ; $i++) {
     $cat=Array();
     $cat['name']=$result[$i]->category_name;
     $cat['id']=$result[$i]->id;
-    $cat['icon'=$result[$i]->category_icon;
+    $cat['icon']=$result[$i]->category_icon;
     $cat['slug']=$result[$i]->slug;
     $res['category']=$cat;
 
