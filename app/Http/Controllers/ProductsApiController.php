@@ -7,6 +7,8 @@ use App\Categories;
 use App\SubCategories;
 use App\Products;
 use App\Gallery;
+use App\User;
+use App\Customers;
 class ProductsApiController extends Controller
 {
     /**
@@ -106,6 +108,48 @@ return $result;
 function getGallery(Request $request){
      $result=Gallery::whereProduct_id($request->id)->get();
 return $result; 
+}
+
+
+function customerOrders(Request $request){
+$username=$request->input("username");
+$customer=Customers::wherePhone($username)->first();
+
+ 
+        $customer_id = $customer->id;;
+$phone=$customer->phone;
+        $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->sum('total_cost');
+        $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->count();
+        $activeBookingAmount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->sum('total_cost');
+        $activeBookingsCount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->count();
+        $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->sum('total_cost');
+        $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->count();
+        $completeBookingAmount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->sum('total_cost');
+        $completeBookingCount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->count();
+        $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->sum('total_cost');
+        $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
+        $customers=DB::table('customers')->where('id','=',$customer_id)->first();
+        $balance=DB::table("users")->whereId($customers->user_id)->first()->balance;
+
+
+$hasbooking=false;
+        if($customer!=null)
+        {
+
+        
+
+
+        $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+      }
+
+      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking);
+                
+        
 }
 
   
