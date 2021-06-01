@@ -34,9 +34,6 @@ class ProductsApiController extends Controller
 $result=Categories::get();
 $finalResult=[];
 
-//$result=SubCategories::whereCategory_id($request->id)->get();
-//$result=Products::whereSubcategory_id($request->id)->limit(6)->get();
-
 for ($i=0; $i <count($result) ; $i++) { 
     # code...
     $res=Array();
@@ -62,7 +59,7 @@ for ($i=0; $i <count($result) ; $i++) {
         $subcat['slug']=$subcategories[$j]->slug;
         $subcat['subcategory']=$subcat;
 
-        $subcat['products']=Products::whereSubcategory_id($subcategories[$j]->id)->limit(1)->get();
+        $subcat['products']=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(1)->get();
 array_push($midresult, $subcat);
 
 
