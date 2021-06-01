@@ -9,6 +9,7 @@ use App\Products;
 use App\Gallery;
 use App\User;
 use App\Customers;
+use DB;
 class ProductsApiController extends Controller
 {
     /**
