@@ -60,7 +60,7 @@ for ($i=0; $i <count($result) ; $i++) {
         $subcat['slug']=$subcategories[$j]->slug;
         $subcat['subcategory']=$subcat;
 
-        $subcat['products']=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(1)->get();
+        $subcat['products']=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(4)->get();
 array_push($midresult, $subcat);
 
 
