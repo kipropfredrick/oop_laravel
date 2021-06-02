@@ -182,7 +182,7 @@ function myAccount(Request $request){
 
           $phone="254".substr($username, 1);
         $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
-          $email= \App\User::whereUser_id( $existingCustomer->user_id)->first()->email;
+          $email= \App\User::whereId( $existingCustomer->user_id)->first()->email;
 
         }
         elseif($valid_email == 1){
