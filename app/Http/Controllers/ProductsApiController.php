@@ -182,7 +182,7 @@ function myAccount(Request $request){
 
           $phone="254".substr($username, 1);
         $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
-          $email=  $existingCustomer->email;
+          $email= \App\User::whereUser_id( $existingCustomer->user_id)->first()->email;
 
         }
         elseif($valid_email == 1){
@@ -199,7 +199,7 @@ function myAccount(Request $request){
             
         }
         else{
-return Array("response"=>"Iconccrect Uusername or password","error"=>true);
+return Array("response"=>"Incorrect Uusername or password","error"=>true);
         }
 
  } 
