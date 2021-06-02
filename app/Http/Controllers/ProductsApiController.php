@@ -199,7 +199,7 @@ function myAccount(Request $request){
             
         }
         else{
-return Array("response"=>"Invalid Email Or Phone Numeber","error"=>true);
+return Array("response"=>"Iconccrect Uusername or password","error"=>true);
         }
 
  } 
