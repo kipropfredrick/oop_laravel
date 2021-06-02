@@ -195,7 +195,8 @@ function myAccount(Request $request){
 
          if (Auth::attempt(["email"=>$email,"password"=>$password])) {
             // Authentication passed...
-            return Array("response"=>Auth()->user(),"error"=>false);
+            $phone=App\Customers::whereUser_id(Auth()->user()->id)->first()->phone;
+            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone);
             
         }
         else{
