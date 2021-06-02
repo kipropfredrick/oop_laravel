@@ -10,6 +10,7 @@ use App\Gallery;
 use App\User;
 use App\Customers;
 use DB;
+use Illuminate\Support\Facades\Auth;
 class ProductsApiController extends Controller
 {
     /**
@@ -164,5 +165,42 @@ $balance=$booking->balance;
         
 }
 
+
+function myAccount(Request $request){
+
+}
   
+
+ function login(Request $request){
+    $username=$request->input('username');
+    $password=$request->input('password');
+     $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $username,$p_matches);
+        //Valid email
+        $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $username, $e_matches);
+       
+        if ($valid_phone == 1 ) {
+
+          $phone="254".substr($username, 1);
+        $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
+          $email=  $existingCustomer->email;
+
+        }
+        elseif($valid_email == 1){
+           $email=$username;
+        }
+
+        else{
+            return Array("response"=>"Invalid Email Or Phone Numeber","error"=>true);
+        }
+
+         if (Auth::attempt(["email"=>$email,"password"=>$password])) {
+            // Authentication passed...
+            return Array("response"=>Auth()->user(),"error"=>false);
+            
+        }
+        else{
+return Array("response"=>"Invalid Email Or Phone Numeber","error"=>true);
+        }
+
+ } 
 }
