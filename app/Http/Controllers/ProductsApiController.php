@@ -148,7 +148,18 @@ $hasbooking=false;
         }
       }
 
-      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking);
+
+      if ($hasbooking) {
+$amountPaid=$booking->amount_paid;
+$balance=$booking->balance;
+          # code...
+      }
+      else{
+        $amountPai=0;
+        $balance=0;
+      }
+
+      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"balance"=>$balance);
                 
         
 }
