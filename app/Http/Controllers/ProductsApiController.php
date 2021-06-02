@@ -190,7 +190,7 @@ function myAccount(Request $request){
         }
 
         else{
-            return Array("response"=>"Invalid Email Or Phone Numeber","error"=>true);
+            return Array("response"=>"Invalid Email Or Phone Number","error"=>true);
         }
 
          if (Auth::attempt(["email"=>$email,"password"=>$password])) {
@@ -200,7 +200,7 @@ function myAccount(Request $request){
             
         }
         else{
-return Array("response"=>"Incorrect Uusername or password","error"=>true);
+return Array("response"=>"Incorrect Username or password","error"=>true);
         }
 
  } 
