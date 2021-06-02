@@ -31,3 +31,5 @@ Route::get('/subcategoriesProducts','ProductsApiController@subcategoriesProducts
 Route::get('/gallery','ProductsApiController@getGallery');
 
 Route::get('/myaccount','ProductsApiController@customerOrders');
+Route::get('/login','ProductsApiController@login');
+
