@@ -230,6 +230,7 @@ return $allPayments;
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
+            $booking['name']=\App\Products::whereId($booking->product_id)->first()->product_name;
         }
 
        return $bookings;
