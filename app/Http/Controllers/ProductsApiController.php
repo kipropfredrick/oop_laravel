@@ -131,7 +131,7 @@ $phone=$customer->phone;
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
         $customers=DB::table('customers')->where('id','=',$customer_id)->first();
-        $balance=DB::table("users")->whereId($customers->user_id)->first()->balance;
+        $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
 $hasbooking=false;
@@ -152,11 +152,11 @@ $hasbooking=false;
 
       if ($hasbooking) {
 $amountPaid=$booking->amount_paid;
-$bookingbalance=$booking->balance;
+$bookingbalance=intval($booking->balance);
           # code...
       }
       else{
-        $amountPai=0;
+        $amountPaid=0;
         $bookingbalance=0;
       }
 
