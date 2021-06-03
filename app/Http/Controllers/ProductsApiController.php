@@ -204,4 +204,14 @@ return Array("response"=>"Incorrect Username or password","error"=>true);
         }
 
  } 
+
+    public function payments(Request $request){
+
+
+$customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+
+         
+return $payments;
+    }
 }
