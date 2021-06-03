@@ -209,8 +209,14 @@ return Array("response"=>"Incorrect Username or password","error"=>true);
 
 
 $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
-        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+        $allPayments[];
+        return $payments;
+for ($i=0; $i < count($payment); $i++) { 
+    # code...
+    $array=Array("product"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']->transac_code,"order_reference"=>"");
 
+}
          
 return $payments;
     }
