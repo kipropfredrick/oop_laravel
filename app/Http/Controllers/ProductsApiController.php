@@ -221,4 +221,17 @@ for ($i=0; $i < count($payments); $i++) {
          
 return $allPayments;
     }
+
+      public function bookings(Request $request){
+        $username=$request->input("username");
+        $status=$request->input("status");
+        $customer = Customers::wherePhone($username)->first();
+        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->get();
+        foreach($bookings as $booking){
+            $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+            $booking['progress'] = $progress;
+        }
+
+       return $bookings;
+    }
 }

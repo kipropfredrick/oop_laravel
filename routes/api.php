@@ -34,4 +34,4 @@ Route::get('/myaccount','ProductsApiController@customerOrders');
 Route::get('/login','ProductsApiController@login');
 
 Route::get('/payments','ProductsApiController@payments');
-
+Route::get('/bookings','ProductsApiController@bookings');
