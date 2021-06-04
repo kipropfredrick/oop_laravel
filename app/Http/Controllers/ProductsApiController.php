@@ -37,7 +37,7 @@ class ProductsApiController extends Controller
      }
 
      function productCategories(Request $request){
-$result=Categories::limit(1)->get();
+$result=Categories::get();
 $finalResult=[];
 
 for ($i=0; $i <count($result) ; $i++) { 
@@ -50,7 +50,7 @@ for ($i=0; $i <count($result) ; $i++) {
     $cat['icon']=$result[$i]->category_icon;
     $cat['slug']=$result[$i]->slug;
     $res['category']=$cat;
-    $subcategories=SubCategories::whereCategory_id($result[$i]->id)->limit(2)->get();
+    $subcategories=SubCategories::whereCategory_id($result[$i]->id)->get();
 
     $midres=Array();
     $midresult=[];
