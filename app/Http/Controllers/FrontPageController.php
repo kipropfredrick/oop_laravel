@@ -736,6 +736,36 @@ class FrontPageController extends Controller
      */
     public function checkout(Request $request, $slug)
     {
+
+if ((auth()->user())!=null) {
+    # code...
+     $existingUser = \App\User::where('email',  auth()->user()->email)->first();
+}
+else
+{
+    $existingUser=null;
+}
+
+
+    # code...
+    if($existingUser!=null)
+        {
+if ($existingUser->role == "user" ) {
+
+        $user = $existingUser;
+
+        $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
+
+
+        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if($booking!=null){
+            return view('front.exists',compact('booking'));
+        }
+    }
+}
+        
+
         $categories = \App\Categories::all();
         $product_quantity = "1";
 
@@ -975,6 +1005,12 @@ class FrontPageController extends Controller
     }
 
     public function make_booking(Request $request){
+
+
+
+
+
+
 
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
@@ -1283,6 +1319,7 @@ $booking->status = "active";
 
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -1429,6 +1466,22 @@ $booking->status = "active";
            return "Error";
        }
 
+    }
+
+    public function payments(){
+        // $payments =  DB::table('payments')->get();
+        if ((auth()->user())==null) {
+            # code...
+            return back();
+        }
+$id=auth()->user()->id;
+
+$customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+
+         
+
+        return view('backoffice.payments.index',compact('payments'));
     }
 
     

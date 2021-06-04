@@ -9,9 +9,9 @@
     <!-- /.card-header -->
     <div class="card-body">
     @if(auth()->user()->role == 'admin')
-    <form action="/admin/save-product" method="post"  enctype="multipart/form-data">
+    <form action="/admin/save-product" method="post"  enctype="multipart/form-data" >
     @elseif(auth()->user()->role == 'vendor')
-    <form action="/vendor/save-product" method="post"  enctype="multipart/form-data">
+    <form action="/vendor/save-product" method="post"  enctype="multipart/form-data"  id="crud-form" >
     @endif
        @csrf
          <div class="row">
@@ -219,10 +219,10 @@
 
      <div class="form-group">
             <label class="">Highlights</label>
-                <textarea class="form-control" cols="30" rows="10" name="highlights" id="highlights" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('highlights')) invalid_field @endif" required>
+                
                
-                </textarea>
-                @error('highlights')
+                 <textarea name="highlights" id="highlights1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('highlights')) invalid_field @endif" ></textarea> 
+                  @error('highlights')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -232,14 +232,17 @@
 
         <div class="form-group">
             <label class="">Description</label>
-                <textarea tclass="form-control" cols="30" rows="10" name="description" id="description" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('description')) invalid_field @endif" required>
-               
-                </textarea>
+              
+
+
+                               
+                     <textarea name="description" id="description1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('description')) invalid_field @endif" ></textarea> 
                 @error('description')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-                 @enderror
+                 @enderror             
+                         
 
         </div>
 
@@ -257,8 +260,32 @@
 @endsection
 
 @section('extra-js')
-
+    <script src="{{ asset('js/ckeditor-classic.bundle.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
 <script type="text/javascript">
+new Vue({
+            el: '#crud-form',
+            data: () => ({
+                
+            }),
+            mounted() {
+                ClassicEditor
+                    .create(document.querySelector('#highlights1'))
+                    .then( editor => console.log( editor ))
+                    .catch( error => console.error( error ));
+                        ClassicEditor
+                    .create(document.querySelector('#description1'))
+                    .then( editor => console.log( editor ))
+                    .catch( error => console.error( error ))
+
+
+            },
+            computed: {
+               
+            }
+        })
+
 
     function filter(){
 

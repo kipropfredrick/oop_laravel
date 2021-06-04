@@ -18,6 +18,8 @@ use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
+use \App\Bookings;
+
 
 
 
@@ -794,8 +796,10 @@ class AdminController extends Controller
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
     $vendor->country  = $request->input('country');
-    $vendor->save();
 
+    $vendor->save();
+    $id = DB::getPdo()->lastInsertId();
+\App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
     return redirect('/admin/vendors')->with('success','Vendor Saved');
 
     }
@@ -1024,9 +1028,9 @@ class AdminController extends Controller
 
     public function active_bookings(){
 
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC')->get();
 
-        // return $bookings;
+
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -1051,15 +1055,17 @@ class AdminController extends Controller
                 }elseif(isset($influencer->user)){
                     $agent = $influencer->user->name.' (Influencer)';
                 }else{
-                    $agent = "Lipa Mos Mos (Admin)";
+                    $agent = "Lipa Mos Mos (Admin) agent";
                 }
 
 
             }elseif($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
+                    return $vendor;
                     $agent = "Lipa Mos Mos (Admin)";
                 }
             }elseif($booking->influencer_code !== null){
@@ -1110,7 +1116,31 @@ class AdminController extends Controller
         DB::table('bookings')->where('id','=',$id)->update(["status"=>"revoked"]);
         $result=DB::table('bookings')->where('id','=',$id)->first();
         $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
-        DB::table("users")->whereId($customers->user_id)->update(["balance"=>DB::table('bookings')->where('id','=',$id)->first()->amount_paid]);
+
+$customerbookings=DB::table('bookings')->where('customer_id','=',$result->customer_id)->where("status","=","active")->first();
+
+if ($customerbookings!=null) {
+    # code...
+
+$amount_paid=DB::table('bookings')->find($customerbookings->id)->amount_paid;
+$balance=DB::table('bookings')->find($customerbookings->id)->balance;
+
+$newamount_paid=intval($amount_paid)+ intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+$newbalance=intval(DB::table('bookings')->find($customerbookings->id)->balance) -intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+DB::table('bookings')->whereId($customerbookings->id)->update(["balance"=>$newbalance,"amount_paid"=>$newamount_paid]);
+
+
+
+}
+else{
+$balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance) +intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+     DB::table("users")->whereId($customers->user_id)->update(["balance"=>$balance]);
+}
+
+       
+
+
+
         return back()->with('success','Booking revoked.');
     }
       public function remove_booking($id){
@@ -1120,7 +1150,7 @@ class AdminController extends Controller
     }
 
     public function complete_bookings(){
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('id', 'DESC')->limit(1)->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -1342,6 +1372,8 @@ class AdminController extends Controller
     }
 
     public function overdue_bookings(){
+
+        $this->updateunservicedoverdue();
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
@@ -1766,6 +1798,11 @@ class AdminController extends Controller
     }
 
     public function unserviced_bookings(){
+
+$this->updateunservicedoverdue();
+
+
+// $bookings=\App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->orderBy('id', 'DESC')->limit(1)->get();
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
@@ -1856,7 +1893,7 @@ class AdminController extends Controller
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->orderBy('id', 'DESC')->get();
 
-        // return($payments);
+         
 
         return view('backoffice.payments.index',compact('payments'));
     }
@@ -1871,6 +1908,7 @@ class AdminController extends Controller
 
     public function customers(Request $request,$type){
    $title="";
+
 if ($type=="active") {
 
 $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
@@ -1909,13 +1947,25 @@ else if ($type=='inactive') {
 
 }
 
-
- $customers  = DB::table('customers')
+if ($type=="inactive") {
+     $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
                         ->join('users', 'customers.user_id', '=', 'users.id')->
                         whereNotIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
                         ->get();
+    # code...
+}
+else{
+      $customers  = DB::table('customers')
+                        ->select('customers.*','customers.id AS customer_id','users.*')
+                        ->join('users', 'customers.user_id', '=', 'users.id')->
+                        whereIn("customers.id",$customers)
+                        ->orderBy('customers.id', 'DESC')
+                        ->get(); 
+}
+
+
 
 
         
@@ -2385,4 +2435,53 @@ else if ($type=='inactive') {
         return $message;
     }
 
+
+    function scheduletasks(Request $request){
+        //Log::info("executed successfully");
+
+        // use cron jobs for linux/ubuntu to schedule task update 
+        
+   $result=Bookings::whereStatus("pending")->latest()->get();
+ $today =  Carbon::now();
+   for ($i=0; $i <count($result) ; $i++) { 
+       # code...
+   
+$createdDate = Carbon::parse($result[$i]->created_at);
+$hours=$today->diffInHours($createdDate);
+
+if (intval($hours)>48) {
+    Bookings::whereId($result[$i]->id)->delete();
+    # code...
+}
+if (intval($hours)==24 && $result[$i]->scheduled=="0") {
+    # code...
+   // Log::info("Notify");
+    Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
+
+}
+//Log::info($hours."     " .$createdDate ."  " .$today);
+
+
+
+   }
+        // $result=DB::table('bookings')->where('id','=',$id)->first();
+        // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
+return "hello";
+    }
+    function updateunservicedoverdue(){
+        $result=Bookings::whereIn("status",["active","unserviced"])->get();
+for ($i=0; $i <count($result) ; $i++) { 
+    # code..
+    $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
+   if ($res==1 || $res==0) {
+       # code...
+     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"unserviced"]);
+   }
+   else{
+     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"overdue"]);
+   
+   }
+
+}
+    }
 }

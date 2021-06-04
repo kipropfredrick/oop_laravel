@@ -11,10 +11,10 @@
         <?php 
 
         $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->sum('total_cost');
-        $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->count();
+        $totalBookingCount = \App\Bookings::distinct('customer_id')->where('status','=','complete')->orWhere('status','=','active')->count();
         $productsCount = \App\Products::where('status','=','approved')->count();
         $activeBookingAmount = \App\Bookings::where('status','=','active')->sum('total_cost');
-        $activeBookingsCount = \App\Bookings::where('status','=','active')->count();
+        $activeBookingsCount = \App\Bookings::distinct('customer_id')->where('status','=','active')->count();
         $overdueBookingAmount = \App\Bookings::where('status','=','overdue')->sum('total_cost');
         $completeBookingAmount = \App\Bookings::where('status','=','complete')->sum('total_cost');
         $completeBookingCount = \App\Bookings::where('status','=','complete')->count();
@@ -167,6 +167,25 @@ $phone=$customer->phone;
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
         $customers=DB::table('customers')->where('id','=',$customer_id)->first();
         $balance=DB::table("users")->whereId($customers->user_id)->first()->balance;
+
+        $existingUser = \App\User::where('email',  auth()->user()->email)->first();
+$email=auth()->user()->email;
+$hasbooking=false;
+        if($existingUser!=null)
+        {
+
+        $user = $existingUser;
+
+        $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
+
+
+        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+      }
                 
         ?>
        
@@ -226,6 +245,60 @@ $phone=$customer->phone;
   </div>
 </div>
 
+<div class="col-12 card ">
+<div class="table-responsive padding">
+        <div class="card-header header-elements-inline">
+            <h6 style="color: #005b77;" class="card-title"><strong>Wallet and Payments</strong></h6>
+    </div>
+    <div class="row mt-1">
+      <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-secondary">
+              <div class="inner">
+                
+
+                <h5>KES  @if($activeBookingsCount==0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
+
+
+                <p>My Wallet Balance</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-wallet"></i>
+              </div>
+             @if($activeBookingAmount==0)  
+               <a href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter" class="small-box-footer mt-3">Redeem <i class="fas fa-arrow-circle-right"></i></a> @endif
+            </div>
+          </div>
+
+   <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h5>  KES @if($hasbooking) {{number_format($booking->amount_paid)}} @else 0 @endif</h5>
+
+                <h6>Balance KES @if($hasbooking) {{number_format($booking->balance)}} @else 0 @endif </h6>
+
+
+                <p>Payments</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-check-circle"></i>
+              </div>
+              <a href="/customer/payments" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+    </div>
+    
+  
+                </div>
+             </div>
+
+<div class="col-12 card ">
+<div class="table-responsive padding">
+        <div class="card-header header-elements-inline">
+            <h6 style="color: #005b77;" class="card-title"><strong>Order Booking Summary</strong></h6>
+    </div>
+    <div class="row mt-1">
 
         <div class="col-lg-3 col-6">
             <!-- small box -->
@@ -300,29 +373,15 @@ $phone=$customer->phone;
               <a href="/customer/revoked-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+             </div>
+    
+  
+                </div>
+             </div>
         
-        
+         
         </div>
-          <div class="row">
-             <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-secondary">
-              <div class="inner">
-                
-
-                <h5>KES  @if($activeBookingsCount=0) {{number_format($activeBookingAmount)}} @else {{$balance }} @endif</h5>
-
-
-                <p>My Wallet Balance</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-wallet"></i>
-              </div>
-             @if($activeBookingAmount==0)  
-               <a href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter" class="small-box-footer mt-3">Redeem <i class="fas fa-arrow-circle-right"></i></a> @endif
-            </div>
-          </div>
-          </div>
+         
 
 
         @elseif(auth()->user()->role == "vendor")

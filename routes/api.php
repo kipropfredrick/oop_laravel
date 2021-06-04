@@ -20,3 +20,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/get-categories','AdminController@fetch_sub_categories');
 Route::post('/get-third-categories','AdminController@get_third_categories');
+
+Route::get('/productcategory','ProductsApiController@productCategories');
+
+Route::get('/weeklybestsellers','ProductsApiController@weeklybestsellers');
+
+Route::get('/trendingProducts','ProductsApiController@trendingProducts');
+Route::get('/subcategories','ProductsApiController@subcategories');
+Route::get('/subcategoriesProducts','ProductsApiController@subcategoriesProducts');
+Route::get('/gallery','ProductsApiController@getGallery');
+
+Route::get('/myaccount','ProductsApiController@customerOrders');
+Route::get('/login','ProductsApiController@login');
+
+Route::get('/payments','ProductsApiController@payments');
+Route::get('/bookings','ProductsApiController@bookings');
+Route::get('/getProducts','ProductsApiController@getProducts');
+

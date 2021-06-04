@@ -7,13 +7,13 @@
 <h6 style="padding:20px"  class="text-uppercase font-size-sm font-weight-bold">Add Category</legend>
   <div style="margin-bottom:20px" class="container">
   @if(auth()->user()->role == "admin")
-     <form action="/admin/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data">
+     <form action="/admin/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data" id="crud-form">
   @elseif(auth()->user()->role == "agent")
-    <form action="/agent/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data">
+    <form action="/agent/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data" id="crud-form">
   @elseif(auth()->user()->role == "vendor")
-     <form action="/vendor/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data">
+     <form action="/vendor/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data" id="crud-form">
   @elseif(auth()->user()->role == "influencer")
-    <form action="/influencer/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data">
+    <form action="/influencer/update-product/{{$product->id}}" method="post"  enctype="multipart/form-data" id="crud-form">
   @endif
           @csrf
 
@@ -190,7 +190,7 @@
         <div class="form-group row">
             <label class="col-form-label col-lg-2">Highlights</label>
             <div class="col-lg-10">
-                <textarea tclass="form-control" cols="30" rows="10" name="highlights" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('highlights')) invalid_field @endif" required>
+              <textarea name="highlights" id="highlights1" class="form-control" placeholder="Enter Description" cols="30" rows="10" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('highlights')) invalid_field @endif" ></textarea> 
                 {{$product->highlights}}
                 </textarea>
                 @error('highlights')
@@ -256,7 +256,31 @@
 
 @section('extra-js')
 
+   <script src="{{ asset('js/ckeditor-classic.bundle.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
 <script type="text/javascript">
+new Vue({
+            el: '#crud-form',
+            data: () => ({
+                
+            }),
+            mounted() {
+                ClassicEditor
+                    .create(document.querySelector('#highlights1'))
+                    .then( editor => console.log( editor ))
+                    .catch( error => console.error( error ));
+                        ClassicEditor
+                    .create(document.querySelector('#description1'))
+                    .then( editor => console.log( editor ))
+                    .catch( error => console.error( error ))
+
+
+            },
+            computed: {
+               
+            }
+        });
 
     function filter(){
 

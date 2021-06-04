@@ -4,6 +4,34 @@
 
 @section('content')
 
+<?php
+ 
+ if ((auth()->user())!=null) {
+    # code...
+     $existingUser = \App\User::where('email',  auth()->user()->email)->first();
+}
+else
+{
+    $existingUser=null;
+}
+
+$fill=false;
+
+        if($existingUser!=null)
+        {
+            if ($existingUser->role == "user" ) {
+$name=$existingUser->name;
+ $email=auth()->user()->email;
+
+        $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
+
+$phone=$existingCustomer->phone;
+$fill=true;
+       
+}
+        }
+
+?>
 <!-- breadcrumb --> 
 <div style="margin-top:110px" class="bc-bg">
     <div class="container">
@@ -39,12 +67,12 @@
                             <!-- summarry -->
                             <div>
                                 <p>You are placing an order for <strong>{{$product->product_name}}</strong>. Minimum deposit id <strong>KSh.100</strong>.</p>
-                                <a href="/checkout-with-existing/{{$product->slug}}">Have an account?</a>
+                                @if(! $fill) <a href="/checkout-with-existing/{{$product->slug}}">Have an account?</a> @endif
                                 <hr/>
                             </div>
                             <!-- end --> 
 
-                            <form action="/make-booking" method="post">
+                            <form action="/make-booking" method="post" id="checkoutform">
                                 @csrf
                                 <input type="hidden" name="quantity" value="{{$product_quantity}}">
                                 <input type="hidden" name="product_id" value="{{$product->id}}">
@@ -63,19 +91,19 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
-                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" value="{{ old('name') }}" placeholder="Full Name">
+                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" value=" @if($fill) {{$name}} @else {{ old('name') }} @endif " placeholder="Full Name" >
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="checkout-company-name">Phone Number<span style="color:red">*</span>
                                         </label>
-                                        <input required name="phone" type="" value="{{ old('phone') }}" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
+                                        <input required name="phone" type=""  class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX" value=" @if($fill) {{$phone}} @else {{ old('phone') }} @endif ">
                                     </div>
                                 </div>
 
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="checkout-last-name">Email</label><span style="color:red">*</span>
-                                        <input required type="email" value="{{ old('email') }}" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address">
+                                        <label for="checkout-last-name">Email</label> &nbsp; &nbsp;<span style="color:red" id="emailerror">*</span>
+                                        <input required type="email" id="email"  name="email" type="text" class="form-control"  placeholder="Email Address" value=" @if($fill) {{$email}} @else {{ old('email') }} @endif ">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.100 minimum)</label>
@@ -221,6 +249,27 @@
 @section('extra-js')
 
 <script type="text/javascript">
+
+    $(document).ready(function() {
+  $('#checkoutform').on('submit', function(e){
+    // validation code here
+    var emailaddress=$("#email").val();
+    if( !validateEmail(emailaddress)) { /* do stuff here */
+$("#email").focus();
+$("#emailerror").html("Invalid Email Address *");
+  e.preventDefault();
+     }
+     else{
+        $("#email").removeClass("invalid").addClass("valid");
+       
+     }
+  
+  });
+});
+ function validateEmail($email) {
+  var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{3,4})?$/;
+  return emailReg.test( $email );
+}
 
     function filter(){
 

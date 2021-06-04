@@ -29,10 +29,11 @@
                 <div class="">
                     <div class="card">
                         <div class="m-4">
-                        <p>Hello, you already have an order in place.</p>
-                        <p>Booking for <strong>{{$booking->product->_product_name}}</strong>, order reference: <strong>{{$booking->booking_reference}}</strong>  and amount <strong>KSh.{{number_format($booking->balance)}}</strong>.</p>
-                        <p>Finish paying for your order to be able to place another one. If your order is pending payment, you can request Admin to deactivate it for you to be able to place a new order.</p>
-                        <p>If you want to continue paying, use Paybill: <strong>4040299</strong> and Account Number: <strong>{{$booking->booking_reference}}</strong>.</p><br>
+                        <h4>You already have an existing order</h4>
+                        <p>Hello, you already have an ongoing order with us.</p>
+                        <p>A booking for <strong>{{$booking->product->_product_name}}</strong>, order reference: <strong>{{$booking->booking_reference}}</strong> and the amount remaining is  <strong>KSh.{{number_format($booking->balance)}}</strong>.</p>
+                        <p>ou can only order a new item upon completion of payment for your existing order. If you wish to transfer from one item to another, feel free to contact our support team.</p>
+                        <p>Use Paybill: <strong>4040299</strong> and Account Number: <strong>{{$booking->booking_reference}} </strong>for all your next payments.</p><br>
                         <p>Call <strong>0113 980 270</strong> or email <strong>support@mosmos.co.ke</strong> for further assistance.</p>
                         </div>
                     </div>
