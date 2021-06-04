@@ -66,7 +66,7 @@ for ($i=0; $i <count($result) ; $i++) {
         $subcat['subcategory']=$subcat;
         $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
   foreach($thirdlevelcategory as $thirdcategory){
-            
+            return Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first();
             $thirdlevelcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['gallery']->image_path;
         }
 
