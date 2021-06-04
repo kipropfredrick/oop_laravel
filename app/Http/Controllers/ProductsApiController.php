@@ -245,4 +245,13 @@ return $allPayments;
 
        return $bookings;
     }
+
+    function getProducts(Request $request){
+        $category_id=$request->input("id");
+       $products= Products::with('gallery')->whereThird_level_category_id ($category_id)->paginate(10);
+
+       return $products;
+
+
+    }
 }

@@ -35,3 +35,5 @@ Route::get('/login','ProductsApiController@login');
 
 Route::get('/payments','ProductsApiController@payments');
 Route::get('/bookings','ProductsApiController@bookings');
+Route::get('/getProducts','ProductsApiController@getProducts');
+
