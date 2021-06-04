@@ -11,6 +11,7 @@ use App\User;
 use App\Customers;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use App\ThirdLevelCategory;
 class ProductsApiController extends Controller
 {
     /**
