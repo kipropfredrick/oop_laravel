@@ -250,7 +250,7 @@ return $allPayments;
         $category_id=$request->input("id");
        $products= Products::select('id','product_name','product_price','product_image')->whereThird_level_category_id ($category_id)->paginate(10);
 
-       return $products["data"];
+       return $products;
 
 
     }
