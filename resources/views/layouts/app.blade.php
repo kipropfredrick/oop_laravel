@@ -466,7 +466,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
     <!-- GetButton.io widget -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         (function () {
             var options = {
                 whatsapp: "+254113980270", // WhatsApp number
@@ -479,7 +479,7 @@
             s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
             var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
         })();
-    </script>
+    </script> -->
     <!-- /GetButton.io widget -->
 
   </body>
