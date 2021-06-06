@@ -67,7 +67,7 @@ for ($i=0; $i <count($result) ; $i++) {
         $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
   foreach($thirdlevelcategory as $thirdcategory){
          
-            $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['gallery'][0]['image_path']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['gallery'][0]['image_path']:"download.jpg";
+            $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
         }
 
         $subcat['thirdlevelcategory']=$thirdlevelcategory;
@@ -253,5 +253,11 @@ return $allPayments;
        return $products->items();
 
 
+    }
+    function getSubcategoryProducts(Request $request){
+         $id=$request->input("id");
+       $products= Products::select('id','product_name','product_price','product_image')->whereSubcategory_id ($id)->paginate(20);
+
+       return $products->items();
     }
 }
