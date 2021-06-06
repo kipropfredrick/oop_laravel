@@ -254,4 +254,10 @@ return $allPayments;
 
 
     }
+    function getSubcategoryProducts(Request $request){
+         $id=$request->input("id");
+       $products= Products::select('id','product_name','product_price','product_image')->whereSubcategory_id ($id)->paginate(20);
+
+       return $products->items();
+    }
 }
