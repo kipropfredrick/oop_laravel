@@ -13,10 +13,10 @@ class autApi extends Controller
     	$email=$request->input("email");
     	$userexists=\App\User::whereEmail($email)->first();
     	$phoneexists=\App\Customers::wherePhone($phone)->first();
-    	if ($userexists!=null) {
+    	if ($userexists==null) {
     		# code...
 
-if ($userexists!=null) {
+if ($phoneexists==null) {
 	# code...
 
 
