@@ -85,7 +85,8 @@ for ($i=0; $i <count($result) ; $i++) {
 
 
 // }
-return $finalResult;}
+}
+return $finalResult;
      }
 
      function weeklybestsellers(Request $request){
