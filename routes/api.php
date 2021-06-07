@@ -38,5 +38,7 @@ Route::get('/bookings','ProductsApiController@bookings');
 Route::get('/getProducts','ProductsApiController@getProducts');
 Route::get('/getSubcategoryProducts','ProductsApiController@getSubcategoryProducts');
 Route::get('/categories','ProductsApiController@categories');
+Route::post('/register','autApi@registerUser');
+
 
 
