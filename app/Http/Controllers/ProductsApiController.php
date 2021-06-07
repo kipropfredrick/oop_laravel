@@ -68,6 +68,11 @@ for ($i=0; $i <count($result) ; $i++) {
   foreach($thirdlevelcategory as $thirdcategory){
          
             $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
+
+            $results=array_search($thirdcategory,$thirdlevelcategory,true);
+if($results !== false) {
+  unset($thirdlevelcategory[$result]);   
+}
         }
 
         $subcat['thirdlevelcategory']=$thirdlevelcategory;
