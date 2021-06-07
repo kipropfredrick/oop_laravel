@@ -32,17 +32,17 @@ $user = new \App\User();
         $customer->user_id = $user_id; 
         $customer->phone  = $valid_phone;
         $customer->save();
-
-        return Array("response"=>"Account created successfully","error"=>true); 
+          $phone=\App\Customers::whereUser_id($user_id)->first()->phone;
+            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone);
 }
 else{
-return Array("response"=>"Email Already taken","error"=>true);
+return Array("response"=>"Phone Number Already taken","error"=>true);
 
 }
 
     	}
     	else{
-    		return Array("response"=>"Phone Number  Already taken","error"=>false);
+    		return Array("response"=>"Email Already taken","error"=>true);
     	}
 
 
