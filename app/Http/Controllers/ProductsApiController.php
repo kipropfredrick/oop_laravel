@@ -65,17 +65,19 @@ for ($i=0; $i <count($result) ; $i++) {
         $subcat['slug']=$subcategories[$j]->slug;
         $subcat['subcategory']=$subcat;
         $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
+        $data=[];
   foreach($thirdlevelcategory as $thirdcategory){
+    $ispresent=Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first();
+    if ($ispresent) {
+        # code...
+         $thirdcategory['icon'] = $ispresent['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
+         array_push($data, $thirdcategory);
+    }
          
-            $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
-
-            $results=array_search($thirdcategory,$thirdlevelcategory,true);
-if($results !== false) {
-  unset($thirdlevelcategory[$result]);   
-}
+           
         }
 
-        $subcat['thirdlevelcategory']=$thirdlevelcategory;
+        $subcat['thirdlevelcategory']=$data;
         //$products=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(4)->get();
 
 
