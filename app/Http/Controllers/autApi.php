@@ -11,8 +11,8 @@ class autApi extends Controller
     function registerUser(Request $request){
     	$phone=$request->input("phone");
     	$email=$request->input("email");
-    	$phoneexists=\App\User::whereEmail($email)->first();
-    	$userexists=\App\Customers::wherePhone($phone)->first();
+    	$userexists=\App\User::whereEmail($email)->first();
+    	$phoneexists=\App\Customers::wherePhone($phone)->first();
     	if ($userexists!=null) {
     		# code...
 
