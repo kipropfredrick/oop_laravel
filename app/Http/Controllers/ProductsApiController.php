@@ -52,40 +52,40 @@ for ($i=0; $i <count($result) ; $i++) {
     $res['category']=$cat;
     $subcategories=SubCategories::whereCategory_id($result[$i]->id)->get();
 
-    $midres=Array();
-    $midresult=[];
+//     $midres=Array();
+//     $midresult=[];
 
-    for ($j=0; $j < count($subcategories) ; $j++) { 
-        # code...
-        //subcat defines sub category
+//     for ($j=0; $j < count($subcategories) ; $j++) { 
+//         # code...
+//         //subcat defines sub category
 
-        $subcat=Array();
-        $subcat['id']=$subcategories[$j]->id;
-        $subcat['name']=$subcategories[$j]->subcategory_name;
-        $subcat['slug']=$subcategories[$j]->slug;
-        $subcat['subcategory']=$subcat;
-        $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
-  foreach($thirdlevelcategory as $thirdcategory){
+//         $subcat=Array();
+//         $subcat['id']=$subcategories[$j]->id;
+//         $subcat['name']=$subcategories[$j]->subcategory_name;
+//         $subcat['slug']=$subcategories[$j]->slug;
+//         $subcat['subcategory']=$subcat;
+//         $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
+//   foreach($thirdlevelcategory as $thirdcategory){
          
-            $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
-        }
+//             $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
+//         }
 
-        $subcat['thirdlevelcategory']=$thirdlevelcategory;
-        //$products=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(4)->get();
-
-
-
-array_push($midresult, $subcat);
+//         $subcat['thirdlevelcategory']=$thirdlevelcategory;
+//         //$products=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(4)->get();
 
 
-    }
 
-    $res['data']=$midresult;
+// array_push($midresult, $subcat);
+
+
+//     }
+
+//     $res['data']=$midresult;
     array_push($finalResult,$res);
 
 
-}
-return $finalResult;
+// }
+return $finalResult;}
      }
 
      function weeklybestsellers(Request $request){
