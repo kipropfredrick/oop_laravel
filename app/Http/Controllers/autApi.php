@@ -16,7 +16,7 @@ class autApi extends Controller
     	if ($userexists!=null) {
     		# code...
 
-if ($phoneexists!=null) {
+if ($userexists!=null) {
 	# code...
 
 
