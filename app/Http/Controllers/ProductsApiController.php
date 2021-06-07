@@ -99,7 +99,12 @@ return $finalResult;
 $bestSellers = \App\Products::with('category','subcategory')
                         ->where('status','=','approved')
                         ->where('quantity','>',0)->inRandomOrder()->take(1)->get();
+   foreach ($bestSellers as $Products) {
+                                # code...
+    $Products['description']="";
+    $Products['highlights']="";
 
+                            }
     return $bestSellers;
 
      }
@@ -108,6 +113,7 @@ $bestSellers = \App\Products::with('category','subcategory')
          $trendingProducts = \App\Products::with('category','subcategory')
                             ->where('status','=','approved')
                             ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
+
 
 
         return $trendingProducts;
