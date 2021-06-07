@@ -37,7 +37,7 @@ class ProductsApiController extends Controller
      }
 
      function productCategories(Request $request){
-$result=Categories::whereId(4)->get();
+$result=Categories::get();
 $finalResult=[];
 
 for ($i=0; $i <count($result) ; $i++) { 
