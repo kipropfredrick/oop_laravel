@@ -11,4 +11,5 @@ class ThirdLevelCategory extends Model
   public function subcategory(){
       return $this->belongsTo(SubCategories::class,'subcategory_id');
   }
+  
 }

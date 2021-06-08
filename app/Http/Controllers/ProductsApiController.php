@@ -65,12 +65,19 @@ for ($i=0; $i <count($result) ; $i++) {
         $subcat['slug']=$subcategories[$j]->slug;
         $subcat['subcategory']=$subcat;
         $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
+        $data=[];
   foreach($thirdlevelcategory as $thirdcategory){
+    $ispresent=Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first();
+    if ($ispresent) {
+        # code...
+         $thirdcategory['icon'] = $ispresent['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
+         array_push($data, $thirdcategory);
+    }
          
-            $thirdcategory['icon'] = Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->latest()->first()['product_image']:"download.jpg";
+           
         }
 
-        $subcat['thirdlevelcategory']=$thirdlevelcategory;
+        $subcat['thirdlevelcategory']=$data;
         //$products=Products::with('gallery')->whereSubcategory_id($subcategories[$j]->id)->limit(4)->get();
 
 
@@ -87,12 +94,19 @@ array_push($midresult, $subcat);
 }
 return $finalResult;
      }
-
+function categories(Request $request){
+return Categories::get();
+}
      function weeklybestsellers(Request $request){
 $bestSellers = \App\Products::with('category','subcategory')
                         ->where('status','=','approved')
-                        ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
+                        ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+   foreach ($bestSellers as $Products) {
+                                # code...
+    $Products['description']="";
+    $Products['highlights']="";
 
+                            }
     return $bestSellers;
 
      }
@@ -100,8 +114,14 @@ $bestSellers = \App\Products::with('category','subcategory')
      function  trendingProducts(Request $request){
          $trendingProducts = \App\Products::with('category','subcategory')
                             ->where('status','=','approved')
-                            ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
+                            ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
 
+ foreach ($trendingProducts as $Products) {
+                                # code...
+    $Products['description']="";
+    $Products['highlights']="";
+
+                            }
 
         return $trendingProducts;
      }
