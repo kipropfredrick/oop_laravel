@@ -40,6 +40,8 @@ Route::get('/getSubcategoryProducts','ProductsApiController@getSubcategoryProduc
 Route::get('/categories','ProductsApiController@categories');
 Route::post('/register','autApi@registerUser');
 Route::get('/phoneExists','autApi@ifPhoneExists');
+Route::get('/resetpassword','autApi@resetPassword');
+
 
 
 
