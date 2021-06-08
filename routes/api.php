@@ -28,7 +28,7 @@ Route::get('/weeklybestsellers','ProductsApiController@weeklybestsellers');
 Route::get('/trendingProducts','ProductsApiController@trendingProducts');
 Route::get('/subcategories','ProductsApiController@subcategories');
 Route::get('/subcategoriesProducts','ProductsApiController@subcategoriesProducts');
-Route::get('/gallery','ProductsApiController@getGallery');
+Route::get('/products','ProductsApiController@getProduct');
 
 Route::get('/myaccount','ProductsApiController@customerOrders');
 Route::get('/login','ProductsApiController@login');

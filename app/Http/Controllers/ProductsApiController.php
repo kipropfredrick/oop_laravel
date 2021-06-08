@@ -137,8 +137,9 @@ return $result;
        $result=Products::whereSubcategory_id($request->id)->limit(6)->get();
 return $result; 
      }
-function getGallery(Request $request){
-     $result=Gallery::whereProduct_id($request->id)->get();
+function getProduct(Request $request){
+    $id=$request->input("id");
+     $result=Products::with("gallery")->whereId($id)->first();
 return $result; 
 }
 
