@@ -59,7 +59,7 @@ $phone=$request->input("phone");
     		return Array("response"=>"Phone Exists","error"=>false);
     	}
     	else{
-return Array("response"=>"no records exists","error"=>true);
+return Array("response"=>"Phone Number Does Not Match Our Existing Records","error"=>true);
     	}
 
     }
