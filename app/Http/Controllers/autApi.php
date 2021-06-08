@@ -69,7 +69,7 @@ return Array("response"=>"no records exists","error"=>true);
     	$phoneExists=\App\Customers::wherePhone($phone)->first();
 
     	$user_id=$phoneExists->user_id;
-    	$response=\App\User::whereId($user_id)->update(["password"=>Hash::make($request->input('password')]);
+    	$response=\App\User::whereId($user_id)->update(["password"=>Hash::make($request->input('password'))]);
 
     		return Array("response"=>"Password Updated Successfully","error"=>false);
 
