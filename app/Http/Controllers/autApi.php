@@ -52,8 +52,8 @@ return Array("response"=>"Phone Number Already taken","error"=>true);
 
 
     function ifPhoneExists(Request $request){
-
-    	$phoneExists=\App\Customers::wherePhone()->first();
+$phone=$request->input("phone");
+    	$phoneExists=\App\Customers::wherePhone($phone)->first();
     	if ($phoneExists!=null) {
     		# code...
     		return Array("response"=>"Phone Exists","error"=>false);
