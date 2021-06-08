@@ -49,4 +49,18 @@ return Array("response"=>"Phone Number Already taken","error"=>true);
 
 
     }
+
+
+    function ifPhoneExists(Request $request){
+
+    	$phoneExists=\App\Customers::wherePhone()->first();
+    	if ($phoneExists!=null) {
+    		# code...
+    		return Array("response"=>"Phone Exists","error"=>false);
+    	}
+    	else{
+return Array("response"=>"no records exists","error"=>true);
+    	}
+
+    }
 }
