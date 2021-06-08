@@ -59,8 +59,19 @@ $phone=$request->input("phone");
     		return Array("response"=>"Phone Exists","error"=>false);
     	}
     	else{
-return Array("response"=>"Phone Number Does Not Match Our Existing Records","error"=>true);
+return Array("response"=>"no records exists","error"=>true);
     	}
+
+    }
+
+    function resetPassword(Request $request){
+    	$phone=$request->input("phone");
+    	$phoneExists=\App\Customers::wherePhone($phone)->first();
+
+    	$user_id=$phoneExists->user_id;
+    	$response=\App\User::whereId($user_id)->update(["password"=>Hash::make($request->input('password')]);
+
+    		return Array("response"=>"Password Updated Successfully","error"=>false);
 
     }
 }
