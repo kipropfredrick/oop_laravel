@@ -140,6 +140,8 @@ return $result;
 function getProduct(Request $request){
     $id=$request->input("id");
      $result=Products::with("gallery")->whereId($id)->first();
+     $counties=\App\Counties::get();
+     $result['counties']=$counties;
 return $result; 
 }
 
