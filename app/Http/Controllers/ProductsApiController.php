@@ -137,8 +137,11 @@ return $result;
        $result=Products::whereSubcategory_id($request->id)->limit(6)->get();
 return $result; 
      }
-function getGallery(Request $request){
-     $result=Gallery::whereProduct_id($request->id)->get();
+function getProduct(Request $request){
+    $id=$request->input("id");
+     $result=Products::with("gallery")->whereId($id)->first();
+     $counties=\App\Counties::get();
+     $result['counties']=$counties;
 return $result; 
 }
 
@@ -241,10 +244,12 @@ return Array("response"=>"Incorrect Username or password","error"=>true);
 $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
         $allPayments=[];
+
+   
   
 for ($i=0; $i < count($payments); $i++) { 
     # code...
-    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']->transac_code,"booking_reference"=>$payments[$i]['booking']->booking_reference,"transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
+    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']?$payments[$i]['mpesapayment']->transac_code:"","booking_reference"=>$payments[$i]['booking']->booking_reference,"transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
     array_push($allPayments, $array);
 
 }
@@ -279,5 +284,18 @@ return $allPayments;
        $products= Products::select('id','product_name','product_price','product_image')->whereSubcategory_id ($id)->paginate(20);
 
        return $products->items();
+    }
+
+       public function search(Request $request){
+
+$search=$request->input('search');
+     
+
+            $products =   \App\Products::select('id','product_name','product_price','product_image','status')->where ( 'product_name', 'LIKE', '%' . $search . '%' )->where('status','=','approved')->paginate(20);
+                        
+
+return $products->items();
+       
+
     }
 }

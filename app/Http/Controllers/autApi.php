@@ -49,4 +49,29 @@ return Array("response"=>"Phone Number Already taken","error"=>true);
 
 
     }
+
+
+    function ifPhoneExists(Request $request){
+$phone=$request->input("phone");
+    	$phoneExists=\App\Customers::wherePhone($phone)->first();
+    	if ($phoneExists!=null) {
+    		# code...
+    		return Array("response"=>"Phone Exists","error"=>false);
+    	}
+    	else{
+return Array("response"=>"no records exists","error"=>true);
+    	}
+
+    }
+
+    function resetPassword(Request $request){
+    	$phone=$request->input("phone");
+    	$phoneExists=\App\Customers::wherePhone($phone)->first();
+
+    	$user_id=$phoneExists->user_id;
+    	$response=\App\User::whereId($user_id)->update(["password"=>Hash::make($request->input('password'))]);
+
+    		return Array("response"=>"Password Updated Successfully","error"=>false);
+
+    }
 }
