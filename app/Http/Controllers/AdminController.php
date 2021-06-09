@@ -491,11 +491,11 @@ class AdminController extends Controller
 
         $subcategory_id = $request->subcategory_id;
 
-        \Log::info("subcategory_id => ".$subcategory_id);
 
         $tsubcategories = DB::table('third_level_categories')
                         ->where('subcategory_id', $subcategory_id)
                         ->get();
+                        
         return $tsubcategories;
 
     }
