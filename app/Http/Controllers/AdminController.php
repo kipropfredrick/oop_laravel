@@ -1034,57 +1034,21 @@ class AdminController extends Controller
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
 
-            $payment = \App\Payments::where('booking_id','=',$booking->id)->latest()->first();
-
-            \Log::info('Payment Array =>'.json_encode($payment));
-
-            if($payment !=null){
-                $booking['date_completed'] = $payment->date_paid;
-            }else{
-                $booking['date_completed'] = "NULL";
-            }
-
-            if($booking->agent_code !== null){
-                $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-               
-                if(isset($agent->user)){
-                    $agent = $agent->user->name.' (Agent)';
-                }elseif(isset($influencer->user)){
-                    $agent = $influencer->user->name.' (Influencer)';
-                }else{
-                    $agent = "Lipa Mos Mos (Admin) agent";
-                }
-
-
-            }elseif($booking->vendor_code !== null){
+            if($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
 
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
-                    return $vendor;
                     $agent = "Lipa Mos Mos (Admin)";
                 }
-            }elseif($booking->influencer_code !== null){
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-                if($influencer == null){
-                    $agent = "Lipa Mos Mos (Admin)";
-                   }else {
-                      if(isset($influencer->user)){
-                        $agent = $influencer->user->name.' (Influencer)';
-                      }
-                   }
-            }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+
+            }else{
                $agent = "Lipa Mos Mos (Admin)";
             }
-
-
             $booking['agent'] = $agent;
 
         }
-
-        // return($bookings);
 
         return view('backoffice.bookings.active',compact('bookings'));  
     }
