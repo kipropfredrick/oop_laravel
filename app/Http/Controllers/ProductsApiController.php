@@ -244,6 +244,8 @@ return Array("response"=>"Incorrect Username or password","error"=>true);
 $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
         $allPayments=[];
+
+        return $payments;
   
 for ($i=0; $i < count($payments); $i++) { 
     # code...
@@ -282,5 +284,64 @@ return $allPayments;
        $products= Products::select('id','product_name','product_price','product_image')->whereSubcategory_id ($id)->paginate(20);
 
        return $products->items();
+    }
+
+       public function search(Request $request){
+
+        $categories = \App\Categories::all();
+
+        $search =  $request->search;
+
+        $products= \App\Products::where('product_name', 'LIKE', '%' . $search . '%' )
+                                ->where('status','=','approved')
+                                ->where('quantity','>',0)
+                                ->orderBy('id','DESC')
+                                // ->inRandomOrder()
+                                ->orderBy('id','DESC')
+                                ->paginate(20);
+
+            $sort_by = $request->sort_by;
+
+            if($sort_by !=null){
+    
+                if($sort_by == "price-asc"){
+                    $p = "product_price";
+                    $o = "ASC";
+                }elseif($sort_by == "price-desc"){
+                    $p = "product_price";
+                    $o = "DESC";
+                }elseif($sort_by == "id"){
+                    $p = "id";
+                    $o = "DESC";
+                }elseif($sort_by == "best-sellers"){
+    
+                    $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
+    
+                    $product_ids = [];
+            
+                    foreach($bookings as $booking){
+                        array_push($product_ids,$booking->product_id);
+                    }
+
+                    $products =   \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
+                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+            
+    
+                        return view('front.search_results',compact('products','categories','search','sort_by'));
+                }
+    
+            }else{
+                $sort_by = "id";
+                $p = "id";
+                $o = "DESC";
+            }
+
+            $products =   \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
+                            ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
+                        
+
+        return view('front.search_results',compact('products','categories','search','sort_by'));
+       
+
     }
 }
