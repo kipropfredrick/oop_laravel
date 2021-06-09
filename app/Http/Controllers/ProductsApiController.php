@@ -100,7 +100,7 @@ return Categories::get();
      function weeklybestsellers(Request $request){
 $bestSellers = \App\Products::with('category','subcategory')
                         ->where('status','=','approved')
-                        ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+                        ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
    foreach ($bestSellers as $Products) {
                                 # code...
     $Products['description']="";
@@ -114,7 +114,7 @@ $bestSellers = \App\Products::with('category','subcategory')
      function  trendingProducts(Request $request){
          $trendingProducts = \App\Products::with('category','subcategory')
                             ->where('status','=','approved')
-                            ->where('quantity','>',0)->inRandomOrder()->take(20)->get();
+                            ->where('quantity','>',0)->inRandomOrder()->take(6)->get();
 
  foreach ($trendingProducts as $Products) {
                                 # code...
