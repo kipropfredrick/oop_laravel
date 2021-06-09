@@ -260,9 +260,9 @@
 @endsection
 
 @section('extra-js')
-    <script src="{{ asset('js/ckeditor-classic.bundle.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+<script src="{{ asset('js/ckeditor-classic.bundle.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
 <script type="text/javascript">
 new Vue({
             el: '#crud-form',
@@ -396,7 +396,11 @@ new Vue({
                 }
           });
 
-          get_third_subs();
+          if(category_id!==""){
+            get_third_subs();
+          }
+
+          
            
     } 
 
@@ -417,7 +421,7 @@ new Vue({
 
             success: function (data) { 
                 var length = data.length;
-                console.log("Data => "+JSON.stringify(data));
+                // console.log("Data => "+JSON.stringify(data));
                 for (i = 0; i < length; i++)
                 { 
                     $('#third_level_category_id').append( '<option value="'+data[i].id+'">'+data[i].name+'</option>' );
