@@ -83,7 +83,21 @@ return Array("response"=>"no records exists","error"=>true);
     		return Array("response"=>"Password Updated Successfully","error"=>false);
 
     }
-
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function lipaNaMpesaPassword($lipa_time)
+    {
+      
+        $passkey = env('STK_PASSKEY');  
+        $BusinessShortCode = env('MPESA_SHORT_CODE');
+        $timestamp =$lipa_time;
+        $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
+        return $lipa_na_mpesa_password;
+    }
 
 
         private function get_msisdn_network($msisdn){
