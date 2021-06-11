@@ -391,7 +391,7 @@ return Array("response"=>$county_id);
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-            return Response("error"=>true,"response"=>"you already have an existing bookings");
+            return Array("error"=>true,"response"=>"you already have an existing bookings");
         }
 
         \Auth::login($user);
