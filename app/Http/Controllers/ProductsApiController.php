@@ -338,7 +338,6 @@ $phone=$customer->phone;
         $exact_location = $request->exact_location;
         $vendor_code = $request->vendor_code;
 
-return Array("response"=>$county_id);
         $categories = \App\Categories::all();
 
         list($msisdn, $network) = $this->get_msisdn_network($request->phone);
