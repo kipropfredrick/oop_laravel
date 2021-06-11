@@ -187,8 +187,11 @@ return Array("response"=>"no records exists","error"=>true);
 
         if(array_key_exists("errorCode", $responseArray)){
             $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
+
+            return Array("response"=>$message,"success"=>false);
         }else{
             $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
+           return Array("response"=>$message,"success"=>true);
         }
 
         return $message;
