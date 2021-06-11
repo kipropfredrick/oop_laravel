@@ -188,10 +188,10 @@ return Array("response"=>"no records exists","error"=>true);
         if(array_key_exists("errorCode", $responseArray)){
             $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
 
-            return Array("response"=>$message,"success"=>false);
+            return Array("response"=>$message,"success"=>false,"error"=>false);
         }else{
             $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
-           return Array("response"=>$message,"success"=>true);
+           return Array("response"=>$message,"success"=>true,"error"=>false);
         }
 
         return $message;
@@ -203,7 +203,7 @@ return Array("response"=>"no records exists","error"=>true);
         $amount=$request->input('amount');
         $booking_ref=$request->input("bookingref");
 
- $message =  $this->stk_push($amount,"254790535349",$booking_ref);
+ $message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
  return $message;
     }
