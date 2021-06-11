@@ -4,6 +4,15 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use DB;
+use File;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use AfricasTalking\SDK\AfricasTalking;
+use App\Http\Controllers\SendSMSController;
+use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendRegistrationEmail;
+
 
 class autApi extends Controller
 {
