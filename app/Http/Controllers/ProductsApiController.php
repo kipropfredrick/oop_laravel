@@ -311,7 +311,7 @@ $phone=$customer->phone;
         
 
 
-        $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+        $booking = \App\Bookings::with('product')->where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if ($booking!=null) {
           # code...
