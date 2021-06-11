@@ -42,7 +42,7 @@ Route::post('/register','autApi@registerUser');
 Route::get('/phoneExists','autApi@ifPhoneExists');
 Route::get('/resetpassword','autApi@resetPassword');
 Route::get('/search','ProductsApiController@search');
-Route::get('/makepayment','ProductsApiController@MakePayment');
+Route::get('/makepayment','autApi@MakePayment');
 
 
 
