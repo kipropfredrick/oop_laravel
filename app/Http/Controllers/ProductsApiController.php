@@ -298,4 +298,36 @@ return $products->items();
        
 
     }
+
+    function checkBooking(request $request){
+        $username=$request->input("username");
+$customer=Customers::wherePhone($username)->first();
+        $customer_id = $customer->id;;
+$phone=$customer->phone;
+
+   if($customer!=null)
+        {
+
+        
+
+
+        $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+          return Array("response"=>$booking,"error"=>false);
+        }
+        else{
+            return Array("response"=>"No Active Or Pending Orders in the list","error"=>true);  
+        }
+      }
+
+      else{
+
+        return Array("response"=>"Account Data Not Found ","error"=>true);
+      }
+
+
+    }
 }
