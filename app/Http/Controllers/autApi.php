@@ -203,7 +203,7 @@ return Array("response"=>"no records exists","error"=>true);
         $amount=$request->input('amount');
         $booking_ref=$request->input("bookingref");
 
- $message =  $this->stk_push($amount,"+254790535349",$booking_ref);
+ $message =  $this->stk_push($amount,"254790535349",$booking_ref);
 
  return $message;
     }
