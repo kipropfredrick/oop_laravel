@@ -43,6 +43,8 @@ Route::get('/phoneExists','autApi@ifPhoneExists');
 Route::get('/resetpassword','autApi@resetPassword');
 Route::get('/search','ProductsApiController@search');
 Route::post('/makepayment','autApi@MakePayment');
+Route::get('/checkbooking','ProductsApiController@checkBooking');
+
 
 
 
