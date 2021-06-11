@@ -1488,7 +1488,7 @@ $customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
 
         $msisdn=$request->input("phone");
         $amount=$request->input('amount');
-        $bookingref=$request->input("bookingref");
+        $booking_ref=$request->input("bookingref");
 
  $message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
