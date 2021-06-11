@@ -331,6 +331,18 @@ $phone=$customer->phone;
 
     }
 
+   /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+
+    private function roundToTheNearestAnything($value, $roundTo)
+    {
+        $mod = $value%$roundTo;
+        return $value+($mod<($roundTo/2)?-$mod:$roundTo-$mod);
+    }
 
 
       public function make_booking(Request $request){
