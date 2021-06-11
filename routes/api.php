@@ -44,7 +44,7 @@ Route::get('/resetpassword','autApi@resetPassword');
 Route::get('/search','ProductsApiController@search');
 Route::post('/makepayment','autApi@MakePayment');
 Route::get('/checkbooking','ProductsApiController@checkBooking');
-Route::post('/makebooking','ProductsApiController@make_booking');
+Route::post('/makebooking','autApi@make_booking');
 
 
 
