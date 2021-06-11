@@ -202,9 +202,8 @@ return Array("response"=>"no records exists","error"=>true);
         $msisdn=$request->input("phone");
         $amount=$request->input('amount');
         $booking_ref=$request->input("bookingref");
-         return Array("response"=>$msisdn,"success"=>false);
 
- $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+ $message =  $this->stk_push($amount,"+254790535349",$booking_ref);
 
  return $message;
     }
