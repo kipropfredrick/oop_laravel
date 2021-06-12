@@ -274,7 +274,7 @@ return $allPayments;
 
     function getProducts(Request $request){
         $category_id=$request->input("id");
-       $products= Products::select('id','product_name','product_price','product_image')->whereThird_level_category_id ($category_id)->paginate(20);
+       $products= Products::select('id','product_name','product_price','product_image')->whereThird_level_category_id ($category_id)->inRandomOrder()->paginate(20);
 
        return $products->items();
 
@@ -282,7 +282,7 @@ return $allPayments;
     }
     function getSubcategoryProducts(Request $request){
          $id=$request->input("id");
-       $products= Products::select('id','product_name','product_price','product_image')->whereSubcategory_id ($id)->paginate(20);
+       $products= Products::select('id','product_name','product_price','product_image')->whereSubcategory_id ($id)->inRandomOrder()->paginate(20);
 
        return $products->items();
     }
