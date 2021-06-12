@@ -301,7 +301,7 @@ class VendorController extends Controller
 
         public function product_delete($id){
 
-            $product = \App\products::find($id);
+            $product = \App\Products::find($id);
     
             $image_path = public_path().'/storage/images/'.$product->product_image;
     
