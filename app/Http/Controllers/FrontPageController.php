@@ -1484,6 +1484,17 @@ $customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
         return view('backoffice.payments.index',compact('payments'));
     }
 
+    public function MakePayment(Request $request){
+
+        $msisdn=$request->input("phone");
+        $amount=$request->input('amount');
+        $booking_ref=$request->input("bookingref");
+
+ $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+
+ return $message;
+    }
+
     
 
 }
