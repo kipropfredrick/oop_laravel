@@ -246,7 +246,7 @@ $customer_id=DB::table("customers")->wherePhone($request->input('username'))->fi
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
         $allPayments=[];
 
-   
+   return $payments;
   
 for ($i=0; $i < count($payments); $i++) { 
     # code...
