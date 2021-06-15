@@ -14,7 +14,7 @@ class pushNotification extends Controller
 
     /*api_key available in:
     Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key*/  
-    $token="dlAXit0PQJKNgUNWxOMCbU:APA91bFylQpf_ar5-yzSpqWbq7A1Kh2w_6dX6iHn_xBXdeEJpvo5FCtUULBa3wp9s5_MTHUl2LfKRp_8FnST9BpAgtLFE4Jt6UNcOzqlC6c_10W50nLtTFYkInpJHM6rvJCQWLC_AAeW";  
+    $token="fAXoLwhYTPGowm9zgi_IOq:APA91bEe7VkO1SqjwF5wWJRWivf89UpL5riCh3DIFBfDYfpll6LT9aNi2PCjAXwnYG8NYOlXmo5NT3FWpglnIyJYPb7OsCQjpa6GlbWP8D7t9DblX-6IVSm47ehE52Ho4iTIBdbDQH9b";  
     $api_key = 'AAAABjRMKq4:APA91bF7kJTVRuQzw_9H8rbYSUDhqDAa6Jtm15undJXta74F20BCUdyLjPIXw338GHL3nFqlmhNcPhqwva9YFMGvS0fs0q3yJdkTz6yXxZCJ70vJJeNl6_v3LWCizNta6d9zFFScM9UB';
     // $ret= Array("message"=>Array("token"=>$token,"notification"=>Array("title"=>"hq","body"=>"hq1","image"=>""),"android"=>Array("notification"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK")),"data"=>$datamess));
                 
