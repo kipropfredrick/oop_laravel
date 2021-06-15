@@ -49,6 +49,13 @@ Route::post('/makebooking','autApi@make_booking');
 
 
 
+Route::get('/pushnotification','pushNotification@testFcm');
+
+
+
+
+
+
 
 
 
