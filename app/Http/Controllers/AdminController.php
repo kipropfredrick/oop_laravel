@@ -2449,7 +2449,7 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 $createdDate = Carbon::parse($result[$i]->notified_at);
 $hours=$today->diffInHours($createdDate);
 
-if (intval($hours)<48) {
+if (intval($hours)>48) {
    
     # code...
        $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
