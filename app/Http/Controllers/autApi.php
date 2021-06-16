@@ -228,6 +228,15 @@ return Array("response"=>"no records exists","error"=>true);
         $exact_location = $request->exact_location;
         $vendor_code = $request->vendor_code;
 
+        $vendor=\App\Vendor::whereId($vendor_code)->first();
+        if ($vendor!=null) {
+            $vendor_code=$vendor->vendor_code;
+            # code...
+        }
+        else{
+            $vendor="VD1";
+        }
+
         $categories = \App\Categories::all();
 
         list($msisdn, $network) = $this->get_msisdn_network($request->phone);
