@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
 use App\Http\Controllers\SendSMSController;
+use App\Http\Controllers\pushNotification;
 
 class MpesaPaymentController extends Controller
 {
@@ -199,8 +200,9 @@ class MpesaPaymentController extends Controller
         # code...
         return 0;
     }
+    $obj = new pushNotification();
     $data=Array("name"=>"payment");
-    $this->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ."for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+    $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ."for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
 
 
         }
