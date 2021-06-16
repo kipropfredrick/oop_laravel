@@ -10,28 +10,31 @@ class pushNotification extends Controller
 
     function testFcm(Request $request){
     	 //API URL of FCM
-    $url = 'https://fcm.googleapis.com/fcm/send';
-
-    /*api_key available in:
-    Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key*/  
-    // $token="fAXoLwhYTPGowm9zgi_IOq:APA91bEe7VkO1SqjwF5wWJRWivf89UpL5riCh3DIFBfDYfpll6LT9aNi2PCjAXwnYG8NYOlXmo5NT3FWpglnIyJYPb7OsCQjpa6GlbWP8D7t9DblX-6IVSm47ehE52Ho4iTIBdbDQH9b";  
-
-    $token=\App\User::whereEmail('brianqmutiso@gmail.com')->first()->token;
+            $token=\App\User::whereEmail('brianqmutiso@gmail.com')->first()->token;
     if ($token==null) {
         # code...
         return 0;
     }
+    $data=Array("name"=>"test");
+    $this->exceuteSendNotification($token,"You have successfully booked (product-name)","Booking Successful",$data)
+    
+    }
+
+
+    function exceuteSendNotification($token,$message,$title,$data){
+$url = 'https://fcm.googleapis.com/fcm/send';
+
+
     $api_key = 'AAAABjRMKq4:APA91bF7kJTVRuQzw_9H8rbYSUDhqDAa6Jtm15undJXta74F20BCUdyLjPIXw338GHL3nFqlmhNcPhqwva9YFMGvS0fs0q3yJdkTz6yXxZCJ70vJJeNl6_v3LWCizNta6d9zFFScM9UB';
-    // $ret= Array("message"=>Array("token"=>$token,"notification"=>Array("title"=>"hq","body"=>"hq1","image"=>""),"android"=>Array("notification"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK")),"data"=>$datamess));
                 
     $fields = array (
         'registration_ids' => array (
                $token
         ),
-        "notification"=>Array("title"=>"Discover Business Near You.","body"=> "Check out this test message","image"=>''),
+        "notification"=>Array("title"=>$title,"body"=> $message,"image"=>''),
 
         "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK"),
-        'data' => Array("name"=>"brian"),
+        'data' => $data,
 
     );
 
