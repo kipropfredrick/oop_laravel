@@ -191,6 +191,18 @@ class MpesaPaymentController extends Controller
             } catch (Exception $e) {
                 echo "Error: ".$e->getMessage();
             }
+
+            $user_id=\App\Customers::whereId($booking->customer_id)->first()->user_id;
+
+   $token=\App\User::whereId($user_id)->first()->token;
+    if ($token==null) {
+        # code...
+        return 0;
+    }
+    $data=Array("name"=>"payment");
+    $this->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ."for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+
+
         }
 
     }
