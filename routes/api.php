@@ -51,6 +51,10 @@ Route::post('/makebooking','autApi@make_booking');
 
 Route::get('/pushnotification','pushNotification@testFcm');
 
+Route::get('/insertToken','firebaseToken@insertToken');
+Route::get('/updateToken','firebaseToken@updateToken');
+
+
 
 
 
