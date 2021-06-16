@@ -12,8 +12,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendRegistrationEmail;
-
-
+use App\Http\Controllers\pushNotification;
 class autApi extends Controller
 {
     //
@@ -383,6 +382,14 @@ $booking->status = "active";
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+    $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+       return $message;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"bookingsuccess");
+    $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
       return $message;
             
@@ -446,6 +453,16 @@ $booking->status = "active";
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+
+
+   $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+       return $message;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"bookingsuccess");
+    $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
         return $message;
             
