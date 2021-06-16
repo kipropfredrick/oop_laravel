@@ -548,7 +548,7 @@ class MpesaPaymentController extends Controller
     }
     $obj = new pushNotification();
     $data=Array("name"=>"payment");
-    $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ."for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+    $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
 
             
         $message = "Success!";
