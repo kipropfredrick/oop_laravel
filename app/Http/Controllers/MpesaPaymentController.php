@@ -193,16 +193,7 @@ class MpesaPaymentController extends Controller
                 echo "Error: ".$e->getMessage();
             }
 
-            $user_id=\App\Customers::whereId($booking->customer_id)->first()->user_id;
-
-   $token=\App\User::whereId($user_id)->first()->token;
-    if ($token==null) {
-        # code...
-        return 0;
-    }
-    $obj = new pushNotification();
-    $data=Array("name"=>"payment");
-    $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ."for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+            
 
 
         }
@@ -548,7 +539,17 @@ class MpesaPaymentController extends Controller
             ];
 
             Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
-           
+          // $user_id=\App\Customers::whereId($booking->customer_id)->first()->user_id;
+
+   $token=\App\User::whereId($booking->customer->user->id)->first()->token;
+    if ($token==null) {
+        # code...
+        return 0;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"payment");
+    $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ."for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+
             
         $message = "Success!";
 
