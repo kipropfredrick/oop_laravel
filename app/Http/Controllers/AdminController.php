@@ -19,6 +19,7 @@ use App\Mail\SendPaymentMailToAdmin;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
 use \App\Bookings;
+use App\Http\Controllers\pushNotification;
 
 
 
@@ -2415,10 +2416,21 @@ if (intval($hours)>48) {
     Bookings::whereId($result[$i]->id)->delete();
     # code...
 }
-if (intval($hours)==24 && $result[$i]->scheduled=="0") {
+if (intval($hours)<24 && $result[$i]->scheduled=="0") {
     # code...
    // Log::info("Notify");
-    Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
+    $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
+   $token=\App\User::whereId($customer->id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"makepayment");
+    $obj->exceuteSendNotification($token,"Start paying for your order ","Please make your payment",$data);
+}
+    Bookings::whereEmail('brianqmutiso@gmail.com')->update(["scheduled"=>"1"]);
 
 }
 //Log::info($hours."     " .$createdDate ."  " .$today);
