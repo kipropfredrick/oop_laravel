@@ -2430,7 +2430,7 @@ if (intval($hours)<24 && $result[$i]->scheduled=="0") {
     $data=Array("name"=>"makepayment");
     $obj->exceuteSendNotification($token,"Start paying for your order ","Please make your payment",$data);
 }
-    Bookings::whereEmail('brianqmutiso@gmail.com')->update(["scheduled"=>"1"]);
+    Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
 
 }
 //Log::info($hours."     " .$createdDate ."  " .$today);
