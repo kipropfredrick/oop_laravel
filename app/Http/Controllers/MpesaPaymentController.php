@@ -417,6 +417,16 @@ class MpesaPaymentController extends Controller
 
                 SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 
+
+  $token=\App\User::whereId($booking->customer->user->id)->first()->token;
+    if ($token==null) {
+        # code...
+        return 0;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"complete");
+    $obj->exceuteSendNotification($token,"You have complete payment for ".$booking->product->product_name,"Congratulations",$data);
+
                 $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
 
 

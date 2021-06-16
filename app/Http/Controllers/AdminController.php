@@ -2416,7 +2416,7 @@ if (intval($hours)>48) {
     Bookings::whereId($result[$i]->id)->delete();
     # code...
 }
-if (intval($hours)<24 && $result[$i]->scheduled=="0") {
+if (intval($hours)==24 && $result[$i]->scheduled=="0") {
     # code...
    // Log::info("Notify");
     $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
