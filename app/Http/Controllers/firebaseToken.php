@@ -11,8 +11,8 @@ class firebaseToken extends Controller
     	$phone=$request->input('username');
     	$token=$request->input("token");
     	$existingCustomer = \App\Customers::where('phone','=',$phone)->first();
-        $userid= $existingCustomer->userid;
-\App\User::whereId( $userid)->update(['token'=>$token]);
+        $userid= $existingCustomer->user_id;
+\App\User::whereId($userid)->update(['token'=>$token]);
 
     }
  function updateToken(Request $request){
