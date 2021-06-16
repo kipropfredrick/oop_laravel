@@ -2420,7 +2420,7 @@ if (intval($hours)<24 && $result[$i]->scheduled=="0") {
     # code...
    // Log::info("Notify");
     $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
-   $token=\App\User::whereId($customer->id)->first()->token;
+   $token=\App\User::whereId($customer->user_id)->first()->token;
     if ($token==null) {
         # code...
     
