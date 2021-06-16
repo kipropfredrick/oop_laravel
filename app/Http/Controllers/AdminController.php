@@ -2438,6 +2438,46 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 
 
    }
+
+
+       
+   $result=Bookings::whereStatus("active")->whereCustomer_id(1883)->latest()->get();
+ $today =  Carbon::now();
+   for ($i=0; $i <count($result) ; $i++) { 
+       # code...
+   
+$createdDate = Carbon::parse($result[$i]->notified_at);
+$hours=$today->diffInHours($createdDate);
+
+if (intval($hours)<48) {
+   
+    # code...
+       $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
+   $token=\App\User::whereId($customer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"paymentreminder");
+    $obj->exceuteSendNotification($token,"Keep up with your payments to have your order delivered faster","You can pay any amount.",$data);
+}
+    Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
+}
+
+    
+ 
+
+
+//Log::info($hours."     " .$createdDate ."  " .$today);
+
+
+
+   }
+
+
+
         // $result=DB::table('bookings')->where('id','=',$id)->first();
         // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
 return "hello";
