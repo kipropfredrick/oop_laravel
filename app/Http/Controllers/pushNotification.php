@@ -14,7 +14,13 @@ class pushNotification extends Controller
 
     /*api_key available in:
     Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key*/  
-    $token="fAXoLwhYTPGowm9zgi_IOq:APA91bEe7VkO1SqjwF5wWJRWivf89UpL5riCh3DIFBfDYfpll6LT9aNi2PCjAXwnYG8NYOlXmo5NT3FWpglnIyJYPb7OsCQjpa6GlbWP8D7t9DblX-6IVSm47ehE52Ho4iTIBdbDQH9b";  
+    // $token="fAXoLwhYTPGowm9zgi_IOq:APA91bEe7VkO1SqjwF5wWJRWivf89UpL5riCh3DIFBfDYfpll6LT9aNi2PCjAXwnYG8NYOlXmo5NT3FWpglnIyJYPb7OsCQjpa6GlbWP8D7t9DblX-6IVSm47ehE52Ho4iTIBdbDQH9b";  
+
+    $token=\App\User::whereEmail('brianqmutiso@gmail.com')->first()->token;
+    if ($token==null) {
+        # code...
+        return 0;
+    }
     $api_key = 'AAAABjRMKq4:APA91bF7kJTVRuQzw_9H8rbYSUDhqDAa6Jtm15undJXta74F20BCUdyLjPIXw338GHL3nFqlmhNcPhqwva9YFMGvS0fs0q3yJdkTz6yXxZCJ70vJJeNl6_v3LWCizNta6d9zFFScM9UB';
     // $ret= Array("message"=>Array("token"=>$token,"notification"=>Array("title"=>"hq","body"=>"hq1","image"=>""),"android"=>Array("notification"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK")),"data"=>$datamess));
                 
