@@ -12,7 +12,7 @@ class firebaseToken extends Controller
     	$token=$request->input("token");
     	$existingCustomer = \App\Customers::where('phone','=',$phone)->first();
         $userid= $existingCustomer->userid;
-\App\User::whereId( $user_id)->update(['token'=>$token]);
+\App\User::whereId( $userid)->update(['token'=>$token]);
 
     }
  function updateToken(Request $request){
