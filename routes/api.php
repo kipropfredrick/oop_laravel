@@ -45,6 +45,8 @@ Route::get('/search','ProductsApiController@search');
 Route::post('/makepayment','autApi@MakePayment');
 Route::get('/checkbooking','ProductsApiController@checkBooking');
 Route::post('/makebooking','autApi@make_booking');
+Route::post('/hasBooking','autApi@hasBooking');
+
 
 
 

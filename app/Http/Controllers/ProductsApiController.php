@@ -575,4 +575,19 @@ $booking->status = "active";
 
   
     }
+
+    function hasBooking(Request $request){
+      $customer=\App\Customers::wherePhone($request->input("phone"))->first();
+         $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+        else{
+          $hasbooking=false;
+        }
+
+        return Array("hasbooking"=>$hasbooking);
+    }
 }
