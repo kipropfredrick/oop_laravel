@@ -31,6 +31,7 @@ if ($phoneexists==null) {
 $user = new \App\User();
         $user->email = $request->input('email');
         $user->name = $request->input('name');
+        $user->platform="mobile";
         $user->password = Hash::make($request->input('phone'));
         $user->save();
 
@@ -349,6 +350,7 @@ $booking->status = "active";
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
         $booking->booking_reference = $booking_reference;
+        $booking->platform="mobile";
         $booking->quantity  = '1';
        
         $booking->item_cost = $product->product_price;

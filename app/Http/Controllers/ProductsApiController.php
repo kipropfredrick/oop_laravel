@@ -230,7 +230,19 @@ function myAccount(Request $request){
          if (Auth::attempt(["email"=>$email,"password"=>$password])) {
             // Authentication passed...
             $phone=\App\Customers::whereUser_id(Auth()->user()->id)->first()->phone;
-            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone);
+
+          $customer=\App\Customers::wherePhone($request->input("phone"))->first();
+         $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+        else{
+          $hasbooking=false;
+        }
+
+            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone,"hasbooking"=>$hasbooking);
             
         }
         else{
