@@ -231,7 +231,7 @@ function myAccount(Request $request){
             // Authentication passed...
             $phone=\App\Customers::whereUser_id(Auth()->user()->id)->first()->phone;
 
-          $customer=\App\Customers::wherePhone($request->input("phone"))->first();
+          $customer=\App\Customers::wherePhone($phone)->first();
          $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if ($booking!=null) {
