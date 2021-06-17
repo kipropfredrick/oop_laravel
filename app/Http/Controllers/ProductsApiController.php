@@ -221,6 +221,7 @@ if($items[0]=="0"){
 else{
     $phone=$username;
 }
+return $phone;
         
         $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
           $email= \App\User::whereId( $existingCustomer->user_id)->first()->email;
