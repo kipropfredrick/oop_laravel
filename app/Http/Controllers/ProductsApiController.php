@@ -213,7 +213,7 @@ function myAccount(Request $request){
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $username, $e_matches);
        
         if ($valid_phone == 1 ) {
-$items=explode(" ",$username);
+$items=str_split($username);
 
 if($items[0]=="0"){
     $phone="254".substr($username, 1);
