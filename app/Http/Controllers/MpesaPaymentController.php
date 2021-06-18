@@ -425,8 +425,8 @@ class MpesaPaymentController extends Controller
     }
     else{
     $obj = new pushNotification();
-    $data=Array("name"=>"complete");
-    $obj->exceuteSendNotification($token,"You have complete payment for ".$booking->product->product_name,"Congratulations",$data);
+    $data=Array("name"=>"complete","value"=>"View Orders");
+    $obj->exceuteSendNotification($token,"You have completed payment for ".$booking->product->product_name,"Congratulations",$data);
         }
 
                 $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
@@ -560,7 +560,7 @@ class MpesaPaymentController extends Controller
     }
     else{
     $obj = new pushNotification();
-    $data=Array("name"=>"payment");
+    $data=Array("name"=>"payment","value"=>"Payments");
     $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
 
             

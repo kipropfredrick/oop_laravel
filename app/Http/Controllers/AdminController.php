@@ -2427,7 +2427,7 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
     }
     else{
     $obj = new pushNotification();
-    $data=Array("name"=>"makepayment");
+    $data=Array("name"=>"makepayment","value"=>"Make Payment");
     $obj->exceuteSendNotification($token,"Start paying for your order ","Please make your payment",$data);
 }
     Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
@@ -2460,7 +2460,7 @@ if (intval($hours)>48) {
     }
     else{
     $obj = new pushNotification();
-    $data=Array("name"=>"paymentreminder");
+    $data=Array("name"=>"paymentreminder","value"=>"Make Payment");
     $obj->exceuteSendNotification($token,"Keep up with your payments to have your order delivered faster","You can pay any amount.",$data);
 }
     Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
@@ -2494,7 +2494,7 @@ if ($checkifexists==null) {
     }
     else{
     $obj = new pushNotification();
-    $data=Array("name"=>"paymentreminder");
+    $data=Array("name"=>"discount", "value"=>"Get discount");
     $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
 
     $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
@@ -2518,7 +2518,7 @@ if (intval($hours)>200) {
     }
     else{
     $obj = new pushNotification();
-    $data=Array("name"=>"paymentreminder");
+    $data=Array("name"=>"discount","value"=>"Get discount");
    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
    DB::table("discountnotification")->wherePhone($result[$i]->phone)->update(["notified_at"=>Now()]);
 }

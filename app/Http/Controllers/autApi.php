@@ -399,7 +399,7 @@ $booking->status = "active";
        return $message;
     }
     $obj = new pushNotification();
-    $data=Array("name"=>"bookingsuccess");
+    $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
     $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
       return $message;
@@ -472,7 +472,7 @@ $booking->status = "active";
        return $message;
     }
     $obj = new pushNotification();
-    $data=Array("name"=>"bookingsuccess");
+    $data=Array("name"=>"bookingsuccess",,"value"=>"Bookings");
     $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
         return $message;
