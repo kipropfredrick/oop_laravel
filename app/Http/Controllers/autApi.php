@@ -482,5 +482,11 @@ $booking->status = "active";
   
     }
 
+    function firebasetopics(Request $request){
+$result=DB::table("firebasetopics")->get();
+
+return $result;
+    }
+
 
 }

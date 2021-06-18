@@ -52,6 +52,7 @@ Route::post('/hasBooking','autApi@hasBooking');
 
 
 Route::get('/pushnotification','pushNotification@testFcm');
+Route::get('/firebasetopics','pushNotification@firebasetopics');
 
 Route::get('/insertToken','firebaseToken@insertToken');
 Route::get('/updateToken','firebaseToken@updateToken');
