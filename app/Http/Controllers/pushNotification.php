@@ -78,7 +78,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 
 
     $api_key = 'AAAABjRMKq4:APA91bF7kJTVRuQzw_9H8rbYSUDhqDAa6Jtm15undJXta74F20BCUdyLjPIXw338GHL3nFqlmhNcPhqwva9YFMGvS0fs0q3yJdkTz6yXxZCJ70vJJeNl6_v3LWCizNta6d9zFFScM9UB';
-$data=Array("name"=>"test");
+$data=Array("name"=>"test","value"=>"test me");
     $fields = array (
         "to"=>"/topics/news",
         "notification"=>Array("title"=>"New Notification","body"=> "This is topic test message","image"=>''),
