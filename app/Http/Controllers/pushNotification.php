@@ -83,7 +83,7 @@ $data=Array("name"=>"test");
         "to"=>"/topics/news",
         "notification"=>Array("title"=>"New Notification","body"=> "This is topic test message","image"=>''),
 
-        "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK","title"=>$title,"body"=> $message),
+        "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK"),
         'data' => $data,
 
     );
