@@ -31,9 +31,9 @@ $url = 'https://fcm.googleapis.com/fcm/send';
         'registration_ids' => array (
                $token
         ),
-        "notification"=>Array("title"=>$title,"body"=> $message,"image"=>''),
+        //"notification"=>Array("title"=>$title,"body"=> $message,"image"=>''),
 
-        "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK"),
+        "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK","title"=>$title,"body"=> $message),
         'data' => $data,
 
     );
