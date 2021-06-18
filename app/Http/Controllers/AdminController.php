@@ -2511,8 +2511,7 @@ $hours=$today->diffInHours($createdDate);
 if (intval($hours)<200) {
    
     # code...
-       $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
-   $token=\App\User::whereId($customer->user_id)->first()->token;
+        $token=\App\User::whereId($result[$i]->user_id)->first()->token;
     if ($token==null) {
         # code...
     
