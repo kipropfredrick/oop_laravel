@@ -2480,7 +2480,7 @@ if (intval($hours)>48) {
    //discounts pap
 
    $customers=\App\Bookings::pluck('customer_id')->toArray();
-$result = \App\Customers::wherNotIn("id",$customers)->get();
+$result = \App\Customers::whereNotIn("id",$customers)->get();
  $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) { 
        # code...
