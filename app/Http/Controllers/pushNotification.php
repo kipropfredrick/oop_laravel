@@ -109,7 +109,7 @@ $data=Array("name"=>"test");
     }
     curl_close($ch);
     $result=json_decode($result);
-
+return $result;
     if (($result->failure)>0) {
       # code...
       $error=$result->results[0]->error;
