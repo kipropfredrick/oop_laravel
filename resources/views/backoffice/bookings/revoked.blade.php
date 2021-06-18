@@ -51,6 +51,7 @@
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
+                                <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
 								@else
 								<th class="thead">Commission</th>
@@ -101,6 +102,7 @@
 										</div>
 									</div>
 									</td>
+									<td>{{$booking->platform}}</td>
 									<td>{{$booking->status}}</td>
 									@if(auth()->user()->role == "agent")
 									<td><a class="btn btn-outline-primary" href="/agent/deliver-booking/{{$booking->id}}">Deliver</a></td>

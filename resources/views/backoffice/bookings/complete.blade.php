@@ -51,6 +51,8 @@
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
+
+                                <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
 								<th class="thead">Date Completed</th>
 								@else
@@ -102,6 +104,7 @@
 										</div>
 									</div>
 									</td>
+									<td>{{$booking->platform}}</td>
 									<td>{{$booking->status}}</td>
 									<td>{{date('M d'.', '.'Y', strtotime($booking->date_completed))}}</td> 
 									@if(auth()->user()->role == "agent")
