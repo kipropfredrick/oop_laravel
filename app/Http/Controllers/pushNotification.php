@@ -16,7 +16,7 @@ class pushNotification extends Controller
         return 0;
     }
     $data=Array("name"=>"test","value"=>"To Test Page");
-    $this->exceuteSendNotification($token,"You have successfully booked (product-name)","Booking Successful",$data);
+   return  $this->exceuteSendNotification($token,"You have successfully booked (product-name)","Booking Successful",$data);
     
     }
 
