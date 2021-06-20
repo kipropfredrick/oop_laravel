@@ -29,7 +29,7 @@ class autApi extends Controller
             return Array("response"=>"Please enter a valid phone number!","error"=>true);
         }else{
             $valid_phone = $msisdn;
-            return $valid_phone;
+          
         }
 
 
