@@ -55,7 +55,7 @@ $user = new \App\User();
         $customer->phone  = $valid_phone;
         $customer->save();
           $phone=\App\Customers::whereUser_id($user_id)->first()->phone;
-            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$valid_phone);
+            return Array("response"=>$user,"error"=>false,"phone"=>$valid_phone);
 }
 else{
 return Array("response"=>"Phone Number Already taken","error"=>true);
