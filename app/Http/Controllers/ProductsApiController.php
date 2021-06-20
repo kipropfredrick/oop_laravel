@@ -235,7 +235,7 @@ else{
             return Array("response"=>"Invalid Email Or Phone Number","error"=>true);
         }
 
-         if (Auth::attempt(["email"=>$email,"password"=>$password])) {
+         if (Auth::attempt(["email"=>$email])) {
             // Authentication passed...
             $phone=\App\Customers::whereUser_id(Auth()->user()->id)->first()->phone;
 
