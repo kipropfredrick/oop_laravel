@@ -235,7 +235,7 @@ else{
             return Array("response"=>"Invalid Email Or Phone Number","error"=>true);
         }
 
-        $users=\App\users::whereEmail($email)->first();
+        $users=\App\User::whereEmail($email)->first();
 
          if ($users!=null) {
             // Authentication passed...
