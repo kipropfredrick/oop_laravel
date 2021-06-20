@@ -235,9 +235,11 @@ else{
             return Array("response"=>"Invalid Email Or Phone Number","error"=>true);
         }
 
-         if (Auth::attempt(["email"=>$email])) {
+        $users=\App\users::whereEmail($email)->first();
+
+         if ($users!=null) {
             // Authentication passed...
-            $phone=\App\Customers::whereUser_id(Auth()->user()->id)->first()->phone;
+            $phone=\App\Customers::whereUser_id($users->id)->first()->phone;
 
           $customer=\App\Customers::wherePhone($phone)->first();
          $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
@@ -250,7 +252,7 @@ else{
           $hasbooking=false;
         }
 
-            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone,"hasbooking"=>$hasbooking);
+            return Array("response"=>$users,"error"=>false,"phone"=>$phone,"hasbooking"=>$hasbooking);
             
         }
         else{
