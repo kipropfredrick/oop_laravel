@@ -117,8 +117,12 @@
             <p>Booking Code: <strong>{{$details['booking_reference']}}</strong><br>
                 M-PESA Reference: <strong>{{$details['latestPayment']->mpesapayment->transac_code}}</strong><br>
                 Payment Date: <strong>{{date('M d'.', '.'Y', strtotime($details['latestPayment']->mpesapayment->date_paid))}}</strong></p>
+             <p>APP NOW AVAILABLE</p>
+            <a href="http://bit.ly/MosMosApp" target="_blank">
+                Download our app to easily track your payments - http://bit.ly/MosMosApp.
+            </a>
 
-            <p>Find the attached Invoice.</p>
+            <p>Find Invoice attached.</p>
 
                 </div>
 

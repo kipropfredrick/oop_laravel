@@ -176,7 +176,7 @@ class MpesaPaymentController extends Controller
             $balance =number_format($balance,2);
 
             // Set your message
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             // Set your shortCode or senderId
             $from       = "Mosmos";
@@ -736,7 +736,7 @@ class MpesaPaymentController extends Controller
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
             
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
            
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 

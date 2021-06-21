@@ -225,7 +225,7 @@ else{
         
         $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
           if($existingCustomer==null){
- return Array("response"=>"No matching records.","error"=>true);
+ return Array("response"=>"No records","error"=>true);
           }
           else{
 $email= \App\User::whereId( $existingCustomer->user_id)->first()->email;
