@@ -39,7 +39,7 @@
         			Mobile STK Push
         		</div>
         		<div class="card-body">
-        			{{$result->total}}
+        			{{$result->mobile}}
         		</div>
         	</div>
         	
