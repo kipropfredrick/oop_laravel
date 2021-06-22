@@ -2558,4 +2558,9 @@ for ($i=0; $i <count($result) ; $i++) {
 
 }
     }
+
+    function monitorPayments(Request $request){
+        $result=DB::table("monitorpay")->get()[0];
+        return  view('backoffice.payments.monitoring',compact('result'));
+    }
 }

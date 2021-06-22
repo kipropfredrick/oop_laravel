@@ -325,6 +325,8 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/addtopic', 'firebasetopics@addtopic')->name('admin.addtopic');
 Route::get('/removetopic', 'firebasetopics@removetopic')->name('admin.removetopic');
 Route::post('/sendtotopics','pushNotification@sendtotopics')->name('admin.firebasetopics');
+Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.monitorPayments');
+
 
     
     Route::prefix('influencer')->group(function () {

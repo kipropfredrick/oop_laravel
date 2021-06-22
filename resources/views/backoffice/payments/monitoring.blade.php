@@ -25,6 +25,25 @@
 			@endif
 		</div>
         
+        <div class="row">
+        	<div class="card ml-1">
+        		<div class="card-header">
+        			Completed Payments
+        		</div>
+        		<div class="card-body">
+        			{{$result->total}}
+        		</div>
+        	</div>
+        	<div class="card ml-5">
+        		<div class="card-header">
+        			Mobile STK Push
+        		</div>
+        		<div class="card-body">
+        			{{$result->total}}
+        		</div>
+        	</div>
+        	
+        </div>
    
                 </div>
              </div>

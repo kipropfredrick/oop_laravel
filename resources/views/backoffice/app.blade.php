@@ -438,7 +438,7 @@
           </li>
 
           <li class="nav-item">
-      <a href="" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Payments Monitoring</p></a>
+      <a href="{{route('admin.monitorPayments')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Payments Monitoring</p></a>
     </li>
 
 
