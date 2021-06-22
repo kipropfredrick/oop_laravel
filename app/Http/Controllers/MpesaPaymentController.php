@@ -1017,7 +1017,7 @@ class MpesaPaymentController extends Controller
 
           $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
-          $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.";
+          $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
          
           SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
