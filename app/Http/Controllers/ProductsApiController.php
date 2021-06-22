@@ -534,14 +534,7 @@ $booking->status = "active";
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
-           $result=DB::table("monitorpay")->get();
-                if (count($result)==0) {
-                    DB::table("monitorpay")->insert(["total"=>1,"mobile"=>1]);
-                }
-                else{
-                    $total=intval($result[0]->mobile)+1;
-                    DB::table("monitorpay")->update(["mobile"=>$total]);
-                }
+         
 
       return $message;
             

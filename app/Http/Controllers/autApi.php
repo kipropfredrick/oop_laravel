@@ -217,6 +217,14 @@ return Array("response"=>"no records exists","error"=>true);
         $booking_ref=$request->input("bookingref");
 
  $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+   $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>1,"mobile"=>1]);
+                }
+                else{
+                    $total=intval($result[0]->mobile)+1;
+                    DB::table("monitorpay")->update(["mobile"=>$total]);
+                }
 
  return $message;
     }
