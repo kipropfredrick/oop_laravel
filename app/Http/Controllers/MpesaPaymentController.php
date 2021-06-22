@@ -520,7 +520,7 @@ class MpesaPaymentController extends Controller
                 }
                 else{
                     $total=intval($result[0]->total)+1;
-                    DB::table("monitorpay")->update(["total"=>$total,"mobile"=>0]);
+                    DB::table("monitorpay")->update(["total"=>$total]);
                 }
 
 
