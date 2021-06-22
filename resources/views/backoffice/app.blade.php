@@ -450,15 +450,10 @@
               <li class="nav-item">
                 <a href="/admin/notifications" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Topics</p>
+                  <p>Send Notifications</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="/admin/send-sms" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Send SMS</p>
-                </a>
-              </li>
+         
             </ul>
           </li>
           </li>
