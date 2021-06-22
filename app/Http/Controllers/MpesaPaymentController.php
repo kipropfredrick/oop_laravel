@@ -514,9 +514,28 @@ class MpesaPaymentController extends Controller
                 $shipping_cost = $booking->shipping_cost;
                 $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
+                $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
+                }
+                else{
+                    $total=intval($result[0]->total)+1;
+                    DB::table("monitorpay")->update(["total"=>$total,"mobile"=>0]);
+                }
+
+
+
             }else{
 
                 $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                   $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
+                }
+                else{
+                    $total=intval($result[0]->total)+1;
+                    DB::table("monitorpay")->update(["total"=>$total]);
+                }
 
             }   
 
