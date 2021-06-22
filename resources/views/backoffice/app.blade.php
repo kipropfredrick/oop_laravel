@@ -436,6 +436,31 @@
               </li>
             </ul>
           </li>
+
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-envelope"></i>
+              <p>
+                Notifications
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/notifications" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Topics</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/send-sms" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Send SMS</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           </li>
 
          @elseif(auth()->user()->role =='vendor')

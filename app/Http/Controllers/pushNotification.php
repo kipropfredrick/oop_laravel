@@ -78,10 +78,10 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 
 
     $api_key = 'AAAABjRMKq4:APA91bF7kJTVRuQzw_9H8rbYSUDhqDAa6Jtm15undJXta74F20BCUdyLjPIXw338GHL3nFqlmhNcPhqwva9YFMGvS0fs0q3yJdkTz6yXxZCJ70vJJeNl6_v3LWCizNta6d9zFFScM9UB';
-$data=Array("name"=>"test","value"=>"test me");
+$data=Array("name"=>"Home","value"=>"Home");
     $fields = array (
-        "to"=>"/topics/news",
-        "notification"=>Array("title"=>"New Notification","body"=> "This is topic test message","image"=>''),
+        "to"=>"/topics/".$request->topic,
+        "notification"=>Array("title"=>$request->title,"body"=> $request->description,"image"=>''),
 
         "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK"),
         'data' => $data,
@@ -103,22 +103,13 @@ $data=Array("name"=>"test","value"=>"test me");
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
     $result = curl_exec($ch);
-   // return $result;
+
     if ($result === FALSE) {
         die('FCM Send Error: ' . curl_error($ch));
     }
     curl_close($ch);
     $result=json_decode($result);
-return response()->json($result);
-    if (($result->failure)>0) {
-      # code...
-      $error=$result->results[0]->error;
-       return Array("data"=>$error,"message"=>"Unable to Send Push Notification","response"=>"Success");
-    }
-    else{
-
-  return Array("data"=>$result,"message"=>"Push Notification Send Successfully","response"=>"Success");
-    }
+  return Back()->with("success","Push Notification Send Successfully");
 
 
     }
