@@ -341,7 +341,7 @@ $balance=$existingUser->balance;
 $booking = new \App\Bookings();
  $recipients = $valid_phone;
 if (intval($balance)==0) {
-   $booking->balance =   $total_cost; 
+   $booking->balance =   $total_cost-100; 
 $booking->amount_paid = "0";
 $booking->status = "pending";
 }
