@@ -358,10 +358,10 @@ else{
     else{
 
          \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
-        $booking->balance =   $total_cost-(intval($balance)); 
+        $booking->balance =   $total_cost-(intval($balance))-100; 
 $booking->amount_paid = $balance;
 $booking->status = "active";
- $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance)));
+ $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance))-100);
     }
 
 
@@ -388,7 +388,7 @@ $booking->status = "active";
         $booking->shipping_cost = $shipping_cost;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
-        $booking->total_cost =  $total_cost;
+        $booking->total_cost =  $total_cost-100;
 
         $booking->save();
         
@@ -459,7 +459,7 @@ $booking->status = "active";
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
-        $booking->balance = $total_cost;
+        $booking->balance = intval($total_cost)-100;
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
@@ -467,7 +467,7 @@ $booking->status = "active";
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
-        $booking->total_cost = $total_cost;
+        $booking->total_cost = intval($total_cost)-100;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();

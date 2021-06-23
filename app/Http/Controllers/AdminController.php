@@ -2508,7 +2508,7 @@ else{
     $createdDate = Carbon::parse($checkifexists->notified_at);
 $hours=$today->diffInHours($createdDate);
 
-if (intval($hours)>200) {
+if (intval($hours)>24) {
    
     # code...
         $token=\App\User::whereId($result[$i]->user_id)->first()->token;
