@@ -381,9 +381,9 @@ class FrontPageController extends Controller
         $categories = \App\Categories::all();
 
        
-        $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
+        $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
 
-        // return $thirdlevel_category;
+        return $thirdlevel_category;
 
         $subcategory = \App\SubCategories::where('slug','=',$subcategory)->first();
 
@@ -394,7 +394,7 @@ class FrontPageController extends Controller
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
-                                            // ->where('subcategory_id',$subcategory->id)
+                                            ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id',$thirdlevel_category->id)
                                             // ->inRandomOrder()
                                             ->orderBy('id','DESC')
@@ -423,7 +423,7 @@ class FrontPageController extends Controller
                 }
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                                            // ->where('subcategory_id',$subcategory->id)
+                                            ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id','=',$thirdlevel_category->id)
                                             ->where('quantity','>',0)->inRandomOrder()->paginate(20);
         
@@ -570,9 +570,10 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::all();
             
-            $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
+            $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
         
             $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
+            
         
             $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
         

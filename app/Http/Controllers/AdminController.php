@@ -915,7 +915,9 @@ class AdminController extends Controller
 
         $data = $request->except('_token');
 
-        $slug =  str_replace(' ', '-', $request->name);
+        $subcategory = \App\SubCategories::find($request->subcategory_id);
+
+        $slug =  str_replace(' ', '-',$subcategory->slug.'-'.$request->name);
 
         $slug =  str_replace('/','-',$slug);
 
@@ -955,7 +957,9 @@ class AdminController extends Controller
 
         $data = $request->except('_token');
 
-        $slug =  str_replace(' ', '-', $request->name);
+        $subcategory = \App\SubCategories::find($request->subcategory_id);
+
+        $slug =  str_replace(' ', '-',$subcategory->slug.'-'.$request->name);
 
         $slug =  str_replace('/','-',$slug);
 
