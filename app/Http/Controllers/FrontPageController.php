@@ -266,20 +266,42 @@ class FrontPageController extends Controller
     public function category(Request $request,$slug){
 
         $sort_by = $request->sort_by;
-
+        
+        $brand = $request->brand;
 
         $categories = \App\Categories::all();
 
-        $category = \App\Categories::where('slug','=',$slug)->first();
+        $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
 
+        return $category;
+
+        $brand_ids = \App\Products::where('status','=','approved')
+                                            ->where('quantity','>',0)
+                                            ->where('category_id',$category->id)
+                                            ->pluck('brand_id')->toArray();
+
+        $brand_ids = array_unique($brand_ids);
+
+        $brand_ids = array_filter($brand_ids);
+
+        $brands  = DB::table('brands')
+                                ->whereIn("id",$brand_ids)
+                                ->orderBy('id', 'DESC')
+                                ->get();
 
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
-                                            ->where('quantity','>',0)
-                                            ->where('category_id',$category->id)
-                                            // ->inRandomOrder()
-                                            ->orderBy('id','DESC')
-                                            ->take(10)->get();
+                                            ->where('quantity','>',0);
+                                            // ->where('category_id',$category->id);
+                                            if(!empty($brand)){
+                                                $brand = \App\Brand::where('slug',$brand)->first();
+                                                $trendingProducts->where('brand_id',$brand->id);
+                                                // return $trendingProducts;
+                                            }
+                                            $trendingProducts->orderBy('id','DESC')
+                                            ->take(20)->get();
+
+                                            return array($trendingProducts);
 
 
         if($sort_by !=null){
@@ -307,14 +329,14 @@ class FrontPageController extends Controller
                                             ->where('category_id','=',$category->id)
                                             ->where('quantity','>',0)->inRandomOrder()->paginate(20);
 
-                return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
+                return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts','brands'));
             }
 
         }else{
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
                                     ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
-            return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
+            return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts','brands'));
         }
 
 
@@ -323,7 +345,7 @@ class FrontPageController extends Controller
                             ->where('quantity','>',0)->orderBy($p,$o)->paginate(20);
 
 
-        return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
+        return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts','brands'));
 
     }
 
@@ -339,7 +361,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=10;
+            $take=12;
 
             if($sort_by == "price-asc"){
                 $p = "product_price";
