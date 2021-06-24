@@ -170,7 +170,10 @@
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <div class="text-center">
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                </div>
+                                
                             </a>
                         </div>
                     </div>
