@@ -423,7 +423,7 @@ class FrontPageController extends Controller
                 }
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                                            ->where('subcategory_id',$subcategory->id)
+                                            // ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id','=',$thirdlevel_category->id)
                                             ->where('quantity','>',0)->inRandomOrder()->paginate(20);
         
