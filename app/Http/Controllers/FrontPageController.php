@@ -382,7 +382,9 @@ class FrontPageController extends Controller
 
         $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
 
-        $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
+        $subcategory = \App\SubCategories::where('slug','=',$subcategory)->first();
+
+        // return $subcategory;
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
         
@@ -390,8 +392,8 @@ class FrontPageController extends Controller
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
-                                            ->where('third_level_category_id',$thirdlevel_category->id)
                                             ->where('subcategory_id',$subcategory->id)
+                                            ->where('third_level_category_id',$thirdlevel_category->id)
                                             // ->inRandomOrder()
                                             ->orderBy('id','DESC')
                                             ->take(10)->get();
@@ -419,8 +421,8 @@ class FrontPageController extends Controller
                 }
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                                            ->where('third_level_category_id','=',$thirdlevel_category->id)
                                             ->where('subcategory_id',$subcategory->id)
+                                            ->where('third_level_category_id','=',$thirdlevel_category->id)
                                             ->where('quantity','>',0)->inRandomOrder()->paginate(20);
         
                 return view('front.show_third_category',compact('products','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
