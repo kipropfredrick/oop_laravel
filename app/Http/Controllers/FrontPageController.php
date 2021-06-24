@@ -383,7 +383,6 @@ class FrontPageController extends Controller
        
         $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
 
-        return $thirdlevel_category;
 
         $subcategory = \App\SubCategories::where('slug','=',$subcategory)->first();
 
