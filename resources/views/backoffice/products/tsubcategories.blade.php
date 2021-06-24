@@ -90,6 +90,8 @@
                                         <label >Name</label>
                                         <div class="col-lg-10">
                                             <input tclass="form-control" value="{{$category->name}}" name="name" placeholder="Enter name" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
+
+                                            <input type="hidden" name="subcategory_id" value="{{$category->subcategory->id}}">
                                         
                                             @error('name')
                                                         <div class="invalid-feedback">
