@@ -19,6 +19,7 @@ use App\Mail\SendPaymentMailToAdmin;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
 use \App\Bookings;
+use App\Http\Controllers\pushNotification;
 
 
 
@@ -2418,6 +2419,17 @@ if (intval($hours)>48) {
 if (intval($hours)==24 && $result[$i]->scheduled=="0") {
     # code...
    // Log::info("Notify");
+    $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
+   $token=\App\User::whereId($customer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"makepayment","value"=>"Make Payment");
+    $obj->exceuteSendNotification($token,"Start paying for your order ","Please make your payment",$data);
+}
     Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
 
 }
@@ -2426,6 +2438,106 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 
 
    }
+
+
+       
+   $result=Bookings::whereStatus("active")->whereCustomer_id(1883)->latest()->get();
+ $today =  Carbon::now();
+   for ($i=0; $i <count($result) ; $i++) { 
+       # code...
+   
+$createdDate = Carbon::parse($result[$i]->notified_at);
+$hours=$today->diffInHours($createdDate);
+
+if (intval($hours)>48) {
+   
+    # code...
+       $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
+   $token=\App\User::whereId($customer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"paymentreminder","value"=>"Make Payment");
+    $obj->exceuteSendNotification($token,"Keep up with your payments to have your order delivered faster","You can pay any amount.",$data);
+}
+    Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
+}
+
+    
+ 
+
+
+//Log::info($hours."     " .$createdDate ."  " .$today);
+
+
+
+   }
+
+
+   //discounts pap
+
+   $customers=\App\Bookings::pluck('customer_id')->toArray();
+$result = \App\Customers::whereNotIn("id",$customers)->get();
+ $today =  Carbon::now();
+   for ($i=0; $i <count($result) ; $i++) { 
+       # code...
+$checkifexists=DB::table("discountnotification")->wherePhone($result[$i]->phone)->first();
+
+if ($checkifexists==null) {
+   $token=\App\User::whereId($result[$i]->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"discount", "value"=>"Get discount");
+    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+
+    $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
+DB::table("discountnotification")->insert($array);
+}
+
+    # code...
+}
+else{
+
+    $createdDate = Carbon::parse($checkifexists->notified_at);
+$hours=$today->diffInHours($createdDate);
+
+if (intval($hours)>24) {
+   
+    # code...
+        $token=\App\User::whereId($result[$i]->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"discount","value"=>"Get discount");
+   $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+   DB::table("discountnotification")->wherePhone($result[$i]->phone)->update(["notified_at"=>Now()]);
+}
+    
+}
+}
+
+    
+ 
+
+
+//Log::info($hours."     " .$createdDate ."  " .$today);
+
+
+
+   }
+
+
+
         // $result=DB::table('bookings')->where('id','=',$id)->first();
         // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
 return "hello";
@@ -2445,5 +2557,10 @@ for ($i=0; $i <count($result) ; $i++) {
    }
 
 }
+    }
+
+    function monitorPayments(Request $request){
+        $result=DB::table("monitorpay")->get()[0];
+        return  view('backoffice.payments.monitoring',compact('result'));
     }
 }

@@ -48,6 +48,7 @@
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
+                                <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
 							</tr>
 						</thead>
@@ -101,6 +102,7 @@
 										</div>
 									</div>
 									</td>
+									<td>{{$booking->platform}}</td>
 									<td>{{$booking->status}}</td>
                                 </tr>
                             @endforeach

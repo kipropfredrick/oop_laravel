@@ -12,16 +12,28 @@ use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendRegistrationEmail;
-
-
+use App\Http\Controllers\pushNotification;
 class autApi extends Controller
 {
-    //
+    
+
+
     function registerUser(Request $request){
     	$phone=$request->input("phone");
     	$email=$request->input("email");
     	$userexists=\App\User::whereEmail($email)->first();
-    	$phoneexists=\App\Customers::wherePhone($phone)->first();
+
+ list($msisdn, $network) = $this->get_msisdn_network($request->phone);
+
+        if (!$msisdn){
+            return Array("response"=>"Please enter a valid phone number!","error"=>true);
+        }else{
+            $valid_phone = $msisdn;
+          
+        }
+
+
+    	$phoneexists=\App\Customers::wherePhone($valid_phone)->first();
     	if ($userexists==null) {
     		# code...
 
@@ -32,6 +44,7 @@ if ($phoneexists==null) {
 $user = new \App\User();
         $user->email = $request->input('email');
         $user->name = $request->input('name');
+        $user->platform="mobile";
         $user->password = Hash::make($request->input('phone'));
         $user->save();
 
@@ -42,7 +55,7 @@ $user = new \App\User();
         $customer->phone  = $valid_phone;
         $customer->save();
           $phone=\App\Customers::whereUser_id($user_id)->first()->phone;
-            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone);
+            return Array("response"=>$user,"error"=>false,"phone"=>$valid_phone);
 }
 else{
 return Array("response"=>"Phone Number Already taken","error"=>true);
@@ -194,6 +207,8 @@ return Array("response"=>"no records exists","error"=>true);
            return Array("response"=>$message,"success"=>true,"error"=>false);
         }
 
+         
+
         return $message;
     }
 
@@ -204,6 +219,14 @@ return Array("response"=>"no records exists","error"=>true);
         $booking_ref=$request->input("bookingref");
 
  $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+  $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
+                }
+                else{
+                    $total=intval($result[0]->mobile)+1;
+                    DB::table("monitorpay")->update(["mobile"=>$total]);
+                }
 
  return $message;
     }
@@ -228,6 +251,15 @@ return Array("response"=>"no records exists","error"=>true);
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
         $vendor_code = $request->vendor_code;
+
+        $vendor=\App\Vendor::whereId($vendor_code)->first();
+        if ($vendor!=null) {
+            $vendor_code=$vendor->vendor_code;
+            # code...
+        }
+        else{
+            $vendor="VD1";
+        }
 
         $categories = \App\Categories::all();
 
@@ -309,7 +341,7 @@ $balance=$existingUser->balance;
 $booking = new \App\Bookings();
  $recipients = $valid_phone;
 if (intval($balance)==0) {
-   $booking->balance =   $total_cost; 
+   $booking->balance =   $total_cost-100; 
 $booking->amount_paid = "0";
 $booking->status = "pending";
 }
@@ -326,10 +358,10 @@ else{
     else{
 
          \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
-        $booking->balance =   $total_cost-(intval($balance)); 
+        $booking->balance =   $total_cost-(intval($balance))-100; 
 $booking->amount_paid = $balance;
 $booking->status = "active";
- $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance)));
+ $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance))-100);
     }
 
 
@@ -341,6 +373,7 @@ $booking->status = "active";
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
         $booking->booking_reference = $booking_reference;
+        $booking->platform="mobile";
         $booking->quantity  = '1';
        
         $booking->item_cost = $product->product_price;
@@ -355,7 +388,7 @@ $booking->status = "active";
         $booking->shipping_cost = $shipping_cost;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
-        $booking->total_cost =  $total_cost;
+        $booking->total_cost =  $total_cost-100;
 
         $booking->save();
         
@@ -383,6 +416,14 @@ $booking->status = "active";
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+    $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+       return $message;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
       return $message;
             
@@ -418,7 +459,7 @@ $booking->status = "active";
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
-        $booking->balance = $total_cost;
+        $booking->balance = intval($total_cost)-100;
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
@@ -426,7 +467,7 @@ $booking->status = "active";
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
-        $booking->total_cost = $total_cost;
+        $booking->total_cost = intval($total_cost)-100;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
@@ -447,11 +488,27 @@ $booking->status = "active";
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
+
+   $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+       return $message;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
+
         return $message;
             
         }
 
   
+    }
+
+    function firebasetopics(Request $request){
+$result=DB::table("firebasetopics")->get();
+
+return $result;
     }
 
 

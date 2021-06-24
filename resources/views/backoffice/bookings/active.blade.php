@@ -51,11 +51,13 @@
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
+                                <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
 								<!-- <th class="text-center thead">Actions</th> -->
 								@else
 								<th class="thead">Commission</th>
 								@endif
+
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -101,6 +103,7 @@
 										</div>
 									</div>
 									</td>
+									<td>{{$booking->platform}}</td>
 									<td>{{$booking->status}}</td>
 									<!-- <td><a class="btn btn-outline-danger" href="/admin/revoke-booking/{{$booking->id}}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a></td> -->
 

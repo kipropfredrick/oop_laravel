@@ -213,10 +213,24 @@ function myAccount(Request $request){
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $username, $e_matches);
        
         if ($valid_phone == 1 ) {
+$items=str_split($username);
 
-          $phone="254".substr($username, 1);
+if($items[0]=="0"){
+    $phone="254".substr($username, 1);
+}
+else{
+    $phone=$username;
+}
+
+        
         $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
-          $email= \App\User::whereId( $existingCustomer->user_id)->first()->email;
+          if($existingCustomer==null){
+ return Array("response"=>"No records","error"=>true);
+          }
+          else{
+$email= \App\User::whereId( $existingCustomer->user_id)->first()->email;
+
+          }
 
         }
         elseif($valid_email == 1){
@@ -227,10 +241,24 @@ function myAccount(Request $request){
             return Array("response"=>"Invalid Email Or Phone Number","error"=>true);
         }
 
-         if (Auth::attempt(["email"=>$email,"password"=>$password])) {
+        $users=\App\User::whereEmail($email)->first();
+
+         if ($users!=null) {
             // Authentication passed...
-            $phone=\App\Customers::whereUser_id(Auth()->user()->id)->first()->phone;
-            return Array("response"=>Auth()->user(),"error"=>false,"phone"=>$phone);
+            $phone=\App\Customers::whereUser_id($users->id)->first()->phone;
+
+          $customer=\App\Customers::wherePhone($phone)->first();
+         $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+        else{
+          $hasbooking=false;
+        }
+
+            return Array("response"=>$users,"error"=>false,"phone"=>$phone,"hasbooking"=>$hasbooking);
             
         }
         else{
@@ -246,11 +274,11 @@ $customer_id=DB::table("customers")->wherePhone($request->input('username'))->fi
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
         $allPayments=[];
 
-   
+
   
 for ($i=0; $i < count($payments); $i++) { 
     # code...
-    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']?$payments[$i]['mpesapayment']->transac_code:"","booking_reference"=>$payments[$i]['booking']->booking_reference,"transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
+    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']?$payments[$i]['mpesapayment']->transac_code:"","booking_reference"=>$payments[$i]['booking']?$payments[$i]['booking']->booking_reference:"","transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
     array_push($allPayments, $array);
 
 }
@@ -506,6 +534,8 @@ $booking->status = "active";
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
+         
+
       return $message;
             
         }
@@ -574,5 +604,20 @@ $booking->status = "active";
         }
 
   
+    }
+
+    function hasBooking(Request $request){
+      $customer=\App\Customers::wherePhone($request->input("phone"))->first();
+         $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+        }
+        else{
+          $hasbooking=false;
+        }
+
+        return Array("hasbooking"=>$hasbooking);
     }
 }

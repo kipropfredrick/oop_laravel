@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
 use App\Http\Controllers\SendSMSController;
+use App\Http\Controllers\pushNotification;
 
 class MpesaPaymentController extends Controller
 {
@@ -175,7 +176,7 @@ class MpesaPaymentController extends Controller
             $balance =number_format($balance,2);
 
             // Set your message
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             // Set your shortCode or senderId
             $from       = "Mosmos";
@@ -191,6 +192,10 @@ class MpesaPaymentController extends Controller
             } catch (Exception $e) {
                 echo "Error: ".$e->getMessage();
             }
+
+            
+
+
         }
 
     }
@@ -412,6 +417,18 @@ class MpesaPaymentController extends Controller
 
                 SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 
+
+  $token=\App\User::whereId($booking->customer->user->id)->first()->token;
+    if ($token==null) {
+        # code...
+ 
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"complete","value"=>"View Orders");
+    $obj->exceuteSendNotification($token,"You have completed payment for ".$booking->product->product_name,"Congratulations",$data);
+        }
+
                 $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
 
 
@@ -495,11 +512,32 @@ class MpesaPaymentController extends Controller
 
             if($payment_count<2){
                 $shipping_cost = $booking->shipping_cost;
-                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
+                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+
+                $message="Payment of KSh.{$transaction_amount} for {$bill_ref_no} received. Txn. {$code}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+
+                $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
+                }
+                else{
+                    $total=intval($result[0]->total)+1;
+                    DB::table("monitorpay")->update(["total"=>$total]);
+                }
+
+
 
             }else{
 
-                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                   $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
+                }
+                else{
+                    $total=intval($result[0]->total)+1;
+                    DB::table("monitorpay")->update(["total"=>$total]);
+                }
 
             }   
 
@@ -534,10 +572,21 @@ class MpesaPaymentController extends Controller
             ];
 
             Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
-           
+          // $user_id=\App\Customers::whereId($booking->customer_id)->first()->user_id;
+
+   $token=\App\User::whereId($booking->customer->user->id)->first()->token;
+    if ($token==null) {
+        # code...
+    
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"payment","value"=>"Payments");
+    $obj->exceuteSendNotification($token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+
             
         $message = "Success!";
-
+}
 
     }else{
         $message = "No Data from Safaricom";
@@ -708,7 +757,7 @@ class MpesaPaymentController extends Controller
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
             
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. " ;
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
            
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -989,7 +1038,7 @@ class MpesaPaymentController extends Controller
 
           $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
-          $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.";
+          $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
          
           SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 

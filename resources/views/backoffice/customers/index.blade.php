@@ -32,8 +32,10 @@
 								<th class="thead">Full Name</th>
 								<th class="thead">Phone</th>
 								<th>Bookings</th>
+
 								<th class="thead">Date created</th>
-								<th>Action/Booking Status</th>
+								<th class="thead">Action/Booking Status</th>
+								<th class="thead">Platform</th>
 							</tr>
 						</thead>
 
@@ -53,6 +55,8 @@
 									<h6 style="text-transform: uppercase">{{$customer->booking_status}}</h6>
 									@endif
 								</td>
+
+								<td>{{$customer->platform}}</td>
 							</tr>
 							@endforeach
 						</tbody>
