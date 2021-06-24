@@ -425,6 +425,9 @@ $booking->status = "active";
     $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
     $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
+    $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
+
       return $message;
             
         }
