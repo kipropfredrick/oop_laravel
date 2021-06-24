@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
 use \App\Bookings;
 use App\Http\Controllers\pushNotification;
+use DataTables;
 
 
 
@@ -2271,11 +2272,18 @@ $this->updateunservicedoverdue();
         
     }
 
-    public function sms_log(){
+    public function sms_log(Request $request){
 
-        $logs = DB::table('s_m_s_logs')->orderBy('id','DESC')->get();
+        if($request->ajax()){
 
-        return view('backoffice.sms.index',compact('logs'));
+            $logs = DB::table('s_m_s_logs')->select('s_m_s_logs.*',DB::raw('DATE_FORMAT(created_at, "%M %d %Y %H:%I %S") as created_at_'))->orderBy('id','DESC');
+
+            return DataTables::of($logs)->make(true);
+
+        }
+
+
+        return view('backoffice.sms.index');
 
     }
 
