@@ -72,7 +72,7 @@
                             <div class="lmmsbfilter lmmsb-sec-scr">
                                 @foreach($brands as $brand)
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
+                                    <input type="checkbox" <?php if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
                                     <label class="form-check-label" for="briPhone">{{$brand->brand_name}}</label>
                                 </div>
                                 @endforeach
@@ -368,17 +368,20 @@
 </div>
 <!-- end --> 
 
+<input type="hidden" name ="url" id="url" value="/cat/{{$category->slug}}">
+
 @endsection
 
 @section('extra-js')
 
 <script type="text/javascript">
     var current_url = window.location.href;
+    var url = $('#url').val();
 </script>
 <script type="text/javascript">
 
     function brandClicked(slug){
-        window.location.replace(current_url+"?brand="+slug);
+        window.location.replace(url+"?brand="+slug);
     }
 
     $(document).ready(function(){

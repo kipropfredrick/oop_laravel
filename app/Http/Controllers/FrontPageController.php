@@ -267,13 +267,13 @@ class FrontPageController extends Controller
 
         $sort_by = $request->sort_by;
         
-        $brand = $request->brand;
+        $brand_slug = $request->brand;
+
+        $brand  = [];
 
         $categories = \App\Categories::all();
 
         $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
-
-        return $category;
 
         $brand_ids = \App\Products::where('status','=','approved')
                                             ->where('quantity','>',0)
@@ -283,25 +283,32 @@ class FrontPageController extends Controller
         $brand_ids = array_unique($brand_ids);
 
         $brand_ids = array_filter($brand_ids);
+        
 
         $brands  = DB::table('brands')
                                 ->whereIn("id",$brand_ids)
                                 ->orderBy('id', 'DESC')
                                 ->get();
 
+        $brand = \App\Brand::where('slug',$brand_slug)->first();
+
+        $current_b = $brand;
+
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
-                                            ->where('quantity','>',0);
-                                            // ->where('category_id',$category->id);
-                                            if(!empty($brand)){
-                                                $brand = \App\Brand::where('slug',$brand)->first();
-                                                $trendingProducts->where('brand_id',$brand->id);
-                                                // return $trendingProducts;
-                                            }
-                                            $trendingProducts->orderBy('id','DESC')
-                                            ->take(20)->get();
+                                            ->where('quantity','>',0)
+                                            ->where('category_id',$category->id)
+                                            ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                    $query->where('brand_id', $brand->id);
+                                                }
+                                            })
+                                            ->orderBy('id','DESC')
+                                            ->take(20)->get();;
 
-                                            return array($trendingProducts);
+
+                                            
 
 
         if($sort_by !=null){
@@ -327,25 +334,52 @@ class FrontPageController extends Controller
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('category_id','=',$category->id)
-                                            ->where('quantity','>',0)->inRandomOrder()->paginate(20);
+                                            ->where('quantity','>',0)
+                                            ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                    $query->where('brand_id', $brand->id);
+                                                }
+                                            })
+                                            ->inRandomOrder()
+                                            ->paginate(20);
 
-                return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts','brands'));
+                return view('front.show_category',compact('products','sort_by','current_b','categories','category','trendingProducts','brands'));
             }
 
         }else{
             $sort_by = "id";
-            $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
-                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
-            return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts','brands'));
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('category_id','=',$category->id)
+                                        ->where('quantity','>',0)
+                                        ->where(function($query) use ($brand)
+                                        {
+                                            if (!empty($brand)) {
+                                                $query->where('brand_id', $brand->id);
+                                            }
+                                        })
+                                        ->where('status','=','approved')
+                                        ->inRandomOrder()
+                                        ->paginate(20);
+
+            return view('front.show_category',compact('products','current_b','sort_by','categories','category','trendingProducts','brands'));
         }
 
 
         $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                             ->where('category_id','=',$category->id)
-                            ->where('quantity','>',0)->orderBy($p,$o)->paginate(20);
+                            ->where('quantity','>',0)
+                            ->where(function($query) use ($brand)
+                            {
+                                if (!empty($brand)) {
+                                    $query->where('brand_id', $brand->id);
+                                }
+                            })
+                            ->orderBy($p,$o)
+                            ->paginate(20);
 
 
-        return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts','brands'));
+        return view('front.show_category',compact('products','current_b','sort_by','categories','category','trendingProducts','brands'));
 
     }
 
