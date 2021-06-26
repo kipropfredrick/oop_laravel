@@ -321,8 +321,12 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/send-sms','AdminController@send_sms')->name('admin.send-sms');
     Route::post('/send-sms-save','AdminController@send_sms_save')->name('admin.send-sms-save');
 
+    
+
     Route::get('/notifications', 'firebasetopics@index')->name('admin.notifications');
+    Route::get('/custom', 'firebasetopics@customNotifications')->name('admin.customnotifications');
     Route::post('/addtopic', 'firebasetopics@addtopic')->name('admin.addtopic');
+    Route::post('/customnotify', 'firebasetopics@customnotify')->name('admin.customnotify');
 Route::get('/removetopic', 'firebasetopics@removetopic')->name('admin.removetopic');
 Route::post('/sendtotopics','pushNotification@sendtotopics')->name('admin.firebasetopics');
 Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.monitorPayments');
