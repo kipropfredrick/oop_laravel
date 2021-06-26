@@ -13,6 +13,7 @@ use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendRegistrationEmail;
 use App\Http\Controllers\pushNotification;
+use Log;
 class autApi extends Controller
 {
     
@@ -177,7 +178,7 @@ return Array("response"=>"no records exists","error"=>true);
             'PartyA'            => $msisdn,
             'PartyB'            =>env('MPESA_SHORT_CODE'),
             'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://mosmos.co.ke/stk-callback',
+            'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
             'AccountReference'  => $booking_ref,
             'TransactionDesc'   => 'Mosmos Product Payment'
         );
@@ -512,6 +513,14 @@ $booking->status = "active";
 $result=DB::table("firebasetopics")->get();
 
 return $result;
+    }
+
+    function callBack(Request $request){
+    $stkResponse = file_get_contents('php://input');
+
+        Log::info("STK CALLBACK => ".print_r($stkResponse,true));
+
+        return 0;
     }
 
 
