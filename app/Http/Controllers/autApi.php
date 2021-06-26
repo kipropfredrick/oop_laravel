@@ -13,7 +13,7 @@ use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendRegistrationEmail;
 use App\Http\Controllers\pushNotification;
-use Log;
+
 class autApi extends Controller
 {
     
