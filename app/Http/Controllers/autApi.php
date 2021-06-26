@@ -220,14 +220,7 @@ return Array("response"=>"no records exists","error"=>true);
         $booking_ref=$request->input("bookingref");
 
  $message =  $this->stk_push($amount,$msisdn,$booking_ref);
-  $result=DB::table("monitorpay")->get();
-                if (count($result)==0) {
-                    DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
-                }
-                else{
-                    $total=intval($result[0]->mobile)+1;
-                    DB::table("monitorpay")->update(["mobile"=>$total]);
-                }
+
 
  return $message;
     }
@@ -519,6 +512,21 @@ return $result;
     $stkResponse = file_get_contents('php://input');
 
         Log::info("STK CALLBACKs => ".print_r($stkResponse,true));
+
+         $body=($request->all())['Body']['stkCallback'];
+         $MerchantRequestID=$body['MerchantRequestID'];
+         $ResultCode=$body['ResultCode'];
+
+          if ($ResultCode==0) {
+  $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
+                }
+                else{
+                    $total=intval($result[0]->mobile)+1;
+                    DB::table("monitorpay")->update(["mobile"=>$total]);
+                }
+          }
 
         return 0;
     }
