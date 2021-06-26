@@ -36,7 +36,7 @@
         	</div>
         	<div class="card ml-5">
         		<div class="card-header">
-        			Manual Payments
+        			Mobile Payments
         		</div>
         		<div class="card-body">
         			 {{$result->mobile}}
@@ -45,7 +45,7 @@
 
                 <div class="card ml-5">
                 <div class="card-header">
-                    Manual
+                    Manual Payments
                 </div>
                 <div class="card-body">
                    
