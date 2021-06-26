@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
-@section('title', $subcategory->subcategory_name)
+@section('title', $category->category_name)
 
 @section('content')
-
-
 <!-- breadcrumb --> 
 <div class="bc-bg">
     <div class="container">
+
+
+
+
         <div class="bc-link">
             <a href="/">
                 <i class="fas fa-home"></i>
@@ -15,15 +17,11 @@
 
             <span class="bc-sep"></span>
 
-            <a href="/cat/{{$category->slug}}">
+            <!-- <a href="/cat/{{$category->slug}}"> -->
                 <span>{{$category->category_name}}</span>
-            </a>
-
-            <span class="bc-sep"></span>
-
-            <!-- <a href="/sub/{{$subcategory->id}}"> -->
-                <span>{{$subcategory->subcategory_name}}</span>
             <!-- </a> -->
+
+            <!-- <span class="bc-sep"></span> -->
 
             <!-- <span class="bc-sep"></span>
 
@@ -42,9 +40,9 @@
     <div class="container">
         <div>
             <div class="ht mb-3">
-                <h5>{{$subcategory->subcategory_name}}</h5>
+                <h5>{{$category->category_name}}</h5>
 
-                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('subcategory_id',$subcategory->id)->count(); ?>
+                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('category_id',$category->id)->count(); ?>
 
                 <div>
                     <div class="filters">
@@ -58,7 +56,7 @@
                                 <div class="form-group row">
                                     <label class="col-3 col-form-label">Sort by:</label>
                                     <div class="col-7">
-                                        <form action="/sub/{{$subcategory->slug}}" id="filter-form">
+                                         <form action="/cat/{{$category->slug}}" id="filter-form">
                                             <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
                                                 @if ($sort_by == "id")
                                                     <option value="id">ID</option>
@@ -89,6 +87,7 @@
                                             </select>
                                         </form>
                                     </div>
+                                    <input type="hidden" name="url" id="url" value="{{Request::url()}}">
                                 </div>
                             </div>
                         </div>
@@ -96,10 +95,11 @@
                 </div>
 
             </div>
-            
-                   
 
-                <div class="p-grid product-list">
+            <div>
+
+            
+            <div class="p-grid product-list">
                 @foreach($products as $product)
                     <div class="p-cat product-box">
                         <div class="p-c-sec">
@@ -116,6 +116,7 @@
                     </div>
                     @endforeach
            </div>
+
            
            @if($count==0)
                 <div class="text-center">
@@ -123,17 +124,24 @@
                     <h6 class="text-center">No Products Found!</h6>
                 </div>
             @endif
+           
+             
+            </div>
 
-           <?php 
+
+        </div>
+
+        <?php 
             $currentP = $products->currentPage();
             $nextP = $currentP+1;
             $lastp = $products->lastPage();
             $baseUrl = \URL::to('/');
-            $url = $baseUrl.'/sub/'.$subcategory->slug;
+            $url = $baseUrl.'/cat/'.$category->slug;
             $loadUrl = $url."?page=".$nextP;
-            ?>
+        ?>
 
-         @if($currentP!=$lastp)
+
+        @if($currentP!=$lastp)
         <div class="row justify-content-center">
             <!-- <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a> -->
             <button data-totalResult="{{$count}}" style="width:150px;margin-top:20px" class="btn btn-block load-more-btn">Load more</button>
@@ -141,22 +149,21 @@
         @endif
 
     </div>
-    <!-- end products grid -->
-
-        </div>
-    </div>
     <!-- end products carousel -->
+
+
 </div>
 
- <!-- {{ $products->links() }} -->
 
+
+ <!-- {{ $products->links() }} -->
 
  <div class="bg-white">
     <!-- products carousel -->
     <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
-                <h5>{{$subcategory->subcategory_name}} Weekly Best Sellers</h5>
+                <h5>{{$category->category_name}} Weekly Best Sellers</h5>
             </div>
 
             <div id="product-carousel">
@@ -170,6 +177,7 @@
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
+                                
                                 <div class="text-center">
                                     <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
                                 </div>
@@ -179,11 +187,11 @@
                     </div>
                     @empty
                     
-                       <div class="text-center">
-                            <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
-                            <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
-                        </div>
-                    
+                    <div class="text-center">
+                        <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                        <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
+                    </div>
+
                     @endforelse
 
                 </div>
@@ -195,7 +203,6 @@
 
 </div>
 
-</div>
 
 @endsection
 
@@ -208,7 +215,6 @@
     $(document).ready(function(){
         $(".load-more-btn").on('click',function(){
             var _totalCurrentResult=$(".product-box").length;
-            var sort_by = $('#sort_by').val();
             // Ajax Reuqest
             $.ajax({
                 url:current_url,
@@ -216,13 +222,13 @@
                 dataType:'json',
                 data:{
                     skip:_totalCurrentResult,
-                    _token:"{{ csrf_token() }}",
-                    sort_by:sort_by
+                    _token:"{{ csrf_token() }}"
                 },
                 beforeSend:function(){
                     $(".load-more-btn").html('Loading...');
                 },
                 success:function(response){
+                    
                     var _html='';
                     var image="/storage/images/";
                     var p_url ="/product/";

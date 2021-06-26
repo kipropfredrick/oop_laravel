@@ -39,9 +39,12 @@
                             <a href="/product/{{$product->slug}}">
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
-                                <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
+                                <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                               <div class="text-center">
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                </div>
+
                             </a>
                         </div>
                     </div>
@@ -73,9 +76,11 @@
                             <a href="/product/{{$product->slug}}">
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
-                                <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
+                                <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                               <div class="text-center">
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                </div>
                             </a>
                         </div>
                     </div>
@@ -105,9 +110,11 @@
                             <a href="/product/{{$product->slug}}">
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
-                                <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
+                                <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
 
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                               <div class="text-center">
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                </div>
                             </a>
                         </div>
                     </div>
@@ -138,9 +145,11 @@
                 @forelse($categories as $category)
                     <div class="">
                             <div class="mdg-c">
-                                <img src="/storage/images/{{$category->category_icon}}" alt="Category Name">
+                                 <a href="/cat/{{$category->slug}}">
+                                    <img src="/storage/images/{{$category->category_icon}}" alt="Category Name">
+                                 </a>
                                 <span class="cat-name">
-                                    <a href="/{{$category->slug}}">{{$category->category_name}}</a>
+                                    <a href="/cat/{{$category->slug}}">{{$category->category_name}}</a>
                                 </span>
                             </div>
                      </div>

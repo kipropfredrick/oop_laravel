@@ -260,8 +260,10 @@
                             <a href="/product/{{$product->slug}}">
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
-                                <div class="p-c-price">KSh.{{$product->product_price}}</div>
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                <div class="p-c-price text-center">KSh.{{$product->product_price}}</div>
+                                <div class="text-center">
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                </div>
                             </a>
                         </div>
                     </div>

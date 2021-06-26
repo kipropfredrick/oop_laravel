@@ -59,6 +59,14 @@
   #myTable{
    padding:10px !important;
   }
+
+  .ellipsis{
+    display: inline-block;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
   
   </style>
 

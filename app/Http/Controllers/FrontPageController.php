@@ -266,20 +266,49 @@ class FrontPageController extends Controller
     public function category(Request $request,$slug){
 
         $sort_by = $request->sort_by;
+        
+        $brand_slug = $request->brand;
 
+        $brand  = [];
 
         $categories = \App\Categories::all();
 
-        $category = \App\Categories::where('slug','=',$slug)->first();
+        $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
 
+        $brand_ids = \App\Products::where('status','=','approved')
+                                            ->where('quantity','>',0)
+                                            ->where('category_id',$category->id)
+                                            ->pluck('brand_id')->toArray();
+
+        $brand_ids = array_unique($brand_ids);
+
+        $brand_ids = array_filter($brand_ids);
+        
+
+        $brands  = DB::table('brands')
+                                ->whereIn("id",$brand_ids)
+                                ->orderBy('id', 'DESC')
+                                ->get();
+
+        $brand = \App\Brand::where('slug',$brand_slug)->first();
+
+        $current_b = $brand;
 
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
                                             ->where('category_id',$category->id)
-                                            // ->inRandomOrder()
+                                            ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                    $query->where('brand_id', $brand->id);
+                                                }
+                                            })
                                             ->orderBy('id','DESC')
-                                            ->take(10)->get();
+                                            ->take(20)->get();;
+
+
+                                            
 
 
         if($sort_by !=null){
@@ -305,25 +334,52 @@ class FrontPageController extends Controller
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('category_id','=',$category->id)
-                                            ->where('quantity','>',0)->inRandomOrder()->paginate(20);
+                                            ->where('quantity','>',0)
+                                            ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                    $query->where('brand_id', $brand->id);
+                                                }
+                                            })
+                                            ->inRandomOrder()
+                                            ->paginate(20);
 
-                return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
+                return view('front.show_category',compact('products','sort_by','current_b','categories','category','trendingProducts','brands'));
             }
 
         }else{
             $sort_by = "id";
-            $products =   \App\Products::with('category','subcategory','gallery')->where('category_id','=',$category->id)
-                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
-            return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('category_id','=',$category->id)
+                                        ->where('quantity','>',0)
+                                        ->where(function($query) use ($brand)
+                                        {
+                                            if (!empty($brand)) {
+                                                $query->where('brand_id', $brand->id);
+                                            }
+                                        })
+                                        ->where('status','=','approved')
+                                        ->inRandomOrder()
+                                        ->paginate(20);
+
+            return view('front.show_category',compact('products','current_b','sort_by','categories','category','trendingProducts','brands'));
         }
 
 
         $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                             ->where('category_id','=',$category->id)
-                            ->where('quantity','>',0)->orderBy($p,$o)->paginate(20);
+                            ->where('quantity','>',0)
+                            ->where(function($query) use ($brand)
+                            {
+                                if (!empty($brand)) {
+                                    $query->where('brand_id', $brand->id);
+                                }
+                            })
+                            ->orderBy($p,$o)
+                            ->paginate(20);
 
 
-        return view('front.show_category',compact('products','sort_by','categories','category','trendingProducts'));
+        return view('front.show_category',compact('products','current_b','sort_by','categories','category','trendingProducts','brands'));
 
     }
 
@@ -339,7 +395,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=10;
+            $take=12;
 
             if($sort_by == "price-asc"){
                 $p = "product_price";
@@ -380,9 +436,12 @@ class FrontPageController extends Controller
         
         $categories = \App\Categories::all();
 
-        $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
+       
+        $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
 
-        $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
+
+        $subcategory = \App\SubCategories::where('slug','=',$subcategory)->first();
+
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
         
@@ -390,6 +449,7 @@ class FrontPageController extends Controller
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
+                                            ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id',$thirdlevel_category->id)
                                             // ->inRandomOrder()
                                             ->orderBy('id','DESC')
@@ -418,6 +478,7 @@ class FrontPageController extends Controller
                 }
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                            ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id','=',$thirdlevel_category->id)
                                             ->where('quantity','>',0)->inRandomOrder()->paginate(20);
         
@@ -564,9 +625,10 @@ class FrontPageController extends Controller
 
         $categories = \App\Categories::all();
             
-            $thirdlevel_category = \App\ThirdLevelCategory::where('slug','=',$slug)->first();
+            $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
         
             $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
+            
         
             $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
         

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
 use \App\Bookings;
 use App\Http\Controllers\pushNotification;
+use DataTables;
 
 
 
@@ -914,7 +915,9 @@ class AdminController extends Controller
 
         $data = $request->except('_token');
 
-        $slug =  str_replace(' ', '-', $request->name);
+        $subcategory = \App\SubCategories::find($request->subcategory_id);
+
+        $slug =  str_replace(' ', '-',$subcategory->slug.'-'.$request->name);
 
         $slug =  str_replace('/','-',$slug);
 
@@ -954,7 +957,9 @@ class AdminController extends Controller
 
         $data = $request->except('_token');
 
-        $slug =  str_replace(' ', '-', $request->name);
+        $subcategory = \App\SubCategories::find($request->subcategory_id);
+
+        $slug =  str_replace(' ', '-',$subcategory->slug.'-'.$request->name);
 
         $slug =  str_replace('/','-',$slug);
 
@@ -1870,63 +1875,64 @@ $this->updateunservicedoverdue();
     }
 
     public function customers(Request $request,$type){
-   $title="";
+        
+        $title="";
 
-if ($type=="active") {
+        if ($type=="active") {
 
-$customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
-          $title="Active/ Complete Bookings";       
-    # code...
-}
-else if ($type=='complete') {
-    # code...
-    $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
-    $title="Complete Bookings";  
-   
-}
-else if ($type=='active-bookings') {
-    # code...
-    $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
-      $title="Active Bookings";  
+        $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
+        $title="Active/ Complete Bookings";       
+        # code...
+        }
+        else if ($type=='complete') {
+        # code...
+        $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
+        $title="Complete Bookings";  
 
-}
+        }
+        else if ($type=='active-bookings') {
+        # code...
+        $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
+        $title="Active Bookings";  
 
-else if ($type=='pending-bookings') {
-    # code...
-    $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
-   
-   $title="Pending Bookings";  
-}
-else if ($type=='revoked-bookings') {
-    # code...
-    $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
-      $title="Revoked Bookings";  
+        }
 
-}
-else if ($type=='inactive') {
-    # code...
-    $customers=\App\Bookings::pluck('customer_id')->toArray();
-      $title="Inactive Customers";  
+        else if ($type=='pending-bookings') {
+        # code...
+        $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
 
-}
+        $title="Pending Bookings";  
+        }
+        else if ($type=='revoked-bookings') {
+        # code...
+        $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
+        $title="Revoked Bookings";  
 
-if ($type=="inactive") {
-     $customers  = DB::table('customers')
+        }
+        else if ($type=='inactive') {
+        # code...
+        $customers=\App\Bookings::pluck('customer_id')->toArray();
+        $title="Inactive Customers";  
+
+        }
+
+        if ($type=="inactive") {
+        $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
                         ->join('users', 'customers.user_id', '=', 'users.id')->
                         whereNotIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
                         ->get();
-    # code...
-}
-else{
-      $customers  = DB::table('customers')
+        # code...
+        }
+        else{
+        $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
                         ->join('users', 'customers.user_id', '=', 'users.id')->
                         whereIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
                         ->get(); 
-}
+        }
 
 
 
@@ -2270,11 +2276,18 @@ else{
         
     }
 
-    public function sms_log(){
+    public function sms_log(Request $request){
 
-        $logs = DB::table('s_m_s_logs')->orderBy('id','DESC')->get();
+        if($request->ajax()){
 
-        return view('backoffice.sms.index',compact('logs'));
+            $logs = DB::table('s_m_s_logs')->select('s_m_s_logs.*',DB::raw('DATE_FORMAT(created_at, "%M %d %Y %H:%I %S") as created_at_'))->orderBy('id','DESC');
+
+            return DataTables::of($logs)->make(true);
+
+        }
+
+
+        return view('backoffice.sms.index');
 
     }
 
@@ -2287,11 +2300,75 @@ else{
     public function send_sms_save(Request $request){
         
       $recipients = $request->receiver;
+      $type = $request->type;
+      $group = $request->group;
       $message = $request->message;
 
-      SendSMSController::sendMessage($recipients,$message,$type = 'composed_message');
+      if($type === "single" && empty($recipients)){
+        return back()->withInput()->with('error','Recipient field is required');
+      }
 
-      return back()->with('success','Message has been sent!');
+      if($type === "group" && empty($group)){
+        return back()->withInput()->with('error','Group field is required');
+      }
+      
+
+      if($type === "single"){
+        SendSMSController::sendMessage($recipients,$message,$type = 'composed_message');
+        return back()->with('success','Message has been sent!');
+      }elseif($type === "group"){
+
+        if($group === "active_customers"){
+
+          $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
+
+        }elseif($group === "cb_customers"){
+
+            $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
+
+        }elseif($group === "ab_customers"){
+
+            $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
+
+        }elseif($group === "pb_customers"){
+
+            $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
+
+        }elseif($group === "rb_customers"){
+
+            $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
+
+        }elseif($group === "inactive_customers"){
+
+            $customers=\App\Bookings::pluck('customer_id')->toArray();
+
+        }
+
+        if ($type=="inactive_customers") {
+            $recipients  = DB::table('customers')
+                            ->whereNotIn("customers.id",$customers)
+                            ->orderBy('customers.id', 'DESC')
+                            ->pluck('phone')->toArray();
+            # code...
+        }
+        else{
+        $recipients  = DB::table('customers')
+                        ->whereIn("customers.id",$customers)
+                        ->orderBy('customers.id', 'DESC')
+                        ->pluck('phone')->toArray();
+        }
+
+        $recipients = implode(",",$recipients);
+
+      }
+
+
+       try {
+           return back()->with('success','Messages Queued Successfully!');
+        }finally{
+            SendSMSController::sendMessage($recipients,$message,$type = $group.'_composed_message');
+        }
+     
           
     }
 
