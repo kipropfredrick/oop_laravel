@@ -518,7 +518,7 @@ return $result;
     function callBack(Request $request){
     $stkResponse = file_get_contents('php://input');
 
-        Log::info("STK CALLBACK => ".print_r($stkResponse,true));
+        Log::info("STK CALLBACKs => ".print_r($stkResponse,true));
 
         return 0;
     }
