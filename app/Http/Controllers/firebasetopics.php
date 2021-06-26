@@ -114,10 +114,7 @@ $token=$value->token;
 $users=User::whereIn("id",$users)->get();
 
 foreach ($users as $key => $value) {
-if ($value->id!="1901") {
-    # code...
-}
-else {
+
 $token=$value->token;
     if ($token==null) {
         # code...
@@ -128,7 +125,7 @@ $token=$value->token;
     $data=Array("name"=>"home","value"=>"home");
     $obj->exceuteSendNotification($token,$message,$title,$data);
         }
-  }
+  
 }
   }
 
