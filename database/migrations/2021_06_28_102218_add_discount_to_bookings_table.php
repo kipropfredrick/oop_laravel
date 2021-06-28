@@ -15,7 +15,7 @@ class AddDiscountToBookingsTable extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             //
-            $table->string("discount");
+            $table->integer("discount");
         });
     }
 
