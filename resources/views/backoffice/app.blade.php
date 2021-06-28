@@ -360,9 +360,16 @@
          <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'revoked-bookings'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;RB customers</p></a>
         </li>
+          <li class="nav-item {{ (request()->is('admin/customers/overdue')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'overdue'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;OB Customers</p></a>
+        </li>
+         <li class="nav-item {{ (request()->is('admin/customers/unserviced')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'unserviced'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;UB Customers</p></a>
+        </li>
           <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'inactive'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;Inactive customers</p></a>
         </li>
+       
  
       </ul>
     </li>

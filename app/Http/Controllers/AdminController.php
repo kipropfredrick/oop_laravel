@@ -1916,6 +1916,21 @@ $this->updateunservicedoverdue();
 
         }
 
+         else if ($type=='overdue') {
+        # code...
+       $customers=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
+        $title="Overdue Bookings";
+
+        }
+           else if ($type=='unserviced') {
+        # code...
+       $customers=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
+        $title="Overdue Bookings";
+
+        }
+        
+
+
         if ($type=="inactive") {
         $customers  = DB::table('customers')
                         ->select('customers.*','customers.id AS customer_id','users.*')
