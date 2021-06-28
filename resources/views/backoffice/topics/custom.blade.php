@@ -62,20 +62,20 @@
     <div class="form-check">
   <input class="form-check-input" name="category[]" type="checkbox" value="active" id="defaultCheck1">
   <label class="form-check-label" for="defaultCheck1" >
-   Complete Bookings 
+   Active Bookings 
   </label>
 </div>
 <div class="form-check">
   <input class="form-check-input" name="category[]" type="checkbox" value="complete" id="defaultCheck2">
   <label class="form-check-label" for="defaultCheck2" >
-    Pending Bookings
+    Complete Bookings
   </label>
 </div>
 
 <div class="form-check">
   <input class="form-check-input" name="category[]" type="checkbox" value="pending" id="defaultCheck3">
   <label class="form-check-label" for="defaultCheck2" >
-    No Active Bookings
+    No Bookings
   </label>
 </div>
   </div>
