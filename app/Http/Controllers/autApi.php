@@ -369,6 +369,7 @@ $booking->status = "active";
         $booking->booking_reference = $booking_reference;
         $booking->platform="mobile";
         $booking->quantity  = '1';
+        $booking->discount  = 100;
        
         $booking->item_cost = $product->product_price;
         
@@ -463,6 +464,7 @@ $booking->status = "active";
         $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
         $booking->due_date = $due_date;
+        $booking->discount=100;
         $booking->status = "pending";
         $booking->total_cost = intval($total_cost)-100;
         $booking->save();
