@@ -609,12 +609,12 @@
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 
-<script type="text/javascript" src="{{asset('vendor/plugins/select2/js/select2.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{asset('vendor/plugins/select2/js/select2.min.js')}}"></script> -->
 <!-- Summernote -->
 <script src="{{asset('backoffice/summernote/summernote-bs4.min.js')}}"></script>
 
 <!-- Select2 -->
-<script src="{{asset('backoffice/plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- <script src="{{asset('backoffice/plugins/select2/js/select2.full.min.js')}}"></script> -->
 
 @yield('extra-js')
 <script>

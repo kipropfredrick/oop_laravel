@@ -77,6 +77,7 @@ $token=$value->token;
     else{
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
+    $message = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$message,$title,$data);
         }
   
@@ -100,6 +101,7 @@ $token=$value->token;
     else{
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
+   $message = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$message,$title,$data);
         }
   
@@ -123,6 +125,8 @@ $token=$value->token;
     else{
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
+    // $obj->exceuteSendNotification($token,$message,$title,$data);
+       $message = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$message,$title,$data);
         }
   
@@ -131,6 +135,7 @@ $token=$value->token;
 
         }
         else{
+
 
 $sendto=$request->sendto;
 
@@ -149,9 +154,12 @@ $token=\App\User::whereId($sendto)->first()->token;
     else{
     $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
+       $message = str_replace('{customerName}',\App\User::whereId($sendto)->first()->name, $message);
     $obj->exceuteSendNotification($token,$message,$title,$data);
+  //  $obj->exceuteSendNotification($token,$message,$title,$data);
+      $count=$count+1;
         }
-         $count=$count+1;
+       
 
 }
 

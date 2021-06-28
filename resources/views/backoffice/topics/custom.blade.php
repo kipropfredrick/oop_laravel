@@ -2,14 +2,14 @@
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- Traffic sources -->
 <div class="card">
 <div class=" padding">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Topics</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>
+              In your notification you can use any of the following tags: {customerName}
+            </strong></h6>
 		</div>
 		
 		<div class="mt-1">
@@ -83,7 +83,7 @@
 
    <div class="container w-100" id="individual" style="display: none;" >
     <label>Send Notification To:</label>
-  <select class="form-control" id="select2" name="sendto">
+  <select class="form-control" id="users" name="sendto">
     <option value="000">Select user</option>
 @foreach ($users as $user)
     <option value="{{$user->id}}">{{$user->name}}</option>
@@ -127,6 +127,11 @@
                $("#select2").select2();
              </script> -->
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script type="text/javascript">
   
   function changelog(){
@@ -161,6 +166,16 @@ else{
    
     return true;
 });
+
+
+
+   $('#users').select2({
+    width:"100%",
+            tags: true,
+            maximumInputLength: 10,
+        });
+
 </script>
+
 
 @endsection
