@@ -65,9 +65,9 @@ if (in_array("active", $category))
 
     $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
-$users=User::whereIn("id",$users)->get();
-return $users;
-foreach ($users as $key => $value) {
+$user=User::whereIn("id",$users)->get();
+return $user;
+foreach ($user as $key => $value) {
 
 $token=$value->token;
     if ($token==null) {
