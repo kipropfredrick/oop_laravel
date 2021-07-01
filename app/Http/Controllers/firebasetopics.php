@@ -77,8 +77,8 @@ $token=$value->token;
     else{
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
-    $message = str_replace('{customerName}',$value->name, $message);
-    $obj->exceuteSendNotification($token,$message,$title,$data);
+    $messages = str_replace('{customerName}',$value->name, $message);
+    $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
   
 }
@@ -101,8 +101,8 @@ $token=$value->token;
     else{
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
-   $message = str_replace('{customerName}',$value->name, $message);
-    $obj->exceuteSendNotification($token,$message,$title,$data);
+   $messages = str_replace('{customerName}',$value->name, $message);
+    $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
   
 }
@@ -126,8 +126,8 @@ $token=$value->token;
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($token,$message,$title,$data);
-       $message = str_replace('{customerName}',$value->name, $message);
-    $obj->exceuteSendNotification($token,$message,$title,$data);
+       $messages = str_replace('{customerName}',$value->name, $message);
+    $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
   
 }
