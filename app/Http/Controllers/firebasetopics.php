@@ -64,7 +64,7 @@ if (in_array("active", $category))
   {
 
     $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
-    $users = \App\Customers::whereIn("id",$customers)->wherePhone('254790535349')->pluck('user_id')->toArray();
+    $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->get();
 return $users;
 foreach ($users as $key => $value) {
