@@ -63,7 +63,7 @@ return Back()->with("success","information updated");
 if (in_array("active", $category))
   {
 
-    $customers=\App\Bookings::where('status','=','test')->pluck('customer_id')->toArray();
+    $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $user=User::whereIn("id",$users)->get();
 
@@ -101,7 +101,7 @@ $token=$value->token;
     else{
         $count=$count+1;
     $data=Array("name"=>"home","value"=>"home");
-    
+
    $messages = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
