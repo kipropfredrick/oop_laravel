@@ -13,6 +13,7 @@ use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Mail;
 use \App\Mail\SendRegistrationEmail;
 use App\Http\Controllers\pushNotification;
+
 class autApi extends Controller
 {
     
@@ -177,7 +178,7 @@ return Array("response"=>"no records exists","error"=>true);
             'PartyA'            => $msisdn,
             'PartyB'            =>env('MPESA_SHORT_CODE'),
             'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://mosmos.co.ke/stk-callback',
+            'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
             'AccountReference'  => $booking_ref,
             'TransactionDesc'   => 'Mosmos Product Payment'
         );
@@ -219,14 +220,7 @@ return Array("response"=>"no records exists","error"=>true);
         $booking_ref=$request->input("bookingref");
 
  $message =  $this->stk_push($amount,$msisdn,$booking_ref);
-  $result=DB::table("monitorpay")->get();
-                if (count($result)==0) {
-                    DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
-                }
-                else{
-                    $total=intval($result[0]->mobile)+1;
-                    DB::table("monitorpay")->update(["mobile"=>$total]);
-                }
+
 
  return $message;
     }
@@ -375,6 +369,7 @@ $booking->status = "active";
         $booking->booking_reference = $booking_reference;
         $booking->platform="mobile";
         $booking->quantity  = '1';
+        $booking->discount  = 100;
        
         $booking->item_cost = $product->product_price;
         
@@ -469,6 +464,7 @@ $booking->status = "active";
         $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
         $booking->due_date = $due_date;
+        $booking->discount=100;
         $booking->status = "pending";
         $booking->total_cost = intval($total_cost)-100;
         $booking->save();
@@ -512,6 +508,29 @@ $booking->status = "active";
 $result=DB::table("firebasetopics")->get();
 
 return $result;
+    }
+
+    function callBack(Request $request){
+    $stkResponse = file_get_contents('php://input');
+
+        Log::info("STK CALLBACKs => ".print_r($stkResponse,true));
+
+         $body=($request->all())['Body']['stkCallback'];
+         $MerchantRequestID=$body['MerchantRequestID'];
+         $ResultCode=$body['ResultCode'];
+
+          if ($ResultCode==0) {
+  $result=DB::table("monitorpay")->get();
+                if (count($result)==0) {
+                    DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
+                }
+                else{
+                    $total=intval($result[0]->mobile)+1;
+                    DB::table("monitorpay")->update(["mobile"=>$total]);
+                }
+          }
+
+        return 0;
     }
 
 

@@ -36,12 +36,23 @@
         	</div>
         	<div class="card ml-5">
         		<div class="card-header">
-        			Mobile STK Push
+        			Mobile Payments
         		</div>
         		<div class="card-body">
-        			{{$result->mobile}}
+        			 {{$result->mobile}}
         		</div>
         	</div>
+
+                <div class="card ml-5">
+                <div class="card-header">
+                    Manual Payments
+                </div>
+                <div class="card-body">
+                   
+
+                    {{intval($result->total)-intval($result->mobile)}}
+                </div>
+            </div>
         	
         </div>
    

@@ -21,6 +21,7 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('backoffice/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{asset('backoffice/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{asset('vendor/plugins/select2/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('backoffice/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
 
   <link rel="stylesheet" href="{{asset('backoffice/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
@@ -359,9 +360,16 @@
          <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'revoked-bookings'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;RB customers</p></a>
         </li>
+          <li class="nav-item {{ (request()->is('admin/customers/overdue')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'overdue'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;OB Customers</p></a>
+        </li>
+         <li class="nav-item {{ (request()->is('admin/customers/unserviced')) ? 'active' : '' }}">
+          <a href="{{route('admin.customers',['type'=>'unserviced'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;UB Customers</p></a>
+        </li>
           <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'inactive'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;Inactive customers</p></a>
         </li>
+       
  
       </ul>
     </li>
@@ -462,7 +470,14 @@
               <li class="nav-item">
                 <a href="/admin/notifications" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Send Notifications</p>
+                  <p>General Notifications</p>
+                </a>
+              </li>
+
+                <li class="nav-item">
+                <a href="/admin/custom" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Custom Notifications</p>
                 </a>
               </li>
          
@@ -593,11 +608,13 @@
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{asset('backoffice/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+
+<!-- <script type="text/javascript" src="{{asset('vendor/plugins/select2/js/select2.min.js')}}"></script> -->
 <!-- Summernote -->
 <script src="{{asset('backoffice/summernote/summernote-bs4.min.js')}}"></script>
 
 <!-- Select2 -->
-<script src="{{asset('backoffice/plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- <script src="{{asset('backoffice/plugins/select2/js/select2.full.min.js')}}"></script> -->
 
 @yield('extra-js')
 <script>

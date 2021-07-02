@@ -58,6 +58,7 @@ Route::get('/sendtotopics','pushNotification@sendtotopics');
 
 Route::get('/insertToken','firebaseToken@insertToken');
 Route::get('/updateToken','firebaseToken@updateToken');
+Route::post('stk-callback', 'autApi@callBack');
 
 
 
