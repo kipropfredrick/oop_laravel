@@ -37,7 +37,7 @@
                             @foreach($category->subcategories as $subcategory)
 
                             <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-left"></span> 
+                                <span class="far fa-arrow-alt-circle-right"></span> 
                                 <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                             </div>
 
@@ -295,24 +295,14 @@
                                 <h5>Category</h5>
                             </div>
 
+                            @foreach($category->subcategories as $subcategory)
+
                             <div class="lmmsbt">
                                 <span class="far fa-arrow-alt-circle-left"></span> 
-                                <a href="#">Phones and Tablets</a>
+                                <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                             </div>
-                            
-                            <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="#">Smartphones</a>
-                            </div>
-                            
-                            <!-- sub/tlc list -->
-                            <div class="lmmslist">
-                                <ul>
-                                    <a href="#"><li>iPhone</li></a>
-                                    <a href="#"><li>Samsung</li></a>
-                                    <a href="#"><li>Oppo</li></a>
-                                </ul>
-                            </div>
+
+                            @endforeach
                         </div>
 
                         <!-- brand filter -->
