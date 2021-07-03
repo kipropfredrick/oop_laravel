@@ -1711,15 +1711,32 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         $payment_count = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->count();
 
-        if($payment_count<2){
-            $shipping_cost = $booking->shipping_cost;
-            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
 
-        }else{
+     if($payment_count<2){
+                $shipping_cost = $booking->shipping_cost;
+                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. " ;
+                $message="Payment of KSh.{$transaction_amount} for {$bill_ref_no} received. Txn. {$code}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
-        }   
+
+
+            }else{
+
+                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+
+            }
+
+
+
+        // if($payment_count<2){
+        //     $shipping_cost = $booking->shipping_cost;
+        //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
+
+        // }else{
+
+        //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. " ;
+
+        // }   
 
         SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 

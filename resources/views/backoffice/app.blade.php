@@ -320,6 +320,9 @@
 		<li class="nav-item">
 			<a href="/admin/payment-callbacks" class="nav-link {{ (request()->is('admin/payments-callbacks')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <p>&nbsp;Full Payment Info</p></a>
 		</li>
+          <li class="nav-item">
+      <a href="{{route('admin.monitorPayments')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Payments Monitoring</p></a>
+    </li>
 
 		
 		<li class="nav-item">
@@ -453,9 +456,7 @@
             </ul>
           </li>
 
-          <li class="nav-item">
-      <a href="{{route('admin.monitorPayments')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Payments Monitoring</p></a>
-    </li>
+      
 
 
           <li class="nav-item">
