@@ -1716,13 +1716,13 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
                 $shipping_cost = $booking->shipping_cost;
                 //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-                $message="Payment of KSh.{$$request->amount} for {$bill_ref_no} received. Txn. {$payment_log->TransID}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$payment_log->TransID}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
 
 
             }else{
 
-                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
 
             }
 
