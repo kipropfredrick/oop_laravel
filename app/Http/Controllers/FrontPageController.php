@@ -560,6 +560,16 @@ class FrontPageController extends Controller
         
     }
 
+    public function search_brand_category(Request $request,$category){
+
+        $searchTerm = $request->searchTerm;
+
+        $brands = \App\Brand::where('brand_name', 'LIKE', "%{$searchTerm}%")->get();
+
+        return $brands;
+
+    }
+
     public function brand_load_more(Request $request,$slug){
 
         $sort_by = $request->sort_by;

@@ -20,6 +20,8 @@
 </div>
 <!-- end -->
 
+<input type="hidden" id="category_id" value="{{$category->id}}">
+
 <div class="bg-gray-alt">
     <!-- products section -->
     <div class="container">
@@ -69,7 +71,7 @@
                                 <input type="text" class="form-control" id="brandSearch" placeholder="Type to search live...">
                             </div>
 
-                            <div class="lmmsbfilter lmmsb-sec-scr">
+                            <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
                                 @foreach($brands as $brand)
                                 <div class="form-check">
                                     <input type="checkbox" <?php if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
@@ -313,34 +315,16 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control" id="brandSearch" placeholder="Type to search live...">
+                                <input type="text"  class="form-control" id="brandSearch" placeholder="Type to search live...">
                             </div>
 
-                            <div class="lmmsbfilter lmmsb-sec-scr">
+                            <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
+                                @foreach($brands as $brand)
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="briPhone">
-                                    <label class="form-check-label" for="briPhone">iPhone</label>
+                                    <input type="checkbox" <?php if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
+                                    <label class="form-check-label" for="briPhone">{{$brand->brand_name}}</label>
                                 </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">Samsung</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">Oppo</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">Tecno</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">iTel</label>
-                                </div>
+                                @endforeach
                             </div>
 
                         </div>
@@ -371,6 +355,7 @@
 <script type="text/javascript">
 
     function brandClicked(slug){
+        console.log('Slug => '+slug);
         window.location.replace(url+"?brand="+slug);
     }
 
@@ -425,6 +410,41 @@
             });
         });
     });
+
+    $('#brandSearch').keyup(function () {
+            var searchTerm = $('#brandSearch').val();
+            var category_id = $('#category_id').val();
+            var url = '/brand/search/category/'+category_id;
+
+            $.ajax({
+                url : url,
+                type: "POST", 
+                data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
+                async : false, 
+                success: function(response, textStatus, jqXHR) {
+                    console.log(response);
+                    var _html='';
+                    $.each(response,function(index,value){
+                          var slug = value.slug;
+                          console.log('slug => '+slug);
+                         _html+='<div class="form-check">';
+                         _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
+                         _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
+                         _html+='</div>';
+                    });
+                    console.log('_html => '+_html)
+                    $(".lmmsbfilter").html(_html);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+            
+
+    });
+
 </script>
 
 @endsection

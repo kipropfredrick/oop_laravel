@@ -91,6 +91,7 @@ Route::get('/tlc/{subcategory}/{slug}','FrontPageController@thirdlevelcategory')
 Route::post('/tlc/{subcategory}/{slug}','FrontPageController@thirdlevelcategory_load_more');
 Route::post('/cat/{slug}','FrontPageController@category_load_more');
 Route::get('/brand/{slug}','FrontPageController@brand');
+Route::post('/brand/search/category/{category}','FrontPageController@search_brand_category');
 Route::post('/brand/{slug}','FrontPageController@brand_load_more');
 Route::get('/shop/{id}','FrontPageController@shop');
 Route::get('/sub/{slug}','FrontPageController@subcategory')->name('view-subcategory');
