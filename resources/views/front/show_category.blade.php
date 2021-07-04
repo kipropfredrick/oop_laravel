@@ -300,7 +300,7 @@
                             @foreach($category->subcategories as $subcategory)
 
                             <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-left"></span> 
+                                <span class="far fa-arrow-alt-circle-right"></span> 
                                 <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
                             </div>
 

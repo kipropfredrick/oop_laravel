@@ -276,17 +276,20 @@ class FrontPageController extends Controller
         $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
 
         $brand_ids = \App\Products::where('status','=','approved')
-                                            ->where('quantity','>',0)
-                                            ->where('category_id',$category->id)
-                                            ->pluck('brand_id')->toArray();
+                ->distinct('brand_id')
+                ->where('category_id',$category->id)
+                ->where('quantity','>',0)
+                ->whereNotNull('brand_id')
+                ->pluck('brand_id')
+                ->toArray();
 
-        $brand_ids = array_unique($brand_ids);
+        // $brand_ids = array_unique($brand_ids);
 
-        $brand_ids = array_filter($brand_ids);
+        // $brand_ids = array_filter($brand_ids);
         
 
         $brands  = DB::table('brands')
-                                // ->whereIn("id",$brand_ids)
+                                ->whereIn("id",$brand_ids)
                                 ->orderBy('id', 'DESC')
                                 ->get();
 
