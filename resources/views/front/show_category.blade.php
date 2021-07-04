@@ -42,7 +42,7 @@
 
                             <div class="lmmsbt">
                                 <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="/sub/{{$category->slug}}">{{$category->category_name}}</a>
+                                <a href="/cat/{{$category->slug}}">{{$category->category_name}}</a>
                             </div>
 
                             @if($current_c->id == $category->id)
