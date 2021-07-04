@@ -286,7 +286,7 @@ class FrontPageController extends Controller
         
 
         $brands  = DB::table('brands')
-                                ->whereIn("id",$brand_ids)
+                                // ->whereIn("id",$brand_ids)
                                 ->orderBy('id', 'DESC')
                                 ->get();
 
