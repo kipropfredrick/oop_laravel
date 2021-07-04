@@ -107,34 +107,13 @@
                                         <div class="form-group row">
                                             <label class="col-3 col-form-label">Sort by:</label>
                                             <div class="col-7">
-                                                <form action="/cat/{{$category->slug}}" id="filter-form">
+                                            
+                                                <form action="/cat/{{$category->slug}}<?php if(!empty($current_b)){echo "?brand=".$current_b->slug;} ?>" id="filter-form">
                                                     <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
-                                                        @if ($sort_by == "id")
-                                                            <option value="id">ID</option>
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                        @elseif($sort_by == "best-sellers")
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="id">ID</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                        @elseif($sort_by == "price-asc")
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="id">ID</option>
-                                                        @elseif($sort_by == "price-desc")
-                                                            <option value="price-desc">High to low price</option>
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="id">ID</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                        @else
-                                                            <option value="id">ID</option>
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                        @endif
+                                                            <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">ID</option>
+                                                            <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                                            <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                                            <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
                                                     </select>
                                                 </form>
                                             </div>
@@ -488,6 +467,16 @@
             
 
     });
+
+    function filter_cat(sel)
+    {
+        var formAction = $('#filter-form').attr("action");
+        var sort_by = $('#sort_by').val();
+        var url = formAction+'?sort_by='+sort_by;
+        console.log('sort_by => '+sort_by);
+        window.location.href = url;
+        // $('#filter-form').submit();
+    }
 
 </script>
 
