@@ -275,8 +275,6 @@ class FrontPageController extends Controller
 
         $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
 
-        // return $category;
-
         $brand_ids = \App\Products::where('status','=','approved')
                 ->distinct('brand_id')
                 ->where('category_id',$category->id)
@@ -425,6 +423,10 @@ class FrontPageController extends Controller
 
         $category = \App\Categories::where('slug','=',$slug)->first();
 
+        $brand_slug = $request->brand;
+
+        $brand = \App\Brand::where('slug',$brand_slug)->first();
+
         if($request->ajax()){
 
             $skip=$request->skip;
@@ -446,6 +448,12 @@ class FrontPageController extends Controller
                                         ->where('category_id','=',$category->id)
                                         ->where('quantity','>',0)
                                         ->where('status','=','approved')
+                                        ->where(function($query) use ($brand)
+                                        {
+                                            if (!empty($brand)) {
+                                                $query->where('brand_id', $brand->id);
+                                            }
+                                        })
                                         ->orderBy($p,$o)
                                         ->skip($skip)
                                         ->take($take)

@@ -95,7 +95,18 @@
 
                     <div class="ht mb-3">
 
-                    <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('category_id',$category->id)->count(); ?>
+                    <?php 
+                     $count = App\Products::where('quantity','>',0)
+                                           ->where('status','=','approved')
+                                           ->where('category_id',$current_c->id)
+                                           ->where(function($query) use ($current_b)
+                                           {
+                                               if (!empty($current_b)) {
+                                                   $query->where('brand_id', $current_b->id);
+                                               }
+                                           })
+                                           ->count(); 
+                    ?>
 
                         <div>
                             <div class="filters">
@@ -162,7 +173,7 @@
                             $nextP = $currentP+1;
                             $lastp = $products->lastPage();
                             $baseUrl = \URL::to('/');
-                            $url = $baseUrl.'/cat/'.$category->slug;
+                            $url = $baseUrl.'/cat/'.$current_c->slug;
                             $loadUrl = $url."?page=".$nextP;
                         ?>
 
