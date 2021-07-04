@@ -342,7 +342,7 @@
 </div>
 <!-- end --> 
 
-<input type="hidden" name ="url" id="url" value="/cat/{{$category->slug}}">
+<!-- <input type="hidden" name ="url" id="url" value="/cat/{{$category->slug}}"> -->
 
 @endsection
 

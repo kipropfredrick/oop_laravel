@@ -60,15 +60,15 @@ $url = 'https://fcm.googleapis.com/fcm/send';
     curl_close($ch);
     $result=json_decode($result);
 
-    if (($result->failure)>0) {
-      # code...
-      $error=$result->results[0]->error;
-       return Array("data"=>$error,"message"=>"Unable to Send Push Notification","response"=>"Success");
-    }
-    else{
+  //   if (($result->failure)>0) {
+  //     # code...
+  //     $error=$result->results[0]->error;
+  //      return Array("data"=>$error,"message"=>"Unable to Send Push Notification","response"=>"Success");
+  //   }
+  //   else{
 
-  return Array("data"=>$result,"message"=>"Push Notification Send Successfully","response"=>"Success");
-    }
+  // return Array("data"=>$result,"message"=>"Push Notification Send Successfully","response"=>"Success");
+  //   }
     }
 
 
