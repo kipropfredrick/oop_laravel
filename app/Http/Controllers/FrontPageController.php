@@ -397,8 +397,20 @@ class FrontPageController extends Controller
                             ->orderBy($p,$o)
                             ->paginate(20);
 
+        $productsCount = \App\Products::with('category','subcategory')->where('status','=','approved')
+                            ->where('category_id','=',$category->id)
+                            ->where('quantity','>',0)
+                            ->where(function($query) use ($brand)
+                            {
+                                if (!empty($brand)) {
+                                    $query->where('brand_id', $brand->id);
+                                }
+                            })
+                            ->orderBy($p,$o)
+                            ->count();
 
-        return view('front.show_category',compact('products','current_b','sort_by','categories','category','trendingProducts','brands'));
+
+        return view('front.show_category',compact('products','productsCount','current_b','sort_by','categories','category','trendingProducts','brands'));
 
     }
 
