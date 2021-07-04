@@ -183,7 +183,7 @@
             </div>
 
             <!-- product description --> 
-            <div>
+            <div class="tabbable">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="pdesc-tab" data-toggle="tab" href="#pdesc" role="tab" aria-controls="pdesc" aria-selected="true">Product Description</a>

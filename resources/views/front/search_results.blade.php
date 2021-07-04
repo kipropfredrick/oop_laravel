@@ -113,7 +113,7 @@
                                     <div class="p-c-name">{{$product->product_name}}</div>
                                     <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>
                                 </a>
                             </div>
                         </div>
@@ -205,7 +205,7 @@
                                     _html+='<img src="'+image+value.product_image+'" alt="'+value.product_name+'">';
                                     _html+='<div class="p-c-name">'+value.product_name+'</div>';
                                     _html+='<div class="p-c-price">KSh.'+value.product_price+'</div>';
-                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-block p-btn">Lipa Mos Mos</a>';
+                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>';
                                 _html+='</a>';
                             _html+='</div>';
                         _html+='</div>';

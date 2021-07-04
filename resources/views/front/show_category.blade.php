@@ -33,31 +33,32 @@
                         <!-- categories filter -->
                         <div class="lmmsb-sec">
                             <div class="lmmsbt">
-                                <h5>Sub Categories</h5>
+                                <h5>CATEGORY</h5>
                             </div>
 
-                            @foreach($category->subcategories as $subcategory)
+                            <?php $current_c = $category; ?>
+
+                            @foreach(\App\Categories::all() as $category)
 
                             <div class="lmmsbt">
                                 <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                <a href="/sub/{{$category->slug}}">{{$category->category_name}}</a>
                             </div>
 
-                            @endforeach
-                            
-                            <!-- <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="#">Smartphones</a>
-                            </div> -->
-                            
+                            @if($current_c->id == $category->id)
                             <!-- sub/tlc list -->
-                            <!-- <div class="lmmslist">
+                            <div class="lmmslist">
                                 <ul>
-                                    <a href="#"><li>iPhone</li></a>
-                                    <a href="#"><li>Samsung</li></a>
-                                    <a href="#"><li>Oppo</li></a>
+                                    @foreach($category->subcategories as $subcategory)
+                                    <a href="/sub/{{$subcategory->slug}}"><li>{{$subcategory->subcategory_name}}</li></a>
+                                    @endforeach
                                 </ul>
-                            </div> -->
+                            </div>
+                            @endif
+
+                            @endforeach
+
+
                         </div>
 
                         <!-- brand filter -->
@@ -88,7 +89,7 @@
                 <div class="lmm-p-listing-sec">
                     <!-- category / brand name / title -->
                     <div class="ht-title">
-                        <h5>{{$category->category_name}}</h5>
+                        <h5>{{$category->category_name}} / <?php if(!empty($current_b)){echo $current_b->brand_name;} ?></h5>
                     </div>
 
                     <div class="ht mb-3">
@@ -139,7 +140,7 @@
                                                 <div class="p-c-name">{{$product->product_name}}</div>
                                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                                <a href="/checkout/{{$product->slug}}" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>
                                             </a>
                                         </div>
                                     </div>
@@ -367,7 +368,7 @@
                                     _html+='<img src="'+image+value.product_image+'" alt="'+value.product_name+'">';
                                     _html+='<div class="p-c-name">'+value.product_name+'</div>';
                                     _html+='<div class="p-c-price">KSh.'+value.product_price+'</div>';
-                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-block p-btn">Lipa Mos Mos</a>';
+                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>';
                                 _html+='</a>';
                             _html+='</div>';
                         _html+='</div>';
