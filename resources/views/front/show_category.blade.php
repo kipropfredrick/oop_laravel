@@ -3,6 +3,9 @@
 @section('title', $category->category_name)
 
 @section('content')
+
+<?php $current_c = $category; ?>
+
 <!-- breadcrumb --> 
 <div class="bc-bg">
     <div class="container">
@@ -13,7 +16,7 @@
 
             <span class="bc-sep"></span>
 
-                <span>{{$category->category_name}}</span>
+                <span>{{$current_c->category_name}}</span>
 
         </div>
     </div>
@@ -35,8 +38,6 @@
                             <div class="lmmsbt">
                                 <h5>CATEGORY</h5>
                             </div>
-
-                            <?php $current_c = $category; ?>
 
                             @foreach(\App\Categories::all() as $category)
 
@@ -89,7 +90,7 @@
                 <div class="lmm-p-listing-sec">
                     <!-- category / brand name / title -->
                     <div class="ht-title">
-                        <h5>{{$category->category_name}} / <?php if(!empty($current_b)){echo $current_b->brand_name;} ?></h5>
+                        <h5>{{$current_c->category_name}} <?php if(!empty($current_b)){echo " / ".$current_b->brand_name;} ?></h5>
                     </div>
 
                     <div class="ht mb-3">

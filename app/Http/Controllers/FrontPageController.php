@@ -275,6 +275,8 @@ class FrontPageController extends Controller
 
         $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
 
+        // return $category;
+
         $brand_ids = \App\Products::where('status','=','approved')
                 ->distinct('brand_id')
                 ->where('category_id',$category->id)
