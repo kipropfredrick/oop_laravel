@@ -98,7 +98,7 @@
                         <div>
                             <div class="filters">
                                 <div class="p-count">
-                                    <label class="col-form-label">00 product(s) found</label>
+                                    <label class="col-form-label">{{number_format($productsCount)}} product(s) found</label>
                                 </div>
 
                                 <div class="p-filter">
@@ -355,7 +355,7 @@
 <script type="text/javascript">
 
     function brandClicked(slug){
-        console.log('Slug => '+slug);
+        // console.log('Slug => '+slug);
         window.location.replace(url+"?brand="+slug);
     }
 
@@ -398,11 +398,11 @@
                     // Change Load More When No Further result
                     var _totalCurrentResult=$(".product-box").length;
                     var _totalResult=parseInt($(".load-more-btn").attr('data-totalResult'));
-                    console.log("_totalCurrentResult => "+_totalCurrentResult);
-                    console.log("_totalResult => "+_totalResult);
+                    // console.log("_totalCurrentResult => "+_totalCurrentResult);
+                    // console.log("_totalResult => "+_totalResult);
                     if(_totalCurrentResult==_totalResult){
                         $(".load-more-btn").remove();
-                        console.log('End of list');
+                        // console.log('End of list');
                     }else{
                         $(".load-more-btn").html('Load More');
                     }
@@ -414,7 +414,7 @@
     $('#brandSearch').keyup(function () {
             var searchTerm = $('#brandSearch').val();
             var category_id = $('#category_id').val();
-            var url = '/brand/search/category/'+category_id;
+            var url = '/brand/search';
 
             $.ajax({
                 url : url,
@@ -422,17 +422,21 @@
                 data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
                 async : false, 
                 success: function(response, textStatus, jqXHR) {
-                    console.log(response);
+                    // console.log(response);
                     var _html='';
-                    $.each(response,function(index,value){
-                          var slug = value.slug;
-                          console.log('slug => '+slug);
-                         _html+='<div class="form-check">';
-                         _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
-                         _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
-                         _html+='</div>';
-                    });
-                    console.log('_html => '+_html)
+                    if(response.length>0){
+                        $.each(response,function(index,value){
+                            var slug = value.slug;
+                            // console.log('slug => '+slug);
+                            _html+='<div class="form-check">';
+                            _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
+                            _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
+                            _html+='</div>';
+                        });
+                    }else{
+                        _html='No results found';
+                    }
+                    // console.log('_html => '+_html)
                     $(".lmmsbfilter").html(_html);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -448,7 +452,7 @@
     $('#brandSearch2').keyup(function () {
             var searchTerm = $('#brandSearch2').val();
             var category_id = $('#category_id').val();
-            var url = '/brand/search/category/'+category_id;
+            var url = '/brand/search';
 
             $.ajax({
                 url : url,
@@ -456,17 +460,23 @@
                 data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
                 async : false, 
                 success: function(response, textStatus, jqXHR) {
-                    console.log(response);
+                    // console.log(response);
                     var _html='';
-                    $.each(response,function(index,value){
-                          var slug = value.slug;
-                          console.log('slug => '+slug);
-                         _html+='<div class="form-check">';
-                         _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
-                         _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
-                         _html+='</div>';
-                    });
-                    console.log('_html => '+_html)
+                    if(response.length>0){
+
+                            $.each(response,function(index,value){
+                                var slug = value.slug;
+                                // console.log('slug => '+slug);
+                                _html+='<div class="form-check">';
+                                _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
+                                _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
+                                _html+='</div>';
+                            });
+
+                    }else{
+                        _html='No results found';
+                    }
+
                     $("#brandList2").html(_html);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
