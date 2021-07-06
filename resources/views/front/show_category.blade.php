@@ -3,6 +3,9 @@
 @section('title', $category->category_name)
 
 @section('content')
+
+<?php $current_c = $category; ?>
+
 <!-- breadcrumb --> 
 <div class="bc-bg">
     <div class="container">
@@ -13,12 +16,14 @@
 
             <span class="bc-sep"></span>
 
-                <span>{{$category->category_name}}</span>
+                <span>{{$current_c->category_name}}</span>
 
         </div>
     </div>
 </div>
 <!-- end -->
+
+<input type="hidden" id="category_id" value="{{$category->id}}">
 
 <div class="bg-gray-alt">
     <!-- products section -->
@@ -31,31 +36,30 @@
                         <!-- categories filter -->
                         <div class="lmmsb-sec">
                             <div class="lmmsbt">
-                                <h5>Sub Categories</h5>
+                                <h5>CATEGORY</h5>
                             </div>
 
-                            @foreach($category->subcategories as $subcategory)
+                            @foreach(\App\Categories::all() as $category)
 
                             <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                <span class="far <?php if($current_c->id == $category->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <a href="/cat/{{$category->slug}}">{{$category->category_name}}</a>
                             </div>
 
-                            @endforeach
-                            
-                            <!-- <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="#">Smartphones</a>
-                            </div> -->
-                            
+                            @if($current_c->id == $category->id)
                             <!-- sub/tlc list -->
-                            <!-- <div class="lmmslist">
+                            <div class="lmmslist">
                                 <ul>
-                                    <a href="#"><li>iPhone</li></a>
-                                    <a href="#"><li>Samsung</li></a>
-                                    <a href="#"><li>Oppo</li></a>
+                                    @foreach($category->subcategories as $subcategory)
+                                    <a href="/sub/{{$subcategory->slug}}"><li>{{$subcategory->subcategory_name}}</li></a>
+                                    @endforeach
                                 </ul>
-                            </div> -->
+                            </div>
+                            @endif
+
+                            @endforeach
+
+
                         </div>
 
                         <!-- brand filter -->
@@ -69,12 +73,10 @@
                                 <input type="text" class="form-control" id="brandSearch" placeholder="Type to search live...">
                             </div>
 
-                            <div class="lmmsbfilter lmmsb-sec-scr">
+                            <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
                                 @foreach($brands as $brand)
                                 <div class="form-check">
-
-                                         <input type="checkbox" class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
-                                  <!--   <input type="checkbox" <?php //if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone"> -->
+                                    <input type="checkbox" <?php if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
                                     <label class="form-check-label" for="briPhone">{{$brand->brand_name}}</label>
                                 </div>
                                 @endforeach
@@ -88,17 +90,28 @@
                 <div class="lmm-p-listing-sec">
                     <!-- category / brand name / title -->
                     <div class="ht-title">
-                        <h5>{{$category->category_name}}</h5>
+                        <h5>{{$current_c->category_name}} <?php if(!empty($current_b)){echo " / ".$current_b->brand_name;} ?></h5>
                     </div>
 
                     <div class="ht mb-3">
 
-                    <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('category_id',$category->id)->count(); ?>
+                    <?php 
+                     $count = App\Products::where('quantity','>',0)
+                                           ->where('status','=','approved')
+                                           ->where('category_id',$current_c->id)
+                                           ->where(function($query) use ($current_b)
+                                           {
+                                               if (!empty($current_b)) {
+                                                   $query->where('brand_id', $current_b->id);
+                                               }
+                                           })
+                                           ->count(); 
+                    ?>
 
                         <div>
                             <div class="filters">
                                 <div class="p-count">
-                                    <label class="col-form-label">00 product(s) found</label>
+                                    <label class="col-form-label">{{number_format($productsCount)}} product(s) found</label>
                                 </div>
 
                                 <div class="p-filter">
@@ -107,34 +120,13 @@
                                         <div class="form-group row">
                                             <label class="col-3 col-form-label">Sort by:</label>
                                             <div class="col-7">
-                                                <form action="/cat/{{$category->slug}}" id="filter-form">
+                                            
+                                                <form action="/cat/{{$category->slug}}<?php if(!empty($current_b)){echo "?brand=".$current_b->slug;} ?>" id="filter-form">
                                                     <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
-                                                        @if ($sort_by == "id")
-                                                            <option value="id">ID</option>
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                        @elseif($sort_by == "best-sellers")
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="id">ID</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                        @elseif($sort_by == "price-asc")
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="id">ID</option>
-                                                        @elseif($sort_by == "price-desc")
-                                                            <option value="price-desc">High to low price</option>
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="id">ID</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                        @else
-                                                            <option value="id">ID</option>
-                                                            <option value="best-sellers">Best sellers</option>
-                                                            <option value="price-asc">Low to high price</option>
-                                                            <option value="price-desc">High to low price</option> 
-                                                        @endif
+                                                            <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">ID</option>
+                                                            <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                                            <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                                            <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
                                                     </select>
                                                 </form>
                                             </div>
@@ -160,7 +152,7 @@
                                                 <div class="p-c-name">{{$product->product_name}}</div>
                                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-                                                <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Lipa Mos Mos</a>
+                                                <a href="/checkout/{{$product->slug}}" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>
                                             </a>
                                         </div>
                                     </div>
@@ -181,7 +173,7 @@
                             $nextP = $currentP+1;
                             $lastp = $products->lastPage();
                             $baseUrl = \URL::to('/');
-                            $url = $baseUrl.'/cat/'.$category->slug;
+                            $url = $baseUrl.'/cat/'.$current_c->slug;
                             $loadUrl = $url."?page=".$nextP;
                         ?>
 
@@ -293,18 +285,31 @@
                     <div class="lmm-sidebar">
                         <!-- categories filter -->
                         <div class="lmmsb-sec">
-                            <div class="lmmsbt">
-                                <h5>Category</h5>
+                            
+                        <div class="lmmsbt">
+                                <h5>CATEGORY</h5>
                             </div>
 
-                            @foreach($category->subcategories as $subcategory)
+                            @foreach(\App\Categories::all() as $category)
 
                             <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-left"></span> 
-                                <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                <span class="far <?php if($current_c->id == $category->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <a href="/cat/{{$category->slug}}">{{$category->category_name}}</a>
                             </div>
+
+                            @if($current_c->id == $category->id)
+                            <!-- sub/tlc list -->
+                            <div class="lmmslist">
+                                <ul>
+                                    @foreach($category->subcategories as $subcategory)
+                                    <a href="/sub/{{$subcategory->slug}}"><li>{{$subcategory->subcategory_name}}</li></a>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
 
                             @endforeach
+                            
                         </div>
 
                         <!-- brand filter -->
@@ -315,34 +320,16 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="text" class="form-control" id="brandSearch" placeholder="Type to search live...">
+                                <input type="text"  class="form-control" id="brandSearch2" placeholder="Type to search live...">
                             </div>
 
-                            <div class="lmmsbfilter lmmsb-sec-scr">
+                            <div id="brandList2" class="lmmsbfilter lmmsb-sec-scr">
+                                @foreach($brands as $brand)
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="briPhone">
-                                    <label class="form-check-label" for="briPhone">iPhone</label>
+                                    <input type="checkbox" <?php if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
+                                    <label class="form-check-label" for="briPhone">{{$brand->brand_name}}</label>
                                 </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">Samsung</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">Oppo</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">Tecno</label>
-                                </div>
-
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="brsamsung">
-                                    <label class="form-check-label" for="brsamsung">iTel</label>
-                                </div>
+                                @endforeach
                             </div>
 
                         </div>
@@ -368,13 +355,13 @@
 
 <script type="text/javascript">
     var current_url = window.location.href;
-    // var url = $('#url').val();
+    var url = $('#url').val();
 </script>
 <script type="text/javascript">
 
     function brandClicked(slug){
-        window.location.replace(current_url+"?brand="+slug);
-       // window.location.replace(url+"?brand="+slug);
+        // console.log('Slug => '+slug);
+        window.location.replace(url+"?brand="+slug);
     }
 
     $(document).ready(function(){
@@ -406,7 +393,7 @@
                                     _html+='<img src="'+image+value.product_image+'" alt="'+value.product_name+'">';
                                     _html+='<div class="p-c-name">'+value.product_name+'</div>';
                                     _html+='<div class="p-c-price">KSh.'+value.product_price+'</div>';
-                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-block p-btn">Lipa Mos Mos</a>';
+                                    _html+='<a href="'+c_url+value.slug+'" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>';
                                 _html+='</a>';
                             _html+='</div>';
                         _html+='</div>';
@@ -416,11 +403,11 @@
                     // Change Load More When No Further result
                     var _totalCurrentResult=$(".product-box").length;
                     var _totalResult=parseInt($(".load-more-btn").attr('data-totalResult'));
-                    console.log("_totalCurrentResult => "+_totalCurrentResult);
-                    console.log("_totalResult => "+_totalResult);
+                    // console.log("_totalCurrentResult => "+_totalCurrentResult);
+                    // console.log("_totalResult => "+_totalResult);
                     if(_totalCurrentResult==_totalResult){
                         $(".load-more-btn").remove();
-                        console.log('End of list');
+                        // console.log('End of list');
                     }else{
                         $(".load-more-btn").html('Load More');
                     }
@@ -428,6 +415,95 @@
             });
         });
     });
+
+    $('#brandSearch').keyup(function () {
+            var searchTerm = $('#brandSearch').val();
+            var category_id = $('#category_id').val();
+            var url = '/brand/search';
+
+            $.ajax({
+                url : url,
+                type: "POST", 
+                data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
+                async : false, 
+                success: function(response, textStatus, jqXHR) {
+                    // console.log(response);
+                    var _html='';
+                    if(response.length>0){
+                        $.each(response,function(index,value){
+                            var slug = value.slug;
+                            // console.log('slug => '+slug);
+                            _html+='<div class="form-check">';
+                            _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
+                            _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
+                            _html+='</div>';
+                        });
+                    }else{
+                        _html='No results found';
+                    }
+                    // console.log('_html => '+_html)
+                    $(".lmmsbfilter").html(_html);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+            
+
+    });
+
+    $('#brandSearch2').keyup(function () {
+            var searchTerm = $('#brandSearch2').val();
+            var category_id = $('#category_id').val();
+            var url = '/brand/search';
+
+            $.ajax({
+                url : url,
+                type: "POST", 
+                data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
+                async : false, 
+                success: function(response, textStatus, jqXHR) {
+                    // console.log(response);
+                    var _html='';
+                    if(response.length>0){
+
+                            $.each(response,function(index,value){
+                                var slug = value.slug;
+                                // console.log('slug => '+slug);
+                                _html+='<div class="form-check">';
+                                _html+='<input type="checkbox"  class="form-check-input" onclick="brandClicked(\''+slug+'\')" id="briPhone">';
+                                _html+='<label class="form-check-label" for="briPhone">'+value.brand_name+'</label>';
+                                _html+='</div>';
+                            });
+
+                    }else{
+                        _html='No results found';
+                    }
+
+                    $("#brandList2").html(_html);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            });
+            
+
+    });
+
+    function filter_cat(sel)
+    {
+        var formAction = $('#filter-form').attr("action");
+        var sort_by = $('#sort_by').val();
+        var url = formAction+'?sort_by='+sort_by;
+        console.log('sort_by => '+sort_by);
+        window.location.href = url;
+        // $('#filter-form').submit();
+    }
+
 </script>
 
 @endsection
