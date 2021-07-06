@@ -36,6 +36,7 @@ Route::get('/privacy-policy', function () {
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
+Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
 Route::get('/scheduletasks','AdminController@scheduletasks');
 
 Route::get('/testSendSMS','FrontPageController@testSendSMS');
@@ -325,7 +326,6 @@ Route::group(['middleware' => ['auth','admin']], function (){
 
     //send prmo notifications
 
-    Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
     Route::get('/notifications', 'firebasetopics@index')->name('admin.notifications');
     Route::get('/custom', 'firebasetopics@customNotifications')->name('admin.customnotifications');
     Route::post('/addtopic', 'firebasetopics@addtopic')->name('admin.addtopic');
