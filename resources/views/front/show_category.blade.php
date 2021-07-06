@@ -42,7 +42,7 @@
                             @foreach(\App\Categories::all() as $category)
 
                             <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-right"></span> 
+                                <span class="far <?php if($current_c->id == $category->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
                                 <a href="/cat/{{$category->slug}}">{{$category->category_name}}</a>
                             </div>
 
@@ -285,18 +285,31 @@
                     <div class="lmm-sidebar">
                         <!-- categories filter -->
                         <div class="lmmsb-sec">
-                            <div class="lmmsbt">
-                                <h5>Category</h5>
+                            
+                        <div class="lmmsbt">
+                                <h5>CATEGORY</h5>
                             </div>
 
-                            @foreach($category->subcategories as $subcategory)
+                            @foreach(\App\Categories::all() as $category)
 
                             <div class="lmmsbt">
-                                <span class="far fa-arrow-alt-circle-right"></span> 
-                                <a href="/sub/{{$subcategory->slug}}">{{$subcategory->subcategory_name}}</a>
+                                <span class="far <?php if($current_c->id == $category->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <a href="/cat/{{$category->slug}}">{{$category->category_name}}</a>
                             </div>
+
+                            @if($current_c->id == $category->id)
+                            <!-- sub/tlc list -->
+                            <div class="lmmslist">
+                                <ul>
+                                    @foreach($category->subcategories as $subcategory)
+                                    <a href="/sub/{{$subcategory->slug}}"><li>{{$subcategory->subcategory_name}}</li></a>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
 
                             @endforeach
+                            
                         </div>
 
                         <!-- brand filter -->
