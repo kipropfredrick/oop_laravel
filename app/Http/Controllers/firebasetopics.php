@@ -253,7 +253,7 @@ return $customer;
     }
 
 function sendpromoreminder(Request $request){
-    $customers=\App\Bookings::whereBooking_reference('MM82003')->whereIn('status',["active","pending"])->pluck('customer_id')->toArray();
+    $customers=\App\Bookings::whereIn('status',["active","pending"])->pluck('customer_id')->toArray();
 
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->get();
