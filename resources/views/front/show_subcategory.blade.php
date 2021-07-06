@@ -54,6 +54,17 @@
                                 <a href="/sub/{{$sub->slug}}">{{$sub->subcategory_name}}</a>
                             </div>
 
+                            @if($current_sub->id == $sub->id)
+                            <!-- sub/tlc list -->
+                            <div class="lmmslist">
+                                <ul>
+                                    @foreach($sub->thirdlevelcategories as $tlc)
+                                    <a href="/tlc/{{$sub->slug}}/{{$tlc->slug}}"><li>{{$tlc->name}}</li></a>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+
                             @endforeach
 
 
@@ -310,12 +321,23 @@
                                 <h5>SUB CATEGORY</h5>
                             </div>
 
-                            @foreach(\App\SubCategories::where('category_id',$category->id)->get() as $sub)
+                            @foreach(\App\SubCategories::with('thirdlevelcategories')->where('category_id',$category->id)->get() as $sub)
 
                             <div class="lmmsbt">
                                 <span class="far <?php if($current_sub->id == $sub->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
                                 <a href="/sub/{{$sub->slug}}">{{$sub->subcategory_name}}</a>
                             </div>
+
+                            @if($current_sub->id == $sub->id)
+                            <!-- sub/tlc list -->
+                            <div class="lmmslist">
+                                <ul>
+                                    @foreach($sub->thirdlevelcategories as $tlc)
+                                    <a href="/tlc/{{$sub->slug}}/{{$tlc->slug}}"><li>{{$tlc->name}}</li></a>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
 
                             @endforeach
                             
