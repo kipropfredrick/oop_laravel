@@ -257,7 +257,7 @@ function sendpromoreminder(Request $request){
 
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->get();
-
+$obj = new pushNotification();
 foreach ($users as $key => $value) {
 
 $token=$value->token;
