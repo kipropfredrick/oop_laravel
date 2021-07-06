@@ -17,7 +17,7 @@ class pushNotification extends Controller
     }
     $data=Array("name"=>"test","value"=>"To Test Page");
    return  $this->exceuteSendNotification($token,"You have successfully booked (product-name)","Booking Successful",$data);
-    
+
     }
 
 
@@ -26,12 +26,12 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 
 
     $api_key = 'AAAABjRMKq4:APA91bF7kJTVRuQzw_9H8rbYSUDhqDAa6Jtm15undJXta74F20BCUdyLjPIXw338GHL3nFqlmhNcPhqwva9YFMGvS0fs0q3yJdkTz6yXxZCJ70vJJeNl6_v3LWCizNta6d9zFFScM9UB';
-                
+
     $fields = array (
         'registration_ids' => array (
                $token
         ),
-        "notification"=>Array("title"=>$title,"body"=> $message,"image"=>''),
+        "notification"=>Array("title"=>$title,"body"=> $message,"image"=>'','priority' => "high"),
 
         "android"=>Array("click_action"=>"FLUTTER_NOTIFICATION_CLICK","title"=>$title,"body"=> $message),
         'data' => $data,
@@ -43,7 +43,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
         'Content-Type:application/json',
         'Authorization:key='.$api_key
     );
-                
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -73,7 +73,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 
 
     function sendtotopics(Request $request){
-     
+
 $url = 'https://fcm.googleapis.com/fcm/send';
 
 
@@ -93,7 +93,7 @@ $data=Array("name"=>"Home","value"=>"Home");
         'Content-Type:application/json',
         'Authorization:key='.$api_key
     );
-                
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, true);
