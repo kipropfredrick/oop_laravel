@@ -173,7 +173,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=10;
+            $take=12;
 
             if($sort_by == "price-asc"){
                 $p = "product_price";
@@ -622,7 +622,7 @@ class FrontPageController extends Controller
         if($request->ajax()){
 
             $skip=$request->skip;
-            $take=10;
+            $take=12;
 
             if($sort_by == "price-asc"){
                 $p = "product_price";
@@ -686,7 +686,7 @@ class FrontPageController extends Controller
                 if($request->ajax()){
         
                     $skip=$request->skip;
-                    $take=10;
+                    $take=12;
         
                     if($sort_by == "price-asc"){
                         $p = "product_price";
@@ -881,7 +881,7 @@ class FrontPageController extends Controller
 
             $skip=$request->skip;
 
-            $take=10;
+            $take=12;
 
             if($request->ajax()){
 
