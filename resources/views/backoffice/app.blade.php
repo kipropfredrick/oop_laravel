@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{asset('backoffice/plugins/fontawesome-free/css/all.min.css')}}">
-  
+
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css')}}">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -67,7 +67,7 @@
     overflow: hidden !important;
     text-overflow: ellipsis;
 }
-  
+
   </style>
 
 </head>
@@ -87,7 +87,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
-      
+
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -217,7 +217,7 @@
               </a>
             </li>
 
-		  
+
           </li>
 
 		  <!-- <li class="nav-item">
@@ -324,11 +324,11 @@
       <a href="{{route('admin.monitorPayments')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Payments Monitoring</p></a>
     </li>
 
-		
+
 		<li class="nav-item">
 			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
 		</li>
-<!-- 
+<!--
 		<li class="nav-item">
 			<a href="/admin/customers" class="nav-link {{ (request()->is('admin/customers')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Customers</p></a>
 		</li>
@@ -347,7 +347,7 @@
         </p>
       </a>
       <ul class="nav nav-treeview">
-      
+
          <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'active'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;Active Customers</p></a>
         </li>
@@ -372,8 +372,8 @@
           <li class="nav-item {{ (request()->is('admin/customers/active')) ? 'active' : '' }}">
           <a href="{{route('admin.customers',['type'=>'inactive'])}}" class="nav-link "><i class="far fa-circle nav-icon"></i> <p>&nbsp;Inactive customers</p></a>
         </li>
-       
- 
+
+
       </ul>
     </li>
 
@@ -406,7 +406,7 @@
 		<li class="nav-item">
 			<a href="/admin/cities" class="nav-link {{ (request()->is('admin/cities')) ? 'active' : '' }}"><i class="fa fa-building"></i> <p>&nbsp;Cities</p></a>
 		</li>
-		  
+
 		<li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-bookmark"></i>
@@ -456,7 +456,7 @@
             </ul>
           </li>
 
-      
+
 
 
           <li class="nav-item">
@@ -481,9 +481,14 @@
                   <p>Custom Notifications</p>
                 </a>
               </li>
-         
+
             </ul>
-          </li>
+        </li>
+
+          <li class="nav-item">
+      <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Promotions</p></a>
+    </li>
+
           </li>
 
          @elseif(auth()->user()->role =='vendor')
@@ -537,9 +542,9 @@
     <!-- Main content -->
     <section style="margin-top:20px" class="content">
       <div   class="container-fluid">
-      
+
 	  @yield('content')
-	  
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
@@ -656,7 +661,7 @@
 			_arrayName.push(subsNames[i].innerHTML);
 			_arraySubsId.push(subsIds[i].innerHTML);
 		}
-		
+
 	}
 
 	var y = document.getElementById("subs");
@@ -666,7 +671,7 @@
 		// node.innerHTML = _array[i];
 		node.setAttribute('value', _arraySubsId[i]);
 		node.innerHTML = _arrayName[i];
-		y.appendChild(node);  
+		y.appendChild(node);
 	}
 
 	console.log(_arrayId);
