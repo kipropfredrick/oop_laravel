@@ -36,7 +36,10 @@ Route::get('/privacy-policy', function () {
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
+
 Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
+
+Route::get('/sendpromoreminder', 'firebasetopics@sendpromoreminder')->name('admin.sendpromoreminder');
 Route::get('/scheduletasks','AdminController@scheduletasks');
 
 Route::get('/testSendSMS','FrontPageController@testSendSMS');

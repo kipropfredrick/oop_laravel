@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
-use app\User;
+use App\User;
 use App\Http\Controllers\pushNotification;
 use App\Payments;
 use App\Http\Controllers\SendSMSController;
@@ -250,9 +250,28 @@ $obj->exceuteSendNotification($token,$message,$title,$data);
 }
 return $customer;
 
+    }
 
+function sendpromoreminder(Request $request){
+    $customers=\App\Bookings::whereBooking_reference('MM82003')->where('status','=','active')->where('status','=','pending')->pluck('customer_id')->toArray();
+    $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
+$users=User::whereIn("id",$users)->get();
 
-return $filtertotalpid;
+foreach ($users as $key => $value) {
+
+$token=$value->token;
+    if ($token==null) {
+        # code...
 
     }
+    else{
+
+    $data=Array("name"=>"payment","value"=>"payment",'priority' => "high");
+$message="Stand a chance to get up to KSh.1000 discount on your order this week if you pay for at least 5 days straight.";
+$title="Congratulations! We want to reward you.";
+$obj->exceuteSendNotification($token,$message,$title,$data);
+        }
+
+}
+}
 }
