@@ -40,7 +40,7 @@ class AdminController extends Controller
              'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
              'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
          ];
-     
+
          foreach ($regex as $operator => $re ) {
              if (preg_match($re, $msisdn)) {
                  return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
@@ -71,7 +71,7 @@ class AdminController extends Controller
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
 
         $customersCount = \App\Customers::count();
-        
+
       return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount'));
 
     }
@@ -92,7 +92,7 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
+
      public function products(){
 
         $products = \App\Products::with('category')->orderBy('id', 'DESC')->get();
@@ -121,7 +121,7 @@ class AdminController extends Controller
 
      }
 
-      
+
 
      public function vendor_product_approve($id){
 
@@ -131,7 +131,7 @@ class AdminController extends Controller
      }
 
      public function vendor_product_reject($id){
-         
+
         $products = \App\Products::where('id','=',$id)->update(['status'=>'rejected']);
 
         return back()->with('success','Product Rejected');
@@ -148,34 +148,34 @@ class AdminController extends Controller
      public function vendor_pending_products(){
         $status = "Pending";
        $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"pending")->orderBy('id', 'DESC')->get();
-       return view('backoffice.products.vendor',compact('products','status')); 
+       return view('backoffice.products.vendor',compact('products','status'));
      }
 
      public function vendor_approved_products(){
         $status = "Approved";
         $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"approved")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.vendor',compact('products','status')); 
+        return view('backoffice.products.vendor',compact('products','status'));
       }
 
       public function agent_approved_products(){
         $products = \App\Products::with('category','agent','agent.user')->where('agent_id','!=', null)->where('status','=',"approved")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.agent',compact('products')); 
+        return view('backoffice.products.agent',compact('products'));
       }
 
       public function agent_pending_products(){
         $products = \App\Products::with('category','agent','agent.user')->where('agent_id','!=', null)->where('status','=',"pending")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.agent',compact('products')); 
+        return view('backoffice.products.agent',compact('products'));
       }
 
       public function agent_rejected_products(){
         $products = \App\Products::with('category','agent','agent.user')->where('agent_id','!=', null)->where('status','=',"rejected")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.agent',compact('products')); 
+        return view('backoffice.products.agent',compact('products'));
       }
 
       public function vendor_rejected_products(){
         $status = "Rejected";
         $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"rejected")->orderBy('id', 'DESC')->get();
-        return view('backoffice.products.vendor',compact('products','status')); 
+        return view('backoffice.products.vendor',compact('products','status'));
       }
 
      public function approve_product($id){
@@ -201,7 +201,7 @@ class AdminController extends Controller
          $products = \App\Products::where('vendor_id','=',$vendor->id)->get();
 
          return view('backoffice.vendors.view-vendor',compact('vendor','products'));
-         
+
      }
 
      public function view_influencer($id){
@@ -210,7 +210,7 @@ class AdminController extends Controller
         $products = \App\Products::where('influencer_id','=',$id)->get();
 
         return view('backoffice.influencers.view',compact('influencer','products'));
-        
+
     }
 
      public function vendor_product_view($id){
@@ -231,28 +231,28 @@ class AdminController extends Controller
 
      public function view_agent($id){
         $agent = \App\Agents::with('user','city')->where('id','=',$id)->first();
-        
+
         return view('backoffice.agents.view-agent',compact('agent'));
-        
+
     }
 
      public function reject_product($id){
 
         $products = \App\Products::where('id','=',$id)->update(['status'=>'rejected']);
-        
+
         return back()->with('success','Product rejected');
-        
+
      }
 
      public function reject_vendor_product($id){
         $products = \App\Products::where('id','=',$id)->update(['status'=>'rejected']);
-        
+
         return back()->with('success','Product rejected');
      }
 
      public function reject_agent_product($id){
         $products = \App\Products::where('id','=',$id)->update(['status'=>'rejected']);
-        
+
         return back()->with('success','Product rejected');
      }
 
@@ -272,17 +272,17 @@ class AdminController extends Controller
          $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
         $image = $request->file('category_icon');
-    
+
             if(!Storage::disk('public')->exists('thumbnail')){
                 Storage::disk('public')->makeDirectory('thumbnail');
             }
-    
+
             if(!Storage::disk('public')->exists('images')){
                 Storage::disk('public')->makeDirectory('images');
             }
-    
+
             $time = time();
-    
+
             if ($files = $request->file('category_icon')) {
                 $fileNameToStore = Image::make($files);
                 $originalPath = 'storage/images/';
@@ -292,14 +292,14 @@ class AdminController extends Controller
                                     $constraint->aspectRatio();
                                 });
                 $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
-    
+
                 $category_icon = $time.$files->getClientOriginalName();
             }else{
                 $category_icon = 'noimage.jpg';
             }
 
         DB::table('categories')->insert(['category_name'=>$request->category_name,'slug'=>$slug,'category_icon'=>$category_icon]);
-        
+
         return redirect('/admin/product-categories')->with('success','Category Added.');
     }
 
@@ -312,17 +312,17 @@ class AdminController extends Controller
          $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
         $image = $request->file('brand_icon');
-    
+
             if(!Storage::disk('public')->exists('thumbnail')){
                 Storage::disk('public')->makeDirectory('thumbnail');
             }
-    
+
             if(!Storage::disk('public')->exists('images')){
                 Storage::disk('public')->makeDirectory('images');
             }
-    
+
             $time = time();
-    
+
             if ($files = $request->file('brand_icon')) {
                 $fileNameToStore = Image::make($files);
                 $originalPath = 'storage/images/';
@@ -332,14 +332,14 @@ class AdminController extends Controller
                                     $constraint->aspectRatio();
                                 });
                 $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
-    
+
                 $brand_icon = $time.$files->getClientOriginalName();
             }else{
                 $brand_icon = 'noimage.jpg';
             }
 
         DB::table('brands')->insert(['brand_name'=>$request->brand_name,'slug'=>$slug,'brand_icon'=>$brand_icon]);
-        
+
         return redirect('/admin/product-brands')->with('success','Brand Added.');
     }
 
@@ -352,18 +352,18 @@ class AdminController extends Controller
              $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
            $image = $request->file('brand_icon');
-    
+
             if($image){
                 if(!Storage::disk('public')->exists('thumbnail')){
                 Storage::disk('public')->makeDirectory('thumbnail');
             }
-    
+
             if(!Storage::disk('public')->exists('images')){
                 Storage::disk('public')->makeDirectory('images');
             }
-    
+
             $time = time();
-    
+
             if ($files = $request->file('brand_icon')) {
                 $fileNameToStore = Image::make($files);
                 $originalPath = 'storage/images/';
@@ -373,7 +373,7 @@ class AdminController extends Controller
                                     $constraint->aspectRatio();
                                 });
                 $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
-    
+
                 $brand_icon = $time.$files->getClientOriginalName();
             }else{
                 $brand_icon = 'noimage.jpg';
@@ -383,7 +383,7 @@ class AdminController extends Controller
             }
 
         DB::table('brands')->where('id',$brand->id)->update(['brand_name'=>$request->brand_name,'slug'=>$slug,'brand_icon'=>$brand_icon]);
-        
+
         return redirect('/admin/product-brands')->with('success','Brand Added.');
     }
 
@@ -408,17 +408,17 @@ class AdminController extends Controller
         $image = $request->file('category_icon');
 
         if($image !=null){
-            
+
             if(!Storage::disk('public')->exists('thumbnail')){
                 Storage::disk('public')->makeDirectory('thumbnail');
             }
-    
+
             if(!Storage::disk('public')->exists('images')){
                 Storage::disk('public')->makeDirectory('images');
             }
-    
+
             $time = time();
-    
+
             if ($files = $request->file('category_icon')) {
                 $fileNameToStore = Image::make($files);
                 $originalPath = 'storage/images/';
@@ -428,11 +428,11 @@ class AdminController extends Controller
                                     $constraint->aspectRatio();
                                 });
                 $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
-    
+
                 $category_icon = $time.$files->getClientOriginalName();
             }else{
                 $category_icon = 'noimage.jpg';
-            } 
+            }
 
             $data = ['category_name'=>$request->category_name,'slug'=>$slug,'category_icon'=>$category_icon];
         }else{
@@ -485,7 +485,7 @@ class AdminController extends Controller
         }
 
         $subcategories = $arr;
-        
+
         return $subcategories;
     }
 
@@ -497,14 +497,14 @@ class AdminController extends Controller
         $tsubcategories = DB::table('third_level_categories')
                         ->where('subcategory_id', $subcategory_id)
                         ->get();
-                        
+
         return $tsubcategories;
 
     }
 
     public function cities(){
         $cities = \App\City::all();
-        return view('backoffice.cities',compact('cities'));   
+        return view('backoffice.cities',compact('cities'));
     }
 
     public function update_city(Request $request,$id){
@@ -517,7 +517,7 @@ class AdminController extends Controller
     public function save_city(Request $request){
 
         DB::table('cities')->insert(['city_name'=>$request->city_name]);
-        
+
         return back()->with('success','City Added.');
 
     }
@@ -561,7 +561,7 @@ class AdminController extends Controller
         }
 
         $slug = $time."-".$request->product_name;
-        
+
         $slug =  str_replace(' ', '-', $slug);
 
         $slug =  str_replace('/','-',$slug);
@@ -612,7 +612,7 @@ class AdminController extends Controller
         return redirect('/admin/products')->with('success','Product Added.');
     }
 
-    
+
     /**
      * Display the specified resource.
      *
@@ -626,13 +626,13 @@ class AdminController extends Controller
     }
 
     public function add_banner(){
-        return view('backoffice.banners.add'); 
+        return view('backoffice.banners.add');
     }
 
     public function save_banner(Request $request){
 
         // dd($request->description);
-        
+
         $data = $request->except('_token','image');
 
         if(!Storage::disk('public')->exists('thumbnail')){
@@ -659,7 +659,7 @@ class AdminController extends Controller
         }else{
             $image = 'noimage.jpg';
         }
-        
+
         $data['image'] = $image;
         $data['description'] = $request->description;
         $data['created_at'] = now();
@@ -677,11 +677,11 @@ class AdminController extends Controller
       $banner = \App\Banners::find($id);
 
       $image_path = public_path().'/storage/banners/'.$banner->image;
-        
+
       unlink($image_path);
 
       $banner->delete();
-      
+
       return redirect('/admin/banners')->with('success','Banner Deleted');
     }
 
@@ -696,14 +696,14 @@ class AdminController extends Controller
       }
 
       public  function banner_edit($id){
-       
+
         $banner = \App\Banners::find($id);
 
         return view('backoffice.banners.edit',compact('banner'));
       }
 
       public function update_banner(Request $request, $id){
-        
+
         $data = $request->except('_token','image');
 
         $banner = \App\Banners::find($id);
@@ -712,9 +712,9 @@ class AdminController extends Controller
 
         if($image!== null){
           $image_path = public_path().'/storage/banners/'.$banner->image;
-       
+
             unlink($image_path);
-      
+
         $time = time();
         if ($files = $request->file('image')) {
             $fileNameToStore = Image::make($files);
@@ -762,7 +762,7 @@ class AdminController extends Controller
         $subcategories = DB::table('sub_categories')->get();
 
         return view('backoffice.products.edit',compact('product','categories','subcategories'));
-        
+
     }
 
     public function add_vendor(){
@@ -791,8 +791,8 @@ class AdminController extends Controller
     $user_id = DB::getPdo()->lastInsertId();
 
     $vendor = new \App\Vendor();
-    $vendor->user_id = $user_id; 
-    $vendor->business_name = $request->business_name; 
+    $vendor->user_id = $user_id;
+    $vendor->business_name = $request->business_name;
     $vendor->status = "approved";
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
@@ -817,13 +817,13 @@ class AdminController extends Controller
         }
 
         $product['weight'] = $weight_array;
-        
+
         $categories = DB::table('categories')->get();
 
         $subcategories = DB::table('sub_categories')->get();
 
         return view('backoffice.products.view',compact('product','categories','subcategories'));
-        
+
     }
 
     public function view_agent_product($id)
@@ -835,7 +835,7 @@ class AdminController extends Controller
         $subcategories = DB::table('sub_categories')->get();
 
         return view('backoffice.products.view',compact('product','categories','subcategories'));
-        
+
     }
 
     public function assign_product($id){
@@ -888,9 +888,9 @@ class AdminController extends Controller
 
     public function view_subcategory($id){
         $subcategory = \App\SubCategories::with('thirdlevelcategories')->find($id);
-  
+
         return view('backoffice.products.tsubcategories',compact('subcategory'));
-  
+
       }
 
     public function save_subcategory(Request $request){
@@ -931,7 +931,7 @@ class AdminController extends Controller
 
         DB::table('third_level_categories')->insert($data);
 
-        return back()->with('success','Category added');  
+        return back()->with('success','Category added');
     }
 
 
@@ -1056,7 +1056,7 @@ class AdminController extends Controller
 
         }
 
-        return view('backoffice.bookings.active',compact('bookings'));  
+        return view('backoffice.bookings.active',compact('bookings'));
     }
 
     public function influencer_active_bookings(){
@@ -1077,7 +1077,7 @@ class AdminController extends Controller
 
         // return($bookings);
 
-        return view('backoffice.bookings.active',compact('bookings'));  
+        return view('backoffice.bookings.active',compact('bookings'));
     }
 
     public function revoke_booking($id){
@@ -1105,7 +1105,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
      DB::table("users")->whereId($customers->user_id)->update(["balance"=>$balance]);
 }
 
-       
+
 
 
 
@@ -1113,7 +1113,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
     }
       public function remove_booking($id){
         DB::table('bookings')->where('id','=',$id)->delete();
-        
+
         return back()->with('success','Booking removed.');
     }
 
@@ -1137,7 +1137,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
             if($booking->agent_code !== null){
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-               
+
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }elseif(isset($influencer->user)){
@@ -1172,9 +1172,9 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-         
 
-        return view('backoffice.bookings.complete',compact('bookings'));  
+
+        return view('backoffice.bookings.complete',compact('bookings'));
     }
 
     public function influencer_complete_bookings(){
@@ -1205,7 +1205,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         // return($bookings);
 
-        return view('backoffice.bookings.complete',compact('bookings'));  
+        return view('backoffice.bookings.complete',compact('bookings'));
     }
 
 
@@ -1216,9 +1216,9 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
             if($booking->agent_code !== null){
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-               
+
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-               
+
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }elseif(isset($influencer->user)){
@@ -1253,7 +1253,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.delivered',compact('bookings'));  
+        return view('backoffice.bookings.delivered',compact('bookings'));
     }
 
     public function influencer_delivered_bookings (){
@@ -1267,7 +1267,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.delivered',compact('bookings'));  
+        return view('backoffice.bookings.delivered',compact('bookings'));
     }
 
     public function influencer_pending_bookings(){
@@ -1281,7 +1281,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.pending',compact('bookings'));  
+        return view('backoffice.bookings.pending',compact('bookings'));
     }
 
     public function influencer_unserviced_bookings(){
@@ -1295,7 +1295,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.unserviced',compact('bookings'));  
+        return view('backoffice.bookings.unserviced',compact('bookings'));
     }
 
 
@@ -1306,7 +1306,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
             if($booking->agent_code !== null){
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-               
+
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
@@ -1329,7 +1329,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.confirmed_deliveries',compact('bookings'));  
+        return view('backoffice.bookings.confirmed_deliveries',compact('bookings'));
     }
 
     public function approve_delivery($id){
@@ -1350,9 +1350,9 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
             if($booking->agent_code !== null){
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-               
+
                 $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-               
+
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }elseif(isset($influencer->user)){
@@ -1387,7 +1387,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.overdue',compact('bookings'));  
+        return view('backoffice.bookings.overdue',compact('bookings'));
     }
 
     public function influencer_overdue_bookings(){
@@ -1404,7 +1404,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.overdue',compact('bookings'));  
+        return view('backoffice.bookings.overdue',compact('bookings'));
     }
 
     public function influencer_revoked_bookings(){
@@ -1421,7 +1421,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.revoked',compact('bookings'));  
+        return view('backoffice.bookings.revoked',compact('bookings'));
     }
 
     public function revoked_bookings(){
@@ -1433,7 +1433,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
             if($booking->agent_code !== null){
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-               
+
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
@@ -1465,7 +1465,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         }
 
-        return view('backoffice.bookings.revoked',compact('bookings'));  
+        return view('backoffice.bookings.revoked',compact('bookings'));
     }
 
     public function transfer_order(){
@@ -1481,9 +1481,9 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         // $bookings = [];
 
-        return view('backoffice.bookings.transfer',compact('bookings')); 
-        
-       
+        return view('backoffice.bookings.transfer',compact('bookings'));
+
+
 
     }
 
@@ -1570,7 +1570,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         if($booking == null){
             return back()->with('error', 'Booking Does not exist!');
         }
-   
+
        $payment_log = \App\PaymentLog::find($id);
 
        $existingLogCount = \App\PaymentLog::where('TransID',$payment_log->TransID)->count();
@@ -1586,7 +1586,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
            if($booking->vendor_code !== null){
                 $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
                 if($vendor == null){
-                    
+
                    }else {
 
                     $recipients = $vendor->phone;
@@ -1605,7 +1605,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         $payment = new \App\Payments();
         $payment->booking_id = $booking->id;
-        $payment->customer_id = $booking->customer_id; 
+        $payment->customer_id = $booking->customer_id;
         $payment->product_id  = $booking->product_id;
         $payment->transaction_amount = $request->amount;
         $payment->booking_status = 'active';
@@ -1631,7 +1631,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
                 if($booking->vendor_code !== null){
 
                     if($vendor == null){
-                    
+
                     }else {
                         $location = " Your will pick your product at ".$vendor->location;
                     }
@@ -1659,7 +1659,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
             if($booking->vendor_code !== null){
                 $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
                 if($vendor == null){
-                    
+
                    }else {
                     $admin_commission = $product->product_price * ($product->subcategory->commision/100);
                     $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
@@ -1682,14 +1682,14 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
                    }
             }
-            
+
         }else{
 
             DB::table('bookings')
             ->where('booking_reference','=',$bill_ref_no)
             ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
         }
-        
+
 
         DB::table('mpesapayments')
             ->insert([
@@ -1736,7 +1736,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. " ;
 
-        // }   
+        // }
 
         SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1759,7 +1759,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         ];
 
         Mail::to('order@mosmos.co.ke')->send(new SendPaymentMailToAdmin($details));
-   
+
 
         $latestPayment = \App\Payments::with('mpesapayment')->where('booking_id',$booking->id)->latest()->first();
 
@@ -1796,7 +1796,7 @@ $this->updateunservicedoverdue();
 
             if($booking->agent_code !== null){
                 $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-               
+
                 if(isset($agent->user)){
                     $agent = $agent->user->name.' (Agent)';
                 }else{
@@ -1828,7 +1828,7 @@ $this->updateunservicedoverdue();
 
         }
 
-        return view('backoffice.bookings.unserviced',compact('bookings'));  
+        return view('backoffice.bookings.unserviced',compact('bookings'));
     }
 
     public function pending_bookings(){
@@ -1870,7 +1870,7 @@ $this->updateunservicedoverdue();
 
         }
 
-        return view('backoffice.bookings.pending',compact('bookings'));  
+        return view('backoffice.bookings.pending',compact('bookings'));
     }
 
     public function payments(){
@@ -1878,7 +1878,7 @@ $this->updateunservicedoverdue();
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->orderBy('id', 'DESC')->get();
 
-         
+
 
         return view('backoffice.payments.index',compact('payments'));
     }
@@ -1892,25 +1892,25 @@ $this->updateunservicedoverdue();
     }
 
     public function customers(Request $request,$type){
-        
+
         $title="";
 
         if ($type=="active") {
 
         $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
-        $title="Active/ Complete Bookings";       
+        $title="Active/ Complete Bookings";
         # code...
         }
         else if ($type=='complete') {
         # code...
         $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
-        $title="Complete Bookings";  
+        $title="Complete Bookings";
 
         }
         else if ($type=='active-bookings') {
         # code...
         $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
-        $title="Active Bookings";  
+        $title="Active Bookings";
 
         }
 
@@ -1918,18 +1918,18 @@ $this->updateunservicedoverdue();
         # code...
         $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
 
-        $title="Pending Bookings";  
+        $title="Pending Bookings";
         }
         else if ($type=='revoked-bookings') {
         # code...
         $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
-        $title="Revoked Bookings";  
+        $title="Revoked Bookings";
 
         }
         else if ($type=='inactive') {
         # code...
         $customers=\App\Bookings::pluck('customer_id')->toArray();
-        $title="Inactive Customers";  
+        $title="Inactive Customers";
 
         }
 
@@ -1945,7 +1945,7 @@ $this->updateunservicedoverdue();
         $title="Overdue Bookings";
 
         }
-        
+
 
 
         if ($type=="inactive") {
@@ -1963,15 +1963,15 @@ $this->updateunservicedoverdue();
                         ->join('users', 'customers.user_id', '=', 'users.id')->
                         whereIn("customers.id",$customers)
                         ->orderBy('customers.id', 'DESC')
-                        ->get(); 
+                        ->get();
         }
 
 
 
 
-        
+
         foreach($customers as $customer){
-            
+
             $bookingsCount = \App\Bookings::where('customer_id',$customer->customer_id)->where('status','!=','revoked')->count();
 
             $booking = \App\Bookings::where('customer_id',$customer->customer_id)->latest()->first();
@@ -1979,7 +1979,7 @@ $this->updateunservicedoverdue();
             if($booking!=null){
                 $customer->booking_status = $booking->status;
             }else{
-                $customer->booking_status = "NO BOOKING"; 
+                $customer->booking_status = "NO BOOKING";
             }
 
             $customer->bookingsCount = $bookingsCount;
@@ -2026,7 +2026,7 @@ $this->updateunservicedoverdue();
     }
 
     public function add_influencer(){
-        return view('backoffice.influencers.add');  
+        return view('backoffice.influencers.add');
     }
 
     public function add_agent(){
@@ -2038,11 +2038,11 @@ $this->updateunservicedoverdue();
         $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $request->phone,$p_matches);
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
-        //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred. 
+        //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred.
         if ($valid_phone != 1 ) {
 
             return back()->withInput()->with('error', 'Please enter a valid  Phone Number!');
-            
+
 
         }elseif($valid_email != 1){
             return back()->withInput()->with('error', 'Please enter a valid  email address!');
@@ -2073,8 +2073,8 @@ $this->updateunservicedoverdue();
         $user_id = DB::getPdo()->lastInsertId();
 
         $agent = new \App\Agents();
-        $agent->user_id = $user_id; 
-        $agent->agent_code ='AG'.$user_id; 
+        $agent->user_id = $user_id;
+        $agent->agent_code ='AG'.$user_id;
         $agent->phone  = '254'.ltrim($request->input('phone'), '0');
         $agent->location  = $request->input('location');
         $agent->city_id  = $request->input('city_id');
@@ -2089,20 +2089,20 @@ $this->updateunservicedoverdue();
     public function influencer_save(Request $request){
 
         list($payment_log->MSISDN, $network) = $this->get_msisdn_network($request->phone);
-        
+
         $valid_phone = $payment_log->MSISDN;
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
-        //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred. 
+        //preg_match() returns 1 if the pattern matches given subject, 0 if it does not, or FALSE if an error occurred.
         if (!$payment_log->MSISDN) {
-        
+
             return back()->withInput()->with('error', 'Please enter a valid  Phone Number!');
-            
-        
+
+
         }elseif($valid_email != 1){
             return back()->withInput()->with('error', 'Please enter a valid  email address!');
         }
-        
+
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
         if($existingUser)
         {
@@ -2119,12 +2119,12 @@ $this->updateunservicedoverdue();
         $user->role ='influencer';
         $user->password = Hash::make($request->input('phone'));
         $user->save();
-        
+
         $user_id = DB::getPdo()->lastInsertId();
-        
+
         $influencer= new \App\Influencer();
-        $influencer->user_id = $user_id; 
-        $influencer->code ='INF'.$user_id; 
+        $influencer->user_id = $user_id;
+        $influencer->code ='INF'.$user_id;
         $influencer->phone  = $payment_log->MSISDN;
         $influencer->commission = $request->commission;
         $influencer->store_name  = $request->input('store_name');
@@ -2140,7 +2140,7 @@ $this->updateunservicedoverdue();
         $influencer_t->save();
 
         return redirect('admin/influencers')->with('success','Influencer Added');
-        
+
         }
 
     public function product_delete($id){
@@ -2149,7 +2149,7 @@ $this->updateunservicedoverdue();
 
         $image_path = public_path().'/storage/images/'.$product->product_image;
 
-          
+
         unlink($image_path);
 
         $galleries = \App\Gallery::where('product_id','=',$product->id)->get();
@@ -2157,13 +2157,13 @@ $this->updateunservicedoverdue();
         foreach($galleries as $gallery){
 
             $image_path = public_path().'/storage/gallery/images/'.$gallery->image_path;
-            
+
             unlink($image_path);
 
         }
-  
+
         $product->delete();
-        
+
         return redirect('/admin/products')->with('success','Product Deleted');
 
     }
@@ -2211,7 +2211,7 @@ $this->updateunservicedoverdue();
     //   return response()->json($commissions);
 
       return view('backoffice.commissions.index',compact('commissions'));
-        
+
     }
 
     public function influencer_commissions(){
@@ -2223,7 +2223,7 @@ $this->updateunservicedoverdue();
     public function influencer_pay(Request $request){
 
         $logData = $request->except('_token');
-        
+
         \App\InfluencerPaymentlog::create($logData);
 
         $influencer_t = \App\InfluencerCommissionTotal::where('influencer_id',$request->influencer_id)->first();
@@ -2263,49 +2263,49 @@ $this->updateunservicedoverdue();
     public function influencer_delete_account($id){
 
         $influencer = \App\Influencer::where('id','=',$id)->first();
-        
+
          $products = \App\Products::where('influencer_id','=',$influencer->id)->get();
-        
+
          $bookings = \App\Bookings::where('influencer_code','=',$influencer->influencer_code)->get();
-        
+
          foreach($products as $product){
             \App\Products::where('id','=',$product->id)->update(['influencer_id'=>NULL,'updated_at'=>now()]);
          }
-        
+
          foreach($bookings as $booking){
             \App\Bookings::where('id','=',$booking->id)->update(['agent_code'=>NULL,'updated_at'=>now()]);
          }
-        
+
          \App\User::where('id',$influencer->user_id)->delete();
-        
+
          $influencer->delete();
-        
+
          return back()->with('success','influencer deleted');
-        
+
     }
 
     public function agent_delete_account($id){
 
         $agent = \App\Agents::where('id','=',$id)->first();
-        
+
          $products = \App\Products::where('agent_id','=',$agent->id)->get();
-        
+
          $bookings = \App\Bookings::where('agent_code','=',$agent->agent_code)->get();
-        
+
          foreach($products as $product){
             \App\Products::where('id','=',$product->id)->update(['agent_id'=>NULL,'updated_at'=>now()]);
          }
-        
+
          foreach($bookings as $booking){
             \App\Bookings::where('id','=',$booking->id)->update(['agent_code'=>NULL,'updated_at'=>now()]);
          }
-        
+
          \App\User::where('id',$agent->user_id)->delete();
-        
+
          $agent->delete();
-        
+
          return back()->with('success','agent deleted');
-        
+
     }
 
     public function sms_log(Request $request){
@@ -2326,11 +2326,11 @@ $this->updateunservicedoverdue();
     public function send_sms(){
 
       return view('backoffice.sms.send');
-        
+
     }
 
     public function send_sms_save(Request $request){
-        
+
       $recipients = $request->receiver;
       $type = $request->type;
       $group = $request->group;
@@ -2343,7 +2343,7 @@ $this->updateunservicedoverdue();
       if($type === "group" && empty($group)){
         return back()->withInput()->with('error','Group field is required');
       }
-      
+
 
       if($type === "single"){
         SendSMSController::sendMessage($recipients,$message,$type = 'composed_message');
@@ -2400,12 +2400,12 @@ $this->updateunservicedoverdue();
         }finally{
             SendSMSController::sendMessage($recipients,$message,$type = $group.'_composed_message');
         }
-     
-          
+
+
     }
 
     public function update_product_bookings(){
-        
+
         $bookings = \App\Bookings::with('product')->where('agent_code',NULL)->orWhere('vendor_code',NULL)->get();
 
         foreach($bookings as $booking){
@@ -2416,29 +2416,29 @@ $this->updateunservicedoverdue();
                 if($product->agent_id !=null){
 
                     $agent = \App\Agents::where('id','=',$product->agent_id)->first();
-            
+
                     $agent_code = $agent->agent_code;
-    
+
                     \App\Bookings::where('id',$booking->id)->update(['agent_code'=>$agent_code]);
-            
+
                 }elseif($product->vendor_id !=null){
-        
+
                     $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-        
+
                     $vendor_code = $vendor->vendor_code;
-    
+
                     \App\Bookings::where('id',$booking->id)->update(['vendor_code'=>$vendor_code]);
-        
+
                 }elseif($product->influencer_id !=null){
-    
+
                     $influencer = \App\Influencer::where('id','=',$product->influencer_id)->first();
 
                     $influencer_code = $influencer->code;
-    
+
                     \App\Bookings::where('id',$booking->id)->update(['influencer_code'=>$influencer_code]);
-                    
+
                     }
-        
+
             }
 
             $now = now();
@@ -2478,7 +2478,7 @@ $this->updateunservicedoverdue();
             //     \Log::info('Complete booking =>'.print_r($booking,1));
             //     $influencer = \App\Influencer::where('code','=',$booking->influencer_code)->first();
             //     if($influencer == null){
-                    
+
             //        }else {
             //         $influencer_commission = ($product->product_price - $product->buying_price) * ($influencer->commission/100);
 
@@ -2511,13 +2511,13 @@ $this->updateunservicedoverdue();
     function scheduletasks(Request $request){
         //Log::info("executed successfully");
 
-        // use cron jobs for linux/ubuntu to schedule task update 
-        
+        // use cron jobs for linux/ubuntu to schedule task update
+
    $result=Bookings::whereStatus("pending")->latest()->get();
  $today =  Carbon::now();
-   for ($i=0; $i <count($result) ; $i++) { 
+   for ($i=0; $i <count($result) ; $i++) {
        # code...
-   
+
 $createdDate = Carbon::parse($result[$i]->created_at);
 $hours=$today->diffInHours($createdDate);
 
@@ -2532,7 +2532,7 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
    $token=\App\User::whereId($customer->user_id)->first()->token;
     if ($token==null) {
         # code...
-    
+
     }
     else{
     $obj = new pushNotification();
@@ -2549,23 +2549,23 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
    }
 
 
-       
+
    $result=Bookings::whereStatus("active")->whereCustomer_id(1883)->latest()->get();
  $today =  Carbon::now();
-   for ($i=0; $i <count($result) ; $i++) { 
+   for ($i=0; $i <count($result) ; $i++) {
        # code...
-   
+
 $createdDate = Carbon::parse($result[$i]->notified_at);
 $hours=$today->diffInHours($createdDate);
 
 if (intval($hours)>48) {
-   
+
     # code...
        $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
    $token=\App\User::whereId($customer->user_id)->first()->token;
     if ($token==null) {
         # code...
-    
+
     }
     else{
     $obj = new pushNotification();
@@ -2575,8 +2575,8 @@ if (intval($hours)>48) {
     Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
 }
 
-    
- 
+
+
 
 
 //Log::info($hours."     " .$createdDate ."  " .$today);
@@ -2591,7 +2591,7 @@ if (intval($hours)>48) {
    $customers=\App\Bookings::pluck('customer_id')->toArray();
 $result = \App\Customers::whereNotIn("id",$customers)->get();
  $today =  Carbon::now();
-   for ($i=0; $i <count($result) ; $i++) { 
+   for ($i=0; $i <count($result) ; $i++) {
        # code...
 $checkifexists=DB::table("discountnotification")->wherePhone($result[$i]->phone)->first();
 
@@ -2599,7 +2599,7 @@ if ($checkifexists==null) {
    $token=\App\User::whereId($result[$i]->user_id)->first()->token;
     if ($token==null) {
         # code...
-    
+
     }
     else{
     $obj = new pushNotification();
@@ -2618,12 +2618,12 @@ else{
 $hours=$today->diffInHours($createdDate);
 
 if (intval($hours)>24) {
-   
+
     # code...
         $token=\App\User::whereId($result[$i]->user_id)->first()->token;
     if ($token==null) {
         # code...
-    
+
     }
     else{
     $obj = new pushNotification();
@@ -2631,12 +2631,12 @@ if (intval($hours)>24) {
    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
    DB::table("discountnotification")->wherePhone($result[$i]->phone)->update(["notified_at"=>Now()]);
 }
-    
+
 }
 }
 
-    
- 
+
+
 
 
 //Log::info($hours."     " .$createdDate ."  " .$today);
@@ -2653,7 +2653,7 @@ return "hello";
     }
     function updateunservicedoverdue(){
         $result=Bookings::whereIn("status",["active","unserviced"])->get();
-for ($i=0; $i <count($result) ; $i++) { 
+for ($i=0; $i <count($result) ; $i++) {
     # code..
     $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
    if ($res==1 || $res==0) {
@@ -2662,7 +2662,7 @@ for ($i=0; $i <count($result) ; $i++) {
    }
    else{
      \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"overdue"]);
-   
+
    }
 
 }
@@ -2671,5 +2671,17 @@ for ($i=0; $i <count($result) ; $i++) {
     function monitorPayments(Request $request){
         $result=DB::table("monitorpay")->get()[0];
         return  view('backoffice.payments.monitoring',compact('result'));
+    }
+
+    function promotions(Request $request){
+
+$users=\App\promotions::get();
+foreach ($users as $key => $value) {
+    # code...
+    $value->customer=\App\Customers::with('user')->whereId($value->customers_id)->first();
+}
+
+return view("backoffice.promotions.data",compact('users'));
+
     }
 }

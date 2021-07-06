@@ -36,6 +36,10 @@ Route::get('/privacy-policy', function () {
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
+
+Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
+
+Route::get('/sendpromoreminder', 'firebasetopics@sendpromoreminder')->name('admin.sendpromoreminder');
 Route::get('/scheduletasks','AdminController@scheduletasks');
 
 Route::get('/testSendSMS','FrontPageController@testSendSMS');
@@ -117,7 +121,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 
-  Route::group(['middleware' => ['auth']], function (){ 
+  Route::group(['middleware' => ['auth']], function (){
     Route::prefix('dashboard')->group(function () {
         Route::get('/home', 'AdminController@dashboard')->name('dashboard');
     });
@@ -126,7 +130,7 @@ Route::get('/home', 'HomeController@index')->name('home');
  });
 
 Route::prefix('customer')->group(function () {
-    Route::group(['middleware' => ['auth','customer']], function (){ 
+    Route::group(['middleware' => ['auth','customer']], function (){
         Route::get('/dashboard', 'CustomerController@index')->name('customer.dashboard');
         Route::get('/pending-bookings','CustomerController@pending_bookings');
         Route::get('/complete-bookings','CustomerController@complete_bookings');
@@ -134,12 +138,12 @@ Route::prefix('customer')->group(function () {
         Route::get('/revoked-bookings','CustomerController@revoked_bookings');
         Route::post('/customer/redeem','CustomerController@redeem')->name('customer.redeem');
         Route::get('/payments', 'FrontPageController@payments')->name('customer.payments');
-        
+
     });
 });
 
 Route::prefix('agent')->group(function () {
-    Route::group(['middleware' => ['auth','agent']], function (){ 
+    Route::group(['middleware' => ['auth','agent']], function (){
         Route::get('/assigned-products', 'AgentsController@assigned_products')->name('agent.assigned.products');
         Route::get('/product-view/{id}','AgentsController@view_product');
         Route::get('/complete-bookings','AgentsController@complete_bookings');
@@ -175,7 +179,7 @@ Route::prefix('agent')->group(function () {
 });
 
 Route::prefix('influencer')->group(function () {
-    Route::group(['middleware' => ['auth','influencer']], function (){ 
+    Route::group(['middleware' => ['auth','influencer']], function (){
         Route::get('/product-view/{id}','InfluencerController@view_product');
         Route::get('/add-product', 'InfluencerController@add_product');
         Route::post('/update-product/{id}', 'InfluencerController@update_product');
@@ -206,7 +210,7 @@ Route::prefix('influencer')->group(function () {
 });
 
 Route::prefix('vendor')->group(function () {
-    Route::group(['middleware' => ['auth']], function (){ 
+    Route::group(['middleware' => ['auth']], function (){
         Route::get('/assigned-products', 'VendorController@assigned_products');
         Route::get('/product-view/{id}','VendorController@view_product');
         Route::get('/add-product', 'VendorController@add_product');
@@ -238,8 +242,9 @@ Route::prefix('vendor')->group(function () {
 });
 
 Route::prefix('admin')->group(function () {
-Route::group(['middleware' => ['auth','admin']], function (){ 
+Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/dashboard', 'AdminController@index')->name('admin.dashboard');
+    Route::get('/promotions', 'AdminController@promotions')->name('admin.promotions');
     Route::get('/profile', 'AdminController@profile')->name('admin.profile');
     Route::get('/update-profile', 'AdminController@update_profile')->name('admin.update-profile');
     Route::get('/products', 'AdminController@products')->name('admin.products');
@@ -322,7 +327,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/send-sms','AdminController@send_sms')->name('admin.send-sms');
     Route::post('/send-sms-save','AdminController@send_sms_save')->name('admin.send-sms-save');
 
-    
+    //send prmo notifications
 
     Route::get('/notifications', 'firebasetopics@index')->name('admin.notifications');
     Route::get('/custom', 'firebasetopics@customNotifications')->name('admin.customnotifications');
@@ -330,10 +335,12 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/customnotify', 'firebasetopics@customnotify')->name('admin.customnotify');
 Route::get('/removetopic', 'firebasetopics@removetopic')->name('admin.removetopic');
 Route::post('/sendtotopics','pushNotification@sendtotopics')->name('admin.firebasetopics');
+
+//payment monitoring
 Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.monitorPayments');
 
 
-    
+
     Route::prefix('influencer')->group(function () {
 
         Route::get('/active-bookings','AdminController@influencer_active_bookings');
@@ -345,16 +352,16 @@ Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.mo
         Route::get('/delivered-bookings','AdminController@influencer_delivered_bookings');
         Route::get('/confirmed-deliveries','AdminController@influencer_confirmed_deliveries');
         Route::get('/revoked-bookings','AdminController@influencer_revoked_bookings');
-        
+
     });
 
-    Route::prefix('counties')->group(function () { 
+    Route::prefix('counties')->group(function () {
         Route::get('/view-all','CountiesController@index')->name('admin.counties');
         Route::post('/save','CountiesController@store')->name('admin.counties-save');
         Route::post('/update/{county}','CountiesController@update')->name('admin.counties-update');
         Route::get('/view/{county}','CountiesController@show')->name('admin.counties.show');
 
-    Route::prefix('locations')->group(function () { 
+    Route::prefix('locations')->group(function () {
 
         Route::get('/all','PickupLocationController@index')->name('admin.locations.all');
         Route::post('/save','PickupLocationController@store')->name('admin.locations.save');
@@ -363,13 +370,13 @@ Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.mo
         });
     });
 
-    Route::prefix('zones')->group(function () { 
+    Route::prefix('zones')->group(function () {
         Route::get('/view-all','NairobiZonesController@index')->name('admin.zones');
         Route::post('/save','NairobiZonesController@store')->name('admin.zones-save');
         Route::post('/update/{county}','NairobiZonesController@update')->name('admin.zones-update');
         Route::get('/view/{county}','NairobiZonesController@show')->name('admin.zones.show');
 
-    Route::prefix('dropoffs')->group(function () { 
+    Route::prefix('dropoffs')->group(function () {
 
         Route::get('/all','NairobiDropOffsController@index')->name('admin.dropoffs.all');
         Route::post('/save','NairobiDropOffsController@store')->name('admin.dropoffs.save');
@@ -382,7 +389,7 @@ Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.mo
         Route::get('/delete-account/{id}','AdminController@vendor_delete_account');
         Route::get('/pending-products','AdminController@vendor_pending_products');
         Route::get('/approved-products','AdminController@vendor_approved_products');
-        Route::get('/product-view','AdminController@vendor_product_view'); 
+        Route::get('/product-view','AdminController@vendor_product_view');
         Route::get('/products-report/{id}','ReportGenerator@vendor_products_report');
         Route::get('/active-bookings-report/{id}','ReportGenerator@vendor_active_bookings_report');
         Route::get('/pending-bookings-report/{id}','ReportGenerator@vendor_pending_bookings_report');
@@ -400,7 +407,7 @@ Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.mo
         Route::get('/delete-account/{id}','AdminController@influencer_delete_account');
         Route::get('/pending-products','AdminController@influencer_pending_products');
         Route::get('/approved-products','AdminController@influencer_approved_products');
-        Route::get('/product-view','AdminController@influencer_product_view'); 
+        Route::get('/product-view','AdminController@influencer_product_view');
         Route::get('/products-report/{id}','ReportGenerator@influencer_products_report');
         Route::get('/active-bookings-report/{id}','ReportGenerator@influencer_active_bookings_report');
         Route::get('/pending-bookings-report/{id}','ReportGenerator@influencer_pending_bookings_report');
