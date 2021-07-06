@@ -873,6 +873,12 @@ class FrontPageController extends Controller
 
             $subcategory = \App\SubCategories::where('slug','=',$slug)->first();
 
+            $brand_slug = $request->brand;
+
+            $brand = [];
+    
+            $brand = \App\Brand::where('slug',$brand_slug)->first();
+
             $skip=$request->skip;
 
             $take=10;
@@ -895,6 +901,12 @@ class FrontPageController extends Controller
                                                     ->where('subcategory_id','=',$subcategory->id)
                                                     ->where('quantity','>',0)
                                                     ->where('status','=','approved')
+                                                    ->where(function($query) use ($brand)
+                                                        {
+                                                            if (!empty($brand)) {
+                                                                $query->where('brand_id', $brand->id);
+                                                            }
+                                                        })
                                                     ->orderBy($p,$o)
                                                     ->skip($skip)
                                                     ->take($take)
