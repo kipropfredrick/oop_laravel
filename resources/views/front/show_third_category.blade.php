@@ -223,8 +223,8 @@
             <div class="hh-ft-sort">
                 <div class="form-group">
                     <div class="">
-                        <form action="/tlc/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form">
-                            <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
+                        <form action="/tlc/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form_mob">
+                            <select onchange="filter_mob(this);" name="sort_by" id="sort_by" class="form-control">
                                 <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                 <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
                                 <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
@@ -453,6 +453,11 @@
         console.log('sort_by => '+sort_by);
         window.location.href = url;
         // $('#filter-form').submit();
+    }
+
+    function filter_mob(sel)
+    {
+        $('#filter-form_mob').submit();
     }
 
 </script>
