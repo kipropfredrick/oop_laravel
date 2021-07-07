@@ -51,9 +51,9 @@
 
                             @foreach(\App\ThirdLevelCategory::where('subcategory_id',$subcategory->id)->get() as $tlc)
 
-                            <div class="lmmsbt">
-                                <span class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
-                                <a href="/tlc/{{$subcategory->subcategory_name}}/{{$tlc->slug}}">{{$tlc->name}}</a>
+                            <div <?php if($current_tlc->id == $tlc->id){echo 'style="background-color:#F68B1E;color: #fff !important;padding:5px"';} ?>  class="lmmsbt">
+                                <span <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <a <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> href="/tlc/{{$subcategory->subcategory_name}}/{{$tlc->slug}}">{{$tlc->name}}</a>
                             </div>
 
                             @endforeach
@@ -294,9 +294,9 @@
 
                             @foreach(\App\ThirdLevelCategory::where('subcategory_id',$subcategory->id)->get() as $tlc)
 
-                            <div class="lmmsbt">
-                                <span class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
-                                <a href="/tlc/{{$subcategory->subcategory_name}}/{{$tlc->slug}}">{{$tlc->name}}</a>
+                            <div <?php if($current_tlc->id == $tlc->id){echo 'style="background-color:#F68B1E;color: #fff !important;padding:5px"';} ?>  class="lmmsbt">
+                                <span <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <a <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> href="/tlc/{{$subcategory->subcategory_name}}/{{$tlc->slug}}">{{$tlc->name}}</a>
                             </div>
 
                             @endforeach
