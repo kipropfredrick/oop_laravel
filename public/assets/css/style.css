@@ -47,6 +47,10 @@ button.mdg-btn-search:hover {
     color: #ffffff;
 }
 
+.lmm-app img {
+    max-width: 150px;
+}
+
 .header-cta {
     color: #ffffff;
     padding: 5px 10px 0;

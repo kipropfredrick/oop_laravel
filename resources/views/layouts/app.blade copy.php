@@ -291,39 +291,35 @@
         @yield('content')
     </div>
   
-    
     <!-- footer -->
-    <span class="truly-african"></span>
+        <span class="truly-african"></span>
     <div class="ftr-bg">
         <div class="container">
             <div class="ftr-container">
                 <div class="ftr-content">
-
 
                     <div class="ftr-socials">
                         <a href="https://facebook.com/lipamosmoske" target="_blank"><span class="fa fa-2x fa-facebook"></span></a>
                         <a href="https://instagram.com/lipamosmoske" target="_blank"><span class="fa fa-2x fa-instagram"></span></a>
                     </div>
 
-                    <!-- subscribe --
-                    <div class="ftr-subscribe">
+                    <!-- <div class="ftr-subscribe">
                         <div class="ftr-search mt-2">
                             <h3>Fear of Missing Out?</h3>
                             <p>Subscribe to our newsletter to be the first to know of all the latest offers, deals and new products as they drop.</p>
 
-                            <form class="form-inline">
+                            <form class="form-inline" action="/search" method="get">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Enter your Email Address" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
+                                <input name="search" type="text" class="form-control" placeholder="What are you looking for?" aria-label="What are you looking for?" aria-describedby="mdg-btn-search">
                                     <div class="input-group-append">
-                                        <a class="btn mdg-btn-search" type="button" id="mdg-btn-search">
-                                            <span class="fa fa-envelope-o"></span>
-                                        </a>
+                                    <button class="btn mdg-btn-search" type="submit" id="mdg-btn-search">
+                                        <span class="fa fa-search"></span>
+                                    </button>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                    </div>
-                    <!-- end -->
+                    </div> -->
 
                     <div class="ftr-legal">
                         <div class="mb-2">
@@ -345,26 +341,12 @@
                         </div>
                     </div>
 
-                    <!-- LMM app -->
-                    <div class="ftr-subscribe">
-                        <div class="ftr-search mt-2">
-                            <h3>Download our app</h3>
-                            
-                            <div class="lmm-app">
-                                <a href="https://bit.ly/MosMosApp" target="_blank">
-                                    <img src="{{asset('images/playstore.png')}}" alt="Google Play">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end -->
-
                 </div>
             </div>
         </div>
     </div>
     <!-- end --> 
-    
+
     <!-- copyrights -->
     <div class="copyrights">
         <div class="container">

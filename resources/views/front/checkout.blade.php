@@ -91,12 +91,12 @@ $fill=true;
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
-                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" value=" @if($fill) {{$name}} @else {{ old('name') }} @endif " placeholder="Full Name" >
+                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" value="{{ old('name') }}" placeholder="Full Name" >
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="checkout-company-name">Phone Number<span style="color:red">*</span>
                                         </label>
-                                        <input required name="phone" type=""  class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX" value=" @if($fill) {{$phone}} @else {{ old('phone') }} @endif ">
+                                        <input required name="phone" type=""  class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX" value="{{ old('phone') }}">
                                     </div>
                                 </div>
 
