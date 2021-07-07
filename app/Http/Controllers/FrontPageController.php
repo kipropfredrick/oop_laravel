@@ -1147,8 +1147,6 @@ if ($existingUser->role == "user" ) {
 
         $user = \App\User::find($existingCustomer->user_id);
         
-        $booking_reference = 'MM'.rand(10000,99999);
-
         $booking_date = now();
 
         $$booking_date = strtotime($booking_date);
@@ -1192,15 +1190,12 @@ if ($existingUser->role == "user" ) {
 
            $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
 
-           $booking_reference = 'MM'.rand(10000,99999);
-
-        
             $booking = new \App\Bookings();
             $booking->customer_id = $existingCustomer->id; 
             $booking->product_id  = $request->product_id;
             $booking->county_id = $request->county_id;
             $booking->exact_location = $request->exact_location;
-            $booking->booking_reference = $booking_reference;
+            $booking->booking_reference =  $this->get_booking_reference();
             $booking->quantity  = '1';
             $booking->amount_paid = "0";
             $booking->item_cost = $product->product_price;
@@ -1242,21 +1237,36 @@ if ($existingUser->role == "user" ) {
 
     }
 
+    public function get_booking_reference(){
+
+        $latest_booking = \App\Bookings::latest()->first();
+        $latest_ref = $latest_booking->booking_reference;
+        $latest_ref = substr($latest_ref, 2);
+        
+
+
+        if(strlen($latest_ref) == 6){
+            
+            $latest_ref +=1;
+            $booking_reference = 'MM'.$latest_ref;
+
+        }else{
+          $booking_reference = 'MM100000';   
+        }
+
+        return $booking_reference;
+
+    }
+
     public function make_booking(Request $request){
-
-
-
-
-
 
 
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
         $vendor_code = $request->vendor_code;
 
-
         $categories = \App\Categories::all();
-
+        
         list($msisdn, $network) = $this->get_msisdn_network($request->phone);
 
         if (!$msisdn){
@@ -1312,11 +1322,9 @@ if ($existingUser->role == "user" ) {
 
         \Auth::login($user);
 
-
-        $booking_reference = 'MM'.rand(10000,99999);
+        $booking_reference = $this->get_booking_reference();
 
         $booking_date = now();
-
 
         $due_date = Carbon::now()->addMonths(3);
 
@@ -1330,43 +1338,41 @@ if ($existingUser->role == "user" ) {
          
         }
 
-$balance=$existingUser->balance;
+        $balance=$existingUser->balance;
 
-$booking = new \App\Bookings();
- $recipients = $valid_phone;
-if (intval($balance)==0) {
-   $booking->balance =   $total_cost; 
-$booking->amount_paid = "0";
-$booking->status = "pending";
-}
-else{
+        $booking = new \App\Bookings();
+        $recipients = $valid_phone;
+        if (intval($balance)==0) {
+        $booking->balance =   $total_cost; 
+        $booking->amount_paid = "0";
+        $booking->status = "pending";
+        }
+        else{
 
-    if (intval($total_cost)<intval($balance)) {
-        # code...
-        \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
-        $booking->status = "complete";
-        $booking->balance="0";
+            if (intval($total_cost)<intval($balance)) {
+                # code...
+                \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
+                $booking->status = "complete";
+                $booking->balance="0";
 
-         $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
-    }
-    else{
+                $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
+            }
+            else{
 
-         \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
-        $booking->balance =   $total_cost-(intval($balance)); 
-$booking->amount_paid = $balance;
-$booking->status = "active";
- $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance)));
-    }
-
-
-
-        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
-}
+                \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
+                $booking->balance =   $total_cost-(intval($balance)); 
+                $booking->amount_paid = $balance;
+                $booking->status = "active";
+                $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance)));
+            }
+                
+            SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+        }
 
         
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
-        $booking->booking_reference = $booking_reference;
+        $booking->booking_reference = $this->get_booking_reference();
         $booking->quantity  = '1';
        
         $booking->item_cost = $product->product_price;
@@ -1382,17 +1388,14 @@ $booking->status = "active";
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
+        $booking->booking_reference = $this->get_booking_reference();
 
         $booking->save();
         
+        
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'MM'.rand(10000,99999);
-
-        \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
-
-
-       $recipients = $valid_phone;
+        $recipients = $valid_phone;
       
         $booking_id = DB::getPdo()->lastInsertId();
 
@@ -1419,9 +1422,7 @@ $booking->status = "active";
 
         if($existingCustomer)
         {
-
-        $booking_reference = 'MM'.rand(10000,99999);
-
+            
         $booking_date = now();
 
         $$booking_date = strtotime($booking_date);
@@ -1441,7 +1442,7 @@ $booking->status = "active";
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
-        $booking->booking_reference = $booking_reference;
+        $booking->booking_reference = $this->get_booking_reference();
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = $total_cost;
@@ -1500,10 +1501,7 @@ $booking->status = "active";
 
        $due_date = Carbon::now()->addMonths(3);
 
-        $booking_reference = 'MM'.rand(10000,99999);
-
-
-        $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
+       $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
 
         $booking = new \App\Bookings();
@@ -1511,7 +1509,7 @@ $booking->status = "active";
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
-        $booking->booking_reference = $booking_reference;
+        $booking->booking_reference = $this->get_booking_reference();
         $booking->quantity  = "1";
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
