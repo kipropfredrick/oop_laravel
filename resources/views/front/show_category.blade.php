@@ -244,12 +244,14 @@
             <div class="hh-ft-sort">
                 <div class="form-group">
                     <div class="">
-                        <select id="delivery-station" class="form-control">
-                            <option selected>Sort by: ID</option>
-                            <option>Best sellers</option>
-                            <option>Low to high price</option>
-                            <option>High to low price</option>
+                    <form action="/cat/{{$current_c->slug}}<?php if(!empty($current_b)){echo "?brand=".$current_b->slug;} ?>" id="filter-form_mob">
+                        <select onchange="filter_mob(this);" name="sort_by" id="sort_by" class="form-control">
+                                <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
+                                <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
                         </select>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -502,6 +504,11 @@
         console.log('sort_by => '+sort_by);
         window.location.href = url;
         // $('#filter-form').submit();
+    }
+
+    function filter_mob(sel)
+    {
+        $('#filter-form_mob').submit();
     }
 
 </script>
