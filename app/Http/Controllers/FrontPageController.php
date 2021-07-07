@@ -496,7 +496,7 @@ class FrontPageController extends Controller
 
         $brand_ids = \App\Products::where('status','=','approved')
                                     ->distinct('brand_id')
-                                    ->where('subcategory_id',$subcategory->id)
+                                    ->where('third_level_category_id',$thirdlevel_category->id)
                                     ->where('quantity','>',0)
                                     ->where(function($query) use ($brand)
                                         {
@@ -564,23 +564,33 @@ class FrontPageController extends Controller
         
         }else{
             $sort_by = "id";
-            $products =   \App\Products::with('category','subcategory','gallery')->where('third_level_category_id','=',$thirdlevel_category->id)
-                                    ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                            ->where('subcategory_id',$subcategory->id)
+                                            ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                            ->where(function($query) use ($brand)
+                                                {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
+                                        ->where('quantity','>',0)->where('status','=','approved')
+                                        ->paginate(20);
             return view('front.show_third_category',compact('products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
         }
         
         
         $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                            ->where('third_level_category_id','=',$thirdlevel_category->id)
-                            ->where('quantity','>',0)
-                            ->where(function($query) use ($brand)
-                              {
-                                    if (!empty($brand)) {
-                                        $query->where('brand_id', $brand->id);
-                                    }
-                             })
-                            ->orderBy($p,$o)
-                            ->paginate(20);
+                                    ->where('subcategory_id',$subcategory->id)
+                                    ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                    ->where(function($query) use ($brand)
+                                        {
+                                            if (!empty($brand)) {
+                                                $query->where('brand_id', $brand->id);
+                                            }
+                                    })
+                                    ->where('quantity','>',0)
+                                    ->orderBy($p,$o)
+                                    ->paginate(20);
         
         return view('front.show_third_category',compact('products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
         
@@ -743,6 +753,7 @@ class FrontPageController extends Controller
         
         
                     $products =   \App\Products::with('category','subcategory','gallery')
+                                                ->where('subcategory_id',$subcategory->id)
                                                 ->where('third_level_category_id','=',$thirdlevel_category->id)
                                                 ->where('quantity','>',0)
                                                 ->where('status','=','approved')
