@@ -101,32 +101,10 @@
                                             
                                             <form action="/tlc/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form">
                                                 <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
-                                                    @if ($sort_by == "id")
-                                                        <option value="id">ID</option>
-                                                        <option value="best-sellers">Best sellers</option>
-                                                        <option value="price-asc">Low to high price</option>
-                                                        <option value="price-desc">High to low price</option> 
-                                                    @elseif($sort_by == "best-sellers")
-                                                        <option value="best-sellers">Best sellers</option>
-                                                        <option value="id">ID</option>
-                                                        <option value="price-asc">Low to high price</option>
-                                                        <option value="price-desc">High to low price</option> 
-                                                    @elseif($sort_by == "price-asc")
-                                                        <option value="price-asc">Low to high price</option>
-                                                        <option value="price-desc">High to low price</option> 
-                                                        <option value="best-sellers">Best sellers</option>
-                                                        <option value="id">ID</option>
-                                                    @elseif($sort_by == "price-desc")
-                                                        <option value="price-desc">High to low price</option>
-                                                        <option value="best-sellers">Best sellers</option>
-                                                        <option value="id">ID</option>
-                                                        <option value="price-asc">Low to high price</option>
-                                                    @else
-                                                        <option value="id">ID</option>
-                                                        <option value="best-sellers">Best sellers</option>
-                                                        <option value="price-asc">Low to high price</option>
-                                                        <option value="price-desc">High to low price</option> 
-                                                    @endif
+                                                    <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
+                                                    <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                                    <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                                    <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
                                                 </select>
                                             </form>
                                             
@@ -245,12 +223,14 @@
             <div class="hh-ft-sort">
                 <div class="form-group">
                     <div class="">
-                        <select id="delivery-station" class="form-control">
-                            <option selected>Sort by: ID</option>
-                            <option>Best sellers</option>
-                            <option>Low to high price</option>
-                            <option>High to low price</option>
-                        </select>
+                        <form action="/tlc/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form">
+                            <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
+                                <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
+                                <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
+                            </select>
+                        </form>
                     </div>
                 </div>
             </div>
