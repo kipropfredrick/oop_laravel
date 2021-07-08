@@ -16,12 +16,12 @@ public function balances(Request $request){
   $customers=Customers::wherePhone($phone)->first();
 
 if($customers==null){
-return Array("data"=>Array("response"=>"An Error Occured Processing Your Request"),"error"=>true);
+return Array("data"=>Array("response"=>"Account Association Failed.contact support"),"error"=>true);
 }
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
-return Array("balance"=>$balance,"error"=>false);
+return Array("balance"=>$balance,"error"=>false,"data"=>Array("response"=>"Account Association Failed.contact support"));
 }
 
 
