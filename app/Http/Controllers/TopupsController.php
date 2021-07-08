@@ -21,7 +21,7 @@ return Array("data"=>Array("response"=>"Account Association Failed.contact suppo
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
-return Array("balance"=>$balance,"error"=>false,"data"=>Array("response"=>"Account Association Failed.contact support"));
+return Array("error"=>false,"data"=>Array("response"=>"Account linked successfully.","balance"=>$balance));
 }
 
 
