@@ -15,6 +15,13 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string("type");
+            $table->string("sender");
+            $table->string("receiver");
+            $table->string("transid");
+            $table->string("amount");
+            $table->string("description");
+            $table->string("send");
             $table->timestamps();
         });
     }
