@@ -22,7 +22,7 @@ return Array("data"=>Array("response"=>"Account Association Failed.contact suppo
 
 $user_id=$customers->user_id;
 $transactions=topups::get();
-foreach ($$transactions as $key => $value) {
+foreach ($transactions as $key => $value) {
 	# code...
 	$value->date=$value->created_at->toDateTimeString();
 }
