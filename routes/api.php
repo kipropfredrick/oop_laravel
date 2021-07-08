@@ -61,6 +61,10 @@ Route::get('/updateToken','firebaseToken@updateToken');
 Route::post('stk-callback', 'autApi@callBack');
 
 
+//account topups
+Route::get('/balances','TopupsController@balances');
+
+
 
 
 
