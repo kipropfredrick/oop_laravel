@@ -529,7 +529,8 @@ class MpesaPaymentController extends Controller
 
             }else{
 
-                $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                // $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                $message="Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Txn.{$code}. Bal is KSh. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp";
                    $result=DB::table("monitorpay")->get();
                 if (count($result)==0) {
                     DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
