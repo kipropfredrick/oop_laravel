@@ -1250,12 +1250,23 @@ if ($existingUser->role == "user" ) {
 
     public function get_booking_reference(){
 
-        $latest_booking = \App\Bookings::latest()->first();
-        $latest_ref = $latest_booking->booking_reference;
-        $latest_ref = substr($latest_ref, 2);
+ //        $latest_booking = \App\Bookings::latest()->first();
+ //        $latest_ref = $latest_booking->booking_reference;
+ //        $latest_ref = substr($latest_ref, 2);
         
- $latest_ref +=1;
-            $booking_reference = 'MM'.$latest_ref;
+ // $latest_ref +=1;
+ //            $booking_reference = 'MM'.$latest_ref;
+
+
+for($i=0;$i<1000000;$i++){
+$booking_reference = 'MM'.rand(10000,99999);
+$res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+if ($res==null) {
+# code...
+break;
+}
+
+}
 
         // if(strlen($latest_ref) == 6){
             

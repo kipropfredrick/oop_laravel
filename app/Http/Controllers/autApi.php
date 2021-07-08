@@ -313,7 +313,15 @@ return Array("response"=>"no records exists","error"=>true);
         \Auth::login($user);
 
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+          
+        }
 
         $booking_date = now();
 
