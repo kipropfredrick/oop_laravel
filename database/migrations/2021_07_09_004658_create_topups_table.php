@@ -15,6 +15,13 @@ class CreateTopupsTable extends Migration
     {
         Schema::create('topups', function (Blueprint $table) {
             $table->id();
+            $table->string("type")->default('topup');
+            $table->string("sender");
+            $table->string("receiver")->default('myaccount');
+            $table->string("transid");
+            $table->string("amount");
+            $table->string("description")->default('topup');
+            $table->string("balance");
             $table->timestamps();
         });
     }
