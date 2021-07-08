@@ -1254,16 +1254,16 @@ if ($existingUser->role == "user" ) {
         $latest_ref = $latest_booking->booking_reference;
         $latest_ref = substr($latest_ref, 2);
         
-
-
-        if(strlen($latest_ref) == 6){
-            
-            $latest_ref +=1;
+ $latest_ref +=1;
             $booking_reference = 'MM'.$latest_ref;
 
-        }else{
-          $booking_reference = 'MM100000';   
-        }
+        // if(strlen($latest_ref) == 6){
+            
+           
+
+        // }else{
+        //   $booking_reference = 'MM100000';   
+        // }
 
         return $booking_reference;
 
