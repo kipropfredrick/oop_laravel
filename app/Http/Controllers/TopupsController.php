@@ -46,7 +46,7 @@ $balance=\App\User::whereId($sender)->first();
 $balance=intval($balance->balance)+$amount;
 \App\User::whereId($sender)->update(["balance"=>$balance]);
 
-  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender)
+  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
 
 
 }
