@@ -7,6 +7,7 @@ use App\User;
 use DB;
 use App\Customers;
 use App\topups;
+use AfricasTalking\SDK\AfricasTalking;
 
 class TopupsController extends Controller
 {
