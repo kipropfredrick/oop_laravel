@@ -43,7 +43,7 @@ function maketopups(Request $request){
   }
 $sender=$customers->user_id;
 $balance=\App\User::whereId($sender)->first();
-$balance=intval($balance->balance)+$amount;
+$balance=intval($balance->balance)+$request->amount;
 \App\User::whereId($sender)->update(["balance"=>$balance]);
 
   $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
