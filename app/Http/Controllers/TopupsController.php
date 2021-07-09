@@ -48,7 +48,7 @@ $balance=intval($balance->balance)+$request->amount;
 
  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
 \App\topups::create($credentials);
-return Array("data"=>Array("response"=>"Payment Completed Successfully"),"error"=>true);
+return Array("data"=>Array("response"=>"Payment Completed Successfully"),"error"=>false);
 }
 
 }
