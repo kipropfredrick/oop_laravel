@@ -34,4 +34,21 @@ return Array("error"=>false,"data"=>Array("response"=>"Account linked successful
 }
 
 
+function maketopup(Request $request){
+            $phone=$request->phone;
+  $customers=Customers::wherePhone($phone)->first();
+  if ($customers==null) {
+  	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>true);
+  	# code...
+  }
+$sender=$customers->user_id;
+$balance=\App\User::whereId($sender)->first();
+$balance=intval($balance->balance)+$amount;
+\App\User::whereId($sender)->update(["balance"=>$balance]);
+
+  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender)
+
+
+}
+
 }
