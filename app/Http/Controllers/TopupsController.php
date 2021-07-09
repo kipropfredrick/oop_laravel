@@ -34,7 +34,7 @@ return Array("error"=>false,"data"=>Array("response"=>"Account linked successful
 }
 
 
-function maketopup(Request $request){
+function maketopups(Request $request){
             $phone=$request->phone;
   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
