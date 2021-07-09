@@ -51,4 +51,8 @@ $balance=intval($balance->balance)+$request->amount;
 return Array("data"=>Array("response"=>"Payment Completed Successfully"),"error"=>false);
 }
 
+function purchaseAirtime(Request $request){
+	
+}
+
 }
