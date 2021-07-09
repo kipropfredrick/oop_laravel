@@ -114,6 +114,13 @@ $result   = $airtime->send($array);
 
 if ($result['data']->errorMessage=="None") {
     $main->update(["balance"=>intval($balance)-$amount]);
+
+$balance=\App\User::whereId($sender)->first();
+$balance=intval($balance->balance);
+
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender,"type"=>"airtime");
+\App\topups::create($credentials);
+
   return Array("data"=>Array("response"=>"Airtime redemption was successul"),"error"=>false);
 
 }
