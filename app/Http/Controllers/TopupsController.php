@@ -46,9 +46,9 @@ $balance=\App\User::whereId($sender)->first();
 $balance=intval($balance->balance)+$request->amount;
 \App\User::whereId($sender)->update(["balance"=>$balance]);
 
-  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
-
-
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
+\App\topups::create($credentials);
+return Array("data"=>Array("response"=>"Payment Completed Successfully"),"error"=>true);
 }
 
 }
