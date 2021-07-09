@@ -61,6 +61,7 @@ public function redeem(Request $request){
   }
 $main=DB::table('users')->whereId($customers->user_id);
 $balance=$main->first()->balance;
+$sender=$customers->user_id;
 $sendamount=intval($request->input("amount"))-(intval($request->input("amount")))*0.3;
 $amount=intval($request->input("amount"));
 if ($amount>intval($balance)) {
