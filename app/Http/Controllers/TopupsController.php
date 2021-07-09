@@ -51,8 +51,77 @@ $balance=intval($balance->balance)+$request->amount;
 return Array("data"=>Array("response"=>"Payment Completed Successfully"),"error"=>false);
 }
 
-function purchaseAirtime(Request $request){
-	
+public function redeem(Request $request){
+ $phone=$request->phone;
+  $customers=Customers::wherePhone($phone)->first();
+  if ($customers==null) {
+  	return Array("data"=>Array("response"=>"Cannot make Redemtion.contact support"),"error"=>true);
+  	# code...
+  }
+$main=DB::table('users')->whereId($customers->user_id);
+$balance=$main->first()->balance;
+$sendamount=intval($request->input("amount"))-(intval($request->input("amount")))*0.3;
+$amount=intval($request->input("amount"));
+if ($amount>intval($balance)) {
+    # code...
+	return Array("data"=>Array("response"=>"You Have Insufficient Balance in your wallet account"),"error"=>true);
+    
+}
+//return $result;
+
+
+
+
+$airtime=false;
+$mobileInput=$request->input('phone');
+    $pattern = "/^(0)\d{9}$/";
+$pattern1 = "/^(254)\d{9}$/";
+$pattern2 = "/^(\+254)\d{9}$/";
+if (preg_match($pattern, $mobileInput)) {
+  # code...
+    $airtime=true;
+  $mobilerec="+254".substr($mobileInput,1);
+}
+else if(preg_match($pattern2, $mobileInput)){
+    $airtime=true;
+$mobilerec=$mobileInput;
+}
+else if(preg_match($pattern1, $mobileInput)){
+    $airtime=true;
+$mobilerec="+".$mobileInput;
+}
+
+if (!$airtime) {
+    # code...
+    return Array("data"=>Array("response"=>"mobile number format not supported"),"error"=>true);
+   
+}
+
+  $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
+$apiKey   =env('AFRIAPIKEY');
+
+$AT       = new AfricasTalking($username, $apiKey);
+
+$airtime = $AT->airtime();
+$array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
+'currencyCode' => "KES",
+'amount' => $sendamount)]);
+
+$result   = $airtime->send($array);
+\Log::info(json_encode($result));
+// return back()->with("error","An Error Occured, check details and Try Again");
+
+if ($result['data']->errorMessage=="None") {
+    $main->update(["balance"=>intval($balance)-$amount]);
+  return Array("data"=>Array("response"=>"Airtime redemption was successul"),"error"=>false);
+
+}
+else{
+   return Array("data"=>Array("response"=>$result['data']),"error"=>true);
+    
+}
+
+
 }
 
 }
