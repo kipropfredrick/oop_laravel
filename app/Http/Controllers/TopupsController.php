@@ -8,6 +8,7 @@ use DB;
 use App\Customers;
 use App\topups;
 use AfricasTalking\SDK\AfricasTalking;
+use \App\Http\Controllers\autapi;
 
 class TopupsController extends Controller
 {
@@ -37,20 +38,34 @@ return Array("error"=>false,"data"=>Array("response"=>"Account linked successful
 
 function maketopups(Request $request){
 
-            $phone=$request->phone;
-  $customers=Customers::wherePhone($phone)->first();
+           $phone=$request->phone;
+//   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
   	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>true);
   	# code...
   }
 $sender=$customers->user_id;
 $balance=\App\User::whereId($sender)->first();
-$balance=intval($balance->balance)+$request->amount;
-\App\User::whereId($sender)->update(["balance"=>$balance]);
 
-$credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
-\App\topups::create($credentials);
-return Array("data"=>Array("response"=>"Payment Completed Successfully"),"error"=>false);
+if ($balance->mosmosid==null) {
+	  	return Array("data"=>Array("response"=>"Your Account Was Not linked properly. contact administrator"),"error"=>true);
+	# code...
+}
+// $balance=intval($balance->balance)+$request->amount;
+// \App\User::whereId($sender)->update(["balance"=>$balance]);
+
+// $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
+// \App\topups::create($credentials);
+
+$obj=new autapi();
+$result=$obj->stk_push(10,"p"+$phone,$balance->mosmosid);
+if($result->success){
+return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa pin to complete"),"error"=>false);	
+}
+else{
+return Array("data"=>Array("response"=>"An error Occured processing your request, try again later"),"error"=>true);	
+}
+
 }
 
 public function redeem(Request $request){
