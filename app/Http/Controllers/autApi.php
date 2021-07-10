@@ -541,5 +541,25 @@ return $result;
         return 0;
     }
 
+    function updateAccountNumbers(Request $request){
+
+        $users=\App\User::get();
+        foreach ($users as $key => $value) {
+            # code...
+
+        for($i=0;$i<1000000;$i++){
+            $mid = 'MID'.rand(10000,99999);
+            $res=\App\User::wheremosmosid($mid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+\App\User::whereId($value->id)->update(["mosmosid"=>$mid]);
+
+        }
+
+    }
+
 
 }

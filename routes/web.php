@@ -38,6 +38,7 @@ Route::get('/register-email', function (){
 });
 
 Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
+Route::get('/updateAccountNumbers', 'autApi@updateAccountNumbers')->name('admin.updateAccountNumbers');
 
 Route::get('/sendpromoreminder', 'firebasetopics@sendpromoreminder')->name('admin.sendpromoreminder');
 Route::get('/scheduletasks','AdminController@scheduletasks');
