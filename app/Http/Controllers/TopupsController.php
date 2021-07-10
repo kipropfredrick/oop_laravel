@@ -25,14 +25,14 @@ return Array("data"=>Array("response"=>"Account Association Failed.contact suppo
 $user_id=$customers->user_id;
 
 $transactions=topups::get();
-return $transactions;
+
 foreach ($transactions as $key => $value) {
 	# code...
 	$value->date=$value->created_at->toDateTimeString();
 }
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
-
+return $transactions;
 return Array("error"=>false,"data"=>Array("response"=>"Account linked successfully.","balance"=>$balance,"transactions"=>$transactions));
 
 }
