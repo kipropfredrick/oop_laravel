@@ -40,6 +40,8 @@ function maketopups(Request $request){
 
            $phone=$request->phone;
    $customers=Customers::wherePhone($phone)->first();
+
+   
   if ($customers==null) {
   	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>true);
   	# code...
@@ -57,7 +59,7 @@ if ($balance->mosmosid==null) {
 // $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender);
 // \App\topups::create($credentials);
 
-$obj=new autapi();
+$obj=new autApi();
 $result=$obj->stk_push($request->amount,$phone,$balance->mosmosid);
 if($result['success']){
 return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa pin to complete"),"error"=>false);	
