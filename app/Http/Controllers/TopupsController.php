@@ -32,7 +32,7 @@ foreach ($transactions as $key => $value) {
 }
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
-return $transactions;
+
 return Array("error"=>false,"data"=>Array("response"=>"Account linked successfully.","balance"=>$balance,"transactions"=>$transactions));
 
 }
