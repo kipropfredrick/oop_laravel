@@ -58,8 +58,8 @@ if ($balance->mosmosid==null) {
 // \App\topups::create($credentials);
 
 $obj=new autapi();
-$result=$obj->stk_push(10,$phone,$balance->mosmosid);
-if($result->success){
+$result=$obj->stk_push($request->amount,$phone,$balance->mosmosid);
+if($result['success']){
 return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa pin to complete"),"error"=>false);	
 }
 else{
