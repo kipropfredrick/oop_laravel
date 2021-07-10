@@ -313,7 +313,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$user->id);
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id);
 \App\topups::create($credentials);
 
 }
