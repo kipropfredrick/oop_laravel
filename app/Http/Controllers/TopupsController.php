@@ -8,7 +8,7 @@ use DB;
 use App\Customers;
 use App\topups;
 use AfricasTalking\SDK\AfricasTalking;
-use App\Http\Controllers\autapi;
+use App\Http\Controllers\autApi;
 
 class TopupsController extends Controller
 {
