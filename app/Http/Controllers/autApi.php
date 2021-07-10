@@ -542,6 +542,7 @@ return $result;
     }
 
     function updateAccountNumbers(Request $request){
+     
 
         $users=\App\User::get();
         foreach ($users as $key => $value) {
