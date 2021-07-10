@@ -23,7 +23,9 @@ return Array("data"=>Array("response"=>"Account Association Failed.contact suppo
 }
 
 $user_id=$customers->user_id;
+
 $transactions=topups::get();
+return $transactions;
 foreach ($transactions as $key => $value) {
 	# code...
 	$value->date=$value->created_at->toDateTimeString();
@@ -41,7 +43,7 @@ function maketopups(Request $request){
            $phone=$request->phone;
    $customers=Customers::wherePhone($phone)->first();
 
-   
+
   if ($customers==null) {
   	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>true);
   	# code...
