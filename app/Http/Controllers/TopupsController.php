@@ -123,7 +123,7 @@ $balance=intval($balance->balance);
 
         for($i=0;$i<1000000;$i++){
             $transid = 'TA'.rand(10000,99999)."M";
-            $res=\App\User::wheremosmosid($mid)->first();
+            $res=\App\User::wheremosmosid($transid)->first();
             if ($res==null) {             # code...
 break;  }
           
