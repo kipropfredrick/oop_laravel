@@ -29,6 +29,7 @@ $transactions=topups::get();
 foreach ($transactions as $key => $value) {
 	# code...
 	$value->date=$value->created_at->toDateTimeString();
+	$value->amount=intval($amount);
 }
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
