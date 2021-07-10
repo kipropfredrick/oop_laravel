@@ -39,7 +39,7 @@ return Array("error"=>false,"data"=>Array("response"=>"Account linked successful
 function maketopups(Request $request){
 
            $phone=$request->phone;
-//   $customers=Customers::wherePhone($phone)->first();
+   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
   	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>true);
   	# code...
