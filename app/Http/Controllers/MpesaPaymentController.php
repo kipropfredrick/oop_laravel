@@ -294,6 +294,32 @@ class MpesaPaymentController extends Controller
                 return $message;
 
             }
+               $mosmosaccountpattern="/MID/i";
+  $mosmosTrue = preg_match($mosmosaccountpattern,$bill_ref_no);
+
+            if($mosmosTrue ==1){
+$user=\App\User::whereMosmosid($bill_ref_no);
+$obj=$user->first();
+if($obj!=null){
+    $balance=$obj->balance;
+$balance=$balance+$transaction_amount;
+$user->update(["balance"=>$balance]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TT'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$user->id);
+\App\topups::create($credentials);
+
+}
+
+return "true";
+            }
 
             $existingLog = \App\PaymentLog::where('TransID',$transaction_id)->first();
 
