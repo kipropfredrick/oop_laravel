@@ -64,7 +64,7 @@ Route::post('stk-callback', 'autApi@callBack');
 //account topups
 Route::get('/balances','TopupsController@balances');
 Route::post('/maketopup','TopupsController@maketopups');
-Route::get('/redeem','TopupsController@redeem');
+Route::post('/redeem','TopupsController@redeem');
 
 
 
