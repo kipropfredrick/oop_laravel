@@ -36,7 +36,7 @@ return Array("error"=>false,"data"=>Array("response"=>"Account linked successful
 
 
 function maketopups(Request $request){
-	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>false);
+
             $phone=$request->phone;
   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
@@ -63,7 +63,7 @@ public function redeem(Request $request){
 $main=DB::table('users')->whereId($customers->user_id);
 $balance=$main->first()->balance;
 $sender=$customers->user_id;
-$sendamount=intval($request->input("amount"))-(intval($request->input("amount")))*0.3;
+$sendamount=intval($request->input("amount"));
 $amount=intval($request->input("amount"));
 if ($amount>intval($balance)) {
     # code...
@@ -120,7 +120,16 @@ if ($result['data']->errorMessage=="None") {
 $balance=\App\User::whereId($sender)->first();
 $balance=intval($balance->balance);
 
- $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>"xxxxxxxx","sender"=>$sender,"type"=>"airtime");
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TA'.rand(10000,99999)."M";
+            $res=\App\User::wheremosmosid($mid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
 \App\topups::create($credentials);
 
   return Array("data"=>Array("response"=>"Airtime redemption was successul"),"error"=>false);
