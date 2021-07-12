@@ -219,13 +219,13 @@ if($customer!=null){
 //update database
 $booking=\App\Bookings::whereBooking_reference($winner);
 $bookingobject=$booking->first();
-$orderbalance=intval($bookingobject->balance)-250;
-$discount=intval($bookingobject->discount)+250;
+$orderbalance=intval($bookingobject->balance)-150;
+$discount=intval($bookingobject->discount)+150;
 $details=Array("balance"=>$orderbalance,"discount"=>$discount);
 $booking->update($details);
 $balance=\App\Bookings::whereCustomer_id($customer->id)->where('status','=','active')->first()->balance;
-$message="Hello {$customerName}, you have received a KSh.250 discount on your order. Your balance is KSh.{$balance}. Thank you.";
-$credentials=Array("customers_id"=>$customer->id,"booking_reference"=>$winner,"totalpaid"=>$totalpaid,"discount"=>250,"discounted_at"=>Now());
+$message="Hello {$customerName}, you have received a KSh.150 discount on your order. Your balance is KSh.{$balance}. Thank you.";
+$credentials=Array("customers_id"=>$customer->id,"booking_reference"=>$winner,"totalpaid"=>$totalpaid,"discount"=>150,"discounted_at"=>Now());
 \App\promotions::create($credentials);
 //sendsms
     SendSMSController::sendMessage("+".$customer->phone,$message,$type="payment_notification");
@@ -240,9 +240,9 @@ if ($token==null) {
 }
 else{
 $data=Array("name"=>"home","value"=>"home",'priority' => "high");
-$message="Hello {$customerName}, you have received a KSh.250 discount on your order. Your balance is KSh.{$balance}. Thank you.
+$message="Hello {$customerName}, you have received a KSh.150 discount on your order. Your balance is KSh.{$balance}. Thank you.
 ";
-$title="Congratulations! You have received a KSh.250 discount.";
+$title="Congratulations! You have received a KSh.150 discount.";
 $obj->exceuteSendNotification($token,$message,$title,$data);
     }
 
