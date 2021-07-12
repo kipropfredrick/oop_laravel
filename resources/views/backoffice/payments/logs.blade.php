@@ -25,7 +25,7 @@
 			@endif
 		</div>
         
-        <table id="table1" class="table table-bordered table-striped">
+        <table style="margin-top:10px" id="table1" class="table table-bordered table-striped">
 			<thead>
 			<tr>
 				<th class="thead">No.</th>
