@@ -290,6 +290,8 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/revoked_bookings', 'AdminController@revoked_bookings')->name('admin.revoked_bookings');
     Route::get('/unserviced_bookings', 'AdminController@unserviced_bookings')->name('admin.unserviced_bookings');
     Route::get('/pending_bookings', 'AdminController@pending_bookings')->name('admin.pending_bookings');
+    Route::post('/check-booking-exists','AdminController@check_booking_exists');
+    Route::post('/record-payment/{id}','AdminController@record_payment');
     Route::get('/payments', 'AdminController@payments')->name('admin.payments');
     Route::get('/payment-callbacks', 'AdminController@payments_callbacks');
     Route::get('/customers/{type}', 'AdminController@customers')->name('admin.customers');
