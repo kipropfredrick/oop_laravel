@@ -96,7 +96,7 @@ array_push($midresult, $subcat);
 return $finalResult;
      }
 function categories(Request $request){
-return Categories::inRandomOrder(->get();
+return Categories::inRandomOrder()->get();
 }
      function weeklybestsellers(Request $request){
 $bestSellers = \App\Products::with('category','subcategory')
