@@ -24,7 +24,7 @@ return Array("data"=>Array("response"=>"Account Association Failed.contact suppo
 
 $user_id=$customers->user_id;
 
-$transactions=topups::inRandomOrder()->get();
+$transactions=topups::orderBy('created_at')->get();
 
 foreach ($transactions as $key => $value) {
 	# code...
