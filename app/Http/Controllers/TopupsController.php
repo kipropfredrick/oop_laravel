@@ -24,7 +24,7 @@ return Array("data"=>Array("response"=>"Account Association Failed.contact suppo
 
 $user_id=$customers->user_id;
 
-$transactions=topups::orderBy('created_at')->get();
+$transactions=topups::orderBy('created_at','desc')->get();
 
 foreach ($transactions as $key => $value) {
 	# code...
@@ -34,7 +34,7 @@ foreach ($transactions as $key => $value) {
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
-return Array("error"=>false,"data"=>Array("response"=>"Account linked successfully.","balance"=>$balance,"transactions"=>$transactions));
+return Array("error"=>false,"data"=>Array("response"=>"Account Updated.","balance"=>$balance,"transactions"=>$transactions));
 
 }
 
