@@ -121,7 +121,7 @@ var t =  $('#table1').DataTable({
 		{data:'MiddleName',name:'MiddleName'},
 		{data:'LastName',name:'LastName'},
 		{
-		data: null,
+		data: 'id',
 		"width": "400px",
 		orderable: false,
 		"render": function(data, type, full, meta){
