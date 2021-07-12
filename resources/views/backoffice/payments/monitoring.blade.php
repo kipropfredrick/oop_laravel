@@ -48,8 +48,6 @@
                     Manual Payments
                 </div>
                 <div class="card-body">
-                   
-
                     {{intval($result->total)-intval($result->mobile)}}
                 </div>
             </div>

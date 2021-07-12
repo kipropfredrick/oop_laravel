@@ -1883,12 +1883,27 @@ $this->updateunservicedoverdue();
         return view('backoffice.payments.index',compact('payments'));
     }
 
-    public function payments_callbacks(){
+    public function payments_callbacks(Request $request){
+        
+        if($request->ajax()){
 
-        $payments = \App\PaymentLog::orderBy('id', 'DESC')->get();
+            $payments = DB::table('payment_logs')->select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
+
+            return DataTables::of($payments)->make(true);
+
+        }
 
         return view('backoffice.payments.logs',compact('payments'));
 
+    }
+
+    public function check_booking_exists(Request $request){
+       $booking =  \App\Bookings::where('booking_reference',$request->BillRefNumber)->exists();
+       if($booking){
+           return "1";
+       }else{
+           return "0";
+       }
     }
 
     public function customers(Request $request,$type){
