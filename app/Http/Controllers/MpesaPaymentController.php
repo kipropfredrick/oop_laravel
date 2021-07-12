@@ -318,7 +318,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification($token,"Buy Airtime and pay utility bills at KSh.0 transaction cost."," Wallet top-up successful!",$data);
+    $obj->exceuteSendNotification($$obj->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost."," Wallet top-up successful!",$data);
 
 }
 
