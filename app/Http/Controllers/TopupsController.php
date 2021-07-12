@@ -9,7 +9,7 @@ use App\Customers;
 use App\topups;
 use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\autApi;
-
+use App\Http\Controllers\pushNotification;
 class TopupsController extends Controller
 {
     //
@@ -151,8 +151,11 @@ break;  }
 
  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
 \App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
 
-  return Array("data"=>Array("response"=>"Airtime redemption was successul"),"error"=>false);
+  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
 
 }
 else{
