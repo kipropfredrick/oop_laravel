@@ -74,6 +74,13 @@ return Array("data"=>Array("response"=>"An error Occured processing your request
 }
 
 public function redeem(Request $request){
+
+  $type=$request->type;
+  if ($type=="mpesa") {
+    # code...
+return Array("data"=>Array("response"=>"pesa topup was successful"),"error"=>false);
+
+  }else {
  $phone=$request->phone;
   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
@@ -164,6 +171,7 @@ else{
 }
 
 
+}
 }
 
 }

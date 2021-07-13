@@ -345,6 +345,15 @@ Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.mo
 
 
 
+//add toups 
+
+Route::get('/topups','AdminController@topups')->name('admin.topups');
+Route::get('/purchases','AdminController@purchases')->name('admin.purchases');
+
+
+
+
+
     Route::prefix('influencer')->group(function () {
 
         Route::get('/active-bookings','AdminController@influencer_active_bookings');
