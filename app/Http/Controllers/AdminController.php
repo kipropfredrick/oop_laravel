@@ -2719,7 +2719,14 @@ return view("backoffice.promotions.data",compact('users'));
 
     }
     function topups(Request $request){
-        return topups::whereType('topup')->get();
+        $topups= topups::whereType('topup')->get();
+foreach ($topups as $key => $value) {
+    # code...
+    $value->user=\App\User::whereId($value->sender)->first();
+    $value->customer=\App\Customers::whereUser_id($value->sender)->first();
+}
+return  $topups;
+
     }
       function purchases(Request $request){
       return topups::whereNotIn("type",['topup'])->get();
