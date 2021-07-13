@@ -76,6 +76,13 @@ return Array("data"=>Array("response"=>"An error Occured processing your request
 public function redeem(Request $request){
 
   $type=$request->type;
+$amount=intval($request->input("amount"));
+if ($amount<5) {
+  # code...
+  return Array("data"=>Array("response"=>"Minimum Top Up is ksh.5"),"error"=>true);
+}
+
+
   if ($type=="mpesa") {
     # code...
 return Array("data"=>Array("response"=>"pesa topup was successful"),"error"=>false);
