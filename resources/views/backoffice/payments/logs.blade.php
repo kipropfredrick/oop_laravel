@@ -74,10 +74,9 @@ var t =  $('#table1').DataTable({
 	serverSide: true,
 	ajax: url,
 	columns: [
-		{data: "id",name:"id"},
+		{data: "id",name:"payment_logs.id"},
 		{
-            data: "TransactionType",
-            orderable: false,
+            data: "TransactionType",name:'payment_logs.TransactionType',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -87,8 +86,7 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-            data: "TransID",
-            orderable: false,
+            data: "TransID",name:'payment_logs.TransID',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -98,13 +96,12 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-		  data: "TransAmount",
+		  data: "TransAmount",name:'payment_logs.TransAmount',
 		  render: (data) => 'Ksh. ' + numberFormat(data)
 		},
-		{data:'BillRefNumber',name:'BillRefNumber'},
+		{data:'BillRefNumber',name:'payment_logs.BillRefNumber'},
 		{
-			data: "MSISDN",
-            orderable: false,
+			data: "MSISDN",name:"payment_logs.MSISDN",
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -114,21 +111,19 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-                data: "OrgAccountBalance",
+                data: "OrgAccountBalance",name:"payment_logs.OrgAccountBalance",
                 render: (data) => 'Ksh. ' + numberFormat(data)
 		},
-		{data:'FirstName',name:'FirstName'},
-		{data:'MiddleName',name:'MiddleName'},
-		{data:'LastName',name:'LastName'},
+		{data:'FirstName',name:'payment_logs.FirstName'},
+		{data:'MiddleName',name:'payment_logs.MiddleName'},
+		{data:'LastName',name:'payment_logs.LastName'},
 		{
-		data: 'id',
+		data: 'payment_logs.status',
 		"width": "400px",
-		orderable: false,
 		"render": function(data, type, full, meta){
-			var status = full.status;
-
+			var booking_reference = full.booking_reference;
 			
-			if(status == "unverified"){
+			if(booking_reference == null){
 			return `
 				<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#recordPaymentModal${full.id}">
 					Record Payment
@@ -172,8 +167,7 @@ var t =  $('#table1').DataTable({
 		}
 	},
 		{
-            data: "TransTime_f",name:'TransTime',
-            orderable: false,
+            data: "TransTime_f",name:'payment_logs.TransTime',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">

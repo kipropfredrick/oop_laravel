@@ -46,7 +46,7 @@ Route::post('/makepayment','autApi@MakePayment');
 Route::get('/checkbooking','ProductsApiController@checkBooking');
 Route::post('/makebooking','autApi@make_booking');
 Route::post('/hasBooking','autApi@hasBooking');
-Route::post('/check-booking-exists','AdminController@check_booking_exists');
+Route::get('/check-booking-exists/{booking_reference}','AdminController@check_booking_exists');
 
 
 
