@@ -50,6 +50,12 @@ button.mdg-btn-search:hover {
 .lmm-app img {
     max-width: 150px;
 }
+.table1_wrapper{
+    padding-top: 10px !important;
+}
+.dataTables_wrapper{
+    padding-top: 10px !important;
+}
 
 .header-cta {
     color: #ffffff;
