@@ -2584,7 +2584,7 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 
 
 
-   $result=Bookings::whereStatus("active")->whereCustomer_id(1883)->latest()->get();
+   $result=Bookings::whereStatus("active")->get();
  $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) {
        # code...
@@ -2592,7 +2592,7 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 $createdDate = Carbon::parse($result[$i]->notified_at);
 $hours=$today->diffInHours($createdDate);
 
-if (intval($hours)<48) {
+if (intval($hours)>36) {
 
     # code...
        $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
@@ -2607,6 +2607,42 @@ if (intval($hours)<48) {
     $obj->exceuteSendNotification($token,"Keep up with your payments to have your order delivered faster","You can pay any amount.",$data);
 }
     Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
+}
+
+
+
+
+
+//Log::info($hours."     " .$createdDate ."  " .$today);
+
+
+
+   }
+
+
+    $result=\App\User::get();
+ $today =  Carbon::now();
+   for ($i=0; $i <count($result) ; $i++) {
+       # code...
+
+$createdDate = Carbon::parse($result[$i]->notified_at);
+$hours=$today->diffInHours($createdDate);
+
+if (intval($hours)>48) {
+
+    # code...
+       //$customer=\App\Customers::whereId($result[$i]->customer_id)->first();
+   $token=$result[$i]->token;
+    if ($token==null) {
+        # code...
+
+    }
+    else{
+    $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($token,"Buy airtime for you or your loved ones bila stress on the Lipa Mos Mos app and enjoy great discounts on your orders.","You can now Buy Airtime.",$data);
+}
+    \App\User::whereId($result[$i]->id)->update(["notified_at"=>$today]);
 }
 
 
