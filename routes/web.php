@@ -305,6 +305,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/vendor-products', 'AdminController@vendor_products')->name('admin.vendor-products');
     Route::get('/vendor-product-approve/{id}', 'AdminController@vendor_product_approve');
     Route::get('/vendor-product-reject/{id}', 'AdminController@vendor_product_reject');
+    Route::get('/vendor-product-delete/{id}', 'AdminController@vendor_product_delete');
     Route::get('/cities', 'AdminController@cities')->name('admin.cities');
     Route::post('/agent_save', 'AdminController@agent_save')->name('admin.agent_save');
     Route::post('/save-city', 'AdminController@save_city')->name('admin.save-city');

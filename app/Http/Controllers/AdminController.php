@@ -137,6 +137,13 @@ class AdminController extends Controller
         return back()->with('success','Product Rejected');
      }
 
+     public function vendor_product_delete($id){
+
+        $products = \App\Products::where('id','=',$id)->update(['status'=>'deleted']);
+
+        return back()->with('success','Product Dejected');
+     }
+
      public function vendor_products(){
 
         $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->orderBy('id', 'DESC')->get();
