@@ -331,7 +331,7 @@ return "true";
             }
 
 $ismobiletopup="/254/i";
-$ismobiletopuptrue = preg_match($mosmosaccountpattern,$bill_ref_no);
+$ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
       if ($ismobiletopuptrue) {
                 # code...
                 
