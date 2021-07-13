@@ -44,7 +44,7 @@
 						</thead>
 						<tbody>
 						<?php $index = 0?>
-                            @foreach($topus as $topup) 
+                            @foreach($topups as $topup) 
                                 <tr>
                                     <td>{{$index = $index+1}}.</td>
 									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{$topup->user->name}}</td>
