@@ -44,17 +44,17 @@
 						</thead>
 						<tbody>
 						<?php $index = 0?>
-                            @foreach($bookings as $booking) 
+                            @foreach($topus as $topup) 
                                 <tr>
                                     <td>{{$index = $index+1}}.</td>
-									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{$topups->user->name}}</td>
+									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{$topup->user->name}}</td>
 									
-									<td>{{$topups->customer->phone}}}}</td>
-									<td>{{$topups->transid}}</td>
-									<td>KSh {{number_format(intval($topups->amount))}}</td>
-								<td>KSh {{number_format(intval($topups->balance))}}</td>
+									<td>{{$topup->customer->phone}}}}</td>
+									<td>{{$topup->transid}}</td>
+									<td>KSh {{number_format(intval($topup->amount))}}</td>
+								<td>KSh {{number_format(intval($topup->balance))}}</td>
 									
-									<td>{{date('M d'.', '.'Y : H:m:i', strtotime($booking->created_at))}}</td>
+									<td>{{date('M d'.', '.'Y : H:m:i', strtotime($topup->created_at))}}</td>
 									
 								
 									</tr>
