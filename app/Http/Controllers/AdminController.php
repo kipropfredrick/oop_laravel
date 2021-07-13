@@ -2719,10 +2719,10 @@ return view("backoffice.promotions.data",compact('users'));
 
     }
     function topups(Request $request){
-        return topups::whereType('topups')->get();
+        return topups::whereType('topup')->get();
     }
       function purchases(Request $request){
-      return topups::whereNotIn("type",['topups'])->get();
+      return topups::whereNotIn("type",['topup'])->get();
     }
 
 }
