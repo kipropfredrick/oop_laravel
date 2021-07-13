@@ -2725,11 +2725,21 @@ foreach ($topups as $key => $value) {
     $value->user=\App\User::whereId($value->sender)->first();
     $value->customer=\App\Customers::whereUser_id($value->sender)->first();
 }
-return view("backoffice.topups.topups",compact('topups'));
+$title="Account Top-Ups";
+
+return view("backoffice.topups.topups",compact('topups','title'));
 
     }
       function purchases(Request $request){
-      return topups::whereNotIn("type",['topup'])->get();
+              $topups= topups::whereNotIn("type",['topup'])->get();
+foreach ($topups as $key => $value) {
+    # code...
+    $value->user=\App\User::whereId($value->sender)->first();
+    $value->customer=\App\Customers::whereUser_id($value->sender)->first();
+}
+ $title="Account Withdrawals";
+
+return view("backoffice.topups.topups",compact('topups','title'));
     }
 
 }

@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive padding">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>User Account Top-Ups</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>{{$title}}</strong></h6>
 		</div>
 		
 		<div class="container">
@@ -49,7 +49,7 @@
                                     <td>{{$index = $index+1}}.</td>
 									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{$topup->user->name}}</td>
 									
-									<td>{{$topup->customer->phone}}}}</td>
+									<td>{{$topup->customer->phone}}</td>
 									<td>{{$topup->transid}}</td>
 									<td>KSh {{number_format(intval($topup->amount))}}</td>
 								<td>KSh {{number_format(intval($topup->balance))}}</td>
