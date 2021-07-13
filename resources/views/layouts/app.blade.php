@@ -368,7 +368,7 @@
     <!-- copyrights -->
     <div class="copyrights">
         <div class="container">
-            &copy; <span id="currentYear"></span>. Lipa Mos Mos | Powered by <a href="https://rdfyne.com" target="_blank">Rdfyne Technologies</a>
+            &copy; <span id="currentYear"></span>. Lipa Mos Mos
         </div>
     </div>
     <!-- end -->
