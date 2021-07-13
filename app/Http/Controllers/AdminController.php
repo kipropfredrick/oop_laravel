@@ -50,6 +50,39 @@ class AdminController extends Controller
      }
 
 
+     private function upload_image($image,$folder){
+
+
+        if(!Storage::disk('public')->exists('thumbnail')){
+            Storage::disk('public')->makeDirectory('thumbnail');
+        }
+
+        if(!Storage::disk('public')->exists($folder)){
+            Storage::disk('public')->makeDirectory($folder);
+        }
+
+        $time = time();
+
+        if ($files = $image) {
+            $fileNameToStore = Image::make($files);
+            $originalPath = 'storage/'.$folder.'/';
+            $fileNameToStore->save($originalPath.$time.$files->getClientOriginalName());
+            $thumbnailPath = 'storage/thumbnail/';
+            $fileNameToStore->resize(250, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            });
+            $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
+
+            $image = $time.$files->getClientOriginalName();
+        }else{
+            $image = 'noimage.jpg';
+        }
+
+        return $image;
+
+     }
+
+
     public function index()
     {
         $totalBookingAmount = \App\Bookings::sum('total_cost');
@@ -611,7 +644,9 @@ class AdminController extends Controller
 
             DB::table('galleries')->insert( [
                 'product_id' => $product_id,
-                'image_path' => $image
+                'image_path' => $image,
+                'created_at' =>now(),
+                'updated_at' =>now()
             ]);
 
         }
@@ -982,7 +1017,7 @@ class AdminController extends Controller
 
     public function update_product(Request $request,$id){
 
-        $data = $request->except('_token','image_path','product_image');
+        $data = $request->except('_token','image_paths','product_image');
 
         $weight = $data['weight'].$data['unit'];
 
@@ -992,46 +1027,31 @@ class AdminController extends Controller
 
         $product_image = $request->file('product_image');
 
-        $image_path = $request->file('image_path');
+        $image_paths = $request->file('image_paths');
 
         $time = now();
 
-        // if($image_path == null){
+        if(!empty($product_image)){
 
-        // }else{
-        //     $fileNameToStore = Image::make($image_path);
-        //     $originalPath = 'storage/gallery/images/';
-        //     $fileNameToStore->save($originalPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
-        //     $thumbnailPath = 'storage/gallery/thumbnail/';
-        //     $fileNameToStore->resize(250, null, function ($constraint) {
-        //                         $constraint->aspectRatio();
-        //                     });
-        //     $fileNameToStore = $fileNameToStore->save($thumbnailPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
+         $data['product_image'] = $this->upload_image($image=$product_image,$folder="images");
 
-        //     $image = str_replace(' ', '-',$time.$image_path->getClientOriginalName());
+        }
 
-        //     DB::table('galleries')->insert( [
-        //         'product_id' => $id,
-        //         'image_path' => $image
-        //     ]);
-        // }
+        
 
-        // if($product_image == null){
+        if(!empty($image_paths)){
 
-        // }else{
-        //     $fileNameToStore = Image::make($product_image);
-        //     $originalPath = 'storage/images/';
-        //     $fileNameToStore->save($originalPath.$time.$product_image->getClientOriginalName());
-        //     $thumbnailPath = 'storage/thumbnail/';
-        //     $fileNameToStore->resize(250, null, function ($constraint) {
-        //                         $constraint->aspectRatio();
-        //                     });
-        //     $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$product_image->getClientOriginalName());
+            foreach($request->file('image_paths') as $image_path){
 
-        //     $image = $time.$product_image->getClientOriginalName();
+                DB::table('galleries')->insert( [
+                    'product_id' => $id,
+                    'image_path' => $this->upload_image($image=$image_path,$folder="gallery/images"),
+                    'created_at' =>now(),
+                    'updated_at' =>now()
+                ]);
+            }
 
-        //     $data['product_image'] = $image;
-        // }
+        }
 
 
         DB::table('products')->where('id','=',$id)->update($data);

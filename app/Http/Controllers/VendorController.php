@@ -228,7 +228,7 @@ class VendorController extends Controller
 
         public function update_product(Request $request,$id){
 
-            $data = $request->except('_token','image_path','product_image');
+            $data = $request->except('_token','image_paths','product_image');
 
             $weight = $data['weight'].$data['unit'];
 
@@ -238,7 +238,7 @@ class VendorController extends Controller
     
             $product_image = $request->file('product_image');
     
-            $image_path = $request->file('image_path');
+            $image_path = $request->file('image_paths');
     
             $time = now();
 
@@ -287,7 +287,7 @@ class VendorController extends Controller
     
             DB::table('products')->where('id','=',$id)->update($data);
     
-            return redirect('/vendor/pending-products')->with('success','Product updated.');
+            return redirect('/vendor/approved-products')->with('success','Product updated.');
         }
         
         public function image_delete($id){
