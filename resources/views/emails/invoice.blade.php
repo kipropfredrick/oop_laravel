@@ -132,8 +132,8 @@
                                  @foreach($details['payments'] as $payment)
                                     <tr>
                                         <td scope="row"><strong>{{$index = $index+1}}.</strong></td>
-                                        <td>{{date('M d'.', '.'Y', strtotime($payment->mpesapayment->date_paid))}}</td>
-                                        <td>{{$payment->mpesapayment->transac_code}}</td>
+                                        <td>{{date('M d'.', '.'Y', strtotime($payment->created_at))}}</td>
+                                        <td>{{$payment->mpesapayment?$payment->mpesapayment->transac_code:NULL}}</td>
                                         <td>{{number_format($payment->transaction_amount,2)}}</td>
                                     </tr>
                                 @endforeach

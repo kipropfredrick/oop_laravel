@@ -1690,6 +1690,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
             ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
         }
 
+        DB::table('payment_logs')->where('id',$id)->update(['status'=>'valid']);
 
         DB::table('mpesapayments')
             ->insert([
@@ -1712,31 +1713,19 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         $payment_count = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->count();
 
 
-     if($payment_count<2){
-                $shipping_cost = $booking->shipping_cost;
-                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+        if($payment_count<2){
+                    $shipping_cost = $booking->shipping_cost;
+                    //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-                $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$payment_log->TransID}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
-
-
-
-            }else{
-
-                $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
-
-            }
+                    $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$payment_log->TransID}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
 
+        }else{
 
-        // if($payment_count<2){
-        //     $shipping_cost = $booking->shipping_cost;
-        //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
 
-        // }else{
+        }
 
-        //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. " ;
-
-        // }
 
         SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1769,7 +1758,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
             'booking_reference'=>$booking->booking_reference,
             'total_cost'=>number_format($booking->total_cost,2),
             'amount_paid'=>number_format($booking->amount_paid),
-            'balance'=>number_format($booking->balance),
+            'balance'=>$balance,
             'date_paid'=>$date_paid,
             'product_price'=>number_format($booking->product->product_price),
             'payments'=>$booking->payments,
@@ -1784,51 +1773,49 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
     public function unserviced_bookings(){
 
-$this->updateunservicedoverdue();
+            $this->updateunservicedoverdue();
 
+            $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 
-// $bookings=\App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->orderBy('id', 'DESC')->limit(1)->get();
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
+            foreach($bookings as $booking){
+                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+                $booking['progress'] = $progress;
 
-        foreach($bookings as $booking){
-            $progress = round(($booking->amount_paid/$booking->total_cost)*100);
-            $booking['progress'] = $progress;
+                if($booking->agent_code !== null){
+                    $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
 
-            if($booking->agent_code !== null){
-                $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
+                    if(isset($agent->user)){
+                        $agent = $agent->user->name.' (Agent)';
+                    }else{
+                        $agent = "Lipa Mos Mos (Admin)";
+                    }
 
-                if(isset($agent->user)){
-                    $agent = $agent->user->name.' (Agent)';
-                }else{
-                    $agent = "Lipa Mos Mos (Admin)";
+                }elseif($booking->vendor_code !== null){
+                    $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+                    if(isset($vendor->user)){
+                        $agent = $vendor->user->name.' (Vendor)';
+                    }else{
+                        $agent = "Lipa Mos Mos (Admin)";
+                    }
+                }elseif($booking->influencer_code !== null){
+                    $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
+                    if($influencer == null){
+                        $agent = "Lipa Mos Mos (Admin)";
+                    }else {
+                        if(isset($influencer->user)){
+                            $agent = $influencer->user->name.' (Influencer)';
+                        }
+                    }
+                }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+                $agent = "Lipa Mos Mos (Admin)";
                 }
 
-            }elseif($booking->vendor_code !== null){
-                $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
-                if(isset($vendor->user)){
-                    $agent = $vendor->user->name.' (Vendor)';
-                }else{
-                    $agent = "Lipa Mos Mos (Admin)";
-                }
-            }elseif($booking->influencer_code !== null){
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-                if($influencer == null){
-                    $agent = "Lipa Mos Mos (Admin)";
-                   }else {
-                      if(isset($influencer->user)){
-                        $agent = $influencer->user->name.' (Influencer)';
-                      }
-                   }
-            }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipa Mos Mos (Admin)";
+
+                $booking['agent'] = $agent;
+
             }
 
-
-            $booking['agent'] = $agent;
-
-        }
-
-        return view('backoffice.bookings.unserviced',compact('bookings'));
+            return view('backoffice.bookings.unserviced',compact('bookings'));
     }
 
     public function pending_bookings(){
