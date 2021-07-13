@@ -15,6 +15,11 @@ use App\Mail\SendPaymentMailToAdmin;
 use App\Http\Controllers\SendSMSController;
 use App\Http\Controllers\pushNotification;
 
+use App\User;
+use App\Customers;
+use App\topups;
+use App\Http\Controllers\autApi;
+
 class MpesaPaymentController extends Controller
 {
     public function generate_access_token(){;
@@ -324,6 +329,82 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
 return "true";
             }
+
+$ismobiletopup="/254/i";
+$ismobiletopuptrue = preg_match($mosmosaccountpattern,$bill_ref_no);
+      if ($ismobiletopuptrue) {
+                # code...
+                
+ $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
+$apiKey   =env('AFRIAPIKEY');
+
+$AT       = new AfricasTalking($username, $apiKey);
+
+$airtime = $AT->airtime();
+$array=Array("recipients"=>[Array('phoneNumber' => "+".$bill_ref_no,
+'currencyCode' => "KES",
+'amount' => $transaction_amount)]);
+
+$result   = $airtime->send($array);
+\Log::info(json_encode($result));
+// return back()->with("error","An Error Occured, check details and Try Again");
+$userid="new";
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+if ($result['data']->errorMessage=="None") {
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"mpesa");
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
+
+  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
+
+}
+else{
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+
+$user=\App\User::whereId($userid);
+$obj=$user->first();
+if($obj!=null){
+    $balance=$obj->balance;
+$balance=$balance+$transaction_amount;
+$user->update(["balance"=>$balance]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TT'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id);
+\App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($user->first()->token,"Your airtime purchase request was not successfull. The amount has been credited to your mosmos account.","Wallet top-up successful!",$data);
+
+}
+
+   return Array("data"=>Array("response"=>$result['data']),"error"=>true);
+    
+}
+
+
+            }      
 
             $existingLog = \App\PaymentLog::where('TransID',$transaction_id)->first();
 
