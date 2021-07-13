@@ -56,6 +56,9 @@
 										@if($product->status !== "rejected")
 										 <a data-toggle="tooltip" title="Reject Product" href="/admin/vendor-product-reject/{{$product->id}}" class="btn mr-2 btn-outline-danger"><i class="fa fa-thumbs-down"></i></a>
 										@endif
+										@if($product->status == "rejected")
+										 <a data-toggle="tooltip" title="Delete Product" href="/admin/vendor-product-delete/{{$product->id}}" class="btn mr-2 btn-outline-danger"><i class="fa fa-trash"></i></a>
+										@endif
 									</div>
 								</td>
                             </tr>

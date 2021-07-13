@@ -51,6 +51,39 @@ class AdminController extends Controller
      }
 
 
+     private function upload_image($image,$folder){
+
+
+        if(!Storage::disk('public')->exists('thumbnail')){
+            Storage::disk('public')->makeDirectory('thumbnail');
+        }
+
+        if(!Storage::disk('public')->exists($folder)){
+            Storage::disk('public')->makeDirectory($folder);
+        }
+
+        $time = time();
+
+        if ($files = $image) {
+            $fileNameToStore = Image::make($files);
+            $originalPath = 'storage/'.$folder.'/';
+            $fileNameToStore->save($originalPath.$time.$files->getClientOriginalName());
+            $thumbnailPath = 'storage/thumbnail/';
+            $fileNameToStore->resize(250, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            });
+            $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$files->getClientOriginalName());
+
+            $image = $time.$files->getClientOriginalName();
+        }else{
+            $image = 'noimage.jpg';
+        }
+
+        return $image;
+
+     }
+
+
     public function index()
     {
         $totalBookingAmount = \App\Bookings::sum('total_cost');
@@ -136,6 +169,13 @@ class AdminController extends Controller
         $products = \App\Products::where('id','=',$id)->update(['status'=>'rejected']);
 
         return back()->with('success','Product Rejected');
+     }
+
+     public function vendor_product_delete($id){
+
+        $products = \App\Products::where('id','=',$id)->update(['status'=>'deleted']);
+
+        return back()->with('success','Product Dejected');
      }
 
      public function vendor_products(){
@@ -605,7 +645,9 @@ class AdminController extends Controller
 
             DB::table('galleries')->insert( [
                 'product_id' => $product_id,
-                'image_path' => $image
+                'image_path' => $image,
+                'created_at' =>now(),
+                'updated_at' =>now()
             ]);
 
         }
@@ -976,7 +1018,7 @@ class AdminController extends Controller
 
     public function update_product(Request $request,$id){
 
-        $data = $request->except('_token','image_path','product_image');
+        $data = $request->except('_token','image_paths','product_image');
 
         $weight = $data['weight'].$data['unit'];
 
@@ -986,46 +1028,31 @@ class AdminController extends Controller
 
         $product_image = $request->file('product_image');
 
-        $image_path = $request->file('image_path');
+        $image_paths = $request->file('image_paths');
 
         $time = now();
 
-        // if($image_path == null){
+        if(!empty($product_image)){
 
-        // }else{
-        //     $fileNameToStore = Image::make($image_path);
-        //     $originalPath = 'storage/gallery/images/';
-        //     $fileNameToStore->save($originalPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
-        //     $thumbnailPath = 'storage/gallery/thumbnail/';
-        //     $fileNameToStore->resize(250, null, function ($constraint) {
-        //                         $constraint->aspectRatio();
-        //                     });
-        //     $fileNameToStore = $fileNameToStore->save($thumbnailPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
+         $data['product_image'] = $this->upload_image($image=$product_image,$folder="images");
 
-        //     $image = str_replace(' ', '-',$time.$image_path->getClientOriginalName());
+        }
 
-        //     DB::table('galleries')->insert( [
-        //         'product_id' => $id,
-        //         'image_path' => $image
-        //     ]);
-        // }
+        
 
-        // if($product_image == null){
+        if(!empty($image_paths)){
 
-        // }else{
-        //     $fileNameToStore = Image::make($product_image);
-        //     $originalPath = 'storage/images/';
-        //     $fileNameToStore->save($originalPath.$time.$product_image->getClientOriginalName());
-        //     $thumbnailPath = 'storage/thumbnail/';
-        //     $fileNameToStore->resize(250, null, function ($constraint) {
-        //                         $constraint->aspectRatio();
-        //                     });
-        //     $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$product_image->getClientOriginalName());
+            foreach($request->file('image_paths') as $image_path){
 
-        //     $image = $time.$product_image->getClientOriginalName();
+                DB::table('galleries')->insert( [
+                    'product_id' => $id,
+                    'image_path' => $this->upload_image($image=$image_path,$folder="gallery/images"),
+                    'created_at' =>now(),
+                    'updated_at' =>now()
+                ]);
+            }
 
-        //     $data['product_image'] = $image;
-        // }
+        }
 
 
         DB::table('products')->where('id','=',$id)->update($data);
@@ -1691,6 +1718,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
             ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
         }
 
+        DB::table('payment_logs')->where('id',$id)->update(['status'=>'valid']);
 
         DB::table('mpesapayments')
             ->insert([
@@ -1713,31 +1741,19 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         $payment_count = \App\PaymentLog::where('BillRefNumber',$bill_ref_no)->count();
 
 
-     if($payment_count<2){
-                $shipping_cost = $booking->shipping_cost;
-                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+        if($payment_count<2){
+                    $shipping_cost = $booking->shipping_cost;
+                    //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-                $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$payment_log->TransID}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
-
-
-
-            }else{
-
-                $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
-
-            }
+                    $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$payment_log->TransID}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
 
+        }else{
 
-        // if($payment_count<2){
-        //     $shipping_cost = $booking->shipping_cost;
-        //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.";
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
 
-        // }else{
+        }
 
-        //     $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$payment_log->TransID}. Balance KES. {$balance}. " ;
-
-        // }
 
         SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1770,7 +1786,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
             'booking_reference'=>$booking->booking_reference,
             'total_cost'=>number_format($booking->total_cost,2),
             'amount_paid'=>number_format($booking->amount_paid),
-            'balance'=>number_format($booking->balance),
+            'balance'=>$balance,
             'date_paid'=>$date_paid,
             'product_price'=>number_format($booking->product->product_price),
             'payments'=>$booking->payments,
@@ -1785,51 +1801,49 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
     public function unserviced_bookings(){
 
-$this->updateunservicedoverdue();
+            $this->updateunservicedoverdue();
 
+            $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 
-// $bookings=\App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->orderBy('id', 'DESC')->limit(1)->get();
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
+            foreach($bookings as $booking){
+                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+                $booking['progress'] = $progress;
 
-        foreach($bookings as $booking){
-            $progress = round(($booking->amount_paid/$booking->total_cost)*100);
-            $booking['progress'] = $progress;
+                if($booking->agent_code !== null){
+                    $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
 
-            if($booking->agent_code !== null){
-                $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
+                    if(isset($agent->user)){
+                        $agent = $agent->user->name.' (Agent)';
+                    }else{
+                        $agent = "Lipa Mos Mos (Admin)";
+                    }
 
-                if(isset($agent->user)){
-                    $agent = $agent->user->name.' (Agent)';
-                }else{
-                    $agent = "Lipa Mos Mos (Admin)";
+                }elseif($booking->vendor_code !== null){
+                    $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+                    if(isset($vendor->user)){
+                        $agent = $vendor->user->name.' (Vendor)';
+                    }else{
+                        $agent = "Lipa Mos Mos (Admin)";
+                    }
+                }elseif($booking->influencer_code !== null){
+                    $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
+                    if($influencer == null){
+                        $agent = "Lipa Mos Mos (Admin)";
+                    }else {
+                        if(isset($influencer->user)){
+                            $agent = $influencer->user->name.' (Influencer)';
+                        }
+                    }
+                }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+                $agent = "Lipa Mos Mos (Admin)";
                 }
 
-            }elseif($booking->vendor_code !== null){
-                $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
-                if(isset($vendor->user)){
-                    $agent = $vendor->user->name.' (Vendor)';
-                }else{
-                    $agent = "Lipa Mos Mos (Admin)";
-                }
-            }elseif($booking->influencer_code !== null){
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-                if($influencer == null){
-                    $agent = "Lipa Mos Mos (Admin)";
-                   }else {
-                      if(isset($influencer->user)){
-                        $agent = $influencer->user->name.' (Influencer)';
-                      }
-                   }
-            }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
-               $agent = "Lipa Mos Mos (Admin)";
+
+                $booking['agent'] = $agent;
+
             }
 
-
-            $booking['agent'] = $agent;
-
-        }
-
-        return view('backoffice.bookings.unserviced',compact('bookings'));
+            return view('backoffice.bookings.unserviced',compact('bookings'));
     }
 
     public function pending_bookings(){
@@ -1914,19 +1928,19 @@ $this->updateunservicedoverdue();
         if ($type=="active") {
 
         $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
-        $title="Active/ Complete Bookings";
+        $title="Active/ Complete Bookings Customers";
         # code...
         }
         else if ($type=='complete') {
         # code...
         $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
-        $title="Complete Bookings";
+        $title="Complete Bookings Customers";
 
         }
         else if ($type=='active-bookings') {
         # code...
         $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
-        $title="Active Bookings";
+        $title="Active Bookings Customers";
 
         }
 
@@ -1934,31 +1948,31 @@ $this->updateunservicedoverdue();
         # code...
         $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
 
-        $title="Pending Bookings";
+        $title="Pending Bookings Customers";
         }
         else if ($type=='revoked-bookings') {
         # code...
         $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
-        $title="Revoked Bookings";
+        $title="Revoked Bookings Customers";
 
         }
         else if ($type=='inactive') {
         # code...
         $customers=\App\Bookings::pluck('customer_id')->toArray();
-        $title="Inactive Customers";
+        $title="Inactive Customers Customers";
 
         }
 
          else if ($type=='overdue') {
         # code...
        $customers=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
-        $title="Overdue Bookings";
+        $title="Overdue Bookings Customers";
 
         }
-           else if ($type=='unserviced') {
+        else if ($type=='unserviced') {
         # code...
        $customers=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
-        $title="Overdue Bookings";
+        $title="Unserviced Bookings Customers";
 
         }
 
@@ -2390,6 +2404,10 @@ $this->updateunservicedoverdue();
 
             $customers=\App\Bookings::pluck('customer_id')->toArray();
 
+        }elseif($group === "ob_customers"){
+            $customers=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
+        }elseif($group === "ub_customers"){
+            $customers=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
         }
 
         if ($type=="inactive_customers") {

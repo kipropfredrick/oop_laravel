@@ -237,7 +237,7 @@
         <div class="col-lg-6" style="margin-bottom:20px">
             <div class="form-group">
                 <label class="col-form-label">Add a gallery Image (Optional)</label>
-                <input type="file" data-toggle="tooltip" name="image_path" title="Add Gallery Image" style="height:35px;">
+                <input type="file" data-toggle="tooltip" name="image_paths" title="Add Gallery Image" style="height:35px;" multiple >
             </div>
         </div>
 

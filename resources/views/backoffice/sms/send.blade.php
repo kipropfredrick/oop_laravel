@@ -68,6 +68,8 @@
                     <option <?php if (old('group') == "pb_customers"){echo "selected";} ?> value="pb_customers">PB Customers</option>
                     <option <?php if (old('group') == "rb_customers"){echo "selected";} ?> value="rb_customers">RB Customers</option>
                     <option <?php if (old('group') == "inactive_customers"){echo "selected";} ?> value="inactive_customers">Inactive Customers</option>
+                    <option <?php if (old('group') == "ob_customers"){echo "selected";} ?> value="ob_customers">OB Customers</option>
+                    <option <?php if (old('group') == "ub_customers"){echo "selected";} ?> value="ub_customers">UB Customers</option>
                 </select>               
                 @error('group')
                             <div class="invalid-feedback">
