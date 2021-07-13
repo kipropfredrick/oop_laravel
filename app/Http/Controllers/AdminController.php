@@ -21,6 +21,7 @@ use App\Mail\SendOrderTransferedMail;
 use \App\Bookings;
 use App\Http\Controllers\pushNotification;
 use DataTables;
+use App\topups;
 
 
 
@@ -2717,4 +2718,11 @@ foreach ($users as $key => $value) {
 return view("backoffice.promotions.data",compact('users'));
 
     }
+    function topups(Request $request){
+        return topups::whereType('topups')->get();
+    }
+      function purchases(Request $request){
+      return topups::whereNotIn("type",['topups'])->get();
+    }
+
 }

@@ -113,6 +113,7 @@
 		</div>
 		</div>
       </li>
+      +
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -430,6 +431,34 @@
               </li>
             </ul>
           </li>
+
+
+              <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-bookmark"></i>
+              <p>
+              Top-ups & purchases
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/admin/topups" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Top-ups</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/purchases" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Purchases</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
+
           </li>
 
           <li class="nav-item">
@@ -488,6 +517,14 @@
           <li class="nav-item">
       <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Promotions</p></a>
     </li>
+
+          <li class="nav-item">
+      <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Top-Ups</p></a>
+    </li>
+    
+    
+    
+
 
           </li>
 
