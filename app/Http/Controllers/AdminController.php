@@ -1900,19 +1900,19 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         if ($type=="active") {
 
         $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
-        $title="Active/ Complete Bookings";
+        $title="Active/ Complete Bookings Customers";
         # code...
         }
         else if ($type=='complete') {
         # code...
         $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
-        $title="Complete Bookings";
+        $title="Complete Bookings Customers";
 
         }
         else if ($type=='active-bookings') {
         # code...
         $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
-        $title="Active Bookings";
+        $title="Active Bookings Customers";
 
         }
 
@@ -1920,31 +1920,31 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         # code...
         $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
 
-        $title="Pending Bookings";
+        $title="Pending Bookings Customers";
         }
         else if ($type=='revoked-bookings') {
         # code...
         $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
-        $title="Revoked Bookings";
+        $title="Revoked Bookings Customers";
 
         }
         else if ($type=='inactive') {
         # code...
         $customers=\App\Bookings::pluck('customer_id')->toArray();
-        $title="Inactive Customers";
+        $title="Inactive Customers Customers";
 
         }
 
          else if ($type=='overdue') {
         # code...
        $customers=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
-        $title="Overdue Bookings";
+        $title="Overdue Bookings Customers";
 
         }
-           else if ($type=='unserviced') {
+        else if ($type=='unserviced') {
         # code...
        $customers=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
-        $title="Overdue Bookings";
+        $title="Unserviced Bookings Customers";
 
         }
 
@@ -2376,6 +2376,10 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
             $customers=\App\Bookings::pluck('customer_id')->toArray();
 
+        }elseif($group === "ob_customers"){
+            $customers=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
+        }elseif($group === "ub_customers"){
+            $customers=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
         }
 
         if ($type=="inactive_customers") {
