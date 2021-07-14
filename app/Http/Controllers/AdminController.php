@@ -1902,13 +1902,27 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         
         if($request->ajax()){
 
-            $payments = DB::table('payment_logs')->leftJoin('bookings','payment_logs.BillRefNumber','bookings.booking_reference')->select('payment_logs.*','bookings.booking_reference',DB::raw('DATE_FORMAT(payment_logs.TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
+            $payments = DB::table('payment_logs')->select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
 
             return DataTables::of($payments)->make(true);
 
         }
 
         return view('backoffice.payments.logs',compact('payments'));
+
+    }
+
+    public function update_callback(Request $request){
+        
+
+            $refs = DB::table('bookings')->pluck('booking_reference')->toArray();
+
+            $invalid_payment_ids = DB::table('payment_logs')->whereNotIn('BillRefNumber', $refs)->pluck('id')->toArray();
+
+            DB::table('payment_logs')->whereIn('id',$invalid_payment_ids)->update(['status'=>'unverified']);
+
+            return "Success!";
+
 
     }
 

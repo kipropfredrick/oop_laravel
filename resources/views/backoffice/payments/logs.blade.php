@@ -121,12 +121,9 @@ var t =  $('#table1').DataTable({
 		data: 'payment_logs.status',
 		"width": "400px",
 		"render": function(data, type, full, meta){
-			var booking_reference = full.booking_reference;
-
-			// console.log('Ref => '+booking_reference);
+			var status = full.status;
 			
-			if(booking_reference === null ){
-				// console.log('Ref is Null');
+			if(status === "unverified"){
 			return `
 				<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#recordPaymentModal${full.id}">
 					Record Payment
