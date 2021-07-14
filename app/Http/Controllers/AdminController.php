@@ -1902,7 +1902,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         
         if($request->ajax()){
 
-            $payments = DB::table('payment_logs')->select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
+            $payments = DB::table('payment_logs')->leftJoin('bookings','payment_logs.BillRefNumber','bookings.booking_reference')->select('payment_logs.*','bookings.booking_reference',DB::raw('DATE_FORMAT(payment_logs.TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
 
             return DataTables::of($payments)->make(true);
 
@@ -1912,8 +1912,8 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
     }
 
-    public function check_booking_exists(Request $request){
-       $booking =  \App\Bookings::where('booking_reference',$request->BillRefNumber)->exists();
+    public function check_booking_exists($booking_reference){
+       $booking =  \App\Bookings::where('booking_reference','=',$booking_reference)->first();
        if($booking){
            return "1";
        }else{
