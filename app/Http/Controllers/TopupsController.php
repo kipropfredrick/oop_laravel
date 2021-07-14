@@ -76,12 +76,50 @@ return Array("data"=>Array("response"=>"An error Occured processing your request
 public function redeem(Request $request){
 
   $type=$request->type;
+$amount=intval($request->input("amount"));
+ $phone=$request->phone;
+
+$airtime=false;
+$mobileInput=$request->input('sendmobile');
+    $pattern = "/^(0)\d{9}$/";
+$pattern1 = "/^(254)\d{9}$/";
+$pattern2 = "/^(\+254)\d{9}$/";
+if (preg_match($pattern, $mobileInput)) {
+  # code...
+    $airtime=true;
+  $mobilerec="+254".substr($mobileInput,1);
+}
+else if(preg_match($pattern2, $mobileInput)){
+    $airtime=true;
+$mobilerec=$mobileInput;
+}
+else if(preg_match($pattern1, $mobileInput)){
+    $airtime=true;
+$mobilerec="+".$mobileInput;
+}
+
+
+if ($amount<5) {
+  # code...
+  return Array("data"=>Array("response"=>"Minimum Top Up is ksh.5"),"error"=>true);
+}
+
+
   if ($type=="mpesa") {
     # code...
+    $obj=new autApi();
+
+$result=$obj->stk_push($request->amount,$phone,substr($mobilerec, 1));
+if($result['success']){
+return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa pin to complete"),"error"=>false); 
+}
+else{
+return Array("data"=>Array("response"=>"An error Occured processing your request, try again later"),"error"=>true); 
+}
 return Array("data"=>Array("response"=>"pesa topup was successful"),"error"=>false);
 
   }else {
- $phone=$request->phone;
+
   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
   	return Array("data"=>Array("response"=>"Cannot make Redemtion.contact support"),"error"=>true);
@@ -102,24 +140,7 @@ if ($amount>intval($balance)) {
 
 
 
-$airtime=false;
-$mobileInput=$request->input('phone');
-    $pattern = "/^(0)\d{9}$/";
-$pattern1 = "/^(254)\d{9}$/";
-$pattern2 = "/^(\+254)\d{9}$/";
-if (preg_match($pattern, $mobileInput)) {
-  # code...
-    $airtime=true;
-  $mobilerec="+254".substr($mobileInput,1);
-}
-else if(preg_match($pattern2, $mobileInput)){
-    $airtime=true;
-$mobilerec=$mobileInput;
-}
-else if(preg_match($pattern1, $mobileInput)){
-    $airtime=true;
-$mobilerec="+".$mobileInput;
-}
+
 
 if (!$airtime) {
     # code...
