@@ -62,6 +62,21 @@ button.mdg-btn-search:hover {
     padding: 5px 10px 0;
 
 }
+.cat_h{
+    background-color: #EEE;
+    padding: 5px;
+}
+
+.accordion .cat_h:after {
+    content: "<";
+    float: right;
+    font-weight: bolder; 
+}
+.accordion .cat_h.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: ">"; 
+    font-weight: bolder; 
+}
 
 .cta-icon>.fa-3x {
     font-size: 1.5em;
