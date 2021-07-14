@@ -74,7 +74,7 @@
                                 <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
                                     @foreach($brands as $brand)
                                         <a href="/brand/{{$brand->slug}}">{{$brand->brand_name}}</a>
-                                        <hr>
+                                        <div class="hr"></div>
                                     @endforeach
                                 </div>
 
@@ -316,7 +316,7 @@
                         <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
                             @foreach($brands as $brand)
                                 <a href="/brand/{{$brand->slug}}">{{$brand->brand_name}}</a>
-                                <hr>
+                                <div class="hr"></div>
                             @endforeach
                         </div>
 
