@@ -330,13 +330,13 @@
 			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
 		</li>
 
-    
+
 
               <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-bookmark"></i>
               <p>
-              Top-ups & purchases
+             LMM Pay
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -344,13 +344,13 @@
               <li class="nav-item">
                 <a href="/admin/topups" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Top-ups</p>
+                  <p>Wallet Top-up</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="/admin/purchases" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Purchases</p>
+                  <p>Airtime</p>
                 </a>
               </li>
             </ul>

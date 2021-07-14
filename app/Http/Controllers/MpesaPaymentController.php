@@ -395,7 +395,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification($user->first()->token,"Your airtime purchase request was not successfull. The amount has been credited to your mosmos account.","Wallet top-up successful!",$data);
+    $obj->exceuteSendNotification($user->first()->token,"Your airtime purchase request was not successful. The amount has been credited back to your Lipa Mos Mos wallet.","Airtime purchase failed",$data);
 
 }
 
