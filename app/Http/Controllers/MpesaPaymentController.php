@@ -529,7 +529,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
                 SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
 
 
-  $token=\App\User::whereId($booking->customer->user->id)->first()->token;
+    $token=\App\User::whereId($booking->customer->user->id)->first()->token;
     if ($token==null) {
         # code...
  

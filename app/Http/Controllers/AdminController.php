@@ -1912,8 +1912,22 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
     }
 
-    public function check_booking_exists(Request $request){
-       $booking =  \App\Bookings::where('booking_reference',$request->BillRefNumber)->exists();
+    public function update_callback(Request $request){
+        
+
+            $refs = DB::table('bookings')->pluck('booking_reference')->toArray();
+
+            $invalid_payment_ids = DB::table('payment_logs')->whereNotIn('BillRefNumber', $refs)->pluck('id')->toArray();
+
+            DB::table('payment_logs')->whereIn('id',$invalid_payment_ids)->update(['status'=>'unverified']);
+
+            return "Success!";
+
+
+    }
+
+    public function check_booking_exists($booking_reference){
+       $booking =  \App\Bookings::where('booking_reference','=',$booking_reference)->first();
        if($booking){
            return "1";
        }else{
