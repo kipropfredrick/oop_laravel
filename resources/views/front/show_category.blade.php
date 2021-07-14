@@ -214,7 +214,7 @@
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
                                 
                                 <div class="text-center">
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
                                 </div>
                                 
                             </a>
