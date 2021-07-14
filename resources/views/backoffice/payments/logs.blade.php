@@ -122,8 +122,11 @@ var t =  $('#table1').DataTable({
 		"width": "400px",
 		"render": function(data, type, full, meta){
 			var booking_reference = full.booking_reference;
+
+			console.log('Ref => '+booking_reference);
 			
-			if(booking_reference == null){
+			if(booking_reference === null ){
+				console.log('Ref is Null');
 			return `
 				<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#recordPaymentModal${full.id}">
 					Record Payment
