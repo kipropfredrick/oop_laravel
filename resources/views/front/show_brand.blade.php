@@ -15,7 +15,7 @@
                 <span class="bc-sep"></span>
 
                 <a href="/brand/{{$current_b->slug}}">
-                    <span>{{$current_b->brand_name}}</span>
+                    <span>{{$current_b->brand_name}}</span> 
                 </a>
 
         </div>
@@ -107,8 +107,8 @@
                                             <label class="col-3 col-form-label">Sort by:</label>
                                             <div class="col-7">
                                             
-                                            <form action="/brand/{{$brand->slug}}" id="filter-form">
-                                                <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
+                                            <form action="/brand/{{$current_b->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_d">
+                                                <select onchange="filter_d(this);" name="sort_by" id="sort_by_d" class="form-control">
                                                     <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                                     <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
                                                     <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
@@ -186,7 +186,7 @@
     <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
-               <h5>{{$brand->brand_name}} Weekly Best Sellers</h5>
+               <h5>{{$brand->brand_name}} Weekly Best Sellers</h5> 
             </div>
 
             <div id="product-carousel">
@@ -231,7 +231,7 @@
             <div class="hh-ft-sort">
                 <div class="form-group">
                     <div class="">
-                        <form action="/brand/{{$brand->slug}}" id="filter-form_mob">
+                        <form action="/brand/{{$current_b->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_mob">
                             <select onchange="filter_mob(this);" name="sort_by" id="sort_by" class="form-control">
                                 <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                 <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
@@ -400,6 +400,14 @@
     function filter_mob(sel)
     {
         $('#filter-form_mob').submit();
+    }
+
+    function filter_d(sel)
+    {
+        var url = $('#filter-form_d').attr('action');
+        var selected = $('#sort_by_d')
+        // console.log('URl => '+url);
+        $('#filter-form_d').submit();
     }
 
 </script>

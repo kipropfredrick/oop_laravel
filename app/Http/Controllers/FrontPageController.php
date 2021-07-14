@@ -653,8 +653,9 @@ class FrontPageController extends Controller
                                             })
                                             ->inRandomOrder()
                                             ->paginate(20);
+                                            
 
-                return view('front.show_brand',compact('products','current_b','brands','b_categories','sort_by','sort_by','categories','brand','trendingProducts'));
+                return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','sort_by','categories','brand','trendingProducts'));
             }
 
             $products =   \App\Products::with('category','subcategory','gallery')
@@ -688,7 +689,7 @@ class FrontPageController extends Controller
 
         
         
-        return view('front.show_brand',compact('products','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
+        return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
         
     }
 
