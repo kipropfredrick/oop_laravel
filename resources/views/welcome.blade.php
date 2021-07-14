@@ -42,7 +42,7 @@
                                 <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
 
                                <div class="text-center">
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
                                 </div>
 
                             </a>
@@ -79,7 +79,7 @@
                                 <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
 
                                <div class="text-center">
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
                                 </div>
                             </a>
                         </div>
@@ -113,7 +113,7 @@
                                 <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
 
                                <div class="text-center">
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn">Lipa Mos Mos</a>
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
                                 </div>
                             </a>
                         </div>

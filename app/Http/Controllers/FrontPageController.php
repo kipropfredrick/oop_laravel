@@ -303,7 +303,7 @@ class FrontPageController extends Controller
                                                     $query->where('brand_id', $brand->id);
                                                 }
                                             })
-                                            ->orderBy('id','DESC')
+                                            ->inRandomOrder()
                                             ->take(20)->get();;
 
         if($sort_by !=null){
@@ -520,8 +520,7 @@ class FrontPageController extends Controller
                                             ->where('quantity','>',0)
                                             ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id',$thirdlevel_category->id)
-                                            // ->inRandomOrder()
-                                            ->orderBy('id','DESC')
+                                            ->inRandomOrder()
                                             ->take(10)->get();
         
         
@@ -605,8 +604,8 @@ class FrontPageController extends Controller
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('quantity','>',0)
                                     ->where('brand_id',$brand->id)
-                                    // ->inRandomOrder()
-                                    ->orderBy('id','DESC')->take(10)->get();
+                                    ->inRandomOrder()
+                                    ->take(10)->get();
 
         $sort_by = $request->sort_by;
 
@@ -633,18 +632,28 @@ class FrontPageController extends Controller
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('brand_id','=',$brand->id)
-                                            ->where('quantity','>',0)->inRandomOrder()->paginate(20);
+                                            ->where('quantity','>',0)
+                                            ->inRandomOrder()
+                                            ->paginate(20);
 
                 return view('front.show_brand',compact('products','sort_by','sort_by','categories','brand','trendingProducts'));
             }
 
-            $products =   \App\Products::with('category','subcategory','gallery')->where('brand_id','=',$brand->id)
-                            ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('brand_id','=',$brand->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->orderBy($p,$o)
+                                        ->paginate(20);
 
         }else{
             $sort_by = "id";
-            $products =   \App\Products::with('category','subcategory','gallery')->where('brand_id','=',$brand->id)
-                            ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('brand_id','=',$brand->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->inRandomOrder()
+                                        ->paginate(20);
         }
 
         
@@ -805,9 +814,14 @@ class FrontPageController extends Controller
                                 ->orderBy('id', 'DESC')
                                 ->get();
 
-        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
-                            ->where('subcategory_id',$subcategory->id)
-                            ->where('quantity','>',0)->orderBy('clicks','DESC')->inRandomOrder()->take(10)->get();
+        $trendingProducts = \App\Products::with('category','subcategory')
+                                          ->where('status','=','approved')
+                                          ->where('subcategory_id',$subcategory->id)
+                                          ->where('quantity','>',0)
+                                          ->orderBy('clicks','DESC')
+                                          ->inRandomOrder()
+                                          ->take(10)
+                                          ->get();
 
         $sort_by = $request->sort_by;
 
