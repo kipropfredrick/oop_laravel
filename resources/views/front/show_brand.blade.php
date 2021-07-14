@@ -1,171 +1,219 @@
 @extends('layouts.app')
 
-@section('title', $brand->brand_name)
+@section('title', $current_b->brand_name)
 
 @section('content')
-
 
 <!-- breadcrumb --> 
 <div class="bc-bg">
     <div class="container">
         <div class="bc-link">
-            <a href="/">
-                <i class="fas fa-home"></i>
-            </a>
+                <a href="/">
+                    <i class="fas fa-home"></i>
+                </a>
 
-            <span class="bc-sep"></span>
+                <span class="bc-sep"></span>
 
-            <a href="/brand/{{$brand->slug}}">
-                <span>{{$brand->brand_name}}</span>
-            </a>
+                <a href="/brand/{{$current_b->slug}}">
+                    <span>{{$current_b->brand_name}}</span>
+                </a>
 
         </div>
     </div>
 </div>
 <!-- end -->
 
+
 <div class="bg-gray-alt">
-    <!-- products grid -->
+    <!-- products section -->
     <div class="container">
-        <div>
-            <div class="ht mb-3">
-                <h5>{{$brand->brand_name}}</h5>
+        <div class="lmm-p-listing-page">
+            <div>
+                <!-- sidebar -->
+                <div class="lmm-sb-sec">
+                    <div class="lmm-sidebar lmmsb-hide-sm">
+                        <!-- categories filter -->
+                        <div class="lmmsb-sec">
+                            <div class="lmmsbt">
+                                <h5>CATEGORY</h5>
+                            </div>
+                            
+                                <div id="accordion" class="accordion">
 
-                <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('brand_id',$brand->id)->count(); ?>
+                                    @foreach($b_categories as $b_category)
 
-                <div>
-                    <div class="filters">
-                        <div class="p-count">
-                            <label class="col-form-label">{{number_format($count)}} product(s) found</label>
+                                        <div class="cat_h collapsed" data-toggle="collapse" href="#collapse{{$b_category->id}}">
+                                            <a href="#" class="card-title">
+                                                {{$b_category->category_name}}
+                                            </a>
+                                        </div>
+
+                                        <div id="collapse{{$b_category->id}}" style="padding:5px" class="collapse" data-parent="#accordion" >
+                                            <ul>
+                                                @foreach($b_category->subcategories as $sub)
+                                                <li><a href="/brand/{{$brand->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+
+                                    @endforeach
+                            </div>
+
                         </div>
 
-                        <div class="p-filter">
 
-                            <div class="p-sort">
-                                <div class="form-group row">
-                                    <label class="col-3 col-form-label">Sort by:</label>
-                                    <div class="col-7">
-                                    <form action="/brand/{{$brand->slug}}" id="filter-form">
-                                            <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
-                                                @if ($sort_by == "id")
-                                                    <option value="id">ID</option>
-                                                    <option value="best-sellers">Best sellers</option>
-                                                    <option value="price-asc">Low to high price</option>
-                                                    <option value="price-desc">High to low price</option> 
-                                                @elseif($sort_by == "best-sellers")
-                                                    <option value="best-sellers">Best sellers</option>
-                                                    <option value="id">ID</option>
-                                                    <option value="price-asc">Low to high price</option>
-                                                    <option value="price-desc">High to low price</option> 
-                                                @elseif($sort_by == "price-asc")
-                                                    <option value="price-asc">Low to high price</option>
-                                                    <option value="price-desc">High to low price</option> 
-                                                    <option value="best-sellers">Best sellers</option>
-                                                    <option value="id">ID</option>
-                                                @elseif($sort_by == "price-desc")
-                                                    <option value="price-desc">High to low price</option>
-                                                    <option value="best-sellers">Best sellers</option>
-                                                    <option value="id">ID</option>
-                                                    <option value="price-asc">Low to high price</option>
-                                                @else
-                                                    <option value="id">ID</option>
-                                                    <option value="best-sellers">Best sellers</option>
-                                                    <option value="price-asc">Low to high price</option>
-                                                    <option value="price-desc">High to low price</option> 
-                                                @endif
-                                            </select>
-                                        </form>
+                         <!-- brand filter -->
+                         <div class="lmmsb-sec">
+                                
+                                <div class="lmmsbt">
+                                    <h5>Other Brands</h5>
+                                    <!-- brands listed are only the ones associated with the category selected -->
+                                </div>
+
+
+                                <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
+                                    @foreach($brands as $brand)
+                                        <a href="/brand/{{$brand->slug}}">{{$brand->brand_name}}</a>
+                                        <hr>
+                                    @endforeach
+                                </div>
+
+                            </div>
+
+                    </div>
+                </div>
+
+                <!-- archive listing -->
+                <div class="lmm-p-listing-sec">
+                    <!-- category / brand name / title -->
+                    <div class="ht-title">
+                        <h5>{{$current_b->brand_name}}</h5>
+                    </div>
+
+                    <div class="ht mb-3">
+
+                    <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('brand_id',$current_b->id)->count(); ?>
+
+                        <div>
+                            <div class="filters">
+                                <div class="p-count">
+                                    <label class="col-form-label">{{number_format(count($products))}} product(s) found</label>
+                                </div>
+
+                                <div class="p-filter">
+
+                                    <div class="p-sort">
+                                        <div class="form-group row">
+                                            <label class="col-3 col-form-label">Sort by:</label>
+                                            <div class="col-7">
+                                            
+                                            <form action="/brand/{{$brand->slug}}" id="filter-form">
+                                                <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
+                                                    <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
+                                                    <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                                    <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                                    <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
+                                                </select>
+                                            </form>
+                                            
+                                            </div>
+                                            <input type="hidden" name="url" id="url" value="{{Request::url()}}">
+                                        </div>
                                     </div>
-                                    <input type="hidden" name="url" id="url" value="{{Request::url()}}">
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                </div>
 
-            </div>
+                    <div>
+                        
 
-            <div>
+                        <div class="p-grid product-list">
+                            @foreach($products as $product)
+                                <div class="p-cat product-box">
+                                    <div class="p-c-sec">
+                                        <div class="p-c-inner">
+                                            <a href="/product/{{$product->slug}}">
+                                                <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
+                                                <div class="p-c-name">{{$product->product_name}}</div>
+                                                <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
 
-            
-            <div class="p-grid product-list">
-                @foreach($products as $product)
-                    <div class="p-cat product-box">
-                        <div class="p-c-sec">
-                            <div class="p-c-inner">
-                                <a href="/product/{{$product->slug}}">
-                                    <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
-                                    <div class="p-c-name">{{$product->product_name}}</div>
-                                    <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
-
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>
-                                </a>
-                            </div>
+                                                <a href="/checkout/{{$product->slug}}" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
                         </div>
+
+                    
+                        @if($count==0)
+                            <div class="text-center">
+                                <img class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                                <h6 class="text-center">No Products Found!</h6>
+                            </div>
+                        @endif
+
+                        <?php 
+                            $currentP = $products->currentPage();
+                            $nextP = $currentP+1;
+                            $lastp = $products->lastPage();
+                            $baseUrl = \URL::to('/');
+                            $url = $baseUrl.'/brand/'.$brand->slug;
+                            $loadUrl = $url."?page=".$nextP;
+                        ?>
+
+
+                        @if($currentP!=$lastp)
+                            <div class="row justify-content-center">
+                                <button data-totalResult="{{$count}}" style="width:150px;margin-top:20px" class="btn  btn-block load-more-btn">Load more</button>
+                            </div>
+                        @endif
+
+                        
                     </div>
-                    @endforeach
-           </div>
-
-
-           @if($count==0)
-                <div class="text-center">
-                    <img class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
-                    <h6 class="text-center">No Products Found!</h6>
                 </div>
-            @endif
-
-           <?php 
-            $currentP = $products->currentPage();
-            $nextP = $currentP+1;
-            $lastp = $products->lastPage();
-            $baseUrl = \URL::to('/');
-            $url = $baseUrl.'/brand/'.$brand->slug;
-            $loadUrl = $url."?page=".$nextP;
-            ?>
-
-        @if($currentP!=$lastp)
-        <div class="row justify-content-center">
-            <!-- <a style="width:150px;margin-top:20px" class="btn btn-block load-more-btn" href="{{$loadUrl}}">Load more</a> -->
-            <button data-totalResult="{{$count}}" style="width:150px;margin-top:20px" class="btn  btn-block load-more-btn">Load more</button>
-        </div>
-        @endif
-                
             </div>
+
         </div>
     </div>
-    <!-- end products carousel -->
+    <!-- end products grid -->
 </div>
 
- <!-- {{ $products->links() }} -->
-
- <div class="bg-white">
+<div class="bg-white">
     <!-- products carousel -->
     <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
-                <h5>{{$brand->brand_name}} Weekly Best Sellers</h5>
+               <h5>{{$brand->brand_name}} Weekly Best Sellers</h5>
             </div>
 
             <div id="product-carousel">
                 <div class="slick">
 
-				 @forelse($trendingProducts as $product)
+                  @forelse($trendingProducts as $product)
                     <div class="p-c-sec">
                         <div class="p-c-inner">
                             <a href="/product/{{$product->slug}}">
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
-
-                                <a href="/checkout/{{$product->slug}}" class="btn btn-sm btn-block p-btn">Lipa Mos Mos</a>
+                                
+                                <div class="text-center">
+                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
+                                </div>
+                                
                             </a>
                         </div>
                     </div>
                     @empty
-                        <div class="text-center">
-                            <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
-                            <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
-                        </div>
+                    
+                    <div class="text-center">
+                        <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
+                        <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
+                    </div>
+
                     @endforelse
 
                 </div>
@@ -175,18 +223,129 @@
     <!-- end products carousel -->
 </div>
 
+<!-- handheld filter toggle --> 
+<div class="lmm-filter-toggle">
+    <div>
+        <div class="hh-ft-sec">
+            <!-- sort section -->
+            <div class="hh-ft-sort">
+                <div class="form-group">
+                    <div class="">
+                        <form action="/brand/{{$brand->slug}}" id="filter-form_mob">
+                            <select onchange="filter_mob(this);" name="sort_by" id="sort_by" class="form-control">
+                                <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
+                                <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
+                                <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
+                                <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- filter section -->
+            <div class="hh-ft-filter">
+                <div class="form-group rw">
+                    <div class="">
+                        <a href="#" class="btn btn-block p-btn" data-toggle="modal" data-target="#hhFilterModal">Filter <i class="fas fa-filter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- end -->
+
+<!-- handheld filter options -->
+<div class="lmm-filter-options">
+    <div class="modal fade" id="hhFilterModal" tabindex="-1" aria-labelledby="hhModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <!-- filter title -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hhModalLabel">Get exactly what you want!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="lmm-times" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- filter options -->
+                <div class="modal-body">
+                    <div class="lmm-sidebar">
+                        <!-- categories filter -->
+                        <div class="lmmsb-sec">
+
+
+                        <div class="lmmsbt">
+                                <h5>CATEGORY</h5>
+                            </div>
+
+                            
+                            @foreach($b_categories as $b_category)
+
+                            <div class="cat_h collapsed" data-toggle="collapse" href="#collapse{{$b_category->id}}">
+                                <a href="#" class="card-title">
+                                    {{$b_category->category_name}}
+                                </a>
+                            </div>
+
+                            <div id="collapse{{$b_category->id}}" style="padding:5px" class="collapse" data-parent="#accordion" >
+                                <ul>
+                                    @foreach($b_category->subcategories as $sub)
+                                    <li><a href="/brand/{{$brand->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            @endforeach
+                            
+                        </div>
+
+                        
+                    </div>
+
+                    <!-- brand filter -->
+                    <div class="lmmsb-sec">
+                                
+                        <div class="lmmsbt">
+                            <h5>Other Brands</h5>
+                            <!-- brands listed are only the ones associated with the category selected -->
+                        </div>
+
+
+                        <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
+                            @foreach($brands as $brand)
+                                <a href="/brand/{{$brand->slug}}">{{$brand->brand_name}}</a>
+                                <hr>
+                            @endforeach
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- buttons -->
+                <div class="modal-footer">
+                    <button type="button" class="btn p-btn-sec" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn p-btn">Save Filter Options</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end --> 
 
 
 @endsection
-
 
 @section('extra-js')
 
 <script type="text/javascript">
     var current_url = window.location.href;
+    var url = $('#url').val();
 </script>
 <script type="text/javascript">
+
     $(document).ready(function(){
         $(".load-more-btn").on('click',function(){
             var _totalCurrentResult=$(".product-box").length;
@@ -237,6 +396,12 @@
             });
         });
     });
+
+    function filter_mob(sel)
+    {
+        $('#filter-form_mob').submit();
+    }
+
 </script>
 
 @endsection
