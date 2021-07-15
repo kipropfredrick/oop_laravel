@@ -198,13 +198,55 @@ else{
 
 function refreshpayment(Request $request){
 
-  $start  = new Carbon('2018-10-04 15:00:03');
-$end    = new Carbon('2018-10-05 17:00:09');
 
-$result=$start->diff($end)->format('%H:%I:%S');
+$phone=$request->phone;
+$customer=\App\Customers::wherePhone($phone)->first();
 
-return $result;
-   return Array("data"=>Array("response"=>"Payment Received successsfully"),"error"=>false);
+if ($customer==null) {
+
+   return Array("data"=>Array("response"=>"An Error Occured processsing your payment"),"error"=>true);
+  # code...
+}
+else{
+
+$booking=\App\Bookings::whereCustomer_id($customer->id)->whereStatus('active')->first();
+if ($booking==null) {
+  # code...
+   return Array("data"=>Array("response"=>"An Error Occured processsing your payment"),"error"=>true);
+}
+else{
+
+  $payments=\App\payments::whereBooking_id($booking->id)->first();
+
+if ($payments==null) {
+  # code...
+   return Array("data"=>Array("response"=>"An Error Occured processsing your payment"),"error"=>true);
+}
+
+else{
+    $start  = new Carbon($payments->created_at);
+$end    = new Carbon(Now());
+
+$hrs=intval($start->diff($end)->format('%H')) * 60;
+$minutes=intval($start->diff($end)->format('%I'));
+$total=$hrs+$minutes;
+return $total;
+
+if ($total<3) {
+  # code...
+    return Array("data"=>Array("response"=>"Payment Received successsfully"),"error"=>false);
+}
+else{
+  return Array("data"=>Array("response"=>"No  payment received"),"error"=>true);
+}
+
+}
+
+}
+
+}
+
+
 }
 
 }
