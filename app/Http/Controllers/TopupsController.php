@@ -195,4 +195,8 @@ else{
 }
 }
 
+function refreshpayment(Request $request){
+   return Array("data"=>Array("response"=>"Payment Received successsfully"),"error"=>false);
+}
+
 }
