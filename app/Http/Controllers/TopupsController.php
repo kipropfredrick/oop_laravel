@@ -10,7 +10,7 @@ use App\topups;
 use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\pushNotification;
-use Carbon;
+use Carbon\Carbon;
 class TopupsController extends Controller
 {
     //
