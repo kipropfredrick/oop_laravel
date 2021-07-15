@@ -11,17 +11,17 @@
         <?php 
 
         $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->sum('total_cost');
-        $totalBookingCount = \App\Bookings::distinct('customer_id')->where('status','=','complete')->orWhere('status','=','active')->count();
+        $totalBookingCount = \App\Bookings::distinct('customer_id')->whereIn('status',['complete','active','overdue','unserviced'])->count();
         $productsCount = \App\Products::where('status','=','approved')->count();
-        $activeBookingAmount = \App\Bookings::where('status','=','active')->sum('total_cost');
-        $activeBookingsCount = \App\Bookings::distinct('customer_id')->where('status','=','active')->count();
+        $activeBookingAmount = \App\Bookings::whereIn('status',['active','overdue','unserviced'])->sum('total_cost');
+        $activeBookingsCount = \App\Bookings::distinct('customer_id')->whereIn('status',['active','overdue','unserviced'])->count();
         $overdueBookingAmount = \App\Bookings::where('status','=','overdue')->sum('total_cost');
         $completeBookingAmount = \App\Bookings::where('status','=','complete')->sum('total_cost');
         $completeBookingCount = \App\Bookings::where('status','=','complete')->count();
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->count();
 
-$customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
+$customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->pluck('customer_id')->toArray();
         $customersCount = \App\Customers::whereIn("id",$customers)->count();
         $vendorsCount = \App\Vendor::count();
                 
