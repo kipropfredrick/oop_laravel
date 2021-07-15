@@ -230,7 +230,7 @@ $end    = new Carbon(Now());
 $hrs=intval($start->diff($end)->format('%H')) * 60;
 $minutes=intval($start->diff($end)->format('%I'));
 $total=$hrs+$minutes;
-return $total;
+
 
 if ($total<3) {
   # code...
