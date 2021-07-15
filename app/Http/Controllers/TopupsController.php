@@ -216,7 +216,7 @@ if ($booking==null) {
 }
 else{
 
-  $payments=\App\payments::whereBooking_id($booking->id)->first();
+  $payments=\App\Payments::whereBooking_id($booking->id)->first();
 
 if ($payments==null) {
   # code...
