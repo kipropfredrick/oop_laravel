@@ -1146,7 +1146,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
     }
 
     public function complete_bookings(){
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('updated_at', 'DESC')->get();
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
