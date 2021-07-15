@@ -418,15 +418,14 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
             $log_id = DB::getPdo()->lastInsertId();
 
-
-          \App\PaymentLog::where('id',$log_id)->update(['status'=>"valid"]);
-
         //   Log::info(print_r($mpesaResponse,true));
 
             $booking = \App\Bookings::with('product','payments','customer','customer.user','county','location')->where('booking_reference','=',$bill_ref_no)->first();
 
             if($booking == null){
                 return "Booking Does not exist!";
+            }else{
+               \App\PaymentLog::where('id',$log_id)->update(['status'=>"valid"]);
             }
        
 
