@@ -2769,7 +2769,7 @@ return view("backoffice.promotions.data",compact('users'));
 
     }
     function topups(Request $request){
-        $topups= topups::whereType('topup')->get();
+        $topups= topups::whereType('topup')->latest()->get();
 foreach ($topups as $key => $value) {
     # code...
     $value->user=\App\User::whereId($value->sender)->first();
@@ -2781,7 +2781,7 @@ return view("backoffice.topups.topups",compact('topups','title'));
 
     }
       function purchases(Request $request){
-              $topups= topups::whereNotIn("type",['topup'])->get();
+              $topups= topups::whereNotIn("type",['topup'])->latest()->get();
 foreach ($topups as $key => $value) {
     # code...
     $value->user=\App\User::whereId($value->sender)->first();
