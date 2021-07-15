@@ -10,6 +10,7 @@ use App\topups;
 use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\pushNotification;
+use Carbon;
 class TopupsController extends Controller
 {
     //
@@ -196,6 +197,13 @@ else{
 }
 
 function refreshpayment(Request $request){
+
+  $start  = new Carbon('2018-10-04 15:00:03');
+$end    = new Carbon('2018-10-05 17:00:09');
+
+$result=$start->diff($end)->format('%H:%I:%S');
+
+return $result;
    return Array("data"=>Array("response"=>"Payment Received successsfully"),"error"=>false);
 }
 
