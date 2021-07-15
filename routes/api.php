@@ -67,6 +67,8 @@ Route::get('/balances','TopupsController@balances');
 Route::post('/maketopup','TopupsController@maketopups');
 Route::post('/redeem','TopupsController@redeem');
 
+Route::post('/refreshpayment','TopupsController@refreshpayment');
+
 
 
 
