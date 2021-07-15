@@ -98,7 +98,7 @@ class AdminController extends Controller
 
     public function dashboard(){
         
-        $posts = \App\Bookings::whereDate('created_at', Carbon::today())->get();
+        $posts = \App\Bookings::whereDate('updated_at', Carbon::today())->get();
         return $posts;
 
         $totalBookingAmount = \App\Bookings::sum('total_cost');
