@@ -565,12 +565,12 @@ break;  }
 public function getUserDetails(Request $request){
 
         $phone=$request->input('phone');
-        $customer=\App\Models\Customers::wherePhone($phone)->first();
+        $customer=\App\Customers::wherePhone($phone)->first();
         if ($customer!=null) {
 
         }
         else{
-$user=\App\Models\User::whereId($customer->user_id)->first();
+$user=\App\User::whereId($customer->user_id)->first();
 $result=$user;
 $result['customer']=$customer;
         }
