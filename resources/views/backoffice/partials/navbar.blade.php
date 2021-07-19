@@ -43,6 +43,7 @@
 </form>
 
 @push('script')
+
   <script type="text/javascript">
     function logout() {
       Swal.fire({
@@ -59,5 +60,7 @@
         }
       })
     }
+    
+
   </script>
 @endpush
