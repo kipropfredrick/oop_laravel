@@ -601,7 +601,7 @@ function updateaccount(Request $request){
     $email=$request->email;
     $exactlocation=$request->exactlocation;
 
-$customer=\App\Customers::wherePhone()->first();
+$customer=\App\Customers::wherePhone($phone)->first();
 
 if ($customer==null) {
     # code...
