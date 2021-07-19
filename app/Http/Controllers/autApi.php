@@ -599,8 +599,9 @@ function updateaccount(Request $request){
     $name=$request->name;
     $county_id=$request->county_id;
     $email=$request->email;
-    $exactlocation=$request->exactlocation;
-    return Array("data"=>Array("response"=>json_encode($request)),"error"=>true);
+    $exactlocation=$request->input('exactlocation');
+
+    return Array("data"=>Array("response"=>$exactlocation,"error"=>true);
 $customer=\App\Customers::wherePhone($phone)->first();
 
 if ($customer==null) {
