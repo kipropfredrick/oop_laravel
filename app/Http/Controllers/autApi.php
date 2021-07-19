@@ -601,12 +601,12 @@ function updateaccount(Request $request){
     $email=$request->email;
     $exactlocation=$request->input('exactlocation');
 
-    return Array("data"=>Array("response"=>$exactlocation,"error"=>true));
+    return Array("data"=>Array("response"=>$exactlocation),"error"=>true);
 $customer=\App\Customers::wherePhone($phone)->first();
 
 if ($customer==null) {
     # code...
-        return Array("data"=>Array("response"=>"We are currently unable to updae your account.contact administrator"),"error"=>true);
+        return Array("data"=>Array("response"=>"We are currently unable to update your account.contact administrator"),"error"=>true);
 }
 
 //update booking addresses
