@@ -567,15 +567,28 @@ public function getUserDetails(Request $request){
         $phone=$request->input('phone');
         $customer=\App\Customers::wherePhone($phone)->first();
         if ($customer==null) {
-
+return Array("response"=>"error fetching data","error"=>true);
         }
         else{
 $user=\App\User::whereId($customer->user_id)->first();
 $result=$user;
 $result['customer']=$customer;
+$bookings=\App\Bookings::whereId($customer->id)->whereStatus('active')->first();
+if ($bookings==null) {
+    # code...
+    $result['county_id']=0;
+    $result['exact_location']="";
+}
+else{
+    $result['county_id']=$bookings->county_id;
+    $result['exact_location']=$bookings->exact_location;
+
+}
+
         }
          $counties=\App\Counties::get();
          $result['counties']=$counties;
+         $result['error']=false;
     return $result;
 
 }
