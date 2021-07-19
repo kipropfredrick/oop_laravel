@@ -2688,7 +2688,7 @@ if ($checkifexists==null) {
     else{
     $obj = new pushNotification();
     $data=Array("name"=>"discount", "value"=>"Get discount");
-    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
 
     $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
 DB::table("discountnotification")->insert($array);
