@@ -613,7 +613,7 @@ $array=Array("county_id"=>$county_id,"exact_location"=>$exactlocation);
 \App\Bookings::whereCustomer_id($customer->id)->update($array);
 $array=Array("name"=>$name,"email"=>$email);
 \App\User::whereId($customer->user_id)->update($array);
-   return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>false,"data"=>\App\User::whereId($customer->user_id)->first());
+   return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>false,"datas"=>\App\User::whereId($customer->user_id)->first());
 
 }
 
