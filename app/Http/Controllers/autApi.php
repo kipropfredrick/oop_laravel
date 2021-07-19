@@ -566,7 +566,7 @@ public function getUserDetails(Request $request){
 
         $phone=$request->input('phone');
         $customer=\App\Customers::wherePhone($phone)->first();
-        if ($customer!=null) {
+        if ($customer==null) {
 
         }
         else{
