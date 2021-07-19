@@ -600,7 +600,7 @@ function updateaccount(Request $request){
     $county_id=$request->county_id;
     $email=$request->email;
     $exactlocation=$request->exactlocation;
-    return Array("data"=>Array("response"=>$name),"error"=>true);
+    return Array("data"=>Array("response"=>json_encode($request)),"error"=>true);
 $customer=\App\Customers::wherePhone($phone)->first();
 
 if ($customer==null) {
