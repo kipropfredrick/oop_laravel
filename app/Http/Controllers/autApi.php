@@ -601,7 +601,7 @@ function updateaccount(Request $request){
     $email=$request->email;
     $exactlocation=$request->input('exactlocation');
 
-    return Array("data"=>Array("response"=>$exactlocation,"error"=>true);
+    return Array("data"=>Array("response"=>$exactlocation,"error"=>true));
 $customer=\App\Customers::wherePhone($phone)->first();
 
 if ($customer==null) {
