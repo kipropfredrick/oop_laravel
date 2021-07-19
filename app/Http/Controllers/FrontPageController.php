@@ -1440,7 +1440,7 @@ break;
                 $booking->balance =   $total_cost-(intval($balance)); 
                 $booking->amount_paid = $balance;
                 $booking->status = "active";
-                $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance)));
+                $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
             }
                 
             SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");

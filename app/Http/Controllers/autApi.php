@@ -363,7 +363,7 @@ else{
         $booking->balance =   $total_cost-(intval($balance))-100;
 $booking->amount_paid = $balance;
 $booking->status = "active";
- $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance))-100);
+ $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance))-100);
     }
 
 
@@ -593,7 +593,7 @@ else{
 
 }
 
-function updateaccount(Request $request){
+public function updateaccount(Request $request){
 
     $phone=$request->input('phone');
     $name=$request->input('name');

@@ -172,7 +172,7 @@ $token=\App\User::whereId($sendto)->first()->token;
         }
 
 
-        return Back()->with('success','notification send successfully ('. $count .' recipients)'  );
+        return Back()->with('success','notification sent successfully ('. $count .' recipients)'  );
     }
 
 
