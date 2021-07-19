@@ -573,7 +573,7 @@ return Array("response"=>"error fetching data","error"=>true);
 $user=\App\User::whereId($customer->user_id)->first();
 $result=$user;
 $result['customer']=$customer;
-$bookings=\App\Bookings::whereId($customer->id)->whereStatus('active')->first();
+$bookings=\App\Bookings::whereCustomer_id($customer->id)->whereStatus('active')->first();
 if ($bookings==null) {
     # code...
     $result['county_id']=0;
