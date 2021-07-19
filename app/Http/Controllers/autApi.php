@@ -595,13 +595,13 @@ else{
 
 function updateaccount(Request $request){
 
-    $phone=$request->phone;
-    $name=$request->name;
-    $county_id=$request->county_id;
-    $email=$request->email;
+    $phone=$request->input('phone');
+    $name=$request->input('name');
+    $county_id=$request->input('county_id');
+    $email=$request->input('email');
     $exactlocation=$request->input('exactlocation');
 
-    return Array("data"=>Array("response"=>$exactlocation),"error"=>true);
+    return Array("data"=>Array("response"=>$email),"error"=>true);
 $customer=\App\Customers::wherePhone($phone)->first();
 
 if ($customer==null) {
