@@ -397,7 +397,16 @@ $booking->status = "active";
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        // $booking_reference = 'MM'.rand(10000,99999);
+           for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+
+        }
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
@@ -441,7 +450,16 @@ $booking->status = "active";
         if($existingCustomer)
         {
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        // $booking_reference = 'MM'.rand(10000,99999);
+               for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+
+        }
 
         $booking_date = now();
 
