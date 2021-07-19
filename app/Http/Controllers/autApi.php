@@ -593,6 +593,30 @@ else{
 
 }
 
+function updateaccount(Request $request){
+
+    $phone=$request->phone;
+    $name=$request->name;
+    $county_id=$request->county_id;
+    $email=$request->email;
+    $exactlocation=$request->exactlocation;
+
+$customer=\App\Customers::wherePhone()->first();
+
+if ($customer==null) {
+    # code...
+        return Array("data"=>Array("response"=>"We are currently unable to updae your account.contact administrator"),"error"=>true);
+}
+
+//update booking addresses
+$array=Array("county_id"=>$county_id,"exact_location"=>$exactlocation);
+\App\Bookings::whereCustomer_id($customer->id)->update($array);
+$array=Array("name"=>$name,"email"=>$email);
+\App\User::whereId($customer->user_id)->update($array);
+   return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>false);
+
+}
+
 
 
 }
