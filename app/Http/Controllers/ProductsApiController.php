@@ -158,17 +158,26 @@ $phone=$customer->phone;
         $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->count();
         $activeBookingAmount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->sum('total_cost');
         $activeBookingsCount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->count();
+
         $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->sum('total_cost');
         $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->count();
         $completeBookingAmount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->sum('total_cost');
         $completeBookingCount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->count();
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
+
+         $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+         $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
         $customers=DB::table('customers')->where('id','=',$customer_id)->first();
         $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
 $hasbooking=false;
+$progresspercentage=0;
+$daystogo=0;
+$dailytarget=0;
+$progressmessage="on track";
+
         if($customer!=null)
         {
 
@@ -187,6 +196,31 @@ $hasbooking=false;
       if ($hasbooking) {
 $amountPaid=$booking->amount_paid;
 $bookingbalance=intval($booking->balance);
+$progresspercentage=$totalBookingAmount/$amountPaid;
+
+$date = Carbon::parse($completionDate);
+$now = Carbon::now();
+
+$daystogo =( $date->diffInDays($now))."Days";
+
+$cdate = Carbon::parse($completionDate);
+$createddate = Carbon::parse($createdat);
+
+$days=intval(($cdate->diffInDays($createddate)));
+
+$dailytarget=intval($totalBookingAmount/$days);
+$dayspassed=intval(($createddate->diffInDays($now)));
+$amountsbepaid=intval($dayspassed*$dailytarget);
+$paymentbalance=$amountsbepaid-$amountPaid;
+if ($paymentbalance<0) {
+  # code...
+  $progressmessage="On Track";
+
+}
+else{
+   $daysdue=intval($paymentbalance/$dailytarget);
+   $progressmessage=$daysdue." behind ".$paymentbalance;
+}
           # code...
       }
       else{
@@ -194,7 +228,7 @@ $bookingbalance=intval($booking->balance);
         $bookingbalance=0;
       }
 
-      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance);
+      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage);
                 
         
 }
