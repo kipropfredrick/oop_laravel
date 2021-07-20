@@ -174,9 +174,9 @@ $phone=$customer->phone;
 
 $hasbooking=false;
 $progresspercentage=0;
-$daystogo=0;
+$daystogo="0 days";
 $dailytarget=0;
-$progressmessage="on track";
+$progressmessage="No Active Booking";
 
         if($customer!=null)
         {
