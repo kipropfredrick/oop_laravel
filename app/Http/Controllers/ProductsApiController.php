@@ -166,8 +166,7 @@ $phone=$customer->phone;
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
 
-         $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
-         $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
+         
         $customers=DB::table('customers')->where('id','=',$customer_id)->first();
         $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
@@ -226,6 +225,10 @@ $bookingbalance=intval($booking->balance);
 $bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', ['active'])->first();
 if ($bok!=null) {
   # code...
+
+  $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+         $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
+         
   $amountPaids=$bok->amount_paid;
 
 $bookingbalances=intval($bok->balance);
