@@ -196,12 +196,12 @@ $progressmessage="on track";
       if ($hasbooking) {
 $amountPaid=$booking->amount_paid;
 $bookingbalance=intval($booking->balance);
-$progresspercentage=$totalBookingAmount/$amountPaid;
+$progresspercentage=intval($totalBookingAmount/$amountPaid);
 
 $date = Carbon::parse($completionDate);
 $now = Carbon::now();
 
-$daystogo =( $date->diffInDays($now))."Days";
+$daystogo =( $date->diffInDays($now))." Days";
 
 $cdate = Carbon::parse($completionDate);
 $createddate = Carbon::parse($createdat);
