@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bookings extends Model
 {
-  protected $fillable = ['product_id','county_id','location_id','customer_id','payment_mode','date_started','due_date','total_cost'];
+  protected $fillable = ['product_id','county_id','location_id','customer_id','payment_mode','date_started','due_date','total_cost','setdate','setreminder'];
 
   public function product(){
       return $this->belongsTo(Products::class,'product_id');

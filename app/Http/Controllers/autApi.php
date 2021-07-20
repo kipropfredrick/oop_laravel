@@ -378,6 +378,8 @@ $booking->status = "active";
         $booking->platform="mobile";
         $booking->quantity  = '1';
         $booking->discount  = 100;
+        $booking->setdate= $request->setdate;
+        $booking->setreminder= $request->setreminder;
 
         $booking->item_cost = $product->product_price;
 
@@ -397,7 +399,16 @@ $booking->status = "active";
 
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        // $booking_reference = 'MM'.rand(10000,99999);
+           for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+
+        }
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
@@ -441,7 +452,16 @@ $booking->status = "active";
         if($existingCustomer)
         {
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        // $booking_reference = 'MM'.rand(10000,99999);
+               for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+
+        }
 
         $booking_date = now();
 
@@ -463,6 +483,8 @@ $booking->status = "active";
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
         $booking->booking_reference = $booking_reference;
+        $booking->setdate= $request->setdate;
+        $booking->setreminder= $request->setreminder;
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = intval($total_cost)-100;
