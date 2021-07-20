@@ -228,7 +228,7 @@ if ($bok!=null) {
 
   $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
          $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
-         
+
   $amountPaids=$bok->amount_paid;
 
 $bookingbalances=intval($bok->balance);
@@ -698,7 +698,7 @@ $booking->status = "active";
 
 $bookingreference=$request->bookingreference;
 $setdate=$request->setdate;
-$setreminder=$request->$request->setreminder;
+$setreminder=$request->setreminder;
 
 $obj=\App\Bookings::whereBooking_reference($bookingreference);
 $booking=$obj->first();
