@@ -195,8 +195,41 @@ $progressmessage="on track";
 
       if ($hasbooking) {
 $amountPaid=$booking->amount_paid;
+
 $bookingbalance=intval($booking->balance);
-$progresspercentage=intval(($amountPaid/$totalBookingAmount)*100);
+// $progresspercentage=intval(($amountPaid/$totalBookingAmount)*100);
+
+// $date = Carbon::parse($completionDate);
+// $now = Carbon::now();
+
+// $daystogo =( $date->diffInDays($now))." Days";
+
+// $cdate = Carbon::parse($completionDate);
+// $createddate = Carbon::parse($createdat);
+
+// $days=intval(($cdate->diffInDays($createddate)));
+
+// $dailytarget=intval($totalBookingAmount/$days);
+// $dayspassed=intval(($createddate->diffInDays($now)));
+// $amountsbepaid=intval($dayspassed*$dailytarget);
+// $paymentbalance=$amountsbepaid-$amountPaid;
+// if ($paymentbalance<0) {
+//   # code...
+//   $progressmessage="On Track";
+
+// }
+// else{
+//    $daysdue=intval($paymentbalance/$dailytarget);
+//    $progressmessage=$daysdue." behind ".$paymentbalance;
+// }
+
+$bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', ['active'])->first();
+if ($bok!=null) {
+  # code...
+  $amountPaids=$bok->amount_paid;
+
+$bookingbalances=intval($bok->balance);
+$progresspercentage=intval(($amountPaids/$totalBookingAmounts)*100);
 
 $date = Carbon::parse($completionDate);
 $now = Carbon::now();
@@ -208,10 +241,10 @@ $createddate = Carbon::parse($createdat);
 
 $days=intval(($cdate->diffInDays($createddate)));
 
-$dailytarget=intval($totalBookingAmount/$days);
+$dailytarget=intval($totalBookingAmounts/$days);
 $dayspassed=intval(($createddate->diffInDays($now)));
 $amountsbepaid=intval($dayspassed*$dailytarget);
-$paymentbalance=$amountsbepaid-$amountPaid;
+$paymentbalance=$amountsbepaid-$amountPaids;
 if ($paymentbalance<0) {
   # code...
   $progressmessage="On Track";
@@ -220,6 +253,7 @@ if ($paymentbalance<0) {
 else{
    $daysdue=intval($paymentbalance/$dailytarget);
    $progressmessage=$daysdue." behind ".$paymentbalance;
+}
 }
           # code...
       }
