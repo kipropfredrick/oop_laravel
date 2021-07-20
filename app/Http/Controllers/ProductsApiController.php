@@ -230,6 +230,7 @@ if ($bok!=null) {
 
 $bookingbalances=intval($bok->balance);
 $progresspercentage=intval(($amountPaids/$totalBookingAmounts)*100);
+$totalBookingAmounts=$bok->total_cost;
 
 $date = Carbon::parse($completionDate);
 $now = Carbon::now();
