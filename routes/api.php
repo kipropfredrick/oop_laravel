@@ -29,7 +29,7 @@ Route::get('/trendingProducts','ProductsApiController@trendingProducts');
 Route::get('/subcategories','ProductsApiController@subcategories');
 Route::get('/subcategoriesProducts','ProductsApiController@subcategoriesProducts');
 Route::get('/products','ProductsApiController@getProduct');
-Route::get('/updateBookingTarget','ProductsApiController@updateBookingTarget');
+Route::post('/updateBookingTarget','ProductsApiController@updateBookingTarget');
 
 Route::get('/myaccount','ProductsApiController@customerOrders');
 Route::get('/login','ProductsApiController@login');
