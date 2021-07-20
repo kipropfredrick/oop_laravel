@@ -690,4 +690,25 @@ $booking->status = "active";
 
         return Array("hasbooking"=>$hasbooking);
     }
+
+    function updateBookingTarget(Request $request){
+
+$bookingreference=$request->bookingreference;
+$setdate=$request->setdate;
+$setreminder=$request->$request->setreminder;
+
+$obj=\App\Bookings::whereBooking_reference($bookingreference);
+$booking=$obj->first();
+if ($booking!=null) {
+  # code...
+$array=Array("setdate"=>$setdate,"setreminder"=>$setreminder);
+$obj->update($array);
+  return Array("data"=>Array("response"=>"Booking updated successfully"),"error"=>false);
+}
+else{
+  return Array("data"=>Array("response"=>"No Booking reference found"),"error"=>true);
+}
+
+
+    }
 }
