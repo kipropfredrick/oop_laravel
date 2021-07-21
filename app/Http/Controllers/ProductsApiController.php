@@ -177,6 +177,8 @@ $daystogo="0 days";
 $dailytarget=0;
 $progressmessage="No Active Booking";
 $hastarget=0;
+$setdate='2021-01-01';
+$setreminder=0;
 
         if($customer!=null)
         {
@@ -232,6 +234,8 @@ if ($bok!=null) {
 
   $amountPaids=$bok->amount_paid;
   $hastarget=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
+  $setreminder=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
+  $setdate=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
 
 $bookingbalances=intval($bok->balance);
 $totalBookingAmounts=$bok->total_cost;
