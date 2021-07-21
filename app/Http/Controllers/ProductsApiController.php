@@ -235,7 +235,7 @@ if ($bok!=null) {
 
   $amountPaids=$bok->amount_paid;
   $hastarget=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $bookingreference=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->bookingreference;
+  $bookingreference=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->booking_reference;
   $setreminder=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
   $setdate=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
 
