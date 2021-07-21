@@ -1465,7 +1465,7 @@ break;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
-        $booking->booking_reference = $this->get_booking_reference();
+       // $booking->booking_reference = $this->get_booking_reference();
 
         $booking->save();
         
