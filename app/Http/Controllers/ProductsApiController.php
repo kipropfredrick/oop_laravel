@@ -176,6 +176,7 @@ $progresspercentage=0;
 $daystogo="0 days";
 $dailytarget=0;
 $progressmessage="No Active Booking";
+$hastarget=0;
 
         if($customer!=null)
         {
@@ -222,7 +223,7 @@ $bookingbalance=intval($booking->balance);
 //    $progressmessage=$daysdue." behind ".$paymentbalance;
 // }
 
-$bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', ['active'])->first();
+$bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', ['active','overdue','unserviced'])->first();
 if ($bok!=null) {
   # code...
 
@@ -230,6 +231,7 @@ if ($bok!=null) {
          $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
 
   $amountPaids=$bok->amount_paid;
+  $hastarget=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
 
 $bookingbalances=intval($bok->balance);
 $totalBookingAmounts=$bok->total_cost;
@@ -267,7 +269,7 @@ else{
         $bookingbalance=0;
       }
 
-      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage);
+      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget);
                 
         
 }
