@@ -254,7 +254,9 @@ $createddate = Carbon::parse($createdat);
 
 $days=intval(($cdate->diffInDays($createddate)));
 
-$dailytarget=intval($totalBookingAmounts/$days);
+if($days>0){
+    $dailytarget=intval($totalBookingAmounts/$days);
+}
 $dayspassed=intval(($createddate->diffInDays($now)));
 $amountsbepaid=intval($dayspassed*$dailytarget);
 $paymentbalance=$amountsbepaid-$amountPaids;
