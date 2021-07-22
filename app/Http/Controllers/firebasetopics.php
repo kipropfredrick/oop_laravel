@@ -124,6 +124,7 @@ $i=0;
 foreach ($users as $key => $value) {
 
 $token=$value->token;
+if($i>301){
     if ($token==null) {
         # code...
 
@@ -136,12 +137,14 @@ $token=$value->token;
        $messages = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
-        if($i==300){
+        if($i==700){
             break;
         }
 
-        $i=$i+1;
+       
 
+}
+ $i=$i+1;
 }
   }
 
