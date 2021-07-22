@@ -119,7 +119,7 @@ $token=$value->token;
     $users = \App\Customers::whereNotIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->whereNotNull("token")->get();
 
-return count($users);
+
 
 foreach ($users as $key => $value) {
 
