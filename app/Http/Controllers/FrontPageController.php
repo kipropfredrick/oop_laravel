@@ -1430,6 +1430,7 @@ break;
                 # code...
                 \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
                 $booking->status = "complete";
+                $booking->amount_paid = $total_cost;
                 $booking->balance="0";
 
                 $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
