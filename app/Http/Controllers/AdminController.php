@@ -2775,7 +2775,7 @@ foreach ($topups as $key => $value) {
     $value->user=\App\User::whereId($value->sender)->first();
     $value->customer=\App\Customers::whereUser_id($value->sender)->first();
 }
-$title="Account Top-Ups";
+$title="Wallet Top-Ups";
 
 return view("backoffice.topups.topups",compact('topups','title'));
 
@@ -2787,7 +2787,7 @@ foreach ($topups as $key => $value) {
     $value->user=\App\User::whereId($value->sender)->first();
     $value->customer=\App\Customers::whereUser_id($value->sender)->first();
 }
- $title="Account Withdrawals";
+ $title="Airtime Purchases";
 
 return view("backoffice.topups.topups",compact('topups','title'));
     }

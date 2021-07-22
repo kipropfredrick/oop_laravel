@@ -117,7 +117,7 @@ return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa p
 else{
 return Array("data"=>Array("response"=>"An error Occured processing your request, try again later"),"error"=>true); 
 }
-return Array("data"=>Array("response"=>"pesa topup was successful"),"error"=>false);
+return Array("data"=>Array("response"=>"mpesa topup was successful"),"error"=>false);
 
   }else {
 

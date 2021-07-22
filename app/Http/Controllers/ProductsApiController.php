@@ -514,7 +514,7 @@ $phone=$customer->phone;
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-            return Array("error"=>true,"response"=>"you already have an existing bookings");
+            return Array("error"=>true,"response"=>"you already have an existing booking");
         }
 
         \Auth::login($user);
