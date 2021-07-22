@@ -514,7 +514,7 @@ $phone=$customer->phone;
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-            return Array("error"=>true,"response"=>"you already have an existing booking");
+            return Array("error"=>true,"response"=>"You already have an existing booking.");
         }
 
         \Auth::login($user);
@@ -533,7 +533,7 @@ $phone=$customer->phone;
         
         if($request->initial_deposit<100){
 
-         return Array("error"=>true,"response"=>"minimum deposit is Ksh. 100");
+         return Array("error"=>true,"response"=>"Minimum allowed deposit is KSh.100.");
          
         }
 
@@ -716,10 +716,10 @@ if ($booking!=null) {
   # code...
 $array=Array("setdate"=>$setdate,"setreminder"=>$setreminder);
 $obj->update($array);
-  return Array("data"=>Array("response"=>"Booking updated successfully"),"error"=>false);
+  return Array("data"=>Array("response"=>"Your payment target has been updated successfully."),"error"=>false);
 }
 else{
-  return Array("data"=>Array("response"=>"No Booking reference found"),"error"=>true);
+  return Array("data"=>Array("response"=>"No booking reference found."),"error"=>true);
 }
 
 
