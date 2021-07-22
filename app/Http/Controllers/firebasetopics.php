@@ -136,7 +136,7 @@ $token=$value->token;
        $messages = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
-        if($i=300){
+        if($i==300){
             break;
         }
 
