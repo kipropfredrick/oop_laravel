@@ -122,9 +122,9 @@ $users=User::whereIn("id",$users)->whereNotNull("token")->get();
 
 $i=0;
 foreach ($users as $key => $value) {
-
+ if($i>301){
+          
 $token=$value->token;
-if($i>301){
     if ($token==null) {
         # code...
 
@@ -137,16 +137,17 @@ if($i>301){
        $messages = str_replace('{customerName}',$value->name, $message);
     $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
-        if($i==700){
+        if($i==800){
             break;
         }
 
-       
+     
 
 }
- $i=$i+1;
-}
-  }
+   $i=$i+1;
+  }  
+
+        }
 
         }
         else{
