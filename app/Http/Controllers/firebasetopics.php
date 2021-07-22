@@ -117,7 +117,7 @@ $token=$value->token;
   {
   $customers=\App\Bookings::pluck('customer_id')->toArray();
     $users = \App\Customers::whereNotIn("id",$customers)->pluck('user_id')->toArray();
-$users=User::whereIn("id",$users)->whereNotNull($token)->get();
+$users=User::whereIn("id",$users)->whereNotNull("token")->get();
 
 return count($users);
 
