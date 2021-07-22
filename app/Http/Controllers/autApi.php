@@ -378,8 +378,15 @@ $booking->status = "active";
         $booking->platform="mobile";
         $booking->quantity  = '1';
         $booking->discount  = 100;
-        $booking->setdate= $request->setdate;
+      if ($request->setreminder!= null) {
+          $booking->setdate= $request->setdate;
         $booking->setreminder= $request->setreminder;
+          # code...
+      }
+      else{
+           $booking->setdate='2021-09-09';
+        $booking->setreminder= 0;
+      }
 
         $booking->item_cost = $product->product_price;
 
@@ -483,8 +490,15 @@ break;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
         $booking->booking_reference = $booking_reference;
-        $booking->setdate= $request->setdate;
+            if ($request->setreminder!= null) {
+          $booking->setdate= $request->setdate;
         $booking->setreminder= $request->setreminder;
+          # code...
+      }
+      else{
+           $booking->setdate='2021-09-09';
+        $booking->setreminder= 0;
+      }
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = intval($total_cost)-100;
