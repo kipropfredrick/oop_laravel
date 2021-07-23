@@ -140,9 +140,25 @@ return $result;
      }
 function getProduct(Request $request){
     $id=$request->input("id");
+    $phone=$request->input('phone');
      $result=Products::with("gallery")->whereId($id)->first();
      $counties=\App\Counties::get();
      $result['counties']=$counties;
+        if ($phone!=null) {
+        $customer=\App\Customers::wherePhone($phone)->first();
+        if ($customer!=null) {
+            # code...
+            $bookings=\App\Bookings::whereCustomer_id($customer->id)->latest()->first();
+if ($bookings!=null) {
+    # code...
+    $result['exactlocation']=$bookings->exact_location;
+    $result['countyid']=$bookings->county_id;
+}
+
+        }
+        
+    }
+
 return $result; 
 }
 
@@ -180,7 +196,7 @@ $hastarget=0;
 $setdate='2021-01-01';
 $setreminder=0;
 $bookingreference="";
-
+$targettype="Not set";
         if($customer!=null)
         {
 
@@ -289,7 +305,7 @@ else{
         $bookingbalance=0;
       }
 
-      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$bookingreference);
+      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$bookingreference,"targettype"=>$targettype);
                 
         
 }
@@ -385,7 +401,7 @@ return $allPayments;
         $username=$request->input("username");
         $status=$request->input("status");
         $customer = Customers::wherePhone($username)->first();
-        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->get();
+        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
