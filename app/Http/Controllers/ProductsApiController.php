@@ -274,14 +274,17 @@ if($days>0){
     if ($setreminder==1) {
         # code...
             $dailytarget=intval($totalBookingAmounts/$days);
+            $targettype="Daily target";
     }
     else if ($setreminder==2) {
         # code...
             $dailytarget=intval($totalBookingAmounts/$days) * 7;
+             $targettype="Weekly target";
     }
     else if ($setreminder==3) {
         # code...
           $dailytarget=intval($totalBookingAmounts/$days) * 30;
+           $targettype="Monthly target";
     }
 
 }
