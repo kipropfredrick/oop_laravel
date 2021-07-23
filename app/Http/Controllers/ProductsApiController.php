@@ -196,7 +196,7 @@ $hastarget=0;
 $setdate='2021-01-01';
 $setreminder=0;
 $bookingreference="";
-$targettype="Not set";
+$targettype="Set target";
         if($customer!=null)
         {
 
