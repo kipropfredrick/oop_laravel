@@ -140,9 +140,25 @@ return $result;
      }
 function getProduct(Request $request){
     $id=$request->input("id");
+    $phone=$request->input('phone');
      $result=Products::with("gallery")->whereId($id)->first();
      $counties=\App\Counties::get();
      $result['counties']=$counties;
+        if ($phone!=null) {
+        $customer=\App\Customers::wherePhone($phone)->first();
+        if ($customer!=null) {
+            # code...
+            $bookings=\App\Bookings::whereCustomer_id($customer->id)->latest()->first();
+if ($bookings!=null) {
+    # code...
+    $result['exactlocation']=$bookings->exact_location;
+    $result['countyid']=$bookings->county_id;
+}
+
+        }
+        
+    }
+
 return $result; 
 }
 
@@ -158,17 +174,29 @@ $phone=$customer->phone;
         $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->count();
         $activeBookingAmount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->sum('total_cost');
         $activeBookingsCount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->count();
+
         $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->sum('total_cost');
         $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->count();
         $completeBookingAmount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->sum('total_cost');
         $completeBookingCount = \App\Bookings::where('status','=','complete')->where('customer_id',$customer_id)->count();
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('customer_id',$customer_id)->count();
+
+         
         $customers=DB::table('customers')->where('id','=',$customer_id)->first();
         $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
 $hasbooking=false;
+$progresspercentage=0;
+$daystogo="0 days";
+$dailytarget=0;
+$progressmessage="No Active Booking";
+$hastarget=0;
+$setdate='2021-01-01';
+$setreminder=0;
+$bookingreference="";
+$targettype="Set target";
         if($customer!=null)
         {
 
@@ -186,7 +214,93 @@ $hasbooking=false;
 
       if ($hasbooking) {
 $amountPaid=$booking->amount_paid;
+
 $bookingbalance=intval($booking->balance);
+// $progresspercentage=intval(($amountPaid/$totalBookingAmount)*100);
+
+// $date = Carbon::parse($completionDate);
+// $now = Carbon::now();
+
+// $daystogo =( $date->diffInDays($now))." Days";
+
+// $cdate = Carbon::parse($completionDate);
+// $createddate = Carbon::parse($createdat);
+
+// $days=intval(($cdate->diffInDays($createddate)));
+
+// $dailytarget=intval($totalBookingAmount/$days);
+// $dayspassed=intval(($createddate->diffInDays($now)));
+// $amountsbepaid=intval($dayspassed*$dailytarget);
+// $paymentbalance=$amountsbepaid-$amountPaid;
+// if ($paymentbalance<0) {
+//   # code...
+//   $progressmessage="On Track";
+
+// }
+// else{
+//    $daysdue=intval($paymentbalance/$dailytarget);
+//    $progressmessage=$daysdue." behind ".$paymentbalance;
+// }
+
+$bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', ['active','overdue','unserviced'])->first();
+if ($bok!=null) {
+  # code...
+
+  $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+         $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
+
+  $amountPaids=$bok->amount_paid;
+  $hastarget=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
+  $bookingreference=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->booking_reference;
+  $setreminder=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
+  $setdate=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+
+$bookingbalances=intval($bok->balance);
+$totalBookingAmounts=$bok->total_cost;
+$progresspercentage=intval(($amountPaids/$totalBookingAmounts)*100);
+
+
+$date = Carbon::parse($completionDate);
+$now = Carbon::now();
+
+$daystogo =( $date->diffInDays($now))." Days";
+
+$cdate = Carbon::parse($completionDate);
+$createddate = Carbon::parse($createdat);
+
+$days=intval(($cdate->diffInDays($createddate)));
+
+if($days>0){
+    if ($setreminder==1) {
+        # code...
+            $dailytarget=intval($totalBookingAmounts/$days);
+            $targettype="Daily target";
+    }
+    else if ($setreminder==2) {
+        # code...
+            $dailytarget=intval($totalBookingAmounts/$days) * 7;
+             $targettype="Weekly target";
+    }
+    else if ($setreminder==3) {
+        # code...
+          $dailytarget=intval($totalBookingAmounts/$days) * 30;
+           $targettype="Monthly target";
+    }
+
+}
+$dayspassed=intval(($createddate->diffInDays($now)));
+$amountsbepaid=intval($dayspassed*$dailytarget);
+$paymentbalance=$amountsbepaid-$amountPaids;
+if ($paymentbalance<0) {
+  # code...
+  $progressmessage="On Track";
+
+}
+else{
+   $daysdue=intval($paymentbalance/$dailytarget);
+   $progressmessage=$daysdue." behind ".$paymentbalance;
+}
+}
           # code...
       }
       else{
@@ -194,7 +308,7 @@ $bookingbalance=intval($booking->balance);
         $bookingbalance=0;
       }
 
-      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance);
+      return Array("totalBookingAmount"=>$totalBookingAmount,"totalBookingAmount"=>$totalBookingAmount,"activeBookingAmount"=>$activeBookingAmount,"activeBookingsCount"=>$activeBookingsCount,"revokedBookingAmount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"completeBookingAmount"=>$completeBookingAmount,"completeBookingCount"=>$completeBookingCount,"pendingBookingAmount"=>$pendingBookingAmount,"pendingBookingCount"=>$pendingBookingCount,"balance"=>$balance,"hasbooking"=>$hasbooking,"amountPaid"=>$amountPaid,"bookingbalance"=>$bookingbalance,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$bookingreference,"targettype"=>$targettype);
                 
         
 }
@@ -290,7 +404,7 @@ return $allPayments;
         $username=$request->input("username");
         $status=$request->input("status");
         $customer = Customers::wherePhone($username)->first();
-        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->get();
+        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
@@ -431,7 +545,7 @@ $phone=$customer->phone;
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-            return Array("error"=>true,"response"=>"you already have an existing bookings");
+            return Array("error"=>true,"response"=>"You already have an existing booking.");
         }
 
         \Auth::login($user);
@@ -450,7 +564,7 @@ $phone=$customer->phone;
         
         if($request->initial_deposit<100){
 
-         return Array("error"=>true,"response"=>"minimum deposit is Ksh. 100");
+         return Array("error"=>true,"response"=>"Minimum allowed deposit is KSh.100.");
          
         }
 
@@ -619,5 +733,26 @@ $booking->status = "active";
         }
 
         return Array("hasbooking"=>$hasbooking);
+    }
+
+    function updateBookingTarget(Request $request){
+
+$bookingreference=$request->bookingreference;
+$setdate=$request->setdate;
+$setreminder=$request->setreminder;
+
+$obj=\App\Bookings::whereBooking_reference($bookingreference);
+$booking=$obj->first();
+if ($booking!=null) {
+  # code...
+$array=Array("setdate"=>$setdate,"setreminder"=>$setreminder);
+$obj->update($array);
+  return Array("data"=>Array("response"=>"Your payment target has been updated successfully."),"error"=>false);
+}
+else{
+  return Array("data"=>Array("response"=>"No booking reference found."),"error"=>true);
+}
+
+
     }
 }

@@ -117,7 +117,8 @@ $token=$value->token;
   {
   $customers=\App\Bookings::pluck('customer_id')->toArray();
     $users = \App\Customers::whereNotIn("id",$customers)->pluck('user_id')->toArray();
-$users=User::whereIn("id",$users)->get();
+$users=User::whereIn("id",$users)->whereNotNull("token")->get();
+
 
 foreach ($users as $key => $value) {
 
@@ -172,7 +173,7 @@ $token=\App\User::whereId($sendto)->first()->token;
         }
 
 
-        return Back()->with('success','notification send successfully ('. $count .' recipients)'  );
+        return Back()->with('success','notification sent successfully ('. $count .' recipients)'  );
     }
 
 

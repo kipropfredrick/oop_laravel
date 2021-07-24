@@ -29,6 +29,7 @@ Route::get('/trendingProducts','ProductsApiController@trendingProducts');
 Route::get('/subcategories','ProductsApiController@subcategories');
 Route::get('/subcategoriesProducts','ProductsApiController@subcategoriesProducts');
 Route::get('/products','ProductsApiController@getProduct');
+Route::post('/updateBookingTarget','ProductsApiController@updateBookingTarget');
 
 Route::get('/myaccount','ProductsApiController@customerOrders');
 Route::get('/login','ProductsApiController@login');
@@ -46,6 +47,9 @@ Route::post('/makepayment','autApi@MakePayment');
 Route::get('/checkbooking','ProductsApiController@checkBooking');
 Route::post('/makebooking','autApi@make_booking');
 Route::post('/hasBooking','autApi@hasBooking');
+Route::get('/getUserDetails','autApi@getUserDetails');
+Route::post('/updateaccount','autApi@updateaccount');
+
 Route::get('/check-booking-exists/{booking_reference}','AdminController@check_booking_exists');
 
 
@@ -66,6 +70,8 @@ Route::post('stk-callback', 'autApi@callBack');
 Route::get('/balances','TopupsController@balances');
 Route::post('/maketopup','TopupsController@maketopups');
 Route::post('/redeem','TopupsController@redeem');
+
+Route::post('/refreshpayment','TopupsController@refreshpayment');
 
 
 

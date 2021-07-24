@@ -1430,6 +1430,7 @@ break;
                 # code...
                 \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
                 $booking->status = "complete";
+                $booking->amount_paid = $total_cost;
                 $booking->balance="0";
 
                 $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
@@ -1440,7 +1441,7 @@ break;
                 $booking->balance =   $total_cost-(intval($balance)); 
                 $booking->amount_paid = $balance;
                 $booking->status = "active";
-                $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance)));
+                $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
             }
                 
             SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
@@ -1465,7 +1466,7 @@ break;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
-        $booking->booking_reference = $this->get_booking_reference();
+       // $booking->booking_reference = $this->get_booking_reference();
 
         $booking->save();
         

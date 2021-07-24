@@ -16,7 +16,7 @@ use App\Http\Controllers\pushNotification;
 
 class autApi extends Controller
 {
-    
+
 
 
     function registerUser(Request $request){
@@ -30,7 +30,7 @@ class autApi extends Controller
             return Array("response"=>"Please enter a valid phone number!","error"=>true);
         }else{
             $valid_phone = $msisdn;
-          
+
         }
 
 
@@ -52,7 +52,7 @@ $user = new \App\User();
         $user_id = DB::getPdo()->lastInsertId();
 
         $customer = new \App\Customers();
-        $customer->user_id = $user_id; 
+        $customer->user_id = $user_id;
         $customer->phone  = $valid_phone;
         $customer->save();
           $phone=\App\Customers::whereUser_id($user_id)->first()->phone;
@@ -105,8 +105,8 @@ return Array("response"=>"no records exists","error"=>true);
      */
     public function lipaNaMpesaPassword($lipa_time)
     {
-      
-        $passkey = env('STK_PASSKEY');  
+
+        $passkey = env('STK_PASSKEY');
         $BusinessShortCode = env('MPESA_SHORT_CODE');
         $timestamp =$lipa_time;
         $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
@@ -121,7 +121,7 @@ return Array("response"=>"no records exists","error"=>true);
                  'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
                  'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
              ];
-         
+
              foreach ($regex as $operator => $re ) {
                  if (preg_match($re, $msisdn)) {
                      return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
@@ -131,7 +131,7 @@ return Array("response"=>"no records exists","error"=>true);
          }
 
  public function stk_push($amount,$msisdn,$booking_ref){
-       
+
         $consumer_key =  env('CONSUMER_KEY');
         $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
@@ -208,7 +208,7 @@ return Array("response"=>"no records exists","error"=>true);
            return Array("response"=>$message,"success"=>true,"error"=>false);
         }
 
-         
+
 
         return $message;
     }
@@ -267,7 +267,7 @@ return Array("response"=>"no records exists","error"=>true);
         }
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
-        
+
         $product = \App\Products::find($request->product_id);
 
         if($product->weight != 0){
@@ -293,7 +293,7 @@ return Array("response"=>"no records exists","error"=>true);
         $total_cost = $product->product_price + $shipping_cost;
 
         $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
-        
+
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
 
         if($existingUser!=null)
@@ -320,7 +320,7 @@ return Array("response"=>"no records exists","error"=>true);
                 # code...
 break;
             }
-          
+
         }
 
         $booking_date = now();
@@ -328,14 +328,14 @@ break;
 
         $due_date = Carbon::now()->addMonths(3);
 
-        
+
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
-        
+
         if($request->initial_deposit<100){
 
          return Array("error"=>true,"response"=>"minimum deposit is Ksh. 100");
-         
+
         }
 
 $balance=$existingUser->balance;
@@ -343,7 +343,7 @@ $balance=$existingUser->balance;
 $booking = new \App\Bookings();
  $recipients = $valid_phone;
 if (intval($balance)==0) {
-   $booking->balance =   $total_cost-100; 
+   $booking->balance =   $total_cost-100;
 $booking->amount_paid = "0";
 $booking->status = "pending";
 }
@@ -353,6 +353,7 @@ else{
         # code...
         \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
         $booking->status = "complete";
+        $booking->amount_paid = $total_cost;
         $booking->balance="0";
 
          $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
@@ -360,10 +361,10 @@ else{
     else{
 
          \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
-        $booking->balance =   $total_cost-(intval($balance))-100; 
+        $booking->balance =   $total_cost-(intval($balance))-100;
 $booking->amount_paid = $balance;
 $booking->status = "active";
- $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is ".number_format($total_cost-(intval($balance))-100);
+ $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance))-100);
     }
 
 
@@ -371,20 +372,29 @@ $booking->status = "active";
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 }
 
-        
-        $booking->customer_id = $existingCustomer->id; 
+
+        $booking->customer_id = $existingCustomer->id;
         $booking->product_id  = $request->product_id;
         $booking->booking_reference = $booking_reference;
         $booking->platform="mobile";
         $booking->quantity  = '1';
         $booking->discount  = 100;
-       
+      if ($request->setreminder!= null) {
+          $booking->setdate= $request->setdate;
+        $booking->setreminder= $request->setreminder;
+          # code...
+      }
+      else{
+           $booking->setdate='2021-09-09';
+        $booking->setreminder= 0;
+      }
+
         $booking->item_cost = $product->product_price;
-        
+
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
         $booking->due_date = $due_date;
-       
+
         $booking->vendor_code = $vendor_code;
         $booking->location_type = "Exact Location";
         $booking->item_cost = $product->product_price;
@@ -394,16 +404,25 @@ $booking->status = "active";
         $booking->total_cost =  $total_cost-100;
 
         $booking->save();
-        
+
         $booking_id = DB::getPdo()->lastInsertId();
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        // $booking_reference = 'MM'.rand(10000,99999);
+           for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+
+        }
 
         \App\Bookings::where('id',$booking_id)->update(['booking_reference'=>$booking_reference]);
 
 
        $recipients = $valid_phone;
-      
+
         $booking_id = DB::getPdo()->lastInsertId();
 
         $product = \App\Products::find($request->product_id);
@@ -415,7 +434,7 @@ $booking->status = "active";
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
-        
+
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
@@ -432,16 +451,25 @@ $booking->status = "active";
     $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
 
       return $message;
-            
+
         }
 
-        
+
         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
 
         if($existingCustomer)
         {
 
-        $booking_reference = 'MM'.rand(10000,99999);
+        // $booking_reference = 'MM'.rand(10000,99999);
+               for($i=0;$i<1000000;$i++){
+            $booking_reference = 'MM'.rand(10000,99999);
+            $res=\App\Bookings::whereBooking_reference($booking_reference)->first();
+            if ($res==null) {
+                # code...
+break;
+            }
+
+        }
 
         $booking_date = now();
 
@@ -454,15 +482,24 @@ $booking->status = "active";
         if($request->initial_deposit<100){
 
     return Array("error"=>true,"response"=>"minimum deposit is Ksh. 100");
-         
+
         }
 
         $booking = new \App\Bookings();
-        $booking->customer_id = $existingCustomer->id; 
+        $booking->customer_id = $existingCustomer->id;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
         $booking->booking_reference = $booking_reference;
+            if ($request->setreminder!= null) {
+          $booking->setdate= $request->setdate;
+        $booking->setreminder= $request->setreminder;
+          # code...
+      }
+      else{
+           $booking->setdate='2021-09-09';
+        $booking->setreminder= 0;
+      }
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = intval($total_cost)-100;
@@ -480,7 +517,7 @@ $booking->status = "active";
         $booking_id = DB::getPdo()->lastInsertId();
 
         $recipients = $valid_phone;
-       
+
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
@@ -506,10 +543,10 @@ $booking->status = "active";
     $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
         return $message;
-            
+
         }
 
-  
+
     }
 
     function firebasetopics(Request $request){
@@ -542,7 +579,7 @@ return $result;
     }
 
     function updateAccountNumbers(Request $request){
-     
+
 
         $users=\App\User::get();
         foreach ($users as $key => $value) {
@@ -553,7 +590,7 @@ return $result;
             $res=\App\User::wheremosmosid($mid)->first();
             if ($res==null) {             # code...
 break;  }
-          
+
         }
 
 \App\User::whereId($value->id)->update(["mosmosid"=>$mid]);
@@ -561,6 +598,62 @@ break;  }
         }
 
     }
+
+public function getUserDetails(Request $request){
+
+        $phone=$request->input('phone');
+        $customer=\App\Customers::wherePhone($phone)->first();
+        if ($customer==null) {
+return Array("response"=>"error fetching data","error"=>true);
+        }
+        else{
+$user=\App\User::whereId($customer->user_id)->first();
+$result=$user;
+$result['customer']=$customer;
+$bookings=\App\Bookings::whereCustomer_id($customer->id)->whereStatus('active')->first();
+if ($bookings==null) {
+    # code...
+    $result['county_id']=0;
+    $result['exact_location']="";
+}
+else{
+    $result['county_id']=$bookings->county_id;
+    $result['exact_location']=$bookings->exact_location;
+
+}
+
+        }
+         $counties=\App\Counties::get();
+         $result['counties']=$counties;
+         $result['error']=false;
+    return $result;
+
+}
+
+public function updateaccount(Request $request){
+
+    $phone=$request->input('phone');
+    $name=$request->input('name');
+    $county_id=$request->input('county_id');
+    $email=$request->input('email');
+    $exactlocation=$request->input('exactlocation');
+
+$customer=\App\Customers::wherePhone($phone)->first();
+
+if ($customer==null) {
+    # code...
+        return Array("data"=>Array("response"=>"We are currently unable to update your account.contact administrator"),"error"=>true);
+}
+
+//update booking addresses
+$array=Array("county_id"=>$county_id,"exact_location"=>$exactlocation);
+\App\Bookings::whereCustomer_id($customer->id)->update($array);
+$array=Array("name"=>$name,"email"=>$email);
+\App\User::whereId($customer->user_id)->update($array);
+   return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>false,"datas"=>\App\User::whereId($customer->user_id)->first());
+
+}
+
 
 
 }

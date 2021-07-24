@@ -520,10 +520,6 @@
       <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Promotions</p></a>
     </li>
 
-          <li class="nav-item">
-      <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Top-Ups</p></a>
-    </li>
-    
     
     
 

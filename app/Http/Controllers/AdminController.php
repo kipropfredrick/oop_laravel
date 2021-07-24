@@ -1553,16 +1553,35 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         $total_cost = ($newProduct->product_price + $shipping_cost);
 
         $balance = $total_cost - $booking->amount_paid;
+          $customer = \App\Customers::where('id',$booking->customer_id)->first();
 
-        \App\Bookings::where('id','=',$booking->id)->update([
+       if ($balance>0) {
+           # code...
+         \App\Bookings::where('id','=',$booking->id)->update([
                         "product_id"=>$newProduct->id,
                         "balance"=>$balance,
                         "shipping_cost"=>$shipping_cost,
                         "item_cost"=>$newProduct->product_price,
                         "total_cost"=>$total_cost
                         ]);
+       }
+       else{
+ \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>0,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        'status'=>"complete",
+                        "total_cost"=>$total_cost
+                        ]);
 
-        $customer = \App\Customers::where('id',$booking->customer_id)->first();
+$objuser=\App\User::whereId($customer->user_id);
+$firstobjuser=$objuser->first();
+$totalbal=intval($firstobjuser->balance)+ ($balance *-1);
+$objuser->update(['balance'=>$totalbal]);
+       }
+
+      
 
         $message = "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).". Use Paybill 4040299 and Account Number ".$booking->booking_reference.". Thank you.";
 
@@ -2688,7 +2707,7 @@ if ($checkifexists==null) {
     else{
     $obj = new pushNotification();
     $data=Array("name"=>"discount", "value"=>"Get discount");
-    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
 
     $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
 DB::table("discountnotification")->insert($array);
@@ -2775,7 +2794,7 @@ foreach ($topups as $key => $value) {
     $value->user=\App\User::whereId($value->sender)->first();
     $value->customer=\App\Customers::whereUser_id($value->sender)->first();
 }
-$title="Account Top-Ups";
+$title="Wallet Top-Ups";
 
 return view("backoffice.topups.topups",compact('topups','title'));
 
@@ -2787,7 +2806,7 @@ foreach ($topups as $key => $value) {
     $value->user=\App\User::whereId($value->sender)->first();
     $value->customer=\App\Customers::whereUser_id($value->sender)->first();
 }
- $title="Account Withdrawals";
+ $title="Airtime Purchases";
 
 return view("backoffice.topups.topups",compact('topups','title'));
     }

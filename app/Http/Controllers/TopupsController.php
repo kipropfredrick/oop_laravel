@@ -10,6 +10,7 @@ use App\topups;
 use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\pushNotification;
+use Carbon\Carbon;
 class TopupsController extends Controller
 {
     //
@@ -19,7 +20,7 @@ public function balances(Request $request){
   $customers=Customers::wherePhone($phone)->first();
 
 if($customers==null){
-return Array("data"=>Array("response"=>"Account Association Failed.contact support"),"error"=>true);
+return Array("data"=>Array("response"=>"Account association failed. Contact support."),"error"=>true);
 }
 
 $user_id=$customers->user_id;
@@ -46,14 +47,14 @@ function maketopups(Request $request){
 
 
   if ($customers==null) {
-  	return Array("data"=>Array("response"=>"Cannot make topups.contact support"),"error"=>true);
+  	return Array("data"=>Array("response"=>"We are unbale to process your request.contact support"),"error"=>true);
   	# code...
   }
 $sender=$customers->user_id;
 $balance=\App\User::whereId($sender)->first();
 
 if ($balance->mosmosid==null) {
-	  	return Array("data"=>Array("response"=>"Your Account Was Not linked properly. contact administrator"),"error"=>true);
+	  	return Array("data"=>Array("response"=>"Your account was not linked properly. Contact support."),"error"=>true);
 	# code...
 }
 // $balance=intval($balance->balance)+$request->amount;
@@ -65,10 +66,10 @@ if ($balance->mosmosid==null) {
 $obj=new autApi();
 $result=$obj->stk_push($request->amount,$phone,$balance->mosmosid);
 if($result['success']){
-return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa pin to complete"),"error"=>false);	
+return Array("data"=>Array("response"=>"Payment request sent. Enter your M-pesa PIN to complete the transaction."),"error"=>false);	
 }
 else{
-return Array("data"=>Array("response"=>"An error Occured processing your request, try again later"),"error"=>true);	
+return Array("data"=>Array("response"=>"An error occurred processing your request, try again later."),"error"=>true);	
 }
 
 }
@@ -101,7 +102,7 @@ $mobilerec="+".$mobileInput;
 
 if ($amount<5) {
   # code...
-  return Array("data"=>Array("response"=>"Minimum Top Up is ksh.5"),"error"=>true);
+  return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
 }
 
 
@@ -111,18 +112,18 @@ if ($amount<5) {
 
 $result=$obj->stk_push($request->amount,$phone,substr($mobilerec, 1));
 if($result['success']){
-return Array("data"=>Array("response"=>"Payment Request Send. Enter your mpesa pin to complete"),"error"=>false); 
+return Array("data"=>Array("response"=>"Payment request sent. Enter your M-pesa PIN to complete the transaction."),"error"=>false); 
 }
 else{
-return Array("data"=>Array("response"=>"An error Occured processing your request, try again later"),"error"=>true); 
+return Array("data"=>Array("response"=>"An error occurred processing your request, try again later."),"error"=>true); 
 }
-return Array("data"=>Array("response"=>"pesa topup was successful"),"error"=>false);
+return Array("data"=>Array("response"=>"M-pesa top-up was successful. Thank you."),"error"=>false);
 
   }else {
 
   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
-  	return Array("data"=>Array("response"=>"Cannot make Redemtion.contact support"),"error"=>true);
+  	return Array("data"=>Array("response"=>"Can not make redemption. Contact support."),"error"=>true);
   	# code...
   }
 $main=DB::table('users')->whereId($customers->user_id);
@@ -132,7 +133,7 @@ $sendamount=intval($request->input("amount"));
 $amount=intval($request->input("amount"));
 if ($amount>intval($balance)) {
     # code...
-	return Array("data"=>Array("response"=>"You Have Insufficient Balance in your wallet account"),"error"=>true);
+	return Array("data"=>Array("response"=>"You have insufficient balance in your Lipa Mos Mos wallet."),"error"=>true);
     
 }
 //return $result;
@@ -144,7 +145,7 @@ if ($amount>intval($balance)) {
 
 if (!$airtime) {
     # code...
-    return Array("data"=>Array("response"=>"mobile number format not supported"),"error"=>true);
+    return Array("data"=>Array("response"=>"The phone number format is not supported. Please try again."),"error"=>true);
    
 }
 
@@ -193,6 +194,59 @@ else{
 
 
 }
+}
+
+function refreshpayment(Request $request){
+
+
+$phone=$request->phone;
+$customer=\App\Customers::wherePhone($phone)->first();
+
+if ($customer==null) {
+
+   return Array("data"=>Array("response"=>"An error occured processsing your payment"),"error"=>true);
+  # code...
+}
+else{
+
+$booking=\App\Bookings::whereCustomer_id($customer->id)->whereStatus('active')->first();
+if ($booking==null) {
+  # code...
+   return Array("data"=>Array("response"=>"An error occured processsing your payment"),"error"=>true);
+}
+else{
+
+  $payments=\App\Payments::whereBooking_id($booking->id)->latest()->first();
+
+if ($payments==null) {
+  # code...
+   return Array("data"=>Array("response"=>"An error occured processsing your payment"),"error"=>true);
+}
+
+else{
+    $start  = new Carbon($payments->created_at);
+$end    = new Carbon(Now());
+
+$hrs=intval($start->diff($end)->format('%H')) * 60;
+$minutes=intval($start->diff($end)->format('%I'));
+$total=$hrs+$minutes;
+
+
+if ($total<3) {
+  # code...
+    return Array("data"=>Array("response"=>"PYour payment has been received."),"error"=>false);
+}
+else{
+  return Array("data"=>Array("response"=>"No payment received. Please try again"),"error"=>true);
+}
+
+}
+
+}
+
+}
+
+
 }
 
 }
