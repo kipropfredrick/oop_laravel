@@ -322,7 +322,7 @@ function myAccount(Request $request){
  function login(Request $request){
     $username=$request->input('username');
     $password=$request->input('password');
-     $valid_phone = preg_match("/^(?:\+?254|0)?(7\d{8})/", $username,$p_matches);
+     $valid_phone = preg_match("/^(?:\+?254|0)?(7|1\d{8})/", $username,$p_matches);
         //Valid email
         $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $username, $e_matches);
        
