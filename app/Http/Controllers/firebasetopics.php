@@ -69,6 +69,7 @@ if (in_array("active", $category))
     $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $user=User::whereIn("id",$users)->get();
+$devices=array();
 
 foreach ($user as $key => $value) {
 
@@ -79,12 +80,19 @@ $token=$value->token;
     }
     else{
         $count=$count+1;
-    $data=Array("name"=>"home","value"=>"home");
-    $messages = str_replace('{customerName}',$value->name, $message);
-    $obj->exceuteSendNotification($token,$messages,$title,$data);
+        array_push($devices, $token);
+
         }
 
 }
+
+return $devices;
+    $data=Array("name"=>"home","value"=>"home");
+    //$messages = str_replace('{customerName}',$value->name, $message);
+     $messages= $message;
+    $obj->exceuteSendNotificationGroup($token,$messages,$title,$data);
+
+
 
   }
    if (in_array("complete", $category))
