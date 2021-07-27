@@ -121,7 +121,7 @@ $users=User::whereIn("id",$users)->get();
 
 $devices=array();
 
-foreach ($user as $key => $value) {
+foreach ($users as $key => $value) {
 
 $token=$value->token;
     if ($token==null) {
@@ -174,7 +174,7 @@ $users=User::whereIn("id",$users)->whereNotNull("token")->get();
 
 $devices=array();
 
-foreach ($user as $key => $value) {
+foreach ($users as $key => $value) {
 
 $token=$value->token;
     if ($token==null) {
