@@ -102,7 +102,26 @@ $token=$value->token;
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->get();
 
-foreach ($users as $key => $value) {
+// foreach ($users as $key => $value) {
+
+// $token=$value->token;
+//     if ($token==null) {
+//         # code...
+
+//     }
+//     else{
+//         $count=$count+1;
+//     $data=Array("name"=>"home","value"=>"home");
+
+//    $messages = str_replace('{customerName}',$value->name, $message);
+//     $obj->exceuteSendNotification($token,$messages,$title,$data);
+//         }
+
+// }
+
+$devices=array();
+
+foreach ($user as $key => $value) {
 
 $token=$value->token;
     if ($token==null) {
@@ -111,13 +130,20 @@ $token=$value->token;
     }
     else{
         $count=$count+1;
-    $data=Array("name"=>"home","value"=>"home");
+        array_push($devices, $token);
 
-   $messages = str_replace('{customerName}',$value->name, $message);
-    $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
 
 }
+
+
+    $data=Array("name"=>"home","value"=>"home");
+    //$messages = str_replace('{customerName}',$value->name, $message);
+     $messages= $message;
+    $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);
+
+
+
 
 
   }
@@ -128,7 +154,27 @@ $token=$value->token;
 $users=User::whereIn("id",$users)->whereNotNull("token")->get();
 
 
-foreach ($users as $key => $value) {
+// foreach ($users as $key => $value) {
+
+// $token=$value->token;
+//     if ($token==null) {
+//         # code...
+
+//     }
+//     else{
+//         $count=$count+1;
+//     $data=Array("name"=>"home","value"=>"home");
+//     // $obj->exceuteSendNotification($token,$message,$title,$data);
+
+//        $messages = str_replace('{customerName}',$value->name, $message);
+//     $obj->exceuteSendNotification($token,$messages,$title,$data);
+//         }
+
+// }
+
+$devices=array();
+
+foreach ($user as $key => $value) {
 
 $token=$value->token;
     if ($token==null) {
@@ -137,14 +183,20 @@ $token=$value->token;
     }
     else{
         $count=$count+1;
-    $data=Array("name"=>"home","value"=>"home");
-    // $obj->exceuteSendNotification($token,$message,$title,$data);
+        array_push($devices, $token);
 
-       $messages = str_replace('{customerName}',$value->name, $message);
-    $obj->exceuteSendNotification($token,$messages,$title,$data);
         }
 
 }
+
+
+    $data=Array("name"=>"home","value"=>"home");
+    //$messages = str_replace('{customerName}',$value->name, $message);
+     $messages= $message;
+    $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);
+
+
+
   }
 
         }
