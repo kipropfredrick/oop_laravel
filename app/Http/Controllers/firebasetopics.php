@@ -86,11 +86,11 @@ $token=$value->token;
 
 }
 
-return $devices;
+
     $data=Array("name"=>"home","value"=>"home");
     //$messages = str_replace('{customerName}',$value->name, $message);
      $messages= $message;
-    $obj->exceuteSendNotificationGroup($token,$messages,$title,$data);
+    $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);
 
 
 
