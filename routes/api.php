@@ -73,6 +73,9 @@ Route::post('/redeem','TopupsController@redeem');
 
 Route::post('/refreshpayment','TopupsController@refreshpayment');
 
+Route::get('/BillsPayment','TopupsController@BillsPayment');
+
+
 
 
 
