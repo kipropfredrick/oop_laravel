@@ -301,12 +301,7 @@ else{
     # code...
   }
   // 
-$main=DB::table('users')->whereId($customers->user_id);
-$bal=$main->first()->balance;
-if ($bal<$amount) {
-  # code...
-   return Array("data"=>Array("response"=>"Your account balance is issuficient"),"error"=>true);
-}
+
 
 
 
@@ -366,6 +361,13 @@ return Array("data"=>Array("response"=>"An error occurred processing your reques
 return Array("data"=>Array("response"=>"M-pesa top-up was successful. Thank you."),"error"=>false);
 
   }
+
+  $main=DB::table('users')->whereId($customers->user_id);
+$bal=$main->first()->balance;
+if ($bal<$amount) {
+  # code...
+   return Array("data"=>Array("response"=>"Your account balance is issuficient"),"error"=>true);
+}
   
 
   if ($payfor=="airtime") {
