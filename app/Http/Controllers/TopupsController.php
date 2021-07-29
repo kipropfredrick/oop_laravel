@@ -259,7 +259,7 @@ $biller_name=$request->biller_name;
 $payfor=$request->payfor;
 $account=$request->accountno;
 
-
+return $this->createTransaction($account,$amount,$biller_name,$phone);
 
 if ($amount<5) {
   # code...
