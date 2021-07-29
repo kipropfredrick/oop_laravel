@@ -31,7 +31,7 @@ foreach ($transactions as $key => $value) {
 	# code...
 	$value->date=$value->created_at->toDateTimeString();
 	$value->amount=intval($value->amount);
-}
+} 
 $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance);
 
 
@@ -251,29 +251,132 @@ else{
 
 
 function BillsPayment(Request $request){
-// $datastring = "vid=nelmasoft";
-// $hashkey = "@HggUuvzH2#JmvqnhD9W9Xr*zz5P*796";
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/billing/account/balance";
+
+$type=$request->type;
+$amount=intval($request->input("amount"));
+$phone=$request->phone;
+$biller_name=$request->biller_name;
+$payfor=$request->payfor;
+$account=$request->accountno;
 
 
-//   $datastring = "prefix=011&vid=nelmasoft";
-// $hashkey = "@HggUuvzH2#JmvqnhD9W9Xr*zz5P*796";
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/billing/account/balance";
 
-// $datastring = "account=14253115639&account_type=kplc_prepaid&vid=nelmasoft";
-// $hashkey = "@HggUuvzH2#JmvqnhD9W9Xr*zz5P*796";
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/billing/account/balance";  
-  $amount=55;
-  $account="4567";
-  $biller_name="kplc_prepaid";
-  $phone="0790535349";
-  $prefix="790";
+if ($amount<5) {
+  # code...
+  return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
+}
+
+if ($payfor=="airtime") {
+  # code...
+  $ismobileformatted=false;
+$account=$request->input('sendmobile');
+    $pattern = "/^(0)\d{9}$/";
+$pattern1 = "/^(254)\d{9}$/";
+$pattern2 = "/^(\+254)\d{9}$/";
+if (preg_match($pattern, $account)) {
+  # code...
+    $ismobileformatted=true;
+  $accountno=$account;
+}
+else if(preg_match($pattern2, $account)){
+    $ismobileformatted=true;
+$accountno="0".substr($account, 4);
+}
+else if(preg_match($pattern1, $account)){
+    $ismobileformatted=true;
+$accountno="0".substr($account, 3);
+}
+else{
+    return Array("data"=>Array("response"=>"Phone number not supported"),"error"=>true);
+}
+
+
+}
+
+
+//check if user exist
+   $customers=Customers::wherePhone($phone)->first();
+  if ($customers==null) {
+    return Array("data"=>Array("response"=>"Error purchasing airtime contact our support team"),"error"=>true);
+    # code...
+  }
+  // 
+$main=DB::table('users')->whereId($customers->user_id);
+$bal=$main->first()->balance;
+if ($bal<$amount) {
+  # code...
+   return Array("data"=>Array("response"=>"Your account balance is issuficient"),"error"=>true);
+}
+
+
+
+
+  if ($type=="mpesa") {
+    # code...
+    $obj=new autApi();
+    if ($payfor=='airtime') {
+      # code...
+      $result=$obj->stk_push($request->amount,$phone,"254".substr($accountno, 1));
+    }
+    else{
+
+if ($biller_name=="kplc_prepaid") {
+  # code...
+  $accountno="PP".$account;
+}
+else if ($biller_name=="kplc_postpaid") {
+  # code...
+    $accountno="PS".$account;
+}
+else if ($biller_name=="zuku") {
+  # code...
+    $accountno="ZU".$account;
+}
+else if ($biller_name=="startimes") {
+  # code...
+    $accountno="ST".$account;
+}
+else if ($biller_name=="gotv") {
+  # code...
+    $accountno="GO".$account;
+}
+else if ($biller_name=="dstv") {
+  # code...
+      $accountno="DS".$account;
+}
+else if ($biller_name=="nairobi_water") {
+  # code...
+        $accountno="NW".$account;
+}
+else{
+  return Array("data"=>Array("response"=>"Biller Not Supported ."),"error"=>true); 
+}
+
+$result=$obj->stk_push($request->amount,$phone,$accountno);
+
+    }
+
+
+if($result['success']){
+return Array("data"=>Array("response"=>"Payment request sent. Enter your M-pesa PIN to complete the transaction."),"error"=>false); 
+}
+else{
+return Array("data"=>Array("response"=>"An error occurred processing your request, try again later."),"error"=>true); 
+}
+return Array("data"=>Array("response"=>"M-pesa top-up was successful. Thank you."),"error"=>false);
+
+  }
   
 
-$response= json_decode($this->createTransaction($account,$amount,$biller_name,$phone));
+  if ($payfor=="airtime") {
+    # code...
+    $response= json_decode($this->createTransaction($accountno,$amount,$biller_name,$phone));
+  }
+  else{
+   $response= json_decode($this->createTransaction($account,$amount,$biller_name,$phone)); 
+  }
+
+
 //return response()->json($response);
 if (isset($response->error)) {
   # code...
@@ -281,7 +384,36 @@ if (isset($response->error)) {
     return Array("data"=>Array("response"=>is_array($response->error)?$response->error[0]->text:$response->error->error),"error"=>true);
 }
 else{
-  return "ok";
+  //update the account
+$balance=$main->first()->balance;
+$sender=$customers->user_id;
+$sendamount=intval($request->input("amount"));
+$amount=intval($request->input("amount"));
+//
+
+
+      $main->update(["balance"=>intval($balance)-$amount]);
+
+$balance=\App\User::whereId($sender)->first();
+$balance=intval($balance->balance);
+
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TA'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
+
+  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
+
 }
 
 //return $this->phonelookup($prefix);
@@ -392,5 +524,9 @@ return $result;
 
 }
 
+
+
 }
+
+
 

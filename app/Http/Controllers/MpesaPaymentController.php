@@ -19,6 +19,7 @@ use App\User;
 use App\Customers;
 use App\topups;
 use App\Http\Controllers\autApi;
+use App\Http\Controllers\TopupsController;
 
 class MpesaPaymentController extends Controller
 {
@@ -404,7 +405,119 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 }
 
 
-            }      
+            }    
+
+$pp="/PP/i";
+$ps="/PS/i";
+$zu="/ZU/i";
+$st="/ST/i";
+$go="/GO/i";
+$ds="/DS/i";
+$nw="/NW/i";
+if (preg_match($pp,$bill_ref_no) || preg_match($ps,$bill_ref_no) || preg_match($zu,$bill_ref_no) ||
+ preg_match($st,$bill_ref_no) || preg_match($go,$bill_ref_no) || preg_match($ds,$bill_ref_no) || preg_match($nw,$bill_ref_no)) {
+$biller_name="";
+$account=substr($bill_ref_no, 2);
+
+    if (preg_match($pp,$bill_ref_no) ) {
+        # code...
+        $biller_name="kplc_prepaid";
+    }
+    else if (preg_match($ps,$bill_ref_no) ) {
+        # code...
+        $biller_name="kplc_postpaid";
+    }
+      else if (preg_match($zu,$bill_ref_no) ) {
+        # code...
+        $biller_name="zuku";
+    }
+      else if (preg_match($st,$bill_ref_no) ) {
+        # code...
+        $biller_name="startimes";
+    }
+      else if (preg_match($go,$bill_ref_no) ) {
+        # code...
+        $biller_name="gotv";
+    }
+      else if (preg_match($ds,$bill_ref_no) ) {
+        # code...
+        $biller_name="dstv";
+    }
+      else if (preg_match($nw,$bill_ref_no) ) {
+        # code...
+        $biller_name="nairobi_water";
+    }
+
+    $userid="new";
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+
+    $obj= new TopupsController();
+   $response= json_decode($obj->createTransaction($account,$transaction_amount,$biller_name,"0".substr(3, $msisdn)));
+
+Log::info($response);
+if (isset($response->error)) {
+
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+
+$user=\App\User::whereId($userid);
+$obj=$user->first();
+if($obj!=null){
+    $balance=$obj->balance;
+$balance=$balance+$transaction_amount;
+$user->update(["balance"=>$balance]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TT'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id);
+\App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($user->first()->token,"Your airtime purchase request was not successful. The amount has been credited back to your Lipa Mos Mos wallet.","Airtime purchase failed",$data);
+
+}
+
+   return 0;
+
+
+}
+
+    else{
+
+
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>$biller_name);
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"paybil payment received. ".$sendamount."Thank you.","Transaction successful. ",$data);
+
+  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
+
+    }
+
+    # code...
+}
+
+
+
 
             $existingLog = \App\PaymentLog::where('TransID',$transaction_id)->first();
 
@@ -1170,5 +1283,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
        }
 
     }
+
+
 
 }
