@@ -458,7 +458,7 @@ if ($customer!=null) {
 }
 
     $obj= new TopupsController();
-   $response= json_decode($obj->createTransaction('1234',"10",'zuku','254790535349'));
+   $response= json_decode($obj->createTransaction('1234',"10",'zuku',"0".substr(3, $msisdn)));
 
 Log::info(json_encode($response));
 if (isset($response->error)) {
