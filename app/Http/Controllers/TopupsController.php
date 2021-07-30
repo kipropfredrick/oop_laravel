@@ -260,6 +260,8 @@ $biller_name=$request->biller_name;
 $account=$request->accountno;
 // return $this->getAccountBalance();
 
+ return Array("data"=>Array("response"=>"Error purchasing airtime contact our support team".$amount),"error"=>true);
+
 // return $this->createTransaction($account,$amount,$biller_name,$phone);
 
 if ($amount<5) {
