@@ -253,14 +253,13 @@ else{
 function BillsPayment(Request $request){
 
 $type=$request->paymenttype;
-$amount=intval($request->input("amount"));
+$amount=10;
+//intval($request->input("amount"));
 $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
-// return $this->getAccountBalance();
 
- return Array("data"=>Array("response"=>"Error purchasing airtime contact our support team".$amount),"error"=>true);
 
 // return $this->createTransaction($account,$amount,$biller_name,$phone);
 
