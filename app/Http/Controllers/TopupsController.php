@@ -252,46 +252,47 @@ else{
 
 function BillsPayment(Request $request){
 
-$type=$request->type;
+$type=$request->paymenttype;
 $amount=intval($request->input("amount"));
 $phone=$request->phone;
 $biller_name=$request->biller_name;
-$payfor=$request->payfor;
+// $payfor=$request->payfor;
 $account=$request->accountno;
+// return $this->getAccountBalance();
 
-//return $this->createTransaction($account,$amount,$biller_name,$phone);
+// return $this->createTransaction($account,$amount,$biller_name,$phone);
 
 if ($amount<5) {
   # code...
   return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
 }
 
-if ($payfor=="airtime") {
-  # code...
-  $ismobileformatted=false;
-$account=$request->input('sendmobile');
-    $pattern = "/^(0)\d{9}$/";
-$pattern1 = "/^(254)\d{9}$/";
-$pattern2 = "/^(\+254)\d{9}$/";
-if (preg_match($pattern, $account)) {
-  # code...
-    $ismobileformatted=true;
-  $accountno=$account;
-}
-else if(preg_match($pattern2, $account)){
-    $ismobileformatted=true;
-$accountno="0".substr($account, 4);
-}
-else if(preg_match($pattern1, $account)){
-    $ismobileformatted=true;
-$accountno="0".substr($account, 3);
-}
-else{
-    return Array("data"=>Array("response"=>"Phone number not supported"),"error"=>true);
-}
+// if ($payfor=="airtime") {
+//   # code...
+//   $ismobileformatted=false;
+// $account=$request->input('sendmobile');
+//     $pattern = "/^(0)\d{9}$/";
+// $pattern1 = "/^(254)\d{9}$/";
+// $pattern2 = "/^(\+254)\d{9}$/";
+// if (preg_match($pattern, $account)) {
+//   # code...
+//     $ismobileformatted=true;
+//   $accountno=$account;
+// }
+// else if(preg_match($pattern2, $account)){
+//     $ismobileformatted=true;
+// $accountno="0".substr($account, 4);
+// }
+// else if(preg_match($pattern1, $account)){
+//     $ismobileformatted=true;
+// $accountno="0".substr($account, 3);
+// }
+// else{
+//     return Array("data"=>Array("response"=>"Phone number not supported"),"error"=>true);
+// }
 
 
-}
+// }
 
 
 //check if user exist
@@ -309,12 +310,6 @@ else{
   if ($type=="mpesa") {
     # code...
     $obj=new autApi();
-    if ($payfor=='airtime') {
-      # code...
-      $result=$obj->stk_push($request->amount,$phone,"254".substr($accountno, 1));
-    }
-    else{
-
 if ($biller_name=="kplc_prepaid") {
   # code...
   $accountno="PP".$account;
@@ -349,7 +344,7 @@ else{
 
 $result=$obj->stk_push($request->amount,$phone,$accountno);
 
-    }
+    
 
 
 if($result['success']){
@@ -369,14 +364,8 @@ if ($bal<$amount) {
    return Array("data"=>Array("response"=>"Your account balance is issuficient"),"error"=>true);
 }
   
-
-  if ($payfor=="airtime") {
-    # code...
-    $response= json_decode($this->createTransaction($accountno,$amount,$biller_name,$phone));
-  }
-  else{
    $response= json_decode($this->createTransaction($account,$amount,$biller_name,$phone)); 
-  }
+
 
 
 //return response()->json($response);
@@ -401,7 +390,7 @@ $balance=intval($balance->balance);
 
 
         for($i=0;$i<1000000;$i++){
-            $transid = 'TA'.rand(10000,99999)."M";
+            $transid = 'TB'.rand(10000,99999)."M";
             $res=\App\topups::whereTransid($transid)->first();
             if ($res==null) {             # code...
 break;  }
