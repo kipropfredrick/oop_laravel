@@ -398,6 +398,16 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
 
+    <!-- Global site tag (gtag.js) - Google Ads: 373507828 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-373507828"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-373507828');
+</script>
+
     <!-- products carousel -->
     <script type="text/javascript">
         $(document).ready(() => {

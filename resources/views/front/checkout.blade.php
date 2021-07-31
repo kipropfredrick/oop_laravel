@@ -248,6 +248,11 @@ $fill=true;
 
 @section('extra-js')
 
+<!-- Event snippet for Begin checkout conversion page -->
+<script>
+  gtag('event', 'conversion', {'send_to': 'AW-373507828/_wLlCJm0luACEPSNjbIB'});
+</script>
+
 <script type="text/javascript">
 
     $(document).ready(function() {
