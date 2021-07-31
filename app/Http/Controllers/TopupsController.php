@@ -149,21 +149,47 @@ if (!$airtime) {
    
 }
 
-  $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
-$apiKey   =env('AFRIAPIKEY');
+//   $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
+// $apiKey   =env('AFRIAPIKEY');
 
-$AT       = new AfricasTalking($username, $apiKey);
+// $AT       = new AfricasTalking($username, $apiKey);
 
-$airtime = $AT->airtime();
-$array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
-'currencyCode' => "KES",
-'amount' => $sendamount)]);
+// $airtime = $AT->airtime();
+// $array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
+// 'currencyCode' => "KES",
+// 'amount' => $sendamount)]);
 
-$result   = $airtime->send($array);
-\Log::info(json_encode($result));
+$response= json_decode($this->phonelookup(substr($mobilerec,4, 3)));
+
+if (isset($response->data)) {
+  # code...
+  $operator= $response->data->operator;
+}
+else{
+
+  return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
+
+}
+  $response= json_decode($this->createTransaction("0".substr($mobilerec, 4),10,$operator,$phone));
+
+if (isset($response->data)) {
+  # code...
+  $operator= $response->data->operator;
+}
+else{
+
+  return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
+
+}
+  $response= json_decode($this->createTransaction($mobilerec,$amount,$biller_name,$phone));
+// $result   = $airtime->send($array);
+\Log::info(json_encode($response));
 // return back()->with("error","An Error Occured, check details and Try Again");
 
-if ($result['data']->errorMessage=="None") {
+
+
+
+if (!isset($response->error)) {
     $main->update(["balance"=>intval($balance)-$amount]);
 
 $balance=\App\User::whereId($sender)->first();
@@ -188,7 +214,8 @@ break;  }
 
 }
 else{
-   return Array("data"=>Array("response"=>$result['data']),"error"=>true);
+   //return Array("data"=>Array("response"=>$result['data']),"error"=>true);
+   return Array("data"=>Array("response"=>is_array($response->error)?$response->error[0]->text:$response->error->error),"error"=>true);
     
 }
 
@@ -259,6 +286,7 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
+
 
 
 // return $this->createTransaction($account,$amount,$biller_name,$phone);
