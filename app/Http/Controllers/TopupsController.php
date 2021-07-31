@@ -158,7 +158,8 @@ if (!$airtime) {
 // $array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
 // 'currencyCode' => "KES",
 // 'amount' => $sendamount)]);
-
+ return Array("data"=>Array("response"=>"An error occurred. Please try again."),"error"=>true);
+   
 $response= json_decode($this->phonelookup(substr($mobilerec,4, 3)));
 
 if (isset($response->data)) {
@@ -280,16 +281,16 @@ else{
 function BillsPayment(Request $request){
 
 $type=$request->paymenttype;
-$amount=10;
-//intval($request->input("amount"));
+$amount=intval($request->input("amount"));;
+//
 $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
 
+//return $this->getAccountBalance();
 
 
-// return $this->createTransaction($account,$amount,$biller_name,$phone);
 
 if ($amount<5) {
   # code...
