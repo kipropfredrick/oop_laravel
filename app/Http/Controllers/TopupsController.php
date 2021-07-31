@@ -170,17 +170,17 @@ else{
   return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
 
 }
-  $response= json_decode($this->createTransaction("0".substr($mobilerec, 4),10,$operator,$phone));
+//   $response= json_decode($this->createTransaction("0".substr($mobilerec, 4),10,$operator,$phone));
 
-if (isset($response->data)) {
-  # code...
-  $operator= $response->data->operator;
-}
-else{
+// if (isset($response->data)) {
+//   # code...
+//   $operator= $response->data->operator;
+// }
+// else{
 
-  return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
+//   return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
 
-}
+// }
   $response= json_decode($this->createTransaction($mobilerec,$amount,$biller_name,$phone));
 // $result   = $airtime->send($array);
 \Log::info(json_encode($response));
