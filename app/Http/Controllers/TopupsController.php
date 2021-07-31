@@ -181,7 +181,7 @@ else{
 //   return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
 
 // }
-  $response= json_decode($this->createTransaction($mobilerec,$amount,$operator,$phone));
+  $response= json_decode($this->createTransaction(substr("0".$mobilerec, 4),$amount,$operator,$phone));
 // $result   = $airtime->send($array);
 \Log::info(json_encode($response));
 // return back()->with("error","An Error Occured, check details and Try Again");
