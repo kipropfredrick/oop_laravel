@@ -167,7 +167,7 @@ if (isset($response->data)) {
 }
 else{
 
-  return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
+  return Array("data"=>Array("response"=>"Mobile Operator Not Supported".substr($mobilerec,4, 3)),"error"=>true);
 
 }
   $response= json_decode($this->createTransaction("0".substr($mobilerec, 4),10,$operator,$phone));
