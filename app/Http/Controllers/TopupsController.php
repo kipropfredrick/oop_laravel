@@ -123,7 +123,7 @@ return Array("data"=>Array("response"=>"M-pesa top-up was successful. Thank you.
 
   $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
-  	return Array("data"=>Array("response"=>"Can not make redemption. Contact support."),"error"=>true);
+  	return Array("data"=>Array("response"=>"An error occured try again."),"error"=>true);
   	# code...
   }
 $main=DB::table('users')->whereId($customers->user_id);
@@ -158,7 +158,6 @@ if (!$airtime) {
 // $array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
 // 'currencyCode' => "KES",
 // 'amount' => $sendamount)]);
- return Array("data"=>Array("response"=>"An error occurred. Please try again."),"error"=>true);
    
 $response= json_decode($this->phonelookup(substr($mobilerec,4, 3)));
 
@@ -182,7 +181,7 @@ else{
 //   return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
 
 // }
-  $response= json_decode($this->createTransaction(substr("0".$mobilerec, 4),$amount,$operator,$phone));
+  $response= json_decode($this->createTransaction(substr($mobilerec, 1),$amount,$operator,$phone));
 // $result   = $airtime->send($array);
 \Log::info(json_encode($response));
 // return back()->with("error","An Error Occured, check details and Try Again");
