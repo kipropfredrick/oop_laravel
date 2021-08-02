@@ -288,9 +288,6 @@ $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
 
-//return $this->getAccountBalance();
-
-
 
 if ($amount<5) {
   # code...
