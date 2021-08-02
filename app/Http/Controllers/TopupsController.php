@@ -286,8 +286,9 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
-
-
+//return $this->getAccountBalance();
+return $this->createTransaction("54600496308",50,"kplcprepaid","254790535349");
+return $this->checkstatus("KPLNEL3157C1627885999226518229");
 if ($amount<5) {
   # code...
   return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
@@ -536,6 +537,31 @@ $fields=Array("vid"=>$IpayId);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     // curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    $result = curl_exec($ch);
+return $result;
+
+}
+function checkstatus($reference){
+
+  $hashkey = env('IpayKey');
+$IpayId=env('IpayId');
+$datastring = "reference=".$reference."&vid=".$IpayId ;
+$hashid = hash_hmac("sha256", $datastring, $hashkey);
+$url="https://apis.ipayafrica.com/ipay-billing/transaction/check/status";  
+
+$fields=Array("vid"=>$IpayId,"hash"=>$hashid,"reference"=>$reference);
+
+
+
+// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    //curl_setopt($ch, CURLOPT_POST, 1);
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
     $result = curl_exec($ch);
 return $result;
 

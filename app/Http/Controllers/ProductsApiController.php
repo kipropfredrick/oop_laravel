@@ -71,7 +71,7 @@ for ($i=0; $i <count($result) ; $i++) {
     $ispresent=Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first();
     if ($ispresent) {
         # code...
-         $thirdcategory['icon'] = $ispresent['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->where('status','=','approved')->latest()->first()['product_image']:"download.jpg";
+         $thirdcategory['icon'] = $ispresent['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->where('status','=','approved')->latest()->first()['product_image']?Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->where('status','=','approved')->latest()->first()['product_image']:"download.jpg":"download.jpg";
          array_push($data, $thirdcategory);
     }
          
