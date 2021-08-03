@@ -122,7 +122,7 @@ $time = strtotime($lastWeek);
 
 $newformat = date('Y-m-d',$time);
 
- $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->where('date_paid',">",$newformat)->get();
+ $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->where('date_paid',"=",$newformat)->get();
  return $daypayment;
 array_push($payments, $daypayment);
 $date = new \DateTime($lastWeek);
