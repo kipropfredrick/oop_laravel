@@ -106,7 +106,33 @@ class AdminController extends Controller
 
         $customersCount = \App\Customers::count();
 
-      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount'));
+        //7 days ago - last week.
+$lastWeek = date("Y-m-d", strtotime("-7 days"));
+
+$date = new \DateTime($lastWeek);
+
+$arrayDays=[];
+$payments=[];
+for ($i=1; $i <=7 ; $i++) { 
+    $minus=-7+$i;
+$lastWeek = date("Y-m-d", strtotime($minus." days"));
+
+$daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->Where('date_paid',"=",$lastWeek)->sum('transaction_amount');
+array_push($payments, $daypayment);
+$date = new \DateTime($lastWeek);
+$day=$date->format("D");
+array_push($arrayDays, $day);
+
+
+
+}
+//return $payments;;
+
+        $days=json_encode($arrayDays);
+        $bookings=json_encode($payments);
+
+
+      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings'));
 
     }
 

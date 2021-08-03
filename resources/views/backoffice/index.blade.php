@@ -488,6 +488,69 @@ $hasbooking=false;
 
         @endif
       </div><!-- /.container-fluid -->
+ 
+
+      <div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">Bookings</div>
+                <div class="panel-body">
+                    <canvas id="canvas" height="280" width="600"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+    var days = <?php echo $days; ?>;
+    var bookings = <?php echo $bookings; ?>;
+    var myColors = ['red', 'green', 'blue'];
+    var barChartData = {
+        labels: days,
+        datasets: [{
+            label: 'Bookings',
+         fill: false,
+            data: bookings
+        },
+
+        {
+          label:"Unique Customers",
+    fill: false,
+   borderColor: "#bae755",
+   backgroundColor: "#e755ba",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+            data: [20,60,78,48]
+        }]
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myBar = new Chart(ctx, {
+            type: 'line',
+            data: barChartData,
+            options: {
+                elements: {
+                    rectangle: {
+                        borderWidth: 2,
+                        borderColor: '#c1c1c1',
+                        borderSkipped: 'bottom'
+                    }
+                },
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Bookings Analysis (last 7 days)'
+                }
+            }
+        });
+    };
+</script>
     </section>
     <!-- /.content -->
 @endsection
