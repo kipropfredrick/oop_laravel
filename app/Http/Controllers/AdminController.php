@@ -126,7 +126,7 @@ array_push($arrayDays, $day);
 
 
 }
-//return $payments;;
+return $payments;;
 
         $days=json_encode($arrayDays);
         $bookings=json_encode($payments);
