@@ -526,8 +526,8 @@ $hasbooking=false;
         {
           label:"Unique Customers",
     fill: false,
-   borderColor: "#bae755",
-   backgroundColor: "#e755ba",
+   borderColor: "#2CB34A",
+   backgroundColor: "#2CB34A",
    pointBackgroundColor: "#55bae7",
    pointBorderColor: "#55bae7",
    pointHoverBackgroundColor: "#55bae7",
