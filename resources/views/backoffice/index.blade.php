@@ -510,8 +510,8 @@ $hasbooking=false;
             </div>
         </div>
 
-         <div class="col-md-5 offset-md-0 card ml-1">
-            <div class="panel panel-default">
+         <div class="col-md-6 offset-md-0 card">
+            <div class="panel panel-default ml-2">
             
                 <div class="panel-body">
                     <canvas id="canvas2" height="280" width="600"></canvas>
