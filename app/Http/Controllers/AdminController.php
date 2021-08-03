@@ -2944,4 +2944,52 @@ $array=Array("date"=>$currentday,"total"=>$daypayment,"unique"=>$uniquecustomers
     return view('backoffice.aggregate.all',compact('payments','year','month'));
 
 }
+
+function agairtime(Request $request){
+
+   $payments=[];
+
+    $now = new \DateTime('now');
+   $month = $now->format('m');
+   $year = $now->format('Y');
+   if (isset($request->month)) {
+       # code...
+$month=$request->month;
+$year=$request->year;
+   }
+
+
+$days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
+
+$firstday=$year."-".$month."-"."00";
+for ($i=0; $i <$days ; $i++) { 
+    $j=$i+1;
+  $currentday=date('Y-m-d', strtotime($firstday. ' + '.$j.' days'));
+
+  if (Now()<$currentday) {
+      # code...
+    break;
+  }
+
+
+ // $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->sum('transaction_amount');
+
+ $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->sum('amount');
+
+  // $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime'])->sum('amount');
+
+  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->distinct('sender')->count();
+
+$array=Array("date"=>$currentday,"total"=>$dayairtime,"unique"=>$uniquecustomers);
+ array_push($payments, $array);
+}
+
+
+
+
+
+
+    return view('backoffice.aggregate.airtime',compact('payments','year','month'));
+
+}
 }

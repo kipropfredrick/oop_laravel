@@ -340,7 +340,7 @@
                 </a>
               </li>
                <li class="nav-item">
-                <a href="/admin/payments" class="nav-link">
+                <a href="{{route('admin.agairtime')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Airtime (Daily aggregate)</p>
                 </a>
