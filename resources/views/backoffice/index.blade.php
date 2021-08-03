@@ -535,8 +535,8 @@ $hasbooking=false;
         datasets: [{
             label: 'Bookings',
          fill: false,
-          borderColor: "#F68B1E",
-   backgroundColor: "#F68B1E",
+          borderColor: "#1E22A9",
+   backgroundColor: "#1E22A9",
    pointBackgroundColor: "#ED1C24",
    pointBorderColor: "#ED1C24",
    pointHoverBackgroundColor: "#ED1C24",
