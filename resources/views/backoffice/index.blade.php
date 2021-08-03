@@ -496,7 +496,7 @@ $hasbooking=false;
         <div class="col-md-12 offset-md-0 card m-2">
             <div class="panel panel-default">
                                <div class="panel-body">
-                    <canvas id="canvas" height="100" width="400"></canvas>
+                    <canvas id="canvas" height="125" width="400"></canvas>
                 </div>
             </div>
         </div>
