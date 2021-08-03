@@ -330,25 +330,25 @@
               <li class="nav-item">
                 <a href="{{route('admin.agall')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>All (Total Daily aggregate)</p>
+                  <p>All</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('admin.agbookings')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Bookings (Daily aggregate)</p>
+                  <p>Bookings</p>
                 </a>
               </li>
                <li class="nav-item">
                 <a href="{{route('admin.agairtime')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Airtime (Daily aggregate)</p>
+                  <p>Airtime</p>
                 </a>
               </li>
                <li class="nav-item">
-                <a href="/admin/payments" class="nav-link">
+                <a href="{{route('admin.agutility')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Utilities (Daily aggregate)</p>
+                  <p>Utilities</p>
                 </a>
               </li>
             </ul>
