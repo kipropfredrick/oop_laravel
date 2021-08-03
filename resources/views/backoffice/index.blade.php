@@ -528,6 +528,7 @@ $hasbooking=false;
     var days = <?php echo $days; ?>;
     var bookings = <?php echo $bookings; ?>;
     var customers=<?php echo $ucustom; ?>;
+      var airtime=<?php echo $airtime; ?>;
     var myColors = ['red', 'green', 'blue'];
     var barChartData = {
         labels: days,
@@ -556,6 +557,24 @@ $hasbooking=false;
         }]
     };
 
+
+        var airtimeData = {
+        labels: days,
+        datasets: [{
+            label: 'Airtime',
+         fill: false,
+          borderColor: "#F68B1E",
+   backgroundColor: "#F68B1E",
+   pointBackgroundColor: "#ED1C24",
+   pointBorderColor: "#ED1C24",
+   pointHoverBackgroundColor: "#ED1C24",
+   pointHoverBorderColor: "#ED1C24",
+            data: airtime
+        },
+
+     ]
+    };
+
     window.onload = function() {
         var ctx = document.getElementById("canvas").getContext("2d");
         window.myBar = new Chart(ctx, {
@@ -581,7 +600,7 @@ $hasbooking=false;
             var ctx = document.getElementById("canvas1").getContext("2d");
         window.myBar = new Chart(ctx, {
             type: 'line',
-            data: barChartData,
+            data: airtimeData,
             options: {
                 elements: {
                     rectangle: {
@@ -593,7 +612,7 @@ $hasbooking=false;
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Bookings Analysis (last 7 days)'
+                    text: 'Airtime Purchases (last 7 days)'
                 }
             }
         });
