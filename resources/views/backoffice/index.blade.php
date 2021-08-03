@@ -563,8 +563,8 @@ $hasbooking=false;
         datasets: [{
             label: 'Airtime',
          fill: false,
-          borderColor: "#F68B1E",
-   backgroundColor: "#F68B1E",
+          borderColor: "#2CB34A",
+   backgroundColor: "#2CB34A",
    pointBackgroundColor: "#ED1C24",
    pointBorderColor: "#ED1C24",
    pointHoverBackgroundColor: "#ED1C24",
