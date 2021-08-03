@@ -2866,6 +2866,8 @@ function agall(Request $request){
 $month=$request->month;
 $year=$request->year;
    }
+
+
 $days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 
 $firstday=$year."-".$month."-"."00";
@@ -2896,6 +2898,6 @@ $array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"u
 
 
 
-    return view('backoffice.aggregate.all',compact('payments'));
+    return view('backoffice.aggregate.all',compact('payments','year','month'));
 }
 }
