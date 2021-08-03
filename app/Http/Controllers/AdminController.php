@@ -118,8 +118,10 @@ for ($i=1; $i <=7 ; $i++) {
 $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
 // $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->Where('date_paid',"=",$lastWeek)->sum('transaction_amount');
+$time = strtotime($lastWeek);
 
- $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->where('date_paid','2021-07-28')->get();
+$newformat = date('Y-m-d',$time);
+ $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->where('date_paid',$newformat)->get();
  return $daypayment;
 array_push($payments, $daypayment);
 $date = new \DateTime($lastWeek);
