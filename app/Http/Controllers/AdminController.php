@@ -119,7 +119,7 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
  $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->sum('transaction_amount');
 
- return $daypayment;
+
 array_push($payments, $daypayment);
 $date = new \DateTime($lastWeek);
 $day=$date->format("D");
