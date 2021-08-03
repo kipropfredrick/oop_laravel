@@ -24,7 +24,7 @@
 
 			@endif
 		</div>
-		<form action="{{route('admin.agall')}}" >
+		<form action="{{route('admin.agairtime')}}" >
 		<div class="container row mt-2">
 			<div class="col-2">
 				<label>Selected Year </label>
