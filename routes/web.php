@@ -351,6 +351,8 @@ Route::get('/monitorPayments','AdminController@monitorPayments')->name('admin.mo
 Route::get('/topups','AdminController@topups')->name('admin.topups');
 Route::get('/purchases','AdminController@purchases')->name('admin.purchases');
 Route::get('/ag-all','AdminController@agall')->name('admin.agall');
+Route::get('/ag-bookings','AdminController@agbookings')->name('admin.agbookings');
+
 
 
 

@@ -334,7 +334,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/admin/payments" class="nav-link">
+                <a href="{{route('admin.agbookings')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Bookings (Daily aggregate)</p>
                 </a>
