@@ -507,6 +507,7 @@ $hasbooking=false;
 <script>
     var days = <?php echo $days; ?>;
     var bookings = <?php echo $bookings; ?>;
+    var customers=<?php echo $ucustom; ?>;
     var myColors = ['red', 'green', 'blue'];
     var barChartData = {
         labels: days,
@@ -525,7 +526,7 @@ $hasbooking=false;
    pointBorderColor: "#55bae7",
    pointHoverBackgroundColor: "#55bae7",
    pointHoverBorderColor: "#55bae7",
-            data: [20,60,78,48]
+            data: customers
         }]
     };
 
