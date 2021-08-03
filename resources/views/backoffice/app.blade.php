@@ -318,6 +318,43 @@
 		</li>
 
 
+              <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-bookmark"></i>
+              <p>
+             &nbsp Aggregate Payments
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('admin.agall')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All (Total Daily aggregate)</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/payments" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Bookings (Daily aggregate)</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="/admin/payments" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Airtime (Daily aggregate)</p>
+                </a>
+              </li>
+               <li class="nav-item">
+                <a href="/admin/payments" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Utilities (Daily aggregate)</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+
 		<li class="nav-item">
 			<a href="/admin/payment-callbacks" class="nav-link {{ (request()->is('admin/payments-callbacks')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <p>&nbsp;Full Payment Info</p></a>
 		</li>
