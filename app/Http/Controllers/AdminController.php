@@ -115,6 +115,7 @@ $arrayDays=[];
 $payments=[];
 $ucus=[];
 $airtimepayments=[];
+$utilitypayments=[];
 for ($i=1; $i <=7 ; $i++) { 
     $minus=-7+$i;
 $lastWeek = date("Y-m-d", strtotime($minus." days"));
@@ -122,6 +123,9 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
  $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->sum('transaction_amount');
 
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup'])->sum('amount');
+
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['airtime'])->sum('amount');
+
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->distinct('customer_id')->count();
 
 
@@ -131,6 +135,7 @@ $day=$date->format("D");
 array_push($arrayDays, $day);
 array_push($ucus, $uniquecustomers);
 array_push($airtimepayments, $dayairtime);
+array_push($utilitypayments, $dayutility);
 
 
 }
@@ -140,10 +145,11 @@ array_push($airtimepayments, $dayairtime);
         $bookings=json_encode($payments);
         $ucustom=json_encode($ucus);
         $airtime=json_encode($airtimepayments);
+        $utility=json_encode($utilitypayments);
 
 
 
-      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings','ucustom','airtime'));
+      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings','ucustom','airtime','utility'));
 
     }
 

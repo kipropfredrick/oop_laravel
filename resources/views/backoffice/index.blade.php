@@ -529,14 +529,15 @@ $hasbooking=false;
     var bookings = <?php echo $bookings; ?>;
     var customers=<?php echo $ucustom; ?>;
       var airtime=<?php echo $airtime; ?>;
+      var utility=<?php echo $utility; ?>;
     var myColors = ['red', 'green', 'blue'];
     var barChartData = {
         labels: days,
         datasets: [{
             label: 'Bookings',
          fill: false,
-          borderColor: "#1E22A9",
-   backgroundColor: "#1E22A9",
+          borderColor: "#F68B1E",
+   backgroundColor: "#F68B1E",
    pointBackgroundColor: "#ED1C24",
    pointBorderColor: "#ED1C24",
    pointHoverBackgroundColor: "#ED1C24",
@@ -574,6 +575,24 @@ $hasbooking=false;
 
      ]
     };
+
+   var utilitiesData = {
+        labels: days,
+        datasets: [{
+            label: 'Utility',
+         fill: false,
+          borderColor: "#1E22A9",
+   backgroundColor: "#1E22A9",
+   pointBackgroundColor: "#ED1C24",
+   pointBorderColor: "#ED1C24",
+   pointHoverBackgroundColor: "#ED1C24",
+   pointHoverBorderColor: "#ED1C24",
+            data: utility
+        },
+
+     ]
+    };
+    
 
     window.onload = function() {
         var ctx = document.getElementById("canvas").getContext("2d");
@@ -622,7 +641,7 @@ $hasbooking=false;
             var ctx = document.getElementById("canvas2").getContext("2d");
         window.myBar = new Chart(ctx, {
             type: 'line',
-            data: barChartData,
+            data: utilitiesData,
             options: {
                 elements: {
                     rectangle: {
@@ -634,7 +653,7 @@ $hasbooking=false;
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Bookings Analysis (last 7 days)'
+                    text: 'Utility Payment (last 7 days)'
                 }
             }
         });
