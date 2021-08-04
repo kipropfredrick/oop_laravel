@@ -1241,60 +1241,112 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
         return back()->with('success','Booking removed.');
     }
 
-    public function complete_bookings(){
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('updated_at', 'DESC')->get();
+    public function complete_bookings(Request $request){
+        // $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->orderBy('updated_at', 'DESC')->get();
+
+        // foreach($bookings as $booking){
+        //     $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+        //     $booking['progress'] = $progress;
+
+        //     $payment = \App\Payments::where('booking_id','=',$booking->id)->latest()->first();
+
+        //     \Log::info('Payment Array =>'.json_encode($payment));
+
+        //     if($payment !=null){
+        //         $booking['date_completed'] = $payment->date_paid;
+        //     }else{
+        //         $booking['date_completed'] = "NULL";
+        //     }
+
+        //     if($booking->agent_code !== null){
+        //         $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
+        //         $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
+
+        //         if(isset($agent->user)){
+        //             $agent = $agent->user->name.' (Agent)';
+        //         }elseif(isset($influencer->user)){
+        //             $agent = $influencer->user->name.' (Influencer)';
+        //         }else{
+        //             $agent = "Lipa Mos Mos (Admin)";
+        //         }
+
+
+        //     }elseif($booking->vendor_code !== null){
+        //         $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+        //         if(isset($vendor->user)){
+        //             $agent = $vendor->user->name.' (Vendor)';
+        //         }else{
+        //             $agent = "Lipa Mos Mos (Admin)";
+        //         }
+        //     }elseif($booking->influencer_code !== null){
+        //         $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
+        //         if($influencer == null){
+        //             $agent = "Lipa Mos Mos (Admin)";
+        //            }else {
+        //               if(isset($influencer->user)){
+        //                 $agent = $influencer->user->name.' (Influencer)';
+        //               }
+        //            }
+        //     }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+        //        $agent = "Lipa Mos Mos (Admin)";
+        //     }
+
+
+        //     $booking['agent'] = $agent;
+
+        // }
+
+        $bookings=[];
+
+ // $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC')->get();
+ // return $bookings;
+                if($request->ajax()){
+
+              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('status','=','complete')->orderBy('updated_at', 'DESC');
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
 
-            $payment = \App\Payments::where('booking_id','=',$booking->id)->latest()->first();
-
-            \Log::info('Payment Array =>'.json_encode($payment));
-
-            if($payment !=null){
-                $booking['date_completed'] = $payment->date_paid;
-            }else{
-                $booking['date_completed'] = "NULL";
-            }
-
-            if($booking->agent_code !== null){
-                $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-
-                if(isset($agent->user)){
-                    $agent = $agent->user->name.' (Agent)';
-                }elseif(isset($influencer->user)){
-                    $agent = $influencer->user->name.' (Influencer)';
-                }else{
-                    $agent = "Lipa Mos Mos (Admin)";
-                }
-
-
-            }elseif($booking->vendor_code !== null){
+            if($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+
                 if(isset($vendor->user)){
                     $agent = $vendor->user->name.' (Vendor)';
                 }else{
                     $agent = "Lipa Mos Mos (Admin)";
                 }
-            }elseif($booking->influencer_code !== null){
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-                if($influencer == null){
-                    $agent = "Lipa Mos Mos (Admin)";
-                   }else {
-                      if(isset($influencer->user)){
-                        $agent = $influencer->user->name.' (Influencer)';
-                      }
-                   }
-            }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+
+            }else{
                $agent = "Lipa Mos Mos (Admin)";
             }
-
-
             $booking['agent'] = $agent;
 
+            //specify role
+$myrole="";
+               if(auth()->user()->role !== 'influencer'){
+
+          $myrole=ucfirst($booking->customer->user->name);
+
+                                }
+                                    if(auth()->user()->role !== 'vendor'){
+            $myrole=ucfirst($booking->agent);
+                                   }
+
+                                   $booking['myrole']=$myrole;
+
+
+                                   //item cost
+
+        $booking['item_cost']="Ksh ".number_format($booking->item_cost ?$booking->item_cost:$booking->product->product_price);
+
         }
+
+
+            return DataTables::of($bookings)->make(true);
+
+        }
+
 
 
 

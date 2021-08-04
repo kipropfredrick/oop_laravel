@@ -286,9 +286,9 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
-return $this->getAccountBalance();
-//return $this->createTransaction("54600496308",51,"kplc_prepaid","254790535349");
-return $this->checkstatus("KPLNEL3157C1628015033192738308");
+//return $this->getAccountBalance();
+///return $this->createTransaction("54600496308",201,"kplc_prepaid","254790535349");
+return $this->checkstatus("KPLNEL3157C1628074826165161763");
 if ($amount<5) {
   # code...
   return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
