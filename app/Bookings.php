@@ -32,5 +32,7 @@ public function payments(){
 public function dropoff(){
   return $this->belongsTo(NairobiDropOffs::class,'dropoff_id');
 }
-
+public function vendor(){
+  return $this->belongsTo(Vendor::class,'vendor_code','vendor_code');
+}
 }

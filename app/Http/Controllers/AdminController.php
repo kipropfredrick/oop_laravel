@@ -1103,10 +1103,39 @@ array_push($utilitypayments, $dayutility);
         return redirect('/admin/products')->with('success','Product updated.');
     }
 
-    public function active_bookings(){
+    public function active_bookings(Request $request){
 
 
-        $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC')->get();
+        // $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC')->get();
+
+        // foreach($bookings as $booking){
+        //     $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+        //     $booking['progress'] = $progress;
+
+        //     if($booking->vendor_code !== null){
+        //         $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+
+        //         if(isset($vendor->user)){
+        //             $agent = $vendor->user->name.' (Vendor)';
+        //         }else{
+        //             $agent = "Lipa Mos Mos (Admin)";
+        //         }
+
+        //     }else{
+        //        $agent = "Lipa Mos Mos (Admin)";
+        //     }
+        //     $booking['agent'] = $agent;
+
+        // }
+
+        // return view('backoffice.bookings.active',compact('bookings'));
+$bookings=[];
+
+ // $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC')->get();
+ // return $bookings;
+                if($request->ajax()){
+
+              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0)->orderBy('id', 'DESC');
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -1126,9 +1155,32 @@ array_push($utilitypayments, $dayutility);
             }
             $booking['agent'] = $agent;
 
+            //specify role
+$myrole="";
+               if(auth()->user()->role !== 'influencer'){
+
+          $myrole=ucfirst($booking->customer->user->name);
+
+                                }
+                                    if(auth()->user()->role !== 'vendor'){
+            $myrole=ucfirst($booking->agent);
+                                   }
+
+                                   $booking['myrole']=$myrole;
+
+
+                                   //item cost
+
+        $booking['item_cost']="Ksh ".number_format($booking->item_cost ?$booking->item_cost:$booking->product->product_price);
+
         }
 
-        return view('backoffice.bookings.active',compact('bookings'));
+
+            return DataTables::of($bookings)->make(true);
+
+        }
+
+          return view('backoffice.bookings.active',compact('bookings'));
     }
 
     public function influencer_active_bookings(){
@@ -1909,46 +1961,94 @@ $objuser->update(['balance'=>$totalbal]);
             return view('backoffice.bookings.unserviced',compact('bookings'));
     }
 
-    public function pending_bookings(){
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','pending')->orderBy('id', 'DESC')->get();
+    public function pending_bookings(Request $request){
+        // $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.use')->where('status','=','pending')->orderBy('id', 'DESC')->get();
+
+        // foreach($bookings as $booking){
+        //     $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+        //     $booking['progress'] = $progress;
+
+        //     if($booking->agent_code !== null){
+        //         $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
+        //         Log::info("AGENT =>".print_r($agent,1));
+        //         if($agent == null){
+        //          $agent = "Lipa Mos Mos (Admin)";
+        //         }else {
+        //             $agent = $agent->user->name.' (Agent)';
+        //         }
+        //     }elseif($booking->vendor_code !== null){
+        //         $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+        //         if($vendor == null){
+        //             $agent = "Lipa Mos Mos (Admin)";
+        //            }else {
+        //                $agent = $vendor->user->name.' (Vendor)';
+        //            }
+        //     }elseif($booking->influencer_code !== null){
+        //         $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
+        //         if($influencer == null){
+        //             $agent = "Lipa Mos Mos (Admin)";
+        //            }else {
+        //               if(isset($influencer->user)){
+        //                 $agent = $influencer->user->name.' (Influencer)';
+        //               }
+        //            }
+        //     }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+        //        $agent = "Lipa Mos Mos (Admin)";
+        //     }
+
+        //     $booking['agent'] = $agent;
+
+        // }
+        $bookings=[];
+
+             if($request->ajax()){
+
+             $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.use')->where('status','=','pending')->orderBy('id', 'DESC');
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
 
-            if($booking->agent_code !== null){
-                $agent = \App\Agents::with('user')->where('agent_code','=',$booking->agent_code)->first();
-                Log::info("AGENT =>".print_r($agent,1));
-                if($agent == null){
-                 $agent = "Lipa Mos Mos (Admin)";
-                }else {
-                    $agent = $agent->user->name.' (Agent)';
-                }
-            }elseif($booking->vendor_code !== null){
+            if($booking->vendor_code !== null){
                 $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
-                if($vendor == null){
+
+                if(isset($vendor->user)){
+                    $agent = $vendor->user->name.' (Vendor)';
+                }else{
                     $agent = "Lipa Mos Mos (Admin)";
-                   }else {
-                       $agent = $vendor->user->name.' (Vendor)';
-                   }
-            }elseif($booking->influencer_code !== null){
-                $influencer = \App\Influencer::with('user')->where('code','=',$booking->influencer_code)->first();
-                if($influencer == null){
-                    $agent = "Lipa Mos Mos (Admin)";
-                   }else {
-                      if(isset($influencer->user)){
-                        $agent = $influencer->user->name.' (Influencer)';
-                      }
-                   }
-            }elseif ($booking->vendor_code == null && $booking->agent_code == null) {
+                }
+
+            }else{
                $agent = "Lipa Mos Mos (Admin)";
             }
-
             $booking['agent'] = $agent;
+
+            //specify role
+$myrole="";
+               if(auth()->user()->role !== 'influencer'){
+
+          $myrole=ucfirst($booking->customer->user->name);
+
+                                }
+                                    if(auth()->user()->role !== 'vendor'){
+            $myrole=ucfirst($booking->agent);
+                                   }
+
+                                   $booking['myrole']=$myrole;
+
+
+                                   //item cost
+
+        $booking['item_cost']="Ksh ".number_format($booking->item_cost ?$booking->item_cost:$booking->product->product_price);
 
         }
 
-        return view('backoffice.bookings.pending',compact('bookings'));
+
+            return DataTables::of($bookings)->make(true);
+
+        }
+
+         return view('backoffice.bookings.pending',compact('bookings'));
     }
 
     public function payments(){
@@ -1962,6 +2062,7 @@ $objuser->update(['balance'=>$totalbal]);
     }
 
     public function payments_callbacks(Request $request){
+        $payments=[];
         
         if($request->ajax()){
 
