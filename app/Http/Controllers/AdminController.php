@@ -1135,7 +1135,7 @@ $bookings=[];
  // return $bookings;
                 if($request->ajax()){
 
-              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('booking.status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0);
+              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('bookings.status','=','active')->where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),">",0);
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
