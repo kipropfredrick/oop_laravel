@@ -119,7 +119,7 @@ var t =  $('#table1').DataTable({
             },
 
             {
-                data:"county","render": function(data, type, full, meta){
+                data:"county.county_name","render": function(data, type, full, meta){
                     var agent=JSON.stringify(full);
                     var s="";
                     var point="";
@@ -242,10 +242,10 @@ return `
             },
 
               {
-                data:"platform",name:"booking.platform"
+                data:"platform",name:"bookings.platform"
             },
              {
-                data:"status",name:"booking.status"
+                data:"status",name:"bookings.status"
             },
             {
         data:"id","render": function(data, type, full, meta){
@@ -260,7 +260,47 @@ return `
             },
 
 
-          
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+            //  ,
+            //  {
+            //  data:"item_cost",name:"Item Cost"
+            // }
+
            
         
         

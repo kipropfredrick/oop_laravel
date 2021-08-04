@@ -2010,7 +2010,7 @@ $objuser->update(['balance'=>$totalbal]);
 
     }
 
-    public function unserviced_bookings(){
+    public function unserviced_bookings(Request $request){
 
             $this->updateunservicedoverdue();
 
