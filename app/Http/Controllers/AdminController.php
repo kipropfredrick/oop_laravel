@@ -126,11 +126,13 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup'])->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['airtime'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['bill'])->sum('amount');
 
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->distinct('customer_id')->count();
   $uc=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','bill'])->distinct('sender')->count();
   $ub=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['bill'])->distinct('sender')->count();
+
+
 
 
 array_push($payments, $daypayment);
