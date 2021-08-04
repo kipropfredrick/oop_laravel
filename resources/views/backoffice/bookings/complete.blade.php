@@ -84,6 +84,7 @@ var t =  $('#table1').DataTable({
 	processing: true,
 	serverSide: true,
 	searching:true,
+	order: [[ 0, "desc" ]],
 	ajax: url,
 	columns: [
 		{data: "id",name:"bookings.id"},
