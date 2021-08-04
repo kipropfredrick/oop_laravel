@@ -123,11 +123,11 @@ var t =  $('#table1').DataTable({
             },
 
             {
-                data:"county","render": function(data, type, full, meta){
+                data:"id","render": function(data, type, full, meta){
                     var agent=JSON.stringify(full);
                     var s="";
                     var point="";
-                     if(data !== null){
+                     if(full.county !== null){
 
                          point=full.county.county_name+" County,";
 
