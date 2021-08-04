@@ -119,7 +119,7 @@ var t =  $('#table1').DataTable({
             },
 
             {
-                data:"county","render": function(data, type, full, meta){
+                data:"full.county.county_name","render": function(data, type, full, meta){
                     var agent=JSON.stringify(full);
                     var s="";
                     var point="";
