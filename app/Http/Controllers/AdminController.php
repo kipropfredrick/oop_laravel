@@ -1517,7 +1517,7 @@ $myrole="";
 
     public function overdue_bookings(Request $request){
 
-        $this->updateunservicedoverdue();
+       
         // $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->orderBy('id', 'DESC')->get();
 
         // foreach($bookings as $booking){
@@ -1609,6 +1609,9 @@ $myrole="";
 
             return DataTables::of($bookings)->make(true);
 
+        }
+        else{
+             $this->updateunservicedoverdue();
         }
 
  return view('backoffice.bookings.overdue',compact('bookings'));
@@ -2113,7 +2116,7 @@ $objuser->update(['balance'=>$totalbal]);
 
     public function unserviced_bookings(Request $request){
 
-            $this->updateunservicedoverdue();
+            
 
             // $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 
@@ -2202,6 +2205,9 @@ $myrole="";
 
             return DataTables::of($bookings)->make(true);
 
+        }
+        else{
+            $this->updateunservicedoverdue();
         }
 
             return view('backoffice.bookings.unserviced',compact('bookings'));
