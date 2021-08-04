@@ -6,7 +6,7 @@
 <div class="card">
 <div class="table-responsive padding">
         <div class="card-header header-elements-inline">
-            <h6 style="color: #005b77;" class="card-title"><strong>Active Bookings</strong></h6>
+            <h6 style="color: #005b77;" class="card-title"><strong>Pending Bookings</strong></h6>
         </div>
         
         <div class="container">
@@ -260,47 +260,7 @@ return `
             },
 
 
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            // ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-            //  ,
-            //  {
-            //  data:"item_cost",name:"Item Cost"
-            // }
-
+          
            
         
         
