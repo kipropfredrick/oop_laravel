@@ -25,15 +25,15 @@
 			@endif
 		</div>
         
-		<div class="table-responsive padding">
-        <table id="myTable" class="table table-bordered table-striped">
-						<thead>
+        <table style="margin-top:10px" id="table1" class="table table-bordered table-striped">
+				<thead>
 							<tr>
                                 <th class="thead">No.</th>
 								<th class="thead">Product Name</th>
 								<th class="thead">Booking Reference</th>
                                 <th class="thead">Product Code</th>
-                                <th class="thead">Customer</th>
+                                @if(auth()->user()->role !== 'influencer')
+								<th class="thead">Customer</th>
 								@if(auth()->user()->role !== 'vendor')
 								<th class="thead">Vendor</th>
 								@endif
@@ -41,7 +41,7 @@
 								@if(auth()->user()->role !== 'vendor')
                                 <th class="thead">Phone Number</th>
 								@endif
-                                <th class="thead">Item Cost</th>
+								<th class="thead">Item Cost</th>
 								<th class="thead">Shipping Cost</th>
 								<th class="thead">Discount</th>
 								<th class="thead">Total Price</th>
@@ -50,90 +50,232 @@
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
+                                <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
-								<th class="thead">Action</th>
+								<!-- <th class="text-center thead">Actions</th> -->
+								@else
+								<th class="thead">Commission</th>
+								@endif
+
+								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody>
-						<?php $index = 0?>
-					    	@foreach($bookings as $booking)
-                                <tr>
-									<td>{{$index = $index+1}}.</td>
-									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{$booking->product->product_name}}</td>
-									<td>{{$booking->booking_reference}}</td>
-									<td>{{$booking->product->product_code}}</td>
-									<td>
-									@if(isset($booking->customer->user))
-									 {{ucfirst($booking->customer->user->name)}}
-									@endif
-									</td>
-									@if(auth()->user()->role !== 'vendor')
-									<td>{{ucfirst($booking->agent)}}</td>
-									@endif
-									<td>
-										@if($booking->county !=null)
-										{{$booking->county->county_name}} County,{{$booking->location['town']}} @if(isset($booking->location['center_name'])) Town ({{$booking->location['center_name']}}) @else {{ $booking->exact_location}} @endif
-										@elseif(isset($booking->zone))
-										 {{$booking->zone->zone_name}} ({{$booking->dropoff['dropoff_name']}})
-										@else
-										 No Location
-										@endif
-									</td>
-									@if(auth()->user()->role !== 'vendor')
-									<td>
-									 @if(isset($booking->customer))
-									{{ucfirst($booking->customer->phone)}}
-									@endif
-									@endif
-									</td>
-									<td>Ksh {{number_format($booking->item_cost ?:$booking->product->product_price)}}</td>
-									<td>Ksh {{number_format($booking->shipping_cost)}}</td>
-									<td>KSh {{number_format($booking->discount)}}</td>
-									<td>KSh {{number_format($booking->total_cost)}}</td>
-									<td>KSh {{number_format($booking->amount_paid)}}</td>
-									<td>KSh {{number_format($booking->balance)}}</td>
-									<td>{{date('M d'.', '.'Y', strtotime($booking->created_at))}}</td>
-									</td>
-									<td>{{date('M d'.', '.'Y', strtotime($booking->due_date))}}</td>
-									<td>
-									<div class="progress">
-										<div class="progress-bar" role="progressbar" aria-valuenow="{{$booking->progress}}"
-										aria-valuemin="0" aria-valuemax="100" style="width:{{$booking->progress}}%">
-										  {{$booking->progress}}%
+			<tbody>
+						
+			</tbody>
+		</table>
+	</div>
+	</div>
+@endsection
+
+@section('extra-js')
+
+<script>
+
+$(document).ready(function() {
+
+var url = window.location.href;
+
+var t =  $('#table1').DataTable({
+	processing: true,
+	serverSide: true,
+	searching:true,
+	ajax: url,
+	columns: [
+		{data: "id",name:"bookings.id"},
+{data: "product.product_name",name:"product.product_name",  render(data) {
+                return `
+                <div style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                   ${data}
+                </div>
+                `;
+            }},
+            {
+            	data:"booking_reference",name:"bookings.booking_reference"
+            },
+               {
+            	data:"product.product_code",name:"product.product_code"
+            },
+             {
+            	data:"customer.user.name",name:"customer.user.name"
+            },
+             {
+            	data:"vendor.user.name","render": function(data, type, full, meta){
+            		var agent=JSON.stringify(full);
+            		 if(full.vendor_code !== null){
+              
+
+                              return ` ${data}(Vendor)
+ `;
+
+            }else{
+           
+               return `Lipa Mos Mos (Admin)
+ `;
+            } 
+
+
+            	}
+            },
+
+            {
+                data:"county.county_name","render": function(data, type, full, meta){
+                    var agent=JSON.stringify(full);
+                    var s="";
+                    var point="";
+                     if(data !== null){
+
+                         point=full.county.county_name+" County,";
+
+                        if (full.location!=null) {
+                             s=full.location['town']+" Town "+full.location['center_name'];
+                        }
+                        else{
+                             s=" "+full.exact_location;
+                        }
+                        point=point+s;
+              
+
+    
+
+            }else if(full.zone!="undefined"){
+           
+   point=full.zone.name+"("+full.dropoff['dropoff_name']+")";
+            }
+            else{
+                point="No location";
+            } 
+                                      return ` ${point}
+ `;
+
+
+                }
+            },
+
+
+       
+             {
+            	data:"customer.phone","render": function(data, type, full, meta){
+            		var agent=full;
+return `
+	@if(auth()->user()->role !== 'vendor')
+									<td>${agent.customer.phone}</td>
+									@endif  `;
+
+            	}
+            },
+          {
+		  data: "item_cost",name:'bookings.item_cost',
+		  "width": "400px",
+		  render: (data) => 'Ksh. ' + numberFormat(data)
+		},
+          
+          {
+		  data: "shipping_cost",name:'bookings.shipping_cost',
+		  "width": "400px",
+		  render: (data) => 'Ksh. ' + numberFormat(data)
+		},
+		
+          {
+		  data: "discount",name:'bookings.discount',
+		  "width": "400px",
+		  render: (data) => 'Ksh. ' + numberFormat(data)
+		},
+		
+          {
+		  data: "total_cost",name:'bookings.total_cost',
+		  "width": "400px",
+		  render: (data) => 'Ksh. ' + numberFormat(data)
+		},
+		
+          {
+		  data: "amount_paid",name:'bookings.amount_paid',
+		  "width": "400px",
+		  render: (data) => 'Ksh. ' + numberFormat(data)
+		},
+		{
+		  data: "balance",name:'bookings.balance',
+		  "width": "400px",
+		  render: (data) => 'Ksh. ' + numberFormat(data)
+		},{
+		data:"created_at","render": function(data, type, full, meta){
+            		var agent=full;
+            		var strdate = new Date(data);
+var date = moment(strdate).format('DD.MM.YYYY');
+ //07.02.2017
+return `
+${date}
+								 `;
+
+            	}
+            }
+            ,{
+		data:"due_date","render": function(data, type, full, meta){
+            		var agent=full;
+            		var strdate = new Date(data);
+var date = moment(strdate).format('DD.MM.YYYY');
+ //07.02.2017
+return `
+${date}
+								 `;
+
+            	}
+            }
+
+                ,{
+		data:"due_date","render": function(data, type, full, meta){
+            	var dd=full;
+
+            	var progress= Math.round((full.amount_paid/full.total_cost)*100);
+ //07.02.2017
+return `
+<div class="progress">
+										<div class="progress-bar" role="progressbar" aria-valuenow="${progress}"
+										aria-valuemin="0" aria-valuemax="100" style="width:${progress}%">
+										  ${progress}%
 										</div>
 									</div>
-									</td>
-									<td>{{$booking->status}}</td>
-									<td>
-										@if(auth()->user()->role == "agent")
-										<a class="btn btn-outline-primary" data-toggle="modal" data-target="#transferorder{{$booking->id}}">Transfer</a>
+
+								 `;
+
+            	}
+            },
+
+              {
+            	data:"platform",name:"bookings.platform"
+            },
+             {
+            	data:"status",name:"bookings.status"
+            },
+            {
+		data:"id","render": function(data, type, full, meta){
+            	
+ //07.02.2017
+return `
+	@if(auth()->user()->role == "agent")
+										<a class="btn btn-outline-primary" data-toggle="modal" data-target="#transferorder${data}">Transfer</a>
 										@elseif(auth()->user()->role == "admin")
-										<a class="btn btn-outline-primary"data-toggle="modal" data-target="#transferorder{{$booking->id}}">Transfer</a>
+										<a class="btn btn-outline-primary"data-toggle="modal" data-target="#transferorder${data}">Transfer</a>
 										@elseif(auth()->user()->role == "vendor")
-										<a class="btn btn-outline-primary" data-toggle="modal" data-target="#transferorder{{$booking->id}}">Transfer</a>
+										<a class="btn btn-outline-primary" data-toggle="modal" data-target="#transferorder${data}">Transfer</a>
 										@endif
-									</td>
-                                </tr>
 
-
-
-							<!-- Modal -->
-						<div class="modal fade"  id="transferorder{{$booking->id}}" tabindex="-1" role="dialog" aria-labelledby="transferorderLabel" aria-hidden="true">
+<div class="modal fade"  id="transferorder${data}" tabindex="-1" role="dialog" aria-labelledby="transferorderLabel" aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 							<h5 style="padding:10px !important;" class="text-center"><strong>Transfer An Item</strong></h5>
 							<div class="modal-header">
-								<h5 class="modal-title" id="transferorderLabel">{{$booking->product->product_name}} ({{$booking->product->product_code}})</h5>
+								<h5 class="modal-title" id="transferorderLabel">${full.product.product_name} (${full.product.product_code} )</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
 							@if(auth()->user()->role == "agent")
-							<form action="/agent/transfer-order/{{$booking->id}}" method="post">
+							<form action="/agent/transfer-order/${data}" method="post">
 							@elseif(auth()->user()->role == "admin")
-							<form action="/admin/transfer-order/{{$booking->id}}" method="post">
+							<form action="/admin/transfer-order/${data}" method="post">
 							@elseif(auth()->user()->role == "vendor")
-							<form action="/vendor/transfer-order/{{$booking->id}}" method="post">
+							<form action="/vendor/transfer-order/${data}" method="post">
 							@endif
 
 							@csrf
@@ -149,16 +291,75 @@
 							</form>
 
 							</div>
+								 `;
 
-                            @endforeach
-							
-						</tbody>
-						
-					</table>
-						</div>
-						</div>
-						</div>
+            	}
+            },
 
-					</div>
-				</div>
+
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            // ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+            //  ,
+            //  {
+            // 	data:"item_cost",name:"Item Cost"
+            // }
+
+           
+		
+		
+	
+	],
+});
+
+t.on( 'draw.dt', function () {
+var PageInfo = $('#table1').DataTable().page.info();
+	 t.column(0, { page: 'current' }).nodes().each( function (cell, i) {
+		cell.innerHTML = i + 1 + PageInfo.start;
+	} );
+} );
+} );
+
+// function check_if_booking_exists(){
+
+// 	url = '/api/check-booking-exists';
+
+// }
+
+
+</script>
+
 @endsection

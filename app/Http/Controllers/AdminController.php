@@ -1688,15 +1688,64 @@ $myrole="";
         return view('backoffice.bookings.revoked',compact('bookings'));
     }
 
-    public function transfer_order(){
+    public function transfer_order(Request $request){
 
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')
-                                    ->where('status','!=','complete')
-                                    ->orderBy('id', 'DESC')->get();
+        // $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')
+        //                             ->where('status','!=','complete')
+        //                             ->orderBy('id', 'DESC')->get();
+
+        // foreach($bookings as $booking){
+        //     $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+        //     $booking['progress'] = $progress;
+        // }
+
+         $bookings=[];
+
+             if($request->ajax()){
+
+              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('status','!=','complete')->orderBy('id', 'DESC');
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
+
+            if($booking->vendor_code !== null){
+                $vendor = \App\Vendor::with('user')->where('vendor_code','=',$booking->vendor_code)->first();
+
+                if(isset($vendor->user)){
+                    $agent = $vendor->user->name.' (Vendor)';
+                }else{
+                    $agent = "Lipa Mos Mos (Admin)";
+                }
+
+            }else{
+               $agent = "Lipa Mos Mos (Admin)";
+            }
+            $booking['agent'] = $agent;
+
+            //specify role
+$myrole="";
+               if(auth()->user()->role !== 'influencer'){
+
+          $myrole=ucfirst($booking->customer->user->name);
+
+                                }
+                                    if(auth()->user()->role !== 'vendor'){
+            $myrole=ucfirst($booking->agent);
+                                   }
+
+                                   $booking['myrole']=$myrole;
+
+
+                                   //item cost
+
+        $booking['item_cost']="Ksh ".number_format($booking->item_cost ?$booking->item_cost:$booking->product->product_price);
+
+        }
+
+
+            return DataTables::of($bookings)->make(true);
+
         }
 
         // $bookings = [];
