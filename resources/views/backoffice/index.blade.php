@@ -493,7 +493,7 @@ $hasbooking=false;
       <div class="container">
     <div class="row d-flex justify-content-between">
      
-        <div class="col-md-12 offset-md-0 card m-2">
+        <div class="col-md-12 offset-md-0 card mr-5 ml-2">
             <div class="panel panel-default">
                                <div class="panel-body">
                     <canvas id="canvas" height="125" width="400"></canvas>
@@ -501,20 +501,18 @@ $hasbooking=false;
             </div>
         </div>
 
-            <div class="col-md-6 offset-md-0  card">
+           <div class="col-md-12 offset-md-0 card mr-5 ml-2">
             <div class="panel panel-default">
-             
-                <div class="panel-body">
-                    <canvas id="canvas1" height="280" width="600"></canvas>
+                               <div class="panel-body">
+                    <canvas id="canvas1" height="125" width="400"></canvas>
                 </div>
             </div>
         </div>
 
-         <div class="col-md-6 offset-md-0 card">
-            <div class="panel panel-default ml-2">
-            
-                <div class="panel-body">
-                    <canvas id="canvas2" height="280" width="600"></canvas>
+        <div class="col-md-12 offset-md-0 card mr-5 ml-2">
+            <div class="panel panel-default">
+                               <div class="panel-body">
+                    <canvas id="canvas2" height="125" width="400"></canvas>
                 </div>
             </div>
         </div>
@@ -530,6 +528,8 @@ $hasbooking=false;
     var customers=<?php echo $ucustom; ?>;
       var airtime=<?php echo $airtime; ?>;
       var utility=<?php echo $utility; ?>;
+      var billcustomers=<?php echo $billcustomers; ?>;
+      var airtimecustomers=<?php echo $airtimecustomers; ?>;
     var myColors = ['red', 'green', 'blue'];
     var barChartData = {
         labels: days,
@@ -572,6 +572,17 @@ $hasbooking=false;
    pointHoverBorderColor: "#ED1C24",
             data: airtime
         },
+          {
+          label:"Unique Customers",
+    fill: false,
+   borderColor: "#F68B1E",
+   backgroundColor: "#F68B1E",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+            data: airtimecustomers
+        }
 
      ]
     };
@@ -589,6 +600,17 @@ $hasbooking=false;
    pointHoverBorderColor: "#ED1C24",
             data: utility
         },
+          {
+          label:"Unique Customers",
+    fill: false,
+   borderColor: "#F68B1E",
+   backgroundColor: "#F68B1E",
+   pointBackgroundColor: "#55bae7",
+   pointBorderColor: "#55bae7",
+   pointHoverBackgroundColor: "#55bae7",
+   pointHoverBorderColor: "#55bae7",
+            data: billcustomers
+        }
 
      ]
     };

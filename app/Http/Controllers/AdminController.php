@@ -116,6 +116,8 @@ $payments=[];
 $ucus=[];
 $airtimepayments=[];
 $utilitypayments=[];
+$uniqueairtimecustomers=[];
+$uniquebillcustomers=[];
 for ($i=1; $i <=7 ; $i++) { 
     $minus=-7+$i;
 $lastWeek = date("Y-m-d", strtotime($minus." days"));
@@ -127,6 +129,8 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
   $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['airtime'])->sum('amount');
 
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->distinct('customer_id')->count();
+  $uc=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','bill'])->distinct('sender')->count();
+  $ub=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','airtime'])->distinct('sender')->count();
 
 
 array_push($payments, $daypayment);
@@ -136,6 +140,8 @@ array_push($arrayDays, $day);
 array_push($ucus, $uniquecustomers);
 array_push($airtimepayments, $dayairtime);
 array_push($utilitypayments, $dayutility);
+array_push($uniqueairtimecustomers, $uc);
+array_push($uniquebillcustomers, $ub);
 
 
 }
@@ -146,10 +152,12 @@ array_push($utilitypayments, $dayutility);
         $ucustom=json_encode($ucus);
         $airtime=json_encode($airtimepayments);
         $utility=json_encode($utilitypayments);
+        $airtimecustomers=json_encode($uniqueairtimecustomers);
+        $billcustomers=json_encode($uniquebillcustomers);
 
 
 
-      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings','ucustom','airtime','utility'));
+      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings','ucustom','airtime','utility','airtimecustomers','billcustomers'));
 
     }
 
