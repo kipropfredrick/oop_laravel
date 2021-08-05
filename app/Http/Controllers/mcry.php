@@ -19,7 +19,7 @@ function index(){
 
 $plaintext=json_encode($plaintext);
  $s = substr(str_shuffle(str_repeat("123456789", 8)), 0, 8);
-$encrypted_key="5085891621249755";
+$encrypted_key="1903360117933878";
 $obj = new AES($encrypted_key);
 $encrypted_terminalnumber = $obj->encrypt('{"function":"DstGenerateSessionID","RequestUniqueID":"'.$s.'","MethodName":"DstGenerateSessionID"}');
 
@@ -42,7 +42,7 @@ $startTime = Carbon::parse($res->created_at);
 curl_setopt($ch, CURLOPT_URL,"http://rsadmin.pesapoint.co.ke/distributormobilerest/distributormobilerest/" );
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt($ch, CURLOPT_POST,           1 );
-curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=18991324&Data=".$encrypted_terminalnumber ); 
+curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&Data=".$encrypted_terminalnumber ); 
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
 
 $result=curl_exec ($ch);
@@ -66,7 +66,7 @@ $result=curl_exec ($ch);
 curl_setopt($ch, CURLOPT_URL,"http://rsadmin.pesapoint.co.ke/distributormobilerest/distributormobilerest/" );
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt($ch, CURLOPT_POST,           1 );
-curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=18991324&Data=".$encrypted_terminalnumber ); 
+curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&Data=".$encrypted_terminalnumber ); 
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
 
 $result=curl_exec ($ch);

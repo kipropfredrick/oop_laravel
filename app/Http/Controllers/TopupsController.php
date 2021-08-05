@@ -570,7 +570,21 @@ break;  }
 
 function getBalance(){
 $paybillobj = new paybills();
-$balance="KES ". strval((intval($paybillobj->getBalance()))/100);
+$result=$paybillobj->getBalance();
+return $result;
+ $decdata = $obj->decrypt((json_decode($result))->Data);
+ $decdata=json_decode($decdata);
+
+if (($decdata->ResponseCode)=="000") {
+     
+    $bal= $decdata->Balance;
+    # code...
+}
+else{
+    
+ $bal= 0;
+    }
+$balance="KES ". strval((intval($bal))/100);
 return $balance;
 }
 

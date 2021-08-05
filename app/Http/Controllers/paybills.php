@@ -267,7 +267,7 @@ function getBalance(){
   
 
 $s = substr(str_shuffle(str_repeat("123456789", 13)), 0, 13);
-$encrypted_key="5085891621249755";
+$encrypted_key="1903360117933878";
 $obj = new AES($encrypted_key);
  $s = substr(str_shuffle(str_repeat("123456789", 13)), 0, 13);
 $mapobj = new mcry();
@@ -282,24 +282,14 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL,"http://rsadmin.pesapoint.co.ke/distributormobilerest/distributormobilerest/" );
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt($ch, CURLOPT_POST,           1 );
-curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=18991324&Data=".$encdata ); 
+curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&Data=".$encdata ); 
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
 
 $result=curl_exec ($ch);
 
 
- $decdata = $obj->decrypt((json_decode($result))->Data);
-  $decdata=json_decode($decdata);
 
-if (($decdata->ResponseCode)=="000") {
-     
-    return $decdata->Balance;
-    # code...
-}
-else{
-    
- return 0;
-    }
+ return $result;
 
 }
 
