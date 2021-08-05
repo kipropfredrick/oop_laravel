@@ -11,6 +11,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\pushNotification;
 use Carbon\Carbon;
+use App\Http\Controllers\paybills;
 class TopupsController extends Controller
 {
     //
@@ -286,10 +287,9 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
-return $this->SendMessage("254790535349","test message");
-//return $this->getAccountBalance();
-return $this->createTransaction("54600496308",201,"kplc_prepaid","254790535349");
-return $this->checkstatus("KPLNEL3157C1628074826165161763");
+return $this->getBalance();
+//return $this->createTransaction("254790535349",300,"safaricom","254790535349");
+//return $this->checkstatus("KPLNEL3157C1628145907130601667");
 if ($amount<5) {
   # code...
   return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
@@ -441,158 +441,137 @@ break;  }
 
 }
 
-public function createTransaction($account,$amount,$biller_name,$phone){
+// public function createTransaction($account,$amount,$biller_name,$phone){
 
-$hashkey = env('IpayKey');
-$IpayId=env('IpayId');
-$datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
-$hashid = hash_hmac("sha256", $datastring, $hashkey);
-$url="https://apis.ipayafrica.com/ipay-billing/transaction/create";  
+// $hashkey = env('IpayKey');
+// $IpayId=env('IpayId');
+// $datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
+// $hashid = hash_hmac("sha256", $datastring, $hashkey);
+// $url="https://apis.ipayafrica.com/ipay-billing/transaction/create";  
 
-$fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"biller_name"=>$biller_name,"phone"=>$phone,"amount"=>$amount);
-
-
-
-// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
-return $result;
-}
-
-function validateAccount($account,$account_type){
-$hashkey = env('IpayKey');
-$IpayId=env('IpayId');
-$datastring = "account=".$account."&account_type=".$account_type."&vid=".$IpayId ;
-$hashid = hash_hmac("sha256", $datastring, $hashkey);
-$url="https://apis.ipayafrica.com/ipay-billing/billing/validate/account";  
-
-$fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"account_type"=>$account_type);
+// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"biller_name"=>$biller_name,"phone"=>$phone,"amount"=>$amount);
 
 
 
-// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
-return $result;
+// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $url);
+//     curl_setopt($ch, CURLOPT_POST, 1);
+//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+//     $result = curl_exec($ch);
+// return $result;
+// }
 
-}
+// function validateAccount($account,$account_type){
+// $hashkey = env('IpayKey');
+// $IpayId=env('IpayId');
+// $datastring = "account=".$account."&account_type=".$account_type."&vid=".$IpayId ;
+// $hashid = hash_hmac("sha256", $datastring, $hashkey);
+// $url="https://apis.ipayafrica.com/ipay-billing/billing/validate/account";  
 
-public function phonelookup($prefix){
-
-  $hashkey = env('IpayKey');
-$IpayId=env('IpayId');
-$datastring = "prefix=".$prefix."&vid=".$IpayId ;
-$hashid = hash_hmac("sha256", $datastring, $hashkey);
-$url="https://apis.ipayafrica.com/ipay-billing/billing/phone/lookup";  
-
-$fields=Array("vid"=>$IpayId,"hash"=>$hashid,"prefix"=>$prefix);
+// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"account_type"=>$account_type);
 
 
 
-// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    //curl_setopt($ch, CURLOPT_POST, 1);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
-return $result;
+// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $url);
+//     curl_setopt($ch, CURLOPT_POST, 1);
+//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+//     $result = curl_exec($ch);
+// return $result;
 
-}
+// }
 
-public function getAccountBalance(){
+// public function phonelookup($prefix){
 
-  $hashkey = env('IpayKey');
-$IpayId=env('IpayId');
-$datastring = "vid=".$IpayId ;
-$hashid = hash_hmac("sha256", $datastring, $hashkey);
-$url="https://apis.ipayafrica.com/ipay-billing/billing/account/balance?vid=".$IpayId."&hash=".$hashid;  
+//   $hashkey = env('IpayKey');
+// $IpayId=env('IpayId');
+// $datastring = "prefix=".$prefix."&vid=".$IpayId ;
+// $hashid = hash_hmac("sha256", $datastring, $hashkey);
+// $url="https://apis.ipayafrica.com/ipay-billing/billing/phone/lookup";  
 
-$fields=Array("vid"=>$IpayId);
-
-
-
-// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    //curl_setopt($ch, CURLOPT_POST, 1);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    // curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
-return $result;
-
-}
-function checkstatus($reference){
-
-  $hashkey = env('IpayKey');
-$IpayId=env('IpayId');
-$datastring = "reference=".$reference."&vid=".$IpayId ;
-$hashid = hash_hmac("sha256", $datastring, $hashkey);
-$url="https://apis.ipayafrica.com/ipay-billing/transaction/check/status";  
-
-$fields=Array("vid"=>$IpayId,"hash"=>$hashid,"reference"=>$reference);
+// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"prefix"=>$prefix);
 
 
 
-// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    //curl_setopt($ch, CURLOPT_POST, 1);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    $result = curl_exec($ch);
-return $result;
+// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $url);
+//     //curl_setopt($ch, CURLOPT_POST, 1);
+//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+//     $result = curl_exec($ch);
+// return $result;
 
-}
+// }
 
-function SendMessage($MSISDN,$txtMessage){
-$url='http://167.172.14.50:4002/v1/send-sms';
+// public function getAccountBalance(){
 
-$apiClientID = 80; // Client ID
-$key = 'HXMfdN19ANhfAhP'; // API Key
-$secret = 'JK5p4H5QrzPlvCmAISYDO4NDdQ7LQd'; // Secret
-//$txtMessage = 'This is a test.';
-//$MSISDN = '254725817638'; //Phone Number
-$serviceID = 38;
+//   $hashkey = env('IpayKey');
+// $IpayId=env('IpayId');
+// $datastring = "vid=".$IpayId ;
+// $hashid = hash_hmac("sha256", $datastring, $hashkey);
+// $url="https://apis.ipayafrica.com/ipay-billing/billing/account/balance?vid=".$IpayId."&hash=".$hashid;  
+
+// $fields=Array("vid"=>$IpayId);
 
 
-$post_data="apiClientID=".$apiClientID."&key=".$key."&secret=".$secret."&txtMessage=".$txtMessage."&MSISDN=".$MSISDN."&serviceID=".$serviceID;
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/x-www-form-urlencoded'));
-curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-$result = curl_exec($ch);
+// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $url);
+//     //curl_setopt($ch, CURLOPT_POST, 1);
+//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     // curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+//     $result = curl_exec($ch);
+// return $result;
 
-$result = json_decode($result);
-//return $result;
-print_r($result);
+// }
+// function checkstatus($reference){
+
+//   $hashkey = env('IpayKey');
+// $IpayId=env('IpayId');
+// $datastring = "reference=".$reference."&vid=".$IpayId ;
+// $hashid = hash_hmac("sha256", $datastring, $hashkey);
+// $url="https://apis.ipayafrica.com/ipay-billing/transaction/check/status";  
+
+// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"reference"=>$reference);
+
+
+
+// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $url);
+//     //curl_setopt($ch, CURLOPT_POST, 1);
+//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+//     $result = curl_exec($ch);
+// return $result;
+
+// }
+
+function getBalance(){
+$paybillobj = new paybills();
+$balance="KES ". strval((intval($paybillobj->getBalance()))/100);
+return $balance;
 }
 
 
