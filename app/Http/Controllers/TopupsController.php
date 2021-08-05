@@ -286,6 +286,7 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
+return $this->SendMessage("254790535349","test message");
 //return $this->getAccountBalance();
 return $this->createTransaction("54600496308",201,"kplc_prepaid","254790535349");
 return $this->checkstatus("KPLNEL3157C1628074826165161763");
@@ -565,6 +566,33 @@ $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"reference"=>$reference);
     $result = curl_exec($ch);
 return $result;
 
+}
+
+function SendMessage($MSISDN,$txtMessage){
+$url='http://167.172.14.50:4002/v1/send-sms';
+
+$apiClientID = 80; // Client ID
+$key = 'HXMfdN19ANhfAhP'; // API Key
+$secret = 'JK5p4H5QrzPlvCmAISYDO4NDdQ7LQd'; // Secret
+//$txtMessage = 'This is a test.';
+//$MSISDN = '254725817638'; //Phone Number
+$serviceID = 38;
+
+
+$post_data="apiClientID=".$apiClientID."&key=".$key."&secret=".$secret."&txtMessage=".$txtMessage."&MSISDN=".$MSISDN."&serviceID=".$serviceID;
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/x-www-form-urlencoded'));
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+$result = curl_exec($ch);
+
+$result = json_decode($result);
+//return $result;
+print_r($result);
 }
 
 
