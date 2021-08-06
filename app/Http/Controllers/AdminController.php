@@ -2336,7 +2336,7 @@ if ($request->validmpesa!=null) {
              if($request->ajax()){ 
 
 
-        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereIn("payments.id",[13])->orderBy('payments.id', 'DESC');
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
        
             
 
