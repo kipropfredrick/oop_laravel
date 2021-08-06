@@ -63,7 +63,7 @@ var t =  $('#table1').DataTable({
 	columns: [
 		{data: "id",name:"payments.id"},
 		{
-            data: "customer.user.name",name:'payments.customer.user.name',
+            data: "customer.user.name",name:'customer.user.name',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -73,7 +73,7 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-            data: "customer.phone",name:'payments.customer.phone',
+            data: "customer.phone",name:'customer.phone',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -81,16 +81,17 @@ var t =  $('#table1').DataTable({
                 </div>
                 `;
             }
-        },
+         },
+  
 		{
 		  data: "transaction_amount",name:'payments.transaction_amount',
 		  render: (data) => 'Ksh. ' + numberFormat(data)
 		},
-		{data:'mpesapayment.transac_code',name:'payments.mpesapayment.transac_code'},
-{data:'product.product_code',name:'payments.product.product_code'},
+		{data:'mpesapayment.transac_code',name:'mpesapayment.transac_code'},
+{data:'product.product_code',name:'product.product_code'},
 
 		{
-			data: "product.product_name",name:"payments.product.product_name",
+			data: "product.product_name",name:"product.product_name",
             render(data) {
                 return `
                 <div style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
@@ -99,9 +100,9 @@ var t =  $('#table1').DataTable({
                 `;
             }
         },
-		{data:'booking.booking_reference',name:'payments.booking.booking_reference'},
+		{data:'booking.booking_reference',name:'booking.booking_reference'},
 		{
-		  data: "booking.total_cost",name:'payments.booking.total_cost',
+		  data: "booking.total_cost",name:'booking.total_cost',
 		  render: (data) => 'Ksh. ' + numberFormat(data)
 		},
 		{data:'created_at',name:'payments.created_at'},
