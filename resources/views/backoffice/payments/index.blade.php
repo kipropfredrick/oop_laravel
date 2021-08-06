@@ -62,16 +62,17 @@ var t =  $('#table1').DataTable({
 	ajax: url,
 	columns: [
 		{data: "id",name:"payments.id"},
-		{
-            data: "customer.user.name",name:'customer.user.name',
-            render(data) {
-                return `
-                <div style="width:200px;" class="ellipsis">
-                   ${data}
-                </div>
-                `;
-            }
-        },
+		// {
+  //           data: "customer.user.name",name:'customer.user.name',
+  //           render(data) {
+  //               return `
+  //               <div style="width:200px;" class="ellipsis">
+  //                  ${data}
+  //               </div>
+  //               `;
+  //           }
+  //       },
+  {data: "id",name:"payments.id"},
 		{
             data: "customer.phone",name:'customer.phone',
             render(data) {
