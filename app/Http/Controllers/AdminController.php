@@ -2323,12 +2323,23 @@ $myrole="";
          return view('backoffice.bookings.pending',compact('bookings'));
     }
 
-    public function payments(){
+    public function payments(Request $request){
         // $payments =  DB::table('payments')->get();
-        $validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
+        $payments=[];
+        
+
+
+             if($request->ajax()){
+$validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
   $validmpesa=\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray();
 
-        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->whereIn("id",$validmpesa)->orderBy('id', 'DESC')->get();
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereIn("id",$validmpesa)->orderBy('id', 'DESC');
+       
+            
+
+            return DataTables::of($payments)->make(true);
+
+        }
 
 
 
