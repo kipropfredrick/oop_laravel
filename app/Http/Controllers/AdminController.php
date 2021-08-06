@@ -122,7 +122,7 @@ for ($i=1; $i <=7 ; $i++) {
     $minus=-7+$i;
 $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
- $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(date_paid) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->sum('transaction_amount');
+ $daypayment=\App\Paymentlog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%M-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%M-%d")'),"=",$lastWeek)->where("payment_logs.status","=","valid")->sum('TransAmount');
 
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup'])->sum('amount');
 
