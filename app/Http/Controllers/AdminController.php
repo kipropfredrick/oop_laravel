@@ -2326,12 +2326,15 @@ $myrole="";
     public function payments(Request $request){
         // $payments =  DB::table('payments')->get();
         $payments=[];
-        
+        $validpaymentreferences=[];
+        $validmpesa=[];
+if ($request->validmpesa!=null) {
+    # code...$vali
+    $validmpesa=json_decode($request->validmpesa, true);
+}
 
+             if($request->ajax()){ 
 
-             if($request->ajax()){
-$validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
-  $validmpesa=\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray();
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereIn("id",$validmpesa)->orderBy('id', 'DESC');
        
@@ -2340,10 +2343,14 @@ $validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("paymen
             return DataTables::of($payments)->make(true);
 
         }
+        else{
+            $validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
+  $validmpesa=json_encode(\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray());
+        }
 
 
 
-        return view('backoffice.payments.index',compact('payments'));
+        return view('backoffice.payments.index',compact('payments','validmpesa'));
     }
 
     public function payments_callbacks(Request $request){

@@ -59,7 +59,15 @@ var url = window.location.href;
 var t =  $('#table1').DataTable({
 	processing: true,
 	serverSide: true,
-	ajax: url,
+	order: [[ 0, "desc" ]],
+	ajax: {
+
+            "url" : url,
+         "type": "POST",
+         "data" : {
+            "validmpesa" : '{{$validmpesa}}',
+            "_token": "{{ csrf_token() }}",
+        }},
 	columns: [
 		{data: "id",name:"payments.id"},
 		{

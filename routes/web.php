@@ -293,7 +293,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/check-booking-exists','AdminController@check_booking_exists');
     Route::get('/update-callback','AdminController@update_callback');
     Route::post('/record-payment/{id}','AdminController@record_payment');
-    Route::get('/payments', 'AdminController@payments')->name('admin.payments');
+    Route::any('/payments', 'AdminController@payments')->name('admin.payments');
     Route::get('/payment-callbacks', 'AdminController@payments_callbacks');
     Route::get('/customers/{type}', 'AdminController@customers')->name('admin.customers');
     Route::get('/delete-customer/{id}', 'AdminController@delete_customer');
