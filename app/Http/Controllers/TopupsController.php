@@ -392,11 +392,36 @@ if ($decdata==null) {
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
-return Array("data"=>Array("response"=>"kplc transaction success".$token),"error"=>false);
+return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
 }
 else{
     return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>false);
+}
+
+
+
+}
+else if ($biller_name=="kplc_postpaid") {
+  # code...
+  $array=Array("MobileNumber"=>"0".substr($phone, 3),"CustomerName"=>"customer","CustAccNum"=>$account,"Amount"=>$amount*100);
+$res=$paybillobj->kplcpostpaid($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>false);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+
+return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
+  # code...
+}
+else{
+    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>false);
 }
 
 
