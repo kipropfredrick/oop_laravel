@@ -386,7 +386,7 @@ $res=$paybillobj->kplcprepaid($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>false);
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
@@ -396,7 +396,7 @@ return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),
   # code...
 }
 else{
-    return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>false);
+    return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
 
@@ -411,7 +411,7 @@ $res=$paybillobj->kplcpostpaid($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>false);
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
@@ -421,12 +421,64 @@ return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
   # code...
 }
 else{
-    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>false);
+    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
 }
 
 
 
 }
+
+else  {
+  # code...
+  $payto="";
+  if ($biller_name=="zuku") {
+  # code...
+    $payto="ZUKU";
+}
+else if ($biller_name=="startimes") {
+  # code...
+    $payto="STARTIMES";
+}
+else if ($biller_name=="gotv") {
+  # code...
+  $payto="GOTV";
+}
+else if ($biller_name=="dstv") {
+  # code...
+       $payto="DSTV";
+}
+else if ($biller_name=="nairobi_water") {
+  # code...
+        $payto="NWATER";
+}
+else{
+    return Array("data"=>Array("response"=>"Biller payment not supported"),"error"=>true);
+}
+$array=Array("paymentType"=>$payto,"PhoneNumber"=>"0".substr($phone, 3),"AccountNumber"=>$account,"AccountName"=>"customer","Amount"=>$amount*100);
+  // $array=Array("MobileNumber"=>"0".substr($phone, 3),"CustomerName"=>"customer","CustAccNum"=>$account,"Amount"=>$amount*100);
+$res=$paybillobj->otherpayments($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+
+return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
+  # code...
+}
+else{
+    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+}
+
+
+
+}
+
 
 
 

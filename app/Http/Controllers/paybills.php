@@ -127,9 +127,6 @@ $result   = $sms->send([
              	$payment="04303301";
              	$ProductCode="3033";
              }
-             else{
-
-             }
             
 //0703053277
 //04302901
@@ -140,19 +137,20 @@ $result   = $sms->send([
 
 
 $s = substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
-$encrypted_key="5085891621249755";
+$s="9".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
+$encrypted_key="1903360117933878";
 $obj = new AES($encrypted_key);
-  for ($i=0; $i <100000000000000 ; $i++) { 
-   # code...
-  $s="9".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
-  $check=pesalogs::where("paymentreference",$s)->exists();
-  if ($check) {
-    # code...
-  }
-  else{
-    break;
-  }
- }
+ //  for ($i=0; $i <100000000000000 ; $i++) { 
+ //   # code...
+ //  $s="9".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
+ //  $check=pesalogs::where("paymentreference",$s)->exists();
+ //  if ($check) {
+ //    # code...
+ //  }
+ //  else{
+ //    break;
+ //  }
+ // }
 $mapobj = new mcry();
 $sessionId=$mapobj->index();
 
@@ -166,12 +164,14 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL,            "http://rshost.pesapoint.co.ke/productrest/productrest" );
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt($ch, CURLOPT_POST,           1 );
-curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=18991324&TransactionKey=1157699726&Data=".$encdata ); 
+curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&TransactionKey=1157699726&Data=".$encdata ); 
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
 
 $result=curl_exec ($ch);
 
  $decdata = $obj->decrypt((json_decode($result))->Data);
+
+  return $decdata;
 \Log::info($decdata);
  $decdata=json_decode($decdata);
 if (($decdata->ResponseCode)=="000") {
