@@ -12,6 +12,7 @@ use App\Http\Controllers\autApi;
 use App\Http\Controllers\pushNotification;
 use Carbon\Carbon;
 use App\Http\Controllers\paybills;
+use App\Http\Controllers\AES;
 class TopupsController extends Controller
 {
     //
@@ -287,7 +288,11 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
-return $this->getBalance();
+// $paybillobj = new paybills();
+// $array=Array("PhoneNumber"=>"0790535349","CustomerName"=>"Brian Mutiso","MeterNumber"=>"37182395980","Amount"=>45000);
+// $res=$paybillobj->kplcprepaid($array);
+// return $res;
+//return $this->getBalance();
 //return $this->createTransaction("254790535349",300,"safaricom","254790535349");
 //return $this->checkstatus("KPLNEL3157C1628145907130601667");
 if ($amount<5) {
@@ -295,32 +300,6 @@ if ($amount<5) {
   return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
 }
 
-// if ($payfor=="airtime") {
-//   # code...
-//   $ismobileformatted=false;
-// $account=$request->input('sendmobile');
-//     $pattern = "/^(0)\d{9}$/";
-// $pattern1 = "/^(254)\d{9}$/";
-// $pattern2 = "/^(\+254)\d{9}$/";
-// if (preg_match($pattern, $account)) {
-//   # code...
-//     $ismobileformatted=true;
-//   $accountno=$account;
-// }
-// else if(preg_match($pattern2, $account)){
-//     $ismobileformatted=true;
-// $accountno="0".substr($account, 4);
-// }
-// else if(preg_match($pattern1, $account)){
-//     $ismobileformatted=true;
-// $accountno="0".substr($account, 3);
-// }
-// else{
-//     return Array("data"=>Array("response"=>"Phone number not supported"),"error"=>true);
-// }
-
-
-// }
 
 
 //check if user exist
@@ -391,49 +370,60 @@ if ($bal<$amount) {
   # code...
    return Array("data"=>Array("response"=>"Your account balance is issuficient"),"error"=>true);
 }
-  
-   $response= json_decode($this->createTransaction($account,$amount,$biller_name,$phone)); 
 
 
 
-//return response()->json($response);
-if (isset($response->error)) {
+if ($biller_name=="kplc_prepaid") {
   # code...
-  //top up customer account and send an sms and push notification
-    return Array("data"=>Array("response"=>is_array($response->error)?$response->error[0]->text:$response->error->error),"error"=>true);
+   return Array("data"=>Array("response"=>"This is kplc prepaid payment"),"error"=>true);
 }
-else{
-  //update the account
-$balance=$main->first()->balance;
-$sender=$customers->user_id;
-$sendamount=intval($request->input("amount"));
-$amount=intval($request->input("amount"));
-//
 
 
-      $main->update(["balance"=>intval($balance)-$amount]);
 
-$balance=\App\User::whereId($sender)->first();
-$balance=intval($balance->balance);
+  
+//    $response= json_decode($this->createTransaction($account,$amount,$biller_name,$phone)); 
 
 
-        for($i=0;$i<1000000;$i++){
-            $transid = 'TB'.rand(10000,99999)."M";
-            $res=\App\topups::whereTransid($transid)->first();
-            if ($res==null) {             # code...
-break;  }
+
+
+// //return response()->json($response);
+// if (isset($response->error)) {
+//   # code...
+//   //top up customer account and send an sms and push notification
+//     return Array("data"=>Array("response"=>is_array($response->error)?$response->error[0]->text:$response->error->error),"error"=>true);
+// }
+// else{
+//   //update the account
+// $balance=$main->first()->balance;
+// $sender=$customers->user_id;
+// $sendamount=intval($request->input("amount"));
+// $amount=intval($request->input("amount"));
+// //
+
+
+//       $main->update(["balance"=>intval($balance)-$amount]);
+
+// $balance=\App\User::whereId($sender)->first();
+// $balance=intval($balance->balance);
+
+
+//         for($i=0;$i<1000000;$i++){
+//             $transid = 'TB'.rand(10000,99999)."M";
+//             $res=\App\topups::whereTransid($transid)->first();
+//             if ($res==null) {             # code...
+// break;  }
           
-        }
+//         }
 
- $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
-\App\topups::create($credentials);
-  $obj = new pushNotification();
-    $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
+//  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
+// \App\topups::create($credentials);
+//   $obj = new pushNotification();
+//     $data=Array("name"=>"home","value"=>"home");
+//     $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
 
-  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
+//   return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
 
-}
+// }
 
 //return $this->phonelookup($prefix);
 //return $this->getAccountBalance();
@@ -441,137 +431,14 @@ break;  }
 
 }
 
-// public function createTransaction($account,$amount,$biller_name,$phone){
-
-// $hashkey = env('IpayKey');
-// $IpayId=env('IpayId');
-// $datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/transaction/create";  
-
-// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"biller_name"=>$biller_name,"phone"=>$phone,"amount"=>$amount);
-
-
-
-// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-//     $ch = curl_init();
-//     curl_setopt($ch, CURLOPT_URL, $url);
-//     curl_setopt($ch, CURLOPT_POST, 1);
-//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-//     $result = curl_exec($ch);
-// return $result;
-// }
-
-// function validateAccount($account,$account_type){
-// $hashkey = env('IpayKey');
-// $IpayId=env('IpayId');
-// $datastring = "account=".$account."&account_type=".$account_type."&vid=".$IpayId ;
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/billing/validate/account";  
-
-// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"account_type"=>$account_type);
-
-
-
-// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-//     $ch = curl_init();
-//     curl_setopt($ch, CURLOPT_URL, $url);
-//     curl_setopt($ch, CURLOPT_POST, 1);
-//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-//     $result = curl_exec($ch);
-// return $result;
-
-// }
-
-// public function phonelookup($prefix){
-
-//   $hashkey = env('IpayKey');
-// $IpayId=env('IpayId');
-// $datastring = "prefix=".$prefix."&vid=".$IpayId ;
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/billing/phone/lookup";  
-
-// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"prefix"=>$prefix);
-
-
-
-// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-//     $ch = curl_init();
-//     curl_setopt($ch, CURLOPT_URL, $url);
-//     //curl_setopt($ch, CURLOPT_POST, 1);
-//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-//     $result = curl_exec($ch);
-// return $result;
-
-// }
-
-// public function getAccountBalance(){
-
-//   $hashkey = env('IpayKey');
-// $IpayId=env('IpayId');
-// $datastring = "vid=".$IpayId ;
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/billing/account/balance?vid=".$IpayId."&hash=".$hashid;  
-
-// $fields=Array("vid"=>$IpayId);
-
-
-
-// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-//     $ch = curl_init();
-//     curl_setopt($ch, CURLOPT_URL, $url);
-//     //curl_setopt($ch, CURLOPT_POST, 1);
-//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//     // curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-//     $result = curl_exec($ch);
-// return $result;
-
-// }
-// function checkstatus($reference){
-
-//   $hashkey = env('IpayKey');
-// $IpayId=env('IpayId');
-// $datastring = "reference=".$reference."&vid=".$IpayId ;
-// $hashid = hash_hmac("sha256", $datastring, $hashkey);
-// $url="https://apis.ipayafrica.com/ipay-billing/transaction/check/status";  
-
-// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"reference"=>$reference);
-
-
-
-// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
-//     $ch = curl_init();
-//     curl_setopt($ch, CURLOPT_URL, $url);
-//     //curl_setopt($ch, CURLOPT_POST, 1);
-//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-//     $result = curl_exec($ch);
-// return $result;
-
-// }
 
 function getBalance(){
 $paybillobj = new paybills();
+
 $result=$paybillobj->getBalance();
-return $result;
+$encrypted_key="1903360117933878";
+$obj = new AES($encrypted_key);
+
  $decdata = $obj->decrypt((json_decode($result))->Data);
  $decdata=json_decode($decdata);
 
@@ -587,7 +454,10 @@ else{
 $balance="KES ". strval((intval($bal))/100);
 return $balance;
 }
+function kplcprepaid(){
 
+
+}
 
 
 }

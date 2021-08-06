@@ -20,21 +20,21 @@ class paybills extends Controller
 
 
 $s = substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
-$encrypted_key="5085891621249755";
+$encrypted_key="1903360117933878";
 $obj = new AES($encrypted_key);
+ $s="8".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
 
-
- for ($i=0; $i <1000000000000 ; $i++) { 
-   # code...
-  $s="8".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
-  $check=pesalogs::where("paymentreference",$s)->exists();
-  if ($check) {
-    # code...
-  }
-  else{
-    break;
-  }
- }
+ // for ($i=0; $i <1000000000000 ; $i++) { 
+ //   # code...
+ //  $s="8".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
+ //  $check=pesalogs::where("paymentreference",$s)->exists();
+ //  if ($check) {
+ //    # code...
+ //  }
+ //  else{
+ //    break;
+ //  }
+ // }
 $mapobj = new mcry();
 $sessionId=$mapobj->index();
   $data=json_encode(Array("function"=>"BillpayProductDetails","ProductCode"=>"14248","SystemServiceID"=>4,"SessionID"=>$sessionId,"RequestUniqueID"=>$s,"Amount"=>$array['Amount'],"MethodName"=>"VoucherFlexi","VoucherData"=>$VoucherData,"Quantity"=>1));
@@ -47,7 +47,7 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL,            "http://rshost.pesapoint.co.ke/productrest/productrest" );
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt($ch, CURLOPT_POST,           1 );
-curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=18991324&TransactionKey=1157699726&Data=".$encdata ); 
+curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&TransactionKey=1157699726&Data=".$encdata ); 
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
 
 $result=curl_exec ($ch);
@@ -55,6 +55,8 @@ $result=curl_exec ($ch);
 
 
  $decdata = $obj->decrypt((json_decode($result))->Data);
+
+ return $decdata;
 \Log::info($array['MeterNumber']);
 \Log::info(json_encode($decdata));
  $decdata=json_decode($decdata);
@@ -63,6 +65,8 @@ $result=curl_exec ($ch);
     //return $array['TransID'];
 
     $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
+
+    return $token;
    
    $ret= pesalogs::where("TransID",$array['TransID'])->update(["status"=>"credited","token"=>$token,"paymentreference"=>$s]);
  
