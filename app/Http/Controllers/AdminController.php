@@ -3247,11 +3247,17 @@ for ($i=0; $i <$days ; $i++) {
 
  $daypayment=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$currentday)->where("payment_logs.status","=","valid")->sum('TransAmount');
 
+
+
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup'])->sum('amount');
 
   $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime'])->sum('amount');
 
-  $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->distinct('customer_id')->count();
+  $validpaymentreferences=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$currentday)->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
+  $validmpesa=\App\mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray();
+
+
+  $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->whereIn('id',$validmpesa)->distinct('customer_id')->count();
 
 $array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"unique"=>$uniquecustomers);
  array_push($payments, $array);
