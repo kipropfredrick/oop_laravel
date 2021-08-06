@@ -131,6 +131,8 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
   // $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->distinct('customer_id')->count();
 
     $validpaymentreferences=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$lastWeek)->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
+
+    return $validpaymentreferences;
   $validmpesa=\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray();
 
 
