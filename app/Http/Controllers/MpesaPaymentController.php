@@ -361,7 +361,7 @@ else{
 }
 
 $obz=new TopupsController();
-$response= json_decode($obz->phonelookup(substr($mobilerec,1, 3)));
+$response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
 
 if (isset($response->data)) {
   # code...
