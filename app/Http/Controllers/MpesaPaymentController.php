@@ -335,7 +335,7 @@ return "true";
 
 $ismobiletopup="/254/i";
 $mob="/0/i";
-$mob1="/+254/i";
+$mob1='/^(\+254)\d{9}$/';
 $saf="/SAF/i";
 $tel="/TEL/i";
 $air="/AIR/i";
@@ -1514,7 +1514,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
 $ismobiletopup="/254/i";
 $mob="/0/i";
-$mob1="/+254/i";
+$mob1='/^(\+254)\d{9}$/';
 $air="/AIR/i";
 $tel="/TEL/i";
 $saf="/SAF/i";
