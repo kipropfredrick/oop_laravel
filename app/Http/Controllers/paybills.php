@@ -374,6 +374,72 @@ $result=curl_exec ($ch);
  return response()->json($decdata);
     }
 
+    function AirtimeTopUp($array){
+
+
+      // $infor=json_encode(Array("ProductCode"=>$array['ProductCode'],"FromANI"=>$array['FromANI'],"CustomerName"=>$array['CustomerName'],"OutStanding Balance"=>"000"));
+  
+
+$s = substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
+ $s="9".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
+$encrypted_key="1903360117933878";
+$obj = new AES($encrypted_key);
+ //  for ($i=0; $i <100000000000000 ; $i++) { 
+ //   # code...
+ //  $s="9".substr(str_shuffle(str_repeat("123456789", 11)), 0, 11);
+ //  $check=pesalogs::where("paymentreference",$s)->exists();
+ //  if ($check) {
+ //    # code...
+ //  }
+ //  else{
+ //    break;
+ //  }
+ // }
+$mapobj = new mcry();
+$sessionId=$mapobj->index();
+
+  $data=json_encode(Array("ProductCode"=>$array['ProductCode'],"SystemServiceID"=>2,"FromANI"=>"","email"=>"","SessionID"=>$sessionId,"RequestUniqueID"=>$s,"Amount"=>$array['Amount'],"MethodName"=>"TopupFlexi","ReferalNumber"=>$array['PhoneNumber']));
+$encdata=$obj->encrypt($data);
+
+
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL,            "http://rshost.pesapoint.co.ke/productrest/productrest" );
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
+curl_setopt($ch, CURLOPT_POST,           1 );
+curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&TransactionKey=1157699726&Data=".$encdata ); 
+curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
+
+$result=curl_exec ($ch);
+
+ $decdata = $obj->decrypt((json_decode($result))->Data);
+  return $decdata;
+  $decdata=json_decode($decdata);
+if (($decdata->ResponseCode)=="000") {
+      pesalogs::where("TransID",$array['TransID'])->update(["status"=>"credited","paymentreference"=>$s]);
+    return "payment made successfully";
+    # code...
+}
+else{
+   
+     $ret= pesalogs::where("TransID",$array['TransID'])->update(["reason"=>$decdata->ResponseDescription,"paymentreference"=>$s]);
+        $username = "swiftpay"; // use 'sandbox' for development in the test environment
+$apiKey   ="2ae24a2f2364955edefc7889b12823b2f81429283a5cda07b2700ae6665dc6ba";
+$AT       = new AfricasTalking($username, $apiKey);
+$sms      = $AT->sms();
+
+//Use the service
+$phone=pesalogs::where("TransID",$array['TransID'])->first()->MSISDN;
+$result   = $sms->send([
+    'to'      => "+".$phone,
+    'message' => 'Hello. Your transaction could not be completed. Please contact support for assistance. Call  0720303095.'
+]);
+    return "An Error Occured Try Again";
+// return $decdata;
+    }
+
+    }
+
 
 
 

@@ -334,24 +334,114 @@ return "true";
             }
 
 $ismobiletopup="/254/i";
+$mob="/0/i";
+$mob1="/+254/i";
+$saf="/SAF/i";
+$tel="/TEL/i";
+$air="/AIR/i";
+
 $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
-      if ($ismobiletopuptrue) {
+      if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
+
+        $productcode="";
+        $recipient="";
+
+  # code...i
+        if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($mob1,$bill_ref_no)) {
+            # code...
+
+if ($ismobiletopuptrue) {
+   $recipient="0".substr($bill_ref_no, 3);
+}
+else if (preg_match($mob1,$bill_ref_no)) {
+   $recipient="0".substr($bill_ref_no, 4);
+}
+else{
+    $recipient=$bill_ref_no;
+}
+
+$obz=new TopupsController();
+$response= json_decode($obz->phonelookup(substr($mobilerec,1, 3)));
+
+if (isset($response->data)) {
+  # code...
+  $operator= $response->data->operator;
+
+    if ($operator=="safaricom") {
+    # code...
+    $productcode="SF01";
+
+  }
+  else if ($operator=="airtel") {
+    $productcode="AP01";
+
+  }
+  else if ($operator=="telcom") {
+    # code...
+    $productcode="OP01";
+  }
+}
+else{
+
+  return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
+
+}
+
+
+
+
+
+        }
+        else{
+              if (preg_match($saf,$bill_ref_no)) {
+    # code...
+    $productcode="SF01";
+
+  }
+  else if ( preg_match($air,$bill_ref_no)) {
+    $productcode="AP01";
+
+  }
+  else if ( preg_match($tel,$bill_ref_no)) {
+    # code...
+    $productcode="OP01";
+  }
+        }
+
+
+
                 # code...
                 
- $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
-$apiKey   =env('AFRIAPIKEY');
+//  $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
+// $apiKey   =env('AFRIAPIKEY');
 
-$AT       = new AfricasTalking($username, $apiKey);
+// $AT       = new AfricasTalking($username, $apiKey);
 
-$airtime = $AT->airtime();
-$array=Array("recipients"=>[Array('phoneNumber' => "+".$bill_ref_no,
-'currencyCode' => "KES",
-'amount' => $transaction_amount)]);
+// $airtime = $AT->airtime();
+// $array=Array("recipients"=>[Array('phoneNumber' => "+".$bill_ref_no,
+// 'currencyCode' => "KES",
+// 'amount' => $transaction_amount)]);
 
-$result   = $airtime->send($array);
-\Log::info(json_encode($result));
+// $result   = $airtime->send($array);
+// \Log::info(json_encode($result));
 // return back()->with("error","An Error Occured, check details and Try Again");
-$userid="new";
+
+$paybillobj = new paybills();
+$array=Array("PhoneNumber"=>$this->getphone($bill_ref_no),"Amount"=>$transaction_amount*100,"ProductCode"=>$productcode);
+
+$res=$paybillobj->AirtimeTopUp($array);
+
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+    //log the transaction into the database
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+
+$userid=$msisdn;
 $customer=\App\Customers::wherePhone($msisdn)->first();
 if ($customer!=null) {
 
@@ -359,7 +449,7 @@ if ($customer!=null) {
     $userid=$user->id;
     # code...
 }
-if ($result['data']->errorMessage=="None") {
+if (($decdata->ResponseCode)=="000")  {
  $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime");
 \App\topups::create($credentials);
   $obj = new pushNotification();
@@ -1418,6 +1508,34 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 }
 
    return 0;
+    }
+
+    function getphone($bill_ref_no){
+
+$ismobiletopup="/254/i";
+$mob="/0/i";
+$mob1="/+254/i";
+$air="/AIR/i";
+$tel="/TEL/i";
+$saf="/SAF/i";
+$recipient="";
+if (preg_match($air, $bill_ref_no) || preg_match($tel, $bill_ref_no) || preg_match($saf, $bill_ref_no) ) {
+    # code...
+    $bill_ref_no=substr($bill_ref_no, 3);
+}
+
+
+        if (preg_match($ismobiletopup, $bill_ref_no)) {
+   $recipient="0".substr($bill_ref_no, 3);
+}
+else if (preg_match($mob1,$bill_ref_no)) {
+   $recipient="0".substr($bill_ref_no, 4);
+}
+else{
+    $recipient=$bill_ref_no;
+}
+
+return $recipient;
     }
 
 

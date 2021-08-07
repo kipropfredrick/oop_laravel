@@ -81,6 +81,7 @@ public function redeem(Request $request){
   $type=$request->type;
 $amount=intval($request->input("amount"));
  $phone=$request->phone;
+ $telco=$request->telco;
 
 $airtime=false;
 $mobileInput=$request->input('sendmobile');
@@ -90,15 +91,15 @@ $pattern2 = "/^(\+254)\d{9}$/";
 if (preg_match($pattern, $mobileInput)) {
   # code...
     $airtime=true;
-  $mobilerec="+254".substr($mobileInput,1);
+  $mobilerec=$mobileInput;
 }
 else if(preg_match($pattern2, $mobileInput)){
     $airtime=true;
-$mobilerec=$mobileInput;
+$mobilerec="0".substr($mobileInput, 4);
 }
 else if(preg_match($pattern1, $mobileInput)){
     $airtime=true;
-$mobilerec="+".$mobileInput;
+$mobilerec="0".substr($mobileInput, 3);
 }
 
 
@@ -112,14 +113,31 @@ if ($amount<5) {
     # code...
     $obj=new autApi();
 
-$result=$obj->stk_push($request->amount,$phone,substr($mobilerec, 1));
+    $initial="";
+     if ($telco=="safaricom") {
+    # code...
+    $initial="SAF";
+
+  }
+  else if ($telco=="airtel") {
+    $initial="AIR";
+
+  }
+  else if ($telco=="telcom") {
+    # code...
+    $initial="TEL";
+  }
+
+
+
+$result=$obj->stk_push($request->amount,$phone,$initial.$mobilerec);
 if($result['success']){
 return Array("data"=>Array("response"=>"Payment request sent. Enter your M-pesa PIN to complete the transaction."),"error"=>false); 
 }
 else{
 return Array("data"=>Array("response"=>"An error occurred processing your request, try again later."),"error"=>true); 
 }
-return Array("data"=>Array("response"=>"M-pesa top-up was successful. Thank you."),"error"=>false);
+
 
   }else {
 
@@ -160,39 +178,74 @@ if (!$airtime) {
 // $array=Array("recipients"=>[Array('phoneNumber' => $mobilerec,
 // 'currencyCode' => "KES",
 // 'amount' => $sendamount)]);
-   
-$response= json_decode($this->phonelookup(substr($mobilerec,4, 3)));
+$productcode="";
+if ($telco!=null) {
+  # code...
+  if ($telco=="safaricom") {
+    # code...
+    $productcode="SF01";
+
+  }
+  else if ($telco=="airtel") {
+    $productcode="AP01";
+
+  }
+  else if ($telco=="telcom") {
+    # code...
+    $productcode="OP01";
+  }
+
+
+}
+else{
+
+
+
+$response= json_decode($this->phonelookup(substr($mobilerec,1, 3)));
 
 if (isset($response->data)) {
   # code...
   $operator= $response->data->operator;
+
+    if ($operator=="safaricom") {
+    # code...
+    $productcode="SF01";
+
+  }
+  else if ($operator=="airtel") {
+    $productcode="AP01";
+
+  }
+  else if ($operator=="telcom") {
+    # code...
+    $productcode="OP01";
+  }
 }
 else{
 
   return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
 
 }
-//   $response= json_decode($this->createTransaction("0".substr($mobilerec, 4),10,$operator,$phone));
 
-// if (isset($response->data)) {
-//   # code...
-//   $operator= $response->data->operator;
-// }
-// else{
-
-//   return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
-
-// }
-  $response= json_decode($this->createTransaction(substr($mobilerec, 1),$amount,$operator,$phone));
-// $result   = $airtime->send($array);
-\Log::info(json_encode($response));
-// return back()->with("error","An Error Occured, check details and Try Again");
+}
 
 
+$paybillobj = new paybills();
+$array=Array("PhoneNumber"=>$mobilerec,"Amount"=>$amount*100,"ProductCode"=>$productcode);
+
+$res=$paybillobj->AirtimeTopUp($array);
 
 
-if (!isset($response->error)) {
-    $main->update(["balance"=>intval($balance)-$amount]);
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+  $main->update(["balance"=>intval($balance)-$amount]);
 
 $balance=\App\User::whereId($sender)->first();
 $balance=intval($balance->balance);
@@ -213,16 +266,19 @@ break;  }
     $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
 
   return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
-
+  # code...
 }
 else{
-   //return Array("data"=>Array("response"=>$result['data']),"error"=>true);
-   return Array("data"=>Array("response"=>is_array($response->error)?$response->error[0]->text:$response->error->error),"error"=>true);
-    
+    return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
 
+
+  
 }
+
+
+
 }
 
 function refreshpayment(Request $request){
@@ -287,13 +343,10 @@ $amount=intval($request->input("amount"));;
 $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
-$account=$request->accountno;
-$paybillobj = new paybills();
 
 // $paybillobj = new paybills();
 // $array=Array("PhoneNumber"=>"0790535349","CustomerName"=>"Brian Mutiso","MeterNumber"=>"37182395980","Amount"=>45000);
-// $res=$paybillobj->kplcprepaid($array);
-// return $res;
+
 //return $this->getBalance();
 //return $this->createTransaction("254790535349",300,"safaricom","254790535349");
 //return $this->checkstatus("KPLNEL3157C1628145907130601667");
@@ -556,8 +609,30 @@ else{
 $balance="KES ". strval((intval($bal))/100);
 return $balance;
 }
-function kplcprepaid(){
 
+public function phonelookup($prefix){
+
+  $hashkey = env('IpayKey');
+$IpayId=env('IpayId');
+$datastring = "prefix=".$prefix."&vid=".$IpayId ;
+$hashid = hash_hmac("sha256", $datastring, $hashkey);
+$url="https://apis.ipayafrica.com/ipay-billing/billing/phone/lookup";  
+
+$fields=Array("vid"=>$IpayId,"hash"=>$hashid,"prefix"=>$prefix);
+
+
+
+// $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    //curl_setopt($ch, CURLOPT_POST, 1);
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    $result = curl_exec($ch);
+return $result;
 
 }
 
