@@ -431,7 +431,7 @@ else{
 // return back()->with("error","An Error Occured, check details and Try Again");
 
 $paybillobj = new paybills();
-$array=Array("PhoneNumber"=>$this->getphone($bill_ref_no,"Amount"=>$transaction_amount*100,"ProductCode"=>"SF01");
+$array=Array("PhoneNumber"=>$this->getphone($bill_ref_no),"Amount"=>$transaction_amount*100,"ProductCode"=>"SF01");
 
 $res=$paybillobj->AirtimeTopUp($array);
 
