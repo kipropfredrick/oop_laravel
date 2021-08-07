@@ -370,19 +370,22 @@ if (isset($response->data)) {
     if ($operator=="safaricom") {
     # code...
     $productcode="SF01";
+    Log::info("safaricom");
 
   }
   else if ($operator=="airtel") {
     $productcode="AP01";
+      Log::info("airtel");
 
   }
-  else if ($operator=="telcom") {
+  else if ($operator=="telkom") {
     # code...
+      Log::info("telkom");
     $productcode="OP01";
   }
 }
 else{
-
+ Log::info("no telco");
   return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
 
 }
@@ -406,6 +409,7 @@ else{
     # code...
     $productcode="OP01";
   }
+   Log::info($productcode);
         }
 
 
@@ -427,7 +431,7 @@ else{
 // return back()->with("error","An Error Occured, check details and Try Again");
 
 $paybillobj = new paybills();
-$array=Array("PhoneNumber"=>$this->getphone($bill_ref_no),"Amount"=>$transaction_amount*100,"ProductCode"=>$productcode);
+$array=Array("PhoneNumber"=>"079053549","Amount"=>$transaction_amount*100,"ProductCode"=>$productcode);
 
 $res=$paybillobj->AirtimeTopUp($array);
 
@@ -436,10 +440,11 @@ $res=$paybillobj->AirtimeTopUp($array);
 
 if ($decdata==null) {
   # code...
+     Log::info("returned null");
     //log the transaction into the database
   return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
-
+ Log::info("passsed");
 
 $userid=$msisdn;
 $customer=\App\Customers::wherePhone($msisdn)->first();
