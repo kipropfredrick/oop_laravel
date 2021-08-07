@@ -437,6 +437,7 @@ $res=$paybillobj->AirtimeTopUp($array);
 
   Log::info($res);
  $decdata=json_decode($res);
+  Log::info("product code".$productcode);
 
 if ($decdata==null) {
   # code...
