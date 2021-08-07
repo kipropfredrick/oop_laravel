@@ -435,7 +435,7 @@ $array=Array("PhoneNumber"=>$this->getphone($bill_ref_no),"Amount"=>$transaction
 
 $res=$paybillobj->AirtimeTopUp($array);
 
-
+  Log::info($res);
  $decdata=json_decode($res);
 
 if ($decdata==null) {
