@@ -334,7 +334,7 @@ return "true";
             }
 
 $ismobiletopup="/254/i";
-$mob="/07/i";
+$mob='/^(0)\d{9}$/';
 $mob1='/^(\+254)\d{9}$/';
 $saf="/SAF/i";
 $tel="/TEL/i";
@@ -1522,7 +1522,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
     function getphone($bill_ref_no){
 
 $ismobiletopup="/254/i";
-$mob="/0/i";
+$mob='/^(0)\d{9}$/';
 $mob1='/^(\+254)\d{9}$/';
 $air="/AIR/i";
 $tel="/TEL/i";
