@@ -335,27 +335,24 @@ return "true";
 
 $ismobiletopup="/254/i";
 $mob="/0/i";
-$mob1='/^(\+254)\d{9}$/';
 $saf="/SAF/i";
 $tel="/TEL/i";
 $air="/AIR/i";
 
 $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
-      if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
+      if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ) {
 
         $productcode="";
         $recipient="";
 
   # code...i
-        if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($mob1,$bill_ref_no)) {
+        if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no)) {
             # code...
 
 if ($ismobiletopuptrue) {
    $recipient="0".substr($bill_ref_no, 3);
 }
-else if (preg_match($mob1,$bill_ref_no)) {
-   $recipient="0".substr($bill_ref_no, 4);
-}
+
 else{
     $recipient=$bill_ref_no;
 }
@@ -1520,7 +1517,6 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
 $ismobiletopup="/254/i";
 $mob="/0/i";
-$mob1='/^(\+254)\d{9}$/';
 $air="/AIR/i";
 $tel="/TEL/i";
 $saf="/SAF/i";
@@ -1534,9 +1530,7 @@ if (preg_match($air, $bill_ref_no) || preg_match($tel, $bill_ref_no) || preg_mat
         if (preg_match($ismobiletopup, $bill_ref_no)) {
    $recipient="0".substr($bill_ref_no, 3);
 }
-else if (preg_match($mob1,$bill_ref_no)) {
-   $recipient="0".substr($bill_ref_no, 4);
-}
+
 else{
     $recipient=$bill_ref_no;
 }
