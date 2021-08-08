@@ -351,12 +351,15 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
             # code...
 
 if ($ismobiletopuptrue) {
+     Log::info("num 1");
    $recipient="0".substr($bill_ref_no, 3);
 }
 else if (preg_match($mob1,$bill_ref_no)) {
+     Log::info("num 2");
    $recipient="0".substr($bill_ref_no, 4);
 }
 else{
+     Log::info("num 3");
     $recipient=$bill_ref_no;
 }
 
