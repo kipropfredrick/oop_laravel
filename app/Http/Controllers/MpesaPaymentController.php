@@ -507,7 +507,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj??$obj->id:$msisdn);
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
