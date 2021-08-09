@@ -379,7 +379,7 @@
             </a>
             <ul class="nav nav-treeview">
                <li class="nav-item">
-                <a href="/admin/billpayment-callbacks" class="nav-link {{ (request()->is('admin/billpayments-callbacks')) ? 'active' : '' }}">
+                <a href="/admin/bill-payment-callbacks" class="nav-link {{ (request()->is('admin/bill-payments-callbacks')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>&nbsp;Bill Full Payment Info</p>
                 </a>
