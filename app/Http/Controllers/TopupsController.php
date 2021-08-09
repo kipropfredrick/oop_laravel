@@ -439,7 +439,7 @@ $res=$paybillobj->kplcprepaid($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+  return Array("data"=>Array("response"=>"An error occured processing your request.".$account),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
