@@ -395,6 +395,13 @@
                   <p>Airtime</p>
                 </a>
               </li>
+               <li class="nav-item">
+                <a href="/admin/utilities" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Airtime</p>
+                </a>
+              </li>
+              
             </ul>
           </li>
 <!--

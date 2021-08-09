@@ -3251,7 +3251,7 @@ return view("backoffice.topups.topups",compact('topups','title'));
 
     }
       function purchases(Request $request){
-              $topups= topups::whereNotIn("type",['topup'])->latest()->get();
+              $topups= topups::whereIn("type",['airtime'])->latest()->get();
 foreach ($topups as $key => $value) {
     # code...
     $value->user=\App\User::whereId($value->sender)->first();
@@ -3260,6 +3260,17 @@ foreach ($topups as $key => $value) {
  $title="Airtime Purchases";
 
 return view("backoffice.topups.topups",compact('topups','title'));
+    }
+    function utilities(Request $request){
+              $topups= topups::whereNotIn("type",['topup','airtime'])->latest()->get();
+foreach ($topups as $key => $value) {
+    # code...
+    $value->user=\App\User::whereId($value->sender)->first();
+    $value->customer=\App\Customers::whereUser_id($value->sender)->first();
+}
+ $title="Utility Purchases";
+
+return view("backoffice.topups.utilities",compact('topups','title'));
     }
 
 
