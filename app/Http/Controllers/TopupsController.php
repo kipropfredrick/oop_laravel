@@ -446,7 +446,7 @@ if ($decdata==null) {
     //return $array['TransID'];
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
    $this->paymentSuccess($phone,$amount,$biller_name,$token);
-return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
+return Array("data"=>Array("response"=>"Transaction was successful"),"error"=>false);
   # code...
 }
 else{
