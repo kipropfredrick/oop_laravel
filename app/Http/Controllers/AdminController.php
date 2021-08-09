@@ -3144,6 +3144,8 @@ $result = \App\Customers::whereIntegerNotInRaw("id",$customers)->get();
 $devices=[];
 $devices1=[];
  $today =  Carbon::now();
+
+  return $result;
    for ($i=0; $i <count($result) ; $i++) {
        # code...
 $checkifexists=DB::table("discountnotification")->wherePhone($result[$i]->phone)->first();
