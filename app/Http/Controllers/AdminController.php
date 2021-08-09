@@ -3135,8 +3135,8 @@ function scheduletask2(Request $request){
  //discounts pap
 
    $customers=\App\Bookings::pluck('customer_id')->toArray();
-$result = \App\Customers::whereNotIn("id",$customers)->get();
-return count($result);
+$result = \App\Customers::whereIntegerNotInRaw("id",$customers)->get();
+
 $devices=[];
 $devices1=[];
  $today =  Carbon::now();
