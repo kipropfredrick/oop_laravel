@@ -3409,7 +3409,7 @@ for ($i=0; $i <$days ; $i++) {
 
   // $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime'])->sum('amount');
 
-  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",'airtime'])->distinct('sender')->count();
+  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->distinct('sender')->count();
 
 $array=Array("date"=>$currentday,"total"=>$dayairtime,"unique"=>$uniquecustomers);
  array_push($payments, $array);
