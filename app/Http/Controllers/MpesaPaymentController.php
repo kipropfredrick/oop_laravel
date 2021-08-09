@@ -580,7 +580,7 @@ if ($decdata==null) {
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
         Log::info("returned ok");
-$ret=$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
+$ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
 return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
@@ -608,7 +608,7 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
-$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
+$ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
 return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
   # code...
 }
@@ -635,7 +635,7 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
-$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
+$ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
 return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
   # code...
 }
@@ -1550,6 +1550,25 @@ else{
 
 return $recipient;
     }
+
+    function paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name){
+
+        $userid=$msisdn;
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"Bills(".$biller_name.")");
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
+
+  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
+}
 
 
 
