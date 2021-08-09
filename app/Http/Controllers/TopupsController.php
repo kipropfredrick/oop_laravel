@@ -343,7 +343,7 @@ $amount=intval($request->input("amount"));;
 $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
-
+$account=$request->accountno;
  $paybillobj = new paybills();
 // $array=Array("PhoneNumber"=>"0790535349","CustomerName"=>"Brian Mutiso","MeterNumber"=>"37182395980","Amount"=>45000);
 
