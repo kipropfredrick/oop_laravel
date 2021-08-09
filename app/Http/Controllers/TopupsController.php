@@ -352,7 +352,7 @@ $account=$request->accountno;
 //return $this->checkstatus("KPLNEL3157C1628145907130601667");
 if ($amount<10) {
   # code...
-  return Array("data"=>Array("response"=>"Minimum top-up is KSh.10".$account),"error"=>true);
+  return Array("data"=>Array("response"=>"Minimum top-up is KSh.10"),"error"=>true);
 }
 
 
@@ -449,7 +449,7 @@ return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),
   # code...
 }
 else{
-    return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+    return Array("data"=>Array("response"=>"An error occured processing your request h."),"error"=>true);
 }
 
 
