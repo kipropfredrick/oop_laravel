@@ -2373,7 +2373,7 @@ if ($request->validmpesa!=null) {
         
         if($request->ajax()){
 
-            $payments = DB::table('billpayment_logs')->select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
+            $payments = DB::table('billpayment_logs')->select('billpayment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
 
             return DataTables::of($payments)->make(true);
 
