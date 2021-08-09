@@ -2368,6 +2368,20 @@ if ($request->validmpesa!=null) {
 
     }
 
+    function billpayments_callbacks(Request $request){
+        $payments=[];
+        
+        if($request->ajax()){
+
+            $payments = DB::table('billpayment_logs')->select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
+
+            return DataTables::of($payments)->make(true);
+
+        }
+
+        return view('backoffice.payments.billlogs',compact('payments'));  
+    }
+
     public function update_callback(Request $request){
         
 
