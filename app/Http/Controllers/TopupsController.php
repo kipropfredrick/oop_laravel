@@ -445,7 +445,7 @@ if ($decdata==null) {
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
-   $this->paymentSuccess($phone,$amount,$biller_name);
+   $this->paymentSuccess($phone,$amount,$biller_name,$token);
 return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
 }
@@ -637,7 +637,7 @@ $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"prefix"=>$prefix);
 return $result;
 
 }
-function paymentSuccess($phone,$amount,$biller_name){
+function paymentSuccess($phone,$amount,$biller_name,$token=""){
    $customers=Customers::wherePhone($phone)->first();
   if ($customers==null) {
     return Array("data"=>Array("response"=>"An error occured try again."),"error"=>true);
@@ -667,7 +667,7 @@ break;  }
           
         }
 
- $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"Bills(".$biller_name.")");
+ $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"token"=>$token,"type"=>"Bills(".$biller_name.")");
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");

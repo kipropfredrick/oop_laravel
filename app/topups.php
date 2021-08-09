@@ -14,7 +14,7 @@ class topups extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'sender', 'receiver','transid','amount','description','balance'
+        'type', 'sender', 'receiver','transid','amount','description','balance','token'
     ];
 
     //
