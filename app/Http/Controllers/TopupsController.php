@@ -350,9 +350,9 @@ $account=$request->accountno;
 //return $this->getBalance();
 //return $this->createTransaction("254790535349",300,"safaricom","254790535349");
 //return $this->checkstatus("KPLNEL3157C1628145907130601667");
-if ($amount<5) {
+if ($amount<10) {
   # code...
-  return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
+  return Array("data"=>Array("response"=>"Minimum top-up is KSh.10".$account),"error"=>true);
 }
 
 
@@ -439,7 +439,7 @@ $res=$paybillobj->kplcprepaid($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request.".$account),"error"=>true);
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
