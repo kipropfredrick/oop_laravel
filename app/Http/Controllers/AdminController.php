@@ -22,6 +22,7 @@ use \App\Bookings;
 use App\Http\Controllers\pushNotification;
 use DataTables;
 use App\topups;
+use App\Http\Controllers\TopupsController;
 
 
 
@@ -159,6 +160,7 @@ array_push($uniquebillcustomers, $ub);
 }
 
 
+
         $days=json_encode($arrayDays);
         $bookings=json_encode($payments);
         $ucustom=json_encode($ucus);
@@ -166,10 +168,12 @@ array_push($uniquebillcustomers, $ub);
         $utility=json_encode($utilitypayments);
         $airtimecustomers=json_encode($uniqueairtimecustomers);
         $billcustomers=json_encode($uniquebillcustomers);
+        $obj=new TopupsController();
+        $utiliybalance=$obj->getBalance();
 
 
 
-      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings','ucustom','airtime','utility','airtimecustomers','billcustomers'));
+      return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount','days','bookings','ucustom','airtime','utility','airtimecustomers','billcustomers','utiliybalance'));
 
     }
 
