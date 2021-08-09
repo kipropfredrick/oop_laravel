@@ -520,6 +520,40 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
+    $customers=Customers::wherePhone($phone)->first();
+  if ($customers==null) {
+    return Array("data"=>Array("response"=>"An error occured try again."),"error"=>true);
+    # code...
+  }
+$main=DB::table('users')->whereId($customers->user_id);
+$balance=$main->first()->balance;
+$sender=$customers->user_id;
+$sendamount=intval($request->input("amount"));
+$amount=intval($request->input("amount"));
+if ($amount>intval($balance)) {
+    # code...
+  return Array("data"=>Array("response"=>"You have insufficient balance in your Lipa Mos Mos wallet."),"error"=>true);
+    
+}
+   $main->update(["balance"=>intval($balance)-$amount]);
+
+$balance=\App\User::whereId($sender)->first();
+$balance=intval($balance->balance);
+
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TA'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"Bills(".$biller_name.")");
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Payment of KSh. ".$sendamount." was successful.","Transaction successful. ",$data);
 
 return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
   # code...
