@@ -38,7 +38,7 @@ class ProductsApiController extends Controller
      }
 
      function productCategories(Request $request){
-$result=Categories::get();
+$result=Categories::get()->setHidden(['created_at', 'updated_at']);
 $finalResult=[];
 
 for ($i=0; $i <count($result) ; $i++) { 
