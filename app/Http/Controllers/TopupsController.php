@@ -449,7 +449,7 @@ return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),
   # code...
 }
 else{
-    return Array("data"=>Array("response"=>"An error occured processing your request h."),"error"=>true);
+    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
 }
 
 
