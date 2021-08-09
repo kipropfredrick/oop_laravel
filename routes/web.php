@@ -42,6 +42,9 @@ Route::get('/updateAccountNumbers', 'autApi@updateAccountNumbers')->name('admin.
 
 Route::get('/sendpromoreminder', 'firebasetopics@sendpromoreminder')->name('admin.sendpromoreminder');
 Route::get('/scheduletasks','AdminController@scheduletasks');
+Route::get('/scheduletasks1','AdminController@scheduletasks1');
+Route::get('/scheduletasks2','AdminController@scheduletasks2');
+Route::get('/scheduletasks3','AdminController@scheduletasks3');
 
 Route::get('/testSendSMS','FrontPageController@testSendSMS');
 

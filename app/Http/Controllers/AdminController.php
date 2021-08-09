@@ -212,8 +212,8 @@ array_push($uniquebillcustomers, $ub);
      public function influencer_logs(){
 
         $logs = \App\InfluencerPaymentlog::with('influencer.user')->orderBy('id', 'DESC')->get();
-	// return $logs;
-	 \Log::info('Influncer log => '.print_r($logs,1));
+    // return $logs;
+     \Log::info('Influncer log => '.print_r($logs,1));
         return view('backoffice.influencers.logs',compact('logs'));
 
      }
@@ -3033,6 +3033,7 @@ if ($request->validmpesa!=null) {
 
    $result=Bookings::whereStatus("pending")->latest()->get();
  $today =  Carbon::now();
+ $devices1=[];
    for ($i=0; $i <count($result) ; $i++) {
        # code...
 
@@ -3053,9 +3054,7 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 
     }
     else{
-    $obj = new pushNotification();
-    $data=Array("name"=>"makepayment","value"=>"Make Payment");
-    $obj->exceuteSendNotification($token,"Start paying for your order ","Please make your payment",$data);
+    array_push($devices1, $token);
 }
     Bookings::whereId($result[$i]->id)->update(["scheduled"=>"1"]);
 
@@ -3066,9 +3065,31 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
 
    }
 
+    $obj = new pushNotification();
+  $data=Array("name"=>"makepayment","value"=>"Make Payment");
+   $title="Please make your payment.";
+$messages="Start paying for your order.";
+    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
 
 
-   $result=Bookings::whereStatus("active")->get();
+
+  
+
+
+
+
+  
+
+
+
+        // $result=DB::table('bookings')->where('id','=',$id)->first();
+        // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
+return "hello";
+    }
+
+function scheduletask1(Request $request){
+     $result=Bookings::whereStatus("active")->get();
+     $devices1=[];
  $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) {
        # code...
@@ -3086,9 +3107,8 @@ if (intval($hours)>36) {
 
     }
     else{
-    $obj = new pushNotification();
-    $data=Array("name"=>"paymentreminder","value"=>"Make Payment");
-    $obj->exceuteSendNotification($token,"Keep up with your payments to have your order delivered faster","You can pay any amount.",$data);
+   
+   array_push($devices1, $token);
 }
     Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
 }
@@ -3103,47 +3123,21 @@ if (intval($hours)>36) {
 
    }
 
+ $obj = new pushNotification();
+    $data=Array("name"=>"paymentreminder","value"=>"Make Payment");
+   $title="You can pay any amount.";
+$messages="Keep up with your payments to have your order delivered faster.";
+    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
 
-    $result=\App\User::get();
- $today =  Carbon::now();
-   for ($i=0; $i <count($result) ; $i++) {
-       # code...
-
-$createdDate = Carbon::parse($result[$i]->notified_at);
-$hours=$today->diffInHours($createdDate);
-
-if (intval($hours)>48) {
-
-    # code...
-       //$customer=\App\Customers::whereId($result[$i]->customer_id)->first();
-   $token=$result[$i]->token;
-    if ($token==null) {
-        # code...
-
-    }
-    else{
-    $obj = new pushNotification();
-    $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification($token,"Buy airtime for you or your loved ones bila stress on the Lipa Mos Mos app and enjoy great discounts on your orders.","You can now Buy Airtime.",$data);
-}
-    \App\User::whereId($result[$i]->id)->update(["notified_at"=>$today]);
 }
 
-
-
-
-
-//Log::info($hours."     " .$createdDate ."  " .$today);
-
-
-
-   }
-
-
-   //discounts pap
+function scheduletask2(Request $request){
+ //discounts pap
 
    $customers=\App\Bookings::pluck('customer_id')->toArray();
 $result = \App\Customers::whereNotIn("id",$customers)->get();
+$devices=[];
+$devices1=[];
  $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) {
        # code...
@@ -3156,9 +3150,10 @@ if ($checkifexists==null) {
 
     }
     else{
-    $obj = new pushNotification();
-    $data=Array("name"=>"discount", "value"=>"Get discount");
-    $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
+    // $obj = new pushNotification();
+    // $data=Array("name"=>"discount", "value"=>"Get discount");
+    // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
+        array_push($devices1, $token);
 
     $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
 DB::table("discountnotification")->insert($array);
@@ -3180,9 +3175,10 @@ if (intval($hours)>24) {
 
     }
     else{
-    $obj = new pushNotification();
-    $data=Array("name"=>"discount","value"=>"Get discount");
-   $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+   //  $obj = new pushNotification();
+   //  $data=Array("name"=>"discount","value"=>"Get discount");
+   // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+        array_push($devices, $token);
    DB::table("discountnotification")->wherePhone($result[$i]->phone)->update(["notified_at"=>Now()]);
 }
 
@@ -3198,13 +3194,69 @@ if (intval($hours)>24) {
 
 
    }
+$obj = new pushNotification();
+    $data=Array("name"=>"discount", "value"=>"Get discount");
+   $title="Claim your KSh.100 gift 🤑🎁";
+$messages="Order today with the app and get KSh.100 welcome discount on your first order.";
+    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
+
+  $data=Array("name"=>"home","value"=>"home");
+    //$messages = str_replace('{customerName}',$value->name, $message);
+     $messages= "Order today with the app and get KSh.100 welcome discount on your first order.";
+     $title="Get KSh.100 welcome discount";
+    $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);  
 
 
 
-        // $result=DB::table('bookings')->where('id','=',$id)->first();
-        // $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
-return "hello";
+}
+function scheduletask3(Request $request){
+      $result=\App\User::get();
+ $today =  Carbon::now();
+ $devices1=[];
+   for ($i=0; $i <count($result) ; $i++) {
+       # code...
+
+$createdDate = Carbon::parse($result[$i]->notified_at);
+$hours=$today->diffInHours($createdDate);
+
+if (intval($hours)>48) {
+
+    # code...
+       //$customer=\App\Customers::whereId($result[$i]->customer_id)->first();
+   $token=$result[$i]->token;
+    if ($token==null) {
+        # code...
+
     }
+    else{
+    // $obj = new pushNotification();
+    // $data=Array("name"=>"home","value"=>"home");
+    // $obj->exceuteSendNotification($token,"","",$data);
+        array_push($devices1, $token);
+}
+    \App\User::whereId($result[$i]->id)->update(["notified_at"=>$today]);
+}
+
+
+
+
+
+//Log::info($hours."     " .$createdDate ."  " .$today);
+
+
+
+   }
+ $obj = new pushNotification();
+
+  $data=Array("name"=>"home","value"=>"home");
+    //$messages = str_replace('{customerName}',$value->name, $message);
+     $messages= "Buy airtime and pay utility bills for yourself or your loved ones bila stress with the Lipa Mos Mos app.";
+     $title="Buy Airtime & Pay Bills Instantly.";
+    $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);  
+}
+
+
+
     function updateunservicedoverdue(){
         $result=Bookings::whereIn("status",["active","unserviced"])->get();
 for ($i=0; $i <count($result) ; $i++) {
