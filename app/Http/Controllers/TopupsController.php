@@ -608,7 +608,7 @@ else{
     
  $bal= 0;
     }
-$balance="KES ". strval((intval($bal))/100);
+$balance=intval((intval($bal))/100);
 return $balance;
 }
 

@@ -147,7 +147,7 @@ $customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->p
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                <h3>{{$utiliybalance}}</h3>
+                <h3> {{number_format($utiliybalance)}}</h3>
 
                 <p>Utility balance</p>
               </div>
