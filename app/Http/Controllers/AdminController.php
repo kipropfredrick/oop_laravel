@@ -3158,36 +3158,36 @@ if ($checkifexists==null) {
     // $obj = new pushNotification();
     // $data=Array("name"=>"discount", "value"=>"Get discount");
     // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
-        array_push($devices1, $token);
+//         array_push($devices1, $token);
 
-    $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
-DB::table("discountnotification")->insert($array);
+//     $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
+// DB::table("discountnotification")->insert($array);
 }
 
     # code...
 }
 else{
 
-    $createdDate = Carbon::parse($checkifexists->notified_at);
-$hours=$today->diffInHours($createdDate);
+//     $createdDate = Carbon::parse($checkifexists->notified_at);
+// $hours=$today->diffInHours($createdDate);
 
-if (intval($hours)>24) {
+// if (intval($hours)>24) {
 
-    # code...
-        $token=\App\User::whereId($result[$i]->user_id)->first()->token;
-    if ($token==null) {
-        # code...
+//     # code...
+//         $token=\App\User::whereId($result[$i]->user_id)->first()->token;
+//     if ($token==null) {
+//         # code...
 
-    }
-    else{
-   //  $obj = new pushNotification();
-   //  $data=Array("name"=>"discount","value"=>"Get discount");
-   // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
-        array_push($devices, $token);
-   DB::table("discountnotification")->wherePhone($result[$i]->phone)->update(["notified_at"=>Now()]);
-}
+//     }
+//     else{
+//    //  $obj = new pushNotification();
+//    //  $data=Array("name"=>"discount","value"=>"Get discount");
+//    // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
+//         array_push($devices, $token);
+//    DB::table("discountnotification")->wherePhone($result[$i]->phone)->update(["notified_at"=>Now()]);
+// }
 
-}
+// }
 }
 
 
@@ -3199,6 +3199,8 @@ if (intval($hours)>24) {
 
 
    }
+
+   return $result;
 $obj = new pushNotification();
     $data=Array("name"=>"discount", "value"=>"Get discount");
    $title="Claim your KSh.100 gift 🤑🎁";
