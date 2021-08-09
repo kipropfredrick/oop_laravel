@@ -344,7 +344,7 @@ $phone=$request->phone;
 $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 
-// $paybillobj = new paybills();
+ $paybillobj = new paybills();
 // $array=Array("PhoneNumber"=>"0790535349","CustomerName"=>"Brian Mutiso","MeterNumber"=>"37182395980","Amount"=>45000);
 
 //return $this->getBalance();
