@@ -65,7 +65,7 @@ for ($i=0; $i <count($result) ; $i++) {
         $subcat['name']=$subcategories[$j]->subcategory_name;
         $subcat['slug']=$subcategories[$j]->slug;
         $subcat['subcategory']=$subcat;
-        $thirdlevelcategory=ThirdLevelCategory::whereSubcategory_id($subcategories[$j]->id)->get();
+        $thirdlevelcategory=ThirdLevelCategory::select('id','subcategory_id','name','slug')->whereSubcategory_id($subcategories[$j]->id)->get();
         $data=[];
   foreach($thirdlevelcategory as $thirdcategory){
     $ispresent=Products::with('gallery')->whereThird_level_category_id ($thirdcategory->id)->first();
