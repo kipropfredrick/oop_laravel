@@ -3146,31 +3146,33 @@ $devices=[];
 $devices1=[];
  $today =  Carbon::now();
 
-  return $result;
+ 
 
    for ($i=0; $i <count($result) ; $i++) {
        # code...
-$checkifexists=DB::table("discountnotification")->wherePhone($result[$i]->phone)->first();
+//$checkifexists=DB::table("discountnotification")->wherePhone($result[$i]->phone)->first();
 
-if ($checkifexists==null) {
-   $token=\App\User::whereId($result[$i]->user_id)->first()->token;
-    if ($token==null) {
-        # code...
+// if ($checkifexists==null) {
+//      array_push($devices1,$result->token);
+//    $token=\App\User::whereId($result[$i]->user_id)->first()->token;
+//     if ($token==null) {
+//         # code...
 
-    }
-    else{
-    // $obj = new pushNotification();
-    // $data=Array("name"=>"discount", "value"=>"Get discount");
-    // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
-//         array_push($devices1, $token);
+//     }
+//     else{
+//     // $obj = new pushNotification();
+//     // $data=Array("name"=>"discount", "value"=>"Get discount");
+//     // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Claim your KSh.100 gift 🤑🎁",$data);
+// //         array_push($devices1, $token);
 
-//     $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
+//    $array=Array("phone"=>$result[$i]->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
 // DB::table("discountnotification")->insert($array);
-}
+// }
 
     # code...
-}
-else{
+//}
+//else{
+     array_push($devices,$result->token);
 
 //     $createdDate = Carbon::parse($checkifexists->notified_at);
 // $hours=$today->diffInHours($createdDate);
@@ -3192,7 +3194,7 @@ else{
 // }
 
 // }
-}
+//}
 
 
 
@@ -3204,12 +3206,12 @@ else{
 
    }
 
-   return $result;
-$obj = new pushNotification();
-    $data=Array("name"=>"discount", "value"=>"Get discount");
-   $title="Claim your KSh.100 gift 🤑🎁";
-$messages="Order today with the app and get KSh.100 welcome discount on your first order.";
-    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
+  
+ $obj = new pushNotification();
+//     $data=Array("name"=>"discount", "value"=>"Get discount");
+//    $title="Claim your KSh.100 gift 🤑🎁";
+// $messages="Order today with the app and get KSh.100 welcome discount on your first order.";
+//     $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
 
   $data=Array("name"=>"home","value"=>"home");
     //$messages = str_replace('{customerName}',$value->name, $message);
@@ -3230,7 +3232,7 @@ function scheduletask3(Request $request){
 $createdDate = Carbon::parse($result[$i]->notified_at);
 $hours=$today->diffInHours($createdDate);
 
-if (intval($hours)>48) {
+if (intval($hours)<48) {
 
     # code...
        //$customer=\App\Customers::whereId($result[$i]->customer_id)->first();
