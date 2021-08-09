@@ -343,6 +343,19 @@ $air="/AIR/i";
 $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
       if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
 
+  $existingLog = \App\BillpaymentLogs::where('TransID',$transaction_id)->first();
+
+            if($existingLog!=null){
+
+                return "Duplicate Transaction";
+
+            }
+
+            \App\BillpaymentLogs::insert($paymentLog);
+
+            $log_id = DB::getPdo()->lastInsertId();
+
+
         $productcode="";
         $recipient="";
 
@@ -460,6 +473,7 @@ if ($customer!=null) {
 }
 if (($decdata->ResponseCode)=="000")  {
  $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime");
+ \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
@@ -483,6 +497,7 @@ if($obj!=null){
     $balance=$obj->balance;
 $balance=$balance+$transaction_amount;
 $user->update(["balance"=>$balance]);
+ \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"credited"]);
 
         for($i=0;$i<1000000;$i++){
             $transid = 'TT'.rand(10000,99999)."M";
@@ -492,7 +507,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id);
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj??$obj->id:$msisdn);
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
@@ -517,9 +532,27 @@ $ds="/DS/i";
 $nw="/NW/i";
 if (preg_match($pp,$bill_ref_no) || preg_match($ps,$bill_ref_no) || preg_match($zu,$bill_ref_no) ||
  preg_match($st,$bill_ref_no) || preg_match($go,$bill_ref_no) || preg_match($ds,$bill_ref_no) || preg_match($nw,$bill_ref_no)) {
+
+  $existingLog = \App\BillpaymentLogs::where('TransID',$transaction_id)->first();
+
+            if($existingLog!=null){
+
+                return "Duplicate Transaction";
+
+            }
+
+            \App\BillpaymentLogs::insert($paymentLog);
+
+            $log_id = DB::getPdo()->lastInsertId();
+
+
+
+
     $paybillobj = new paybills();
 
 $objtopup=new TopupsController();
+
+
 
 $biller_name="";
 $account=substr($bill_ref_no, 2);
@@ -580,6 +613,7 @@ if ($decdata==null) {
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
         Log::info("returned ok");
+         \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 $ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
 return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
@@ -587,7 +621,7 @@ return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),
 }
 else{
         Log::info("returned error");
-      $this->CustomTopUpAccount($msisdn,$transaction_amount);
+      $this->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
     return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
@@ -608,12 +642,13 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
+     \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 $ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
 return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
   # code...
 }
 else{
-      $this->CustomTopUpAccount($msisdn,$transaction_amount);
+      $this->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
     return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
 }
 
@@ -635,13 +670,14 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
+     \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 $ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
 return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
   # code...
 }
 else{
 
-    $this->CustomTopUpAccount($msisdn,$transaction_amount);
+    $this->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
     return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
 }
 
@@ -1485,7 +1521,7 @@ else{
 
     }
 
-    function CustomTopUpAccount($msisdn,$transaction_amount){
+    function CustomTopUpAccount($msisdn,$transaction_amount,$log_id){
         $customer=\App\Customers::wherePhone($msisdn)->first();
 if ($customer!=null) {
 
@@ -1502,6 +1538,7 @@ if($obj!=null){
     $balance=$obj->balance;
 $balance=$balance+$transaction_amount;
 $user->update(["balance"=>$balance]);
+  \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"credited"]);
 
         for($i=0;$i<1000000;$i++){
             $transid = 'TT'.rand(10000,99999)."M";
@@ -1565,7 +1602,7 @@ if ($customer!=null) {
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Your Payment of KSh. ".$transaction_amount." was successsful.","Transaction successful. ",$data);
+    $obj->exceuteSendNotification(\App\User::whereId($userid)->first()->token,"Your Payment of KSh. ".$transaction_amount." was successsful.","Transaction successful. ",$data);
 
   return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
 }
