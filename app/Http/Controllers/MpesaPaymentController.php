@@ -477,7 +477,7 @@ if (($decdata->ResponseCode)=="000")  {
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
+    $obj->exceuteSendNotification(\App\User::whereId($userid)->first()->token,"Thank you for topping up KSh. ".$transaction_amount." airtime with us.","Transaction successful. ",$data);
 
   return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
 
