@@ -3250,8 +3250,8 @@ if (intval($hours)>48) {
 
   $data=Array("name"=>"home","value"=>"home");
     //$messages = str_replace('{customerName}',$value->name, $message);
-     $messages= "Buy airtime and pay utility bills for yourself or your loved ones bila stress with the Lipa Mos Mos app.";
-     $title="Buy Airtime & Pay Bills Instantly.";
+     $messages= "Buy airtime for you or your loved ones bila stress on the Lipa Mos Mos app and enjoy great discounts on your orders.";
+     $title="You can now Buy Airtime.";
     $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);  
 }
 
