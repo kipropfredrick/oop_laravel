@@ -74,9 +74,9 @@ var t =  $('#table1').DataTable({
 	serverSide: true,
 	ajax: url,
 	columns: [
-		{data: "id",name:"payment_logs.id"},
+		{data: "id",name:"billpayment_logs.id"},
 		{
-            data: "TransactionType",name:'payment_logs.TransactionType',
+            data: "TransactionType",name:'billpayment_logs.TransactionType',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -86,7 +86,7 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-            data: "TransID",name:'payment_logs.TransID',
+            data: "TransID",name:'billpayment_logs.TransID',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -96,12 +96,12 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-		  data: "TransAmount",name:'payment_logs.TransAmount',
+		  data: "TransAmount",name:'billpayment_logs.TransAmount',
 		  render: (data) => 'Ksh. ' + numberFormat(data)
 		},
-		{data:'BillRefNumber',name:'payment_logs.BillRefNumber'},
+		{data:'BillRefNumber',name:'billpayment_logs.BillRefNumber'},
 		{
-			data: "MSISDN",name:"payment_logs.MSISDN",
+			data: "MSISDN",name:"billpayment_logs.MSISDN",
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
@@ -111,14 +111,14 @@ var t =  $('#table1').DataTable({
             }
         },
 		{
-                data: "OrgAccountBalance",name:"payment_logs.OrgAccountBalance",
+                data: "OrgAccountBalance",name:"billpayment_logs.OrgAccountBalance",
                 render: (data) => 'Ksh. ' + numberFormat(data)
 		},
-		{data:'FirstName',name:'payment_logs.FirstName'},
-		{data:'MiddleName',name:'payment_logs.MiddleName'},
-		{data:'LastName',name:'payment_logs.LastName'},
+		{data:'FirstName',name:'billpayment_logs.FirstName'},
+		{data:'MiddleName',name:'billpayment_logs.MiddleName'},
+		{data:'LastName',name:'billpayment_logs.LastName'},
 		{
-		data: 'payment_logs.status',
+		data: 'billpayment_logs.status',
 		"width": "400px",
 		"render": function(data, type, full, meta){
 			var status = full.status;
@@ -167,7 +167,7 @@ var t =  $('#table1').DataTable({
 		}
 	},
 		{
-            data: "TransTime_f",name:'payment_logs.TransTime',
+            data: "TransTime_f",name:'billpayment_logs.TransTime',
             render(data) {
                 return `
                 <div style="width:200px;" class="ellipsis">
