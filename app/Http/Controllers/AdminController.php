@@ -3139,7 +3139,7 @@ function scheduletask2(Request $request){
  //discounts pap
 
    $customers=\App\Bookings::pluck('customer_id')->toArray();
-$result = \App\Customers::with('user:id,token')->select("customers.user_id")->whereNotNull('token'->whereIntegerNotInRaw("id",$customers)->get();
+$result = \App\Customers::with('user:id,token')->select("customers.user_id")->whereNotNull('token')->whereIntegerNotInRaw("id",$customers)->get();
 
 $devices=[];
 $devices1=[];
