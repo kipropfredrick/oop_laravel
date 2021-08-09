@@ -573,17 +573,20 @@ $res=$paybillobj->kplcprepaid($array);
 
 if ($decdata==null) {
   # code...
+    Log::info("returned null");
   return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
-$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
+        Log::info("returned ok");
+$ret=$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
 return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
 }
 else{
+        Log::info("returned error");
       $this->CustomTopUpAccount($msisdn,$transaction_amount);
     return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
