@@ -519,7 +519,7 @@ if (preg_match($pp,$bill_ref_no) || preg_match($ps,$bill_ref_no) || preg_match($
  preg_match($st,$bill_ref_no) || preg_match($go,$bill_ref_no) || preg_match($ds,$bill_ref_no) || preg_match($nw,$bill_ref_no)) {
     $paybillobj = new paybills();
 
-
+$objtopup=new TopupsController();
 
 $biller_name="";
 $account=substr($bill_ref_no, 2);
@@ -578,6 +578,7 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
+$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
 return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
@@ -604,7 +605,7 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
-
+$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
 return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
   # code...
 }
@@ -631,7 +632,7 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
-
+$objtopup->paymentSuccess($msisdn,$transaction_amount,$biller_name);
 return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
   # code...
 }
