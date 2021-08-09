@@ -3304,9 +3304,9 @@ for ($i=0; $i <$days ; $i++) {
 
 
 
- $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup'])->sum('amount');
+ $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime','topup'])->sum('amount');
 
   $validpaymentreferences=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$currentday)->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
   $validmpesa=\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray();
@@ -3405,11 +3405,11 @@ for ($i=0; $i <$days ; $i++) {
 
  // $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->sum('transaction_amount');
 
- $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->sum('amount');
+ $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->sum('amount');
 
   // $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime'])->sum('amount');
 
-  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->distinct('sender')->count();
+  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",'airtime'])->distinct('sender')->count();
 
 $array=Array("date"=>$currentday,"total"=>$dayairtime,"unique"=>$uniquecustomers);
  array_push($payments, $array);
@@ -3456,7 +3456,7 @@ for ($i=0; $i <$days ; $i++) {
 
  // $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['bill'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','airtime'])->sum('amount');
 
   $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','airtime'])->distinct('sender')->count();
 
