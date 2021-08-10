@@ -107,6 +107,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
         die('FCM Send Error: ' . curl_error($ch));
     }
     curl_close($ch);
+    return $result;
     $result=json_decode($result);
 
   //   if (($result->failure)>0) {
