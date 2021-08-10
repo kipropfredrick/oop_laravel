@@ -3243,6 +3243,7 @@ function scheduletask3(Request $request){
  $today =  Carbon::now();
  $devices1=[];
  $ids=[];
+ $coun=0;
    for ($i=0; $i <count($result) ; $i++) {
        # code...
 
@@ -3266,6 +3267,11 @@ if (intval($hours)<48) {
 
 // }
        array_push($devices1, $token);
+       $coun=$coun+1;
+       if ($coun==990) {
+           # code...
+        break;
+       }
 
 array_push($ids, $result[$i]->id);
     
