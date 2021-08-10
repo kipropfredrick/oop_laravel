@@ -3147,7 +3147,7 @@ $devices1=[];
 $insertnotify=[];
 $phones=[];
  $today =  Carbon::now();
-
+   return $result;
  
 
    for ($i=0; $i <count($result) ; $i++) {
