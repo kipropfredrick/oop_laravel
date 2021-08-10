@@ -3249,7 +3249,7 @@ function scheduletask3(Request $request){
 $createdDate = Carbon::parse($result[$i]->notified_at);
 $hours=$today->diffInHours($createdDate);
 
-if (intval($hours)>48) {
+if (intval($hours)<48) {
 
     # code...
        //$customer=\App\Customers::whereId($result[$i]->customer_id)->first();
