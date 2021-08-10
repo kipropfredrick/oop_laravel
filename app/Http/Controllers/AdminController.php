@@ -3242,7 +3242,7 @@ function scheduletask3(Request $request){
       $result=\App\User::whereNotNull('token')->get();
  $today =  Carbon::now();
  $devices1=[];
- $id=[];
+ $ids=[];
    for ($i=0; $i <count($result) ; $i++) {
        # code...
 
