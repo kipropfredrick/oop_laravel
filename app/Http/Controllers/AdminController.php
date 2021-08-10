@@ -3107,7 +3107,7 @@ if (intval($hours)>36) {
 
     # code...
        $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
-   $toke n=\App\User::whereId($customer->user_id)->first()->token;
+   $toke =\App\User::whereId($customer->user_id)->first()->token;
     if ($token==null) {
         # code...
 
