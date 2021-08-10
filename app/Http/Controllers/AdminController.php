@@ -3038,6 +3038,7 @@ if ($request->validmpesa!=null) {
    $result=Bookings::whereStatus("pending")->latest()->get();
  $today =  Carbon::now();
  $devices1=[];
+
    for ($i=0; $i <count($result) ; $i++) {
        # code...
 
@@ -3094,6 +3095,7 @@ return "hello";
 function scheduletask1(Request $request){
      $result=Bookings::whereStatus("active")->get();
      $devices1=[];
+     $coun=0;
  $today =  Carbon::now();
    for ($i=0; $i <count($result) ; $i++) {
        # code...
@@ -3105,7 +3107,7 @@ if (intval($hours)>36) {
 
     # code...
        $customer=\App\Customers::whereId($result[$i]->customer_id)->first();
-   $token=\App\User::whereId($customer->user_id)->first()->token;
+   $toke n=\App\User::whereId($customer->user_id)->first()->token;
     if ($token==null) {
         # code...
 
@@ -3113,6 +3115,11 @@ if (intval($hours)>36) {
     else{
    
    array_push($devices1, $token);
+    $coun=$coun+1;
+       if ($coun==990) {
+           # code...
+        break;
+       }
 }
     Bookings::whereId($result[$i]->id)->update(["notified_at"=>$today]);
 }
@@ -3146,6 +3153,7 @@ $devices=[];
 $devices1=[];
 $insertnotify=[];
 $phones=[];
+$coun=0;
  $today =  Carbon::now();
    
  
@@ -3168,7 +3176,12 @@ if ($checkifexists==null) {
 // //         array_push($devices1, $token);
 
 
-// }
+// } 
+     $coun=$coun+1;
+       if ($coun==990) {
+           # code...
+        break;
+       }
 
         $array=Array("phone"=>$result[$i]->customer->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
         array_push($insertnotify, $array);
@@ -3199,11 +3212,18 @@ if (intval($hours)>24) {
 // }
     array_push($phones, $result[$i]->customer->phone);
     array_push($devices1,$result[$i]->token);
+     $coun=$coun+1;
+       if ($coun==990) {
+           # code...
+        break;
+       }
 
 }
 
 
+
 }
+     
 
 
 
