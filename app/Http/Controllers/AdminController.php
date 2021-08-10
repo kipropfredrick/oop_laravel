@@ -3291,7 +3291,7 @@ array_push($ids, $result[$i]->id);
     //$messages = str_replace('{customerName}',$value->name, $message);
      $messages= "Buy airtime for you or your loved ones bila stress on the Lipa Mos Mos app and enjoy great discounts on your orders.";
      $title="You can now Buy Airtime.";
-    return $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);  
+    return $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data);  
     return  0;
 }
 
