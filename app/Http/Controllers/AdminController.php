@@ -3205,7 +3205,7 @@ $devices1=[];
 
 
    }
-
+return $result;
   
  $obj = new pushNotification();
 //     $data=Array("name"=>"discount", "value"=>"Get discount");
