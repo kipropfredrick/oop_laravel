@@ -3179,8 +3179,12 @@ if ($checkifexists==null) {
 else{
      // array_push($devices,$result[$i]->token);
 
-    $createdDate = Carbon::parse($checkifexists->notified_at);
-$hours=$today->diffInHours($createdDate);
+//     $createdDate = Carbon::parse($checkifexists->notified_at);
+// $hours=$today->diffInHours($createdDate);
+$t1 = strtotime( strval($today) );
+$t2 = strtotime( $checkifexists->notified_at );
+$diff = $t1 - $t2;
+$hours = round($diff / ( 60 * 60 ));
 
 if (intval($hours)>24) {
 
