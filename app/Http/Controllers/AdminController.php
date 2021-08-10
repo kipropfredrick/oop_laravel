@@ -3216,10 +3216,10 @@ if (intval($hours)>24) {
 
    }
 
-   return $result;
+   
 
    DB::table("discountnotification")->insert($insertnotify);
-
+return $result;
     DB::table("discountnotification")->whereIn('phone',$phones)->update(["notified_at"=>Now()]);
 
   
