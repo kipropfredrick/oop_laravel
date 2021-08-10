@@ -2415,7 +2415,9 @@ if ($request->validmpesa!=null) {
         $customers=[];
         $users=$request->users?$request->users:"[]";
 
-      
+     
+       
+        
 
               if($request->ajax()){
 
@@ -2433,9 +2435,10 @@ $users=json_decode($users,true);
   //   ->selectRaw("year(date) as year, COUNT(*) as count") ->orderBy('customers.id', 'DESC');
         # code...
 
-   $customers=\App\Customers::with('user')->join('bookings', 'bookings.customer_id' , '=', 'customers.id'
-    )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereNotIn("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
-
+   // $customers=\App\Customers::with('user')->join('bookings', 'bookings.customer_id' , '=', 'customers.id'
+   //  )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereNotIn("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
+ $customers=\App\Customers::with('user')->leftJoin('bookings', 'bookings.customer_id' , '=', 'customers.id'
+    )->select(DB::raw('(SELECT "" ) as status'),'customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereIntegerInRaw("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
 
         }
         else{
