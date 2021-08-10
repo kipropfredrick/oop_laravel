@@ -1635,7 +1635,7 @@ $myrole="";
 
         }
         else{
-             $this->updateunservicedoverdue();
+            // $this->updateunservicedoverdue();
         }
 
  return view('backoffice.bookings.overdue',compact('bookings'));
@@ -2231,7 +2231,7 @@ $myrole="";
 
         }
         else{
-            $this->updateunservicedoverdue();
+            //$this->updateunservicedoverdue();
         }
 
             return view('backoffice.bookings.unserviced',compact('bookings'));
@@ -3323,7 +3323,7 @@ array_push($ids, $result[$i]->id);
 
 
 
-    function updateunservicedoverdue(){
+    function updateunservicedoverdue(Request $request){
         $result=Bookings::whereIn("status",["active","unserviced"])->get();
 for ($i=0; $i <count($result) ; $i++) {
     # code..
