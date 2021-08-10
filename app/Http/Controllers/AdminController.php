@@ -2438,7 +2438,7 @@ $users=json_decode($users,true);
    // $customers=\App\Customers::with('user')->join('bookings', 'bookings.customer_id' , '=', 'customers.id'
    //  )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereNotIn("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
  $customers=\App\Customers::with('user')->leftJoin('bookings', 'bookings.customer_id' , '=', 'customers.id'
-    )->select(DB::raw('(SELECT "" ) as status'),'customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereIntegerNotInRaw("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
+    )->select(DB::raw('(SELECT "" ) as status'),'customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereIntegerNotInRaw("customers.id",$users) ->orderBy('customers.id', 'DESC');
 
         }
         else{
@@ -2448,7 +2448,7 @@ $users=json_decode($users,true);
         //                 whereIn("customers.id",$users)
         //                 ->orderBy('customers.id', 'DESC')->get();
                $customers=\App\Customers::with('user')->join('bookings', 'bookings.customer_id' , '=', 'customers.id'
-    )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereIntegerInRaw("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
+    )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereIntegerInRaw("customers.id",$users) ->orderBy('customers.id', 'DESC');
         }
 
 
