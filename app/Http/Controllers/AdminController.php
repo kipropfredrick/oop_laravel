@@ -3202,10 +3202,9 @@ if (intval($hours)>24) {
 
 }
 
-  $array=Array("phone"=>$result[$i]->customer->phone,"created_at"=>Now(),"updated_at"=>Now(),"notified_at"=>Now());
-        array_push($insertnotify, $array);
+
 }
-return $result;
+
 
 
 
