@@ -3281,10 +3281,10 @@ array_push($ids, $result[$i]->id);
 
    }
 
-   return 0;
+
    \App\User::whereIntegerInRaw('id',$ids)->update(["notified_at"=>$today]);
 
-   return 0;
+
  $obj = new pushNotification();
 
   $data=Array("name"=>"home","value"=>"home");
@@ -3292,6 +3292,7 @@ array_push($ids, $result[$i]->id);
      $messages= "Buy airtime for you or your loved ones bila stress on the Lipa Mos Mos app and enjoy great discounts on your orders.";
      $title="You can now Buy Airtime.";
     $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);  
+    return  0;
 }
 
 
