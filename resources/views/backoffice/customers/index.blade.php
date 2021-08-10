@@ -72,10 +72,10 @@ var t =  $('#table1').DataTable({
 		{data: "id",name:"customers.id"},
 		{data: "user.name",name:"user.name"},
 		{data: "phone",name:"customers.phone"},
-		{data: "total",name:"total"},
+		{data: "total",name:"customers.phone"},
 		
 		{data: "date",name:"customers.date"},
-		{data: "status",name:"status"},
+		{data: "status",name:"customers.phone"},
 		{data: "user.platform",name:"user.platform"},
 	],
 });
