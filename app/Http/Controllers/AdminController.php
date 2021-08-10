@@ -3239,7 +3239,7 @@ return 0;
 
 }
 function scheduletask3(Request $request){
-      $result=\App\User::get();
+      $result=\App\User::whereNotNull('token')->get();
  $today =  Carbon::now();
  $devices1=[];
  $id=[];
@@ -3254,17 +3254,18 @@ if (intval($hours)>48) {
     # code...
        //$customer=\App\Customers::whereId($result[$i]->customer_id)->first();
    $token=$result[$i]->token;
-    if ($token==null) {
-        # code...
+//     if ($token==null) {
+//         # code...
 
-    }
-    else{
-    // $obj = new pushNotification();
-    // $data=Array("name"=>"home","value"=>"home");
-    // $obj->exceuteSendNotification($token,"","",$data);
-        array_push($devices1, $token);
+//     }
+//     else{
+//     // $obj = new pushNotification();
+//     // $data=Array("name"=>"home","value"=>"home");
+//     // $obj->exceuteSendNotification($token,"","",$data);
+ 
 
-}
+// }
+       array_push($devices1, $token);
 
 array_push($ids, $result[$i]->id);
     
