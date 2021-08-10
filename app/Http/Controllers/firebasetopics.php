@@ -321,6 +321,8 @@ function sendpromoreminder(Request $request){
     $users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->get();
 $obj = new pushNotification();
+$devices=[];
+$coun=0;
 foreach ($users as $key => $value) {
 
 $token=$value->token;
@@ -329,13 +331,27 @@ $token=$value->token;
 
     }
     else{
+array_push($devices, $token);
+$coun=$coun+1;
+if ($coun==900) {
+    # code...
 
-    $data=Array("name"=>"payment","value"=>"payment",'priority' => "high");
+$data=Array("name"=>"payment","value"=>"payment",'priority' => "high");
 $message="Stand a chance to get up to KSh.1000 discount on your order this week if you pay for at least 5 days straight.";
 $title="Congratulations! We want to reward you.";
-$obj->exceuteSendNotification($token,$message,$title,$data);
+$obj->exceuteSendNotificationGroup($devices,$message,$title,$data);
+$coun=0;
+$devices=[];
+}
+    
         }
 
 }
+
+$data=Array("name"=>"payment","value"=>"payment",'priority' => "high");
+$message="Stand a chance to get up to KSh.1000 discount on your order this week if you pay for at least 5 days straight.";
+$title="Congratulations! We want to reward you.";
+$obj->exceuteSendNotificationGroup($devices,$message,$title,$data);
+
 }
 }
