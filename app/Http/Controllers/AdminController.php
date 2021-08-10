@@ -2412,105 +2412,131 @@ if ($request->validmpesa!=null) {
     public function customers(Request $request,$type){
 
         $title="";
+        $customers=[];
+        $users=$request->users?$request->users:"[]";
 
-        if ($type=="active") {
+      
 
-        $customers=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
+              if($request->ajax()){
+
+$users=json_decode($users,true);
+
+
+        if ($type=="inactive") {
+        // $customers  = DB::table('customers')
+        //                 ->select('customers.*','users.*')
+        //                 ->join('users', 'customers.user_id', '=', 'users.id')->
+        //                 whereNotIn("customers.id",$users)
+        //                 ->orderBy('customers.id', 'DESC')->get();
+
+  // $customers=\App\Customers::with('user')->whereNotIn("customers.id",$users)->join('customers', 'customers.id' , '=', 'bookings.customer_id'
+  //   ->selectRaw("year(date) as year, COUNT(*) as count") ->orderBy('customers.id', 'DESC');
+        # code...
+
+   $customers=\App\Customers::with('user')->join('bookings', 'bookings.customer_id' , '=', 'customers.id'
+    )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereNotIn("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
+
+
+        }
+        else{
+        // $customers  = DB::table('customers')
+        //                 ->select('customers.*','users.*')
+        //                 ->join('users', 'customers.user_id', '=', 'users.id')->
+        //                 whereIn("customers.id",$users)
+        //                 ->orderBy('customers.id', 'DESC')->get();
+               $customers=\App\Customers::with('user')->join('bookings', 'bookings.customer_id' , '=', 'customers.id'
+    )->select('bookings.status','customers.*', DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = customers.id) as total'),DB::raw('DATE_FORMAT(customers.created_at, "%b, %d, %Y") as date'))->whereIn("customers.id",$users) ->orderBy('customers.id', 'DESC')->get();
+        }
+
+
+
+            return DataTables::of($customers)->make(true);
+
+        }
+        else{
+
+
+           if ($type=="active") {
+
+        $users=\App\Bookings::where('status','=','complete')->orWhere('status','=','active')->pluck('customer_id')->toArray();
         $title="Active/ Complete Bookings Customers";
         # code...
         }
         else if ($type=='complete') {
         # code...
-        $customers=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
+        $users=\App\Bookings::where('status','=','complete')->pluck('customer_id')->toArray();
         $title="Complete Bookings Customers";
 
         }
         else if ($type=='active-bookings') {
         # code...
-        $customers=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
+        $users=\App\Bookings::where('status','=','active')->pluck('customer_id')->toArray();
         $title="Active Bookings Customers";
 
         }
 
         else if ($type=='pending-bookings') {
         # code...
-        $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
+        $users=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
 
         $title="Pending Bookings Customers";
         }
         else if ($type=='revoked-bookings') {
         # code...
-        $customers=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
+        $users=\App\Bookings::where('status','=','revoked')->pluck('customer_id')->toArray();
         $title="Revoked Bookings Customers";
 
         }
         else if ($type=='inactive') {
         # code...
-        $customers=\App\Bookings::pluck('customer_id')->toArray();
+        $users=\App\Bookings::pluck('customer_id')->toArray();
         $title="Inactive Customers Customers";
 
         }
 
          else if ($type=='overdue') {
         # code...
-       $customers=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
+       $users=\App\Bookings::where('status','=','overdue')->pluck('customer_id')->toArray();
         $title="Overdue Bookings Customers";
 
         }
         else if ($type=='unserviced') {
         # code...
-       $customers=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
+       $users=\App\Bookings::where('status','=','unserviced')->pluck('customer_id')->toArray();
         $title="Unserviced Bookings Customers";
 
         }
-
-
-
-        if ($type=="inactive") {
-        $customers  = DB::table('customers')
-                        ->select('customers.*','customers.id AS customer_id','users.*')
-                        ->join('users', 'customers.user_id', '=', 'users.id')->
-                        whereNotIn("customers.id",$customers)
-                        ->orderBy('customers.id', 'DESC')
-                        ->get();
-        # code...
-        }
-        else{
-        $customers  = DB::table('customers')
-                        ->select('customers.*','customers.id AS customer_id','users.*')
-                        ->join('users', 'customers.user_id', '=', 'users.id')->
-                        whereIn("customers.id",$customers)
-                        ->orderBy('customers.id', 'DESC')
-                        ->get();
-        }
-
-
-
-
-
-        foreach($customers as $customer){
-
-            $bookingsCount = \App\Bookings::where('customer_id',$customer->customer_id)->where('status','!=','revoked')->count();
-
-            $booking = \App\Bookings::where('customer_id',$customer->customer_id)->latest()->first();
-
-            if($booking!=null){
-                $customer->booking_status = $booking->status;
-            }else{
-                $customer->booking_status = "NO BOOKING";
-            }
-
-            $customer->bookingsCount = $bookingsCount;
+        $users=json_encode($users);
 
         }
 
-        return view('backoffice.customers.index',compact('customers','title'));
+        
+
+
+
+        // foreach($customers as $customer){
+
+        //     $bookingsCount = \App\Bookings::where('customer_id',$customer->customer_id)->where('status','!=','revoked')->count();
+
+        //     $booking = \App\Bookings::where('customer_id',$customer->customer_id)->latest()->first();
+
+        //     if($booking!=null){
+        //         $customer->booking_status = $booking->status;
+        //     }else{
+        //         $customer->booking_status = "NO BOOKING";
+        //     }
+
+        //     $customer->bookingsCount = $bookingsCount;
+
+        // }
+
+        return view('backoffice.customers.index',compact('customers','title','users','type'));
     }
 
     public function delete_customer($id){
 
         \App\Bookings::where('customer_id',$id)->where('status','revoked')->delete();
-
+ 
         $customer  = DB::table('customers')
                         ->where('id',$id)
                         ->first();

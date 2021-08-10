@@ -25,8 +25,8 @@
 			@endif
 		</div>
         
-		<table id="myTable" class="table table-bordered table-striped">
-						<thead>
+        <table style="margin-top:10px" id="table1" class="table table-bordered table-striped">
+				<thead>
 							<tr>
                                 <th class="thead">No.</th>
 								<th class="thead">Full Name</th>
@@ -38,30 +38,63 @@
 								<th class="thead">Platform</th>
 							</tr>
 						</thead>
-
-						<tbody>
-							<?php $index = 0?>
-							@foreach($customers as $customer)
-							<tr>
-								<td>{{ $index = $index + 1}}.</td>
-								<td>{{$customer->name}}</td>
-								<td>{{$customer->phone}}</td>
-								<td>{{number_format($customer->bookingsCount)}}</td>
-								<td>{{date('M d'.', '.'Y', strtotime($customer->created_at))}}</td>
-								<td>
-									@if($customer->bookingsCount == 0)
-										<a class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this customer?') ? true : false" href="/admin/delete-customer/{{$customer->customer_id}}"><i class="fa fa-trash"></i> Delete</a>
-									@else
-									<h6 style="text-transform: uppercase">{{$customer->booking_status}}</h6>
-									@endif
-								</td>
-
-								<td>{{$customer->platform}}</td>
-							</tr>
-							@endforeach
-						</tbody>
+			<tbody>
 						
-					</table>
-                </div>
-             </div>
+			</tbody>
+		</table>
+	</div>
+	</div>
+@endsection
+
+@section('extra-js')
+
+<script>
+
+$(document).ready(function() {
+
+var url = window.location.href;
+
+var t =  $('#table1').DataTable({
+	processing: true,
+	serverSide: true,
+		ajax: {
+
+            "url" : url,
+         "type": "POST",
+         "data" : {
+            "users" : '{{$users}}',
+            "type":'{{$type}}',
+             "_token": "{{ csrf_token() }}",
+
+          
+        }},
+	columns: [
+		{data: "id",name:"customers.id"},
+		{data: "user.name",name:"user.name"},
+		{data: "phone",name:"customers.phone"},
+		{data: "total",name:"total"},
+		
+		{data: "date",name:"customers.date"},
+		{data: "status",name:"status"},
+		{data: "user.platform",name:"user.platform"},
+	],
+});
+
+t.on( 'draw.dt', function () {
+var PageInfo = $('#table1').DataTable().page.info();
+	 t.column(0, { page: 'current' }).nodes().each( function (cell, i) {
+		cell.innerHTML = i + 1 + PageInfo.start;
+	} );
+} );
+} );
+
+// function check_if_booking_exists(){
+
+// 	url = '/api/check-booking-exists';
+
+// }
+
+
+</script>
+
 @endsection

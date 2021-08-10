@@ -301,7 +301,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::any('/payments', 'AdminController@payments')->name('admin.payments');
     Route::get('/payment-callbacks', 'AdminController@payments_callbacks');
     Route::get('/bill-payment-callbacks', 'AdminController@billpayments_callbacks');
-    Route::get('/customers/{type}', 'AdminController@customers')->name('admin.customers');
+    Route::any('/customers/{type}', 'AdminController@customers')->name('admin.customers');
     Route::get('/delete-customer/{id}', 'AdminController@delete_customer');
     Route::get('/agents', 'AdminController@agents')->name('admin.agents');
     Route::get('/vendors', 'AdminController@vendors')->name('admin.vendors');
