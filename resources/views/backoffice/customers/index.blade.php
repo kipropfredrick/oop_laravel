@@ -74,7 +74,7 @@ var t =  $('#table1').DataTable({
 		{data: "phone",name:"customers.phone"},
 		{data: "total",name:"customers.phone"},
 		
-		{data: "date",name:"customers.date"},
+		{data: "date",name:"customers.created_at"},
 		{data: "status",name:"customers.phone"},
 		{data: "user.platform",name:"user.platform"},
 	],
