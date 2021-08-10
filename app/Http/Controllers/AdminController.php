@@ -3283,7 +3283,7 @@ array_push($ids, $result[$i]->id);
 
 
    \App\User::whereIntegerInRaw('id',$ids)->update(["notified_at"=>$today]);
-return  $devices1;
+
 
  $obj = new pushNotification();
 
