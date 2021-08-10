@@ -201,7 +201,7 @@ else{
 
 
 
-$response= json_decode($this->phonelookup(substr($mobilerec,2, 3)));
+$response= json_decode($this->phonelookup(substr($mobilerec,1, 3)));
 
 if (isset($response->data)) {
   # code...
@@ -223,7 +223,7 @@ if (isset($response->data)) {
 }
 else{
 
-  return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
+  return Array("data"=>Array("response"=>"Mobile Operator Not Supported"),"error"=>true);
 
 }
 
