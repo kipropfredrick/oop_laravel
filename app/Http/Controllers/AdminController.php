@@ -3140,7 +3140,7 @@ function scheduletask2(Request $request){
 
    $customers=\App\Bookings::pluck('customer_id')->toArray();
     $cus=\App\Customers::whereIntegerNotInRaw("id",$customers)->pluck('user_id')->toArray();
-$result = \App\User::with('customer:user_id,phone')->select("token","id")->whereNotNull('token')->whereIntegerNotInRaw("id",$cus)->get();
+$result = \App\User::with('customer:user_id,phone')->select("token","id")->whereNotNull('token')->whereIntegerInRaw("id",$cus)->get();
 
 $devices=[];
 $devices1=[];
