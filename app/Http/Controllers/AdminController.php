@@ -3242,6 +3242,7 @@ function scheduletask3(Request $request){
       $result=\App\User::get();
  $today =  Carbon::now();
  $devices1=[];
+ $id=[];
    for ($i=0; $i <count($result) ; $i++) {
        # code...
 
@@ -3262,8 +3263,11 @@ if (intval($hours)>48) {
     // $data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($token,"","",$data);
         array_push($devices1, $token);
+
 }
-    \App\User::whereId($result[$i]->id)->update(["notified_at"=>$today]);
+
+array_push($ids, $result[$i]->id);
+    
 }
 
 
@@ -3275,6 +3279,11 @@ if (intval($hours)>48) {
 
 
    }
+
+   return 0;
+   \App\User::whereIntegerInRaw('id',$ids)->update(["notified_at"=>$today]);
+
+   return 0;
  $obj = new pushNotification();
 
   $data=Array("name"=>"home","value"=>"home");
