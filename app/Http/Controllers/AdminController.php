@@ -3889,7 +3889,7 @@ $array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"u
 
 
 
-
+$payments=array_reverse($payments, true);
 
 
     return view('backoffice.aggregate.all',compact('payments','year','month'));
