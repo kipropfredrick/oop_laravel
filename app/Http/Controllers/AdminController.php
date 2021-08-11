@@ -3863,7 +3863,7 @@ for ($i=$days-1; $i >=0 ; $i--) {
     $j=$i+1;
   $currentday=date('Y-m-d', strtotime($firstday. ' - '.$j.' days'));
 
-  if (Now()>$currentday) {
+  if (Now()<$currentday) {
       # code...
     continue;
   }
