@@ -85,27 +85,38 @@ $amount=intval($request->input("amount"));
 
 $airtime=false;
 $mobileInput=$request->input('sendmobile');
-    $pattern = "/^(0)\d{9}$/";
-$pattern1 = "/^(254)\d{9}$/";
-$pattern2 = "/^(\+254)\d{9}$/";
-if (preg_match($pattern, $mobileInput)) {
-  # code...
-    $airtime=true;
-  $mobilerec=$mobileInput;
-}
-else if(preg_match($pattern2, $mobileInput)){
-    $airtime=true;
-$mobilerec="0".substr($mobileInput, 4);
-}
-else if(preg_match($pattern1, $mobileInput)){
-    $airtime=true;
-$mobilerec="0".substr($mobileInput, 3);
-}
+//     $pattern = "/^(0)\d{9}$/";
+// $pattern1 = "/^(254)\d{9}$/";
+// $pattern2 = "/^(\+254)\d{9}$/";
+// if (preg_match($pattern, $mobileInput)) {
+//   # code...
+//     $airtime=true;
+//   $mobilerec=$mobileInput;
+// }
+// else if(preg_match($pattern2, $mobileInput)){
+//     $airtime=true;
+// $mobilerec="0".substr($mobileInput, 4);
+// }
+// else if(preg_match($pattern1, $mobileInput)){
+//     $airtime=true;
+// $mobilerec="0".substr($mobileInput, 3);
+// }
+  list($msisdn, $network) = $this->get_msisdn_network($request->phone);
+
+        if (!$msisdn){
+
+              return Array("data"=>Array("response"=>"Invalid Phone Number"),"error"=>true);
+        }else{
+            $mobilerec = "0".substr($msisdn, 3);
+            
+            $valid_phone=$msisdn;
+         
+        }
 
 
-if ($amount<5) {
+if ($amount<10) {
   # code...
-  return Array("data"=>Array("response"=>"Minimum top-up is KSh.5"),"error"=>true);
+  return Array("data"=>Array("response"=>"Minimum top-up is KSh.10"),"error"=>true);
 }
 
 
@@ -201,9 +212,9 @@ else{
 
 
 
-$response= json_decode($this->phonelookup(substr($mobilerec,1, 3)));
+///$response= json_decode($this->phonelookup(substr($mobilerec,1, 3)));
 
-if (isset($response->data)) {
+if ($msisdn) {
   # code...
   $operator= $response->data->operator;
 
@@ -345,6 +356,10 @@ $biller_name=$request->biller_name;
 // $payfor=$request->payfor;
 $account=$request->accountno;
  $paybillobj = new paybills();
+
+
+        
+
 // $array=Array("PhoneNumber"=>"0790535349","CustomerName"=>"Brian Mutiso","MeterNumber"=>"37182395980","Amount"=>45000);
 
 //return $this->getBalance();
@@ -673,6 +688,24 @@ break;  }
     $data=Array("name"=>"home","value"=>"home");
     $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Payment of KSh. ".$sendamount." was successful.","Transaction successful. ",$data);
 }
+
+
+        public function get_msisdn_network($msisdn){
+            $regex =  [
+                 'airtel' =>'/^\+?(254|0|)7(?:[38]\d{7}|5[0-6]\d{6})\b/',
+                 'equitel' => '/^\+?(254|0|)76[0-7]\d{6}\b/',
+                 'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
+                 'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
+             ];
+         
+             foreach ($regex as $operator => $re ) {
+                 if (preg_match($re, $msisdn)) {
+                     return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
+                 }
+             }
+             return [false, false];
+         }
+
 
 
 }
