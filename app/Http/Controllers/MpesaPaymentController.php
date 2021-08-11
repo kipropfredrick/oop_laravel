@@ -73,9 +73,16 @@ class MpesaPaymentController extends Controller
 
             if($balance<1){
 
+                $user=\App\Customers::whereId($booking->customer_id)->first();
+             
+                $phone=$user->phone;
+                $res=$this->CustomTopUpExcessAmount($phone,$balance*-1);
+
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
                 ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'complete']);
+
+
 
                 $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
 
@@ -849,7 +856,10 @@ else{
             $balance = $booking->total_cost - $amount_paid;
 
             if($balance<1){
-
+               $user=\App\Customers::whereId($booking->customer_id)->first();
+             
+                $phone=$user->phone;
+                $res=$this->CustomTopUpExcessAmount($phone,$balance*-1);
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
                 ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'complete','updated_at'=>now()]);
@@ -1126,6 +1136,11 @@ else{
 
 
             if($balance<1){
+
+                 $user=\App\Customers::whereId($booking->customer_id)->first();
+             
+                $phone=$user->phone;
+                $res=$this->CustomTopUpExcessAmount($phone,$balance*-1);
 
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
@@ -1555,6 +1570,45 @@ if($obj!=null){
 $balance=$balance+$transaction_amount;
 $user->update(["balance"=>$balance]);
   \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"credited"]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TT'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id);
+\App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($user->first()->token,"Your bill payment request was not successful. The amount has been credited back to your Lipa Mos Mos wallet.","Payment failed",$data);
+
+}
+
+   return 0;
+    }
+
+        function CustomTopUpExcessAmount($msisdn,$transaction_amount){
+        $customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}else{
+    return 0;
+}
+
+$user=\App\User::whereId($userid);
+$obj=$user->first();
+if($obj!=null){
+    $balance=$obj->balance;
+$balance=$balance+$transaction_amount;
+$user->update(["balance"=>$balance]);
+
 
         for($i=0;$i<1000000;$i++){
             $transid = 'TT'.rand(10000,99999)."M";
