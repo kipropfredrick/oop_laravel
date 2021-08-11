@@ -363,25 +363,41 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
         if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($mob1,$bill_ref_no)) {
             # code...
 
-if ($ismobiletopuptrue) {
-     Log::info("num 1");
-   $recipient="0".substr($bill_ref_no, 3);
-}
-else if (preg_match($mob1,$bill_ref_no)) {
-     Log::info("num 2");
-   $recipient="0".substr($bill_ref_no, 4);
-}
-else{
-     Log::info("num 3");
-    $recipient=$bill_ref_no;
-}
+// if ($ismobiletopuptrue) {
+//      Log::info("num 1");
+//    $recipient="0".substr($bill_ref_no, 3);
+// }
+// else if (preg_match($mob1,$bill_ref_no)) {
+//      Log::info("num 2");
+//    $recipient="0".substr($bill_ref_no, 4);
+// }
+// else{
+//      Log::info("num 3");
+//     $recipient=$bill_ref_no;
+// }
 
-$obz=new TopupsController();
-$response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
+  list($msisdn, $network) = $this->get_msisdn_network($bill_ref_no);
 
-if (isset($response->data)) {
+        if (!$msisdn){
+             Log::info("Invalid Phone Number");
+
+              return Array("data"=>Array("response"=>"Invalid Phone Number"),"error"=>true);
+        }else{
+            $mobilerec = "0".substr($msisdn, 3);
+            
+            $valid_phone=$msisdn;
+         
+        }
+
+
+
+
+// $obz=new TopupsController();
+// $response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
+
+if ($msisdn) {
   # code...
-  $operator= $response->data->operator;
+  $operator=$network;
 
     if ($operator=="safaricom") {
     # code...
@@ -1572,18 +1588,31 @@ $recipient="";
 if (preg_match($air, $bill_ref_no) || preg_match($tel, $bill_ref_no) || preg_match($saf, $bill_ref_no) ) {
     # code...
     $bill_ref_no=substr($bill_ref_no, 3);
-}
+    list($msisdn, $network) = $this->get_msisdn_network($bill_ref_no);
 
-
-        if (preg_match($ismobiletopup, $bill_ref_no)) {
-   $recipient="0".substr($bill_ref_no, 3);
-}
-else if (preg_match($mob1,$bill_ref_no)) {
-   $recipient="0".substr($bill_ref_no, 4);
-}
+        if (!$msisdn){
+           
+        }else{
+            $recipient = "0".substr($msisdn, 3);
+            
+            $valid_phone=$msisdn;
+         
+}}
 else{
-    $recipient=$bill_ref_no;
+      list($msisdn, $network) = $this->get_msisdn_network($bill_ref_no);
+
+        if (!$msisdn){
+           
+        }else{
+            $recipient = "0".substr($msisdn, 3);
+            
+            $valid_phone=$msisdn;
+         
+        }
 }
+
+
+ 
 
 return $recipient;
     }
@@ -1606,6 +1635,22 @@ if ($customer!=null) {
 
   return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
 }
+
+      public function get_msisdn_network($msisdn){
+            $regex =  [
+                 'airtel' =>'/^\+?(254|0|)7(?:[38]\d{7}|5[0-6]\d{6})\b/',
+                 'equitel' => '/^\+?(254|0|)76[0-7]\d{6}\b/',
+                 'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
+                 'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
+             ];
+         
+             foreach ($regex as $operator => $re ) {
+                 if (preg_match($re, $msisdn)) {
+                     return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
+                 }
+             }
+             return [false, false];
+         }
 
 
 
