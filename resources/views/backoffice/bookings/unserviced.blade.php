@@ -250,12 +250,16 @@ return `
             },
             {
 		data:"id","render": function(data, type, full, meta){
-            	
+      var storepicking="";
+            	if (full.amount_paid>=full.item_cost) {
+storepicking=`<a class="btn btn-outline-success mt-1" href="/admin/storepicking-booking/${data}" onclick="return confirm('Confirm Item will be picked from the store?') ? true : false">Storepickup</a>
+                                 `;
+                }
  //07.02.2017
 return `
 
-<a class="btn btn-outline-danger" href="/admin/revoke-booking/${data}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a>
-								 `;
+<a class="btn btn-outline-danger" href="/admin/revoke-booking/${data}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a> &nbsp &nbsp
+								 `+storepicking;
 
             	}
             },
