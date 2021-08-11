@@ -261,15 +261,43 @@ array_push($uniquebillcustomers, $ub);
 
      }
 
-     public function vendor_pending_products(){
-        $status = "Pending";
-       $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"pending")->orderBy('id', 'DESC')->get();
-       return view('backoffice.products.vendor',compact('products','status'));
+     public function vendor_pending_products(Request $request){
+       //  $status = "Pending";
+       // $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"pending")->orderBy('id', 'DESC')->get();
+       // return view('backoffice.products.vendor',compact('products','status'));
+
+$products=[];
+
+          $status = "Pending";
+
+        if($request->ajax()){
+
+        $products =\App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"pending")->orderBy('id', 'DESC');
+
+ return DataTables::of($products)->make(true);
+
+
+          }
+  
+        return view('backoffice.products.vendor',compact('products','status'));
      }
 
-     public function vendor_approved_products(){
-        $status = "Approved";
-        $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"approved")->orderBy('id', 'DESC')->get();
+     public function vendor_approved_products(Request $request){
+
+
+
+              $status = "Approved";
+              $products=[];
+
+        if($request->ajax()){
+
+        $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"approved")->orderBy('id', 'DESC');
+
+ return DataTables::of($products)->make(true);
+
+
+          }
+  
         return view('backoffice.products.vendor',compact('products','status'));
       }
 
@@ -288,9 +316,24 @@ array_push($uniquebillcustomers, $ub);
         return view('backoffice.products.agent',compact('products'));
       }
 
-      public function vendor_rejected_products(){
-        $status = "Rejected";
-        $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"rejected")->orderBy('id', 'DESC')->get();
+      public function vendor_rejected_products(Request $request){
+
+
+
+
+              $status = "Rejected";
+              $products=[];
+
+        if($request->ajax()){
+
+        $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"rejected")->orderBy('id', 'DESC');
+
+ return DataTables::of($products)->make(true);
+
+
+          }
+        // $status = "Rejected";
+        // $products = \App\Products::with('category','vendor','vendor.user')->where('vendor_id','!=', null)->where('status','=',"rejected")->orderBy('id', 'DESC')->get();
         return view('backoffice.products.vendor',compact('products','status'));
       }
 
