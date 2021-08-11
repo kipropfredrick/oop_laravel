@@ -1310,6 +1310,35 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 
         return back()->with('success','Booking revoked.');
     }
+    public function storepicking_booking($id){
+ $result=DB::table('bookings')->where('id','=',$id)->first();
+
+ if ($result==null) {
+     # code...
+    return Back()->with("error","booking reference failed");
+ }
+ $excessamount=(intval($result->amount_paid)-intval($result->item_cost));
+
+     DB::table('bookings')->where('id','=',$id)->update(["status"=>"complete","balance"=>$excessamount*-1]);
+$customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
+$user=\App\User::whereId($customers->user_id)->first();
+$balance=intval($user->balance);
+\App\User::whereId($customers->user_id)->update(["balance"=$balance+$excessamount]);
+$product=\App\Products::whereId($result->product_id)->first();
+$message = "Congratulations, You have completed Payment for ".$product->product_name.", You will be contacted to finalise your delivery.";
+
+                SendSMSController::sendMessage($customers->phone,$message,$type="booking_completed_notification");
+
+    $obj = new pushNotification();
+    $data=Array("name"=>"complete","value"=>"View Orders");
+    $obj->exceuteSendNotification($user->token,"You have completed payment for ".$product->product_name,"Congratulations",$data);
+        
+
+        return back()->with('success','Item marked as complete.');
+
+
+
+    }
       public function remove_booking($id){
         DB::table('bookings')->where('id','=',$id)->delete();
 
