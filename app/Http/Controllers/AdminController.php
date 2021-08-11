@@ -1987,7 +1987,7 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
         }
 
 
-return $result;
+
 
 // $obz=new TopupsController();
 // $response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
@@ -2313,6 +2313,8 @@ return $result;
 
 
        } 
+
+       return $result;
     }
 
     public function record_payment(Request $request,$id){
