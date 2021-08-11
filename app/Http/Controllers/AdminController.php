@@ -1323,7 +1323,7 @@ $balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balan
 $customers=DB::table('customers')->where('id','=',$result->customer_id)->first();
 $user=\App\User::whereId($customers->user_id)->first();
 $balance=intval($user->balance);
-\App\User::whereId($customers->user_id)->update(["balance"=$balance+$excessamount]);
+\App\User::whereId($customers->user_id)->update(["balance"=>$balance+$excessamount]);
 $product=\App\Products::whereId($result->product_id)->first();
 $message = "Congratulations, You have completed Payment for ".$product->product_name.", You will be contacted to finalise your delivery.";
 
