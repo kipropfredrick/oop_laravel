@@ -211,7 +211,7 @@ else{
 
 if ($msisdn) {
   # code...
-  $operator= $response->data->operator;
+  $operator= $network;
 
     if ($operator=="safaricom") {
     # code...
