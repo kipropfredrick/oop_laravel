@@ -101,7 +101,7 @@ $mobileInput=$request->input('sendmobile');
 //     $airtime=true;
 // $mobilerec="0".substr($mobileInput, 3);
 // }
-  list($msisdn, $network) = $this->get_msisdn_network($request->phone);
+  list($msisdn, $network) = $this->get_msisdn_network($mobileInput);
 
         if (!$msisdn){
 
