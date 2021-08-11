@@ -249,7 +249,7 @@ return `
             	data:"status",name:"bookings.status"
             },
             {
-		data:"id","render": function(data, type, full, meta){
+		data:"id","width": "400px","render": function(data, type, full, meta){
             var storepicking="";
             	if (full.amount_paid>=full.item_cost) {
 storepicking=`<a class="btn btn-outline-success" href="/admin/storepicking-booking/${data}" onclick="return confirm('Confirm Item will be picked from the store?') ? true : false">Storepickup</a>
