@@ -73,10 +73,6 @@ class MpesaPaymentController extends Controller
 
             if($balance<1){
 
-                $user=\App\Customers::whereId($booking->customer_id)->first();
-             
-                $phone=$user->phone;
-                $res=$this->CustomTopUpExcessAmount($phone,$balance*-1);
 
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
@@ -1137,10 +1133,6 @@ else{
 
             if($balance<1){
 
-                 $user=\App\Customers::whereId($booking->customer_id)->first();
-             
-                $phone=$user->phone;
-                $res=$this->CustomTopUpExcessAmount($phone,$balance*-1);
 
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
@@ -1623,7 +1615,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification($user->first()->token,"Your bill payment request was not successful. The amount has been credited back to your Lipa Mos Mos wallet.","Payment failed",$data);
+    $obj->exceuteSendNotification($user->first()->token,"You have received, ksh.".$transaction_amount." on you mosmos wallet.","Payment failed",$data);
 
 }
 
