@@ -2300,7 +2300,7 @@ else{
 return $result;
 
 
-        
+       } 
     }
 
     public function record_payment(Request $request,$id){
