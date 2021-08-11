@@ -252,14 +252,14 @@ return `
 		data:"id","width": "400px","render": function(data, type, full, meta){
             var storepicking="";
             	if (full.amount_paid>=full.item_cost) {
-storepicking=`<a class="btn btn-outline-success col-6" href="/admin/storepicking-booking/${data}" onclick="return confirm('Confirm Item will be picked from the store?') ? true : false">Storepickup</a>
+storepicking=`<a class="btn btn-outline-success" href="/admin/storepicking-booking/${data}" onclick="return confirm('Confirm Item will be picked from the store?') ? true : false">Storepickup</a>
                                  `;
                 }
  //07.02.2017
 return `
-<div class="row">
-<a class="btn btn-outline-danger col-6" href="/admin/revoke-booking/${data}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a> &nbsp &nbsp
-								 `+storepicking+`</div>`;
+
+<a class="btn btn-outline-danger" href="/admin/revoke-booking/${data}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a> &nbsp &nbsp
+								 `+storepicking;
 
             	}
             },
