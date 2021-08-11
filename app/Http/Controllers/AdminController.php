@@ -3858,14 +3858,14 @@ $year=$request->year;
 
 $days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 
-$firstday=$year."-".$month."-"."00";
-for ($i=0; $i <$days ; $i++) { 
+$firstday=$year."-".$month."-".$days;
+for ($i=$days-1; $i >=0 ; $i--) { 
     $j=$i+1;
-  $currentday=date('Y-m-d', strtotime($firstday. ' + '.$j.' days'));
+  $currentday=date('Y-m-d', strtotime($firstday. ' - '.$j.' days'));
 
-  if (Now()<$currentday) {
+  if (Now()>$currentday) {
       # code...
-    break;
+    continue;
   }
 
 
