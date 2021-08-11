@@ -367,7 +367,7 @@
     
     <!-- copyrights -->
     <div class="copyrights">
-        <div class="container">
+        <div class="container row">
             &copy; <span id="currentYear"></span>. <p style="color: black; font-weight: bold;">MosMos Payments. All Rights Reserved.</p>
         </div>
     </div>
