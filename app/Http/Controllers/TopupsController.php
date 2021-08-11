@@ -174,11 +174,6 @@ if ($amount>intval($balance)) {
 
 
 
-if (!$airtime) {
-    # code...
-    return Array("data"=>Array("response"=>"The phone number format is not supported. Please try again."),"error"=>true);
-   
-}
 
 //   $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
 // $apiKey   =env('AFRIAPIKEY');
