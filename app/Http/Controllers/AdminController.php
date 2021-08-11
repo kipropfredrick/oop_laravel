@@ -3936,7 +3936,7 @@ $array=Array("date"=>$currentday,"total"=>$daypayment,"unique"=>$uniquecustomers
  array_push($payments, $array);
 }
 
-
+$payments=array_reverse($payments, true);
 
 
 
@@ -3984,7 +3984,7 @@ $array=Array("date"=>$currentday,"total"=>$dayairtime,"unique"=>$uniquecustomers
  array_push($payments, $array);
 }
 
-
+$payments=array_reverse($payments, true);
 
 
 
@@ -4035,7 +4035,7 @@ $array=Array("date"=>$currentday,"total"=>$dayutility,"unique"=>$uniquecustomers
 
 
 
-
+$payments=array_reverse($payments, true);
 
 
     return view('backoffice.aggregate.utility',compact('payments','year','month'));
