@@ -368,7 +368,7 @@
     <!-- copyrights -->
     <div class="copyrights">
         <div class="container">
-            &copy; <span id="currentYear"></span>. Lipa Mos Mos
+            &copy; <span id="currentYear"></span>. <p style="color: black; font-weight: bold;">MosMos Payments. All Rights Reserved.</p>
         </div>
     </div>
     <!-- end -->
