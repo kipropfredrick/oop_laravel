@@ -286,7 +286,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/active_bookings', 'AdminController@active_bookings')->name('admin.active_bookings');
     Route::get('/revoke-booking/{id}', 'AdminController@revoke_booking')->name('admin.revoke-booking');
 
-    Route::get('/storepicking-booking','AdminController@storepicking-booking')->name('admin.storepicking-booking');
+    Route::get('/storepicking-booking','AdminController@storepicking_booking')->name('admin.storepicking-booking');
     Route::get('/remove-booking/{id}', 'AdminController@remove_booking')->name('admin.remove-booking');
     Route::get('/complete_bookings', 'AdminController@complete_bookings')->name('admin.complete_bookings');
     Route::get('/delivered_bookings','AdminController@delivered_bookings');
