@@ -23,6 +23,14 @@ use App\Http\Controllers\pushNotification;
 use DataTables;
 use App\topups;
 use App\Http\Controllers\TopupsController;
+use App\Http\Controllers\MpesaPaymentController;
+
+
+use App\User;
+use App\Customers;
+use App\Http\Controllers\autApi;
+use App\Http\Controllers\paybills;
+use App\Http\Controllers\AES;
 
 
 
@@ -1927,6 +1935,368 @@ $objuser->update(['balance'=>$totalbal]);
     function recordbillpayment(Request $request,$id){
 
 $result=\App\BillpaymentLogs::where('id',$id)->first();
+$mpesa=new MpesaPaymentController();
+
+if ($result) {
+    # code...
+    return Back()->with("error","Transaction verification failed");
+}
+
+if ($result->status!="unverified") {
+    # code...
+    return Back()->with("error","Transaction already verified");
+}
+$bill_ref_no=$request->reference;
+$transaction_amount=$result->TransAmount;
+$msisdn=$result->MSISDN;
+$transaction_id=$result->transaction_id;
+
+$ismobiletopup="/254/i";
+$mob='/^(0)\d{9}$/';
+$mob1='/^(\+254)\d{9}$/';
+$saf="/SAF/i";
+$tel="/TEL/i";
+$air="/AIR/i";
+
+$ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
+      if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
+
+ 
+            $log_id =$result->id;
+
+
+        $productcode="";
+        $recipient="";
+
+  # code...i
+        if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($mob1,$bill_ref_no)) {
+            # code...
+
+
+  list($msisdn, $network) = $this->get_msisdn_network($bill_ref_no);
+
+        if (!$msisdn){
+             Log::info("Invalid Phone Number");
+
+              return Array("data"=>Array("response"=>"Invalid Phone Number"),"error"=>true);
+        }else{
+            $mobilerec = "0".substr($msisdn, 3);
+            
+            $valid_phone=$msisdn;
+         
+        }
+
+
+
+
+// $obz=new TopupsController();
+// $response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
+
+if ($msisdn) {
+  # code...
+  $operator=$network;
+
+    if ($operator=="safaricom") {
+    # code...
+    $productcode="SF01";
+    Log::info("safaricom");
+
+  }
+  else if ($operator=="airtel") {
+    $productcode="AP01";
+      Log::info("airtel");
+
+  }
+  else if ($operator=="telkom") {
+    # code...
+      Log::info("telkom");
+    $productcode="OP01";
+  }
+}
+else{
+ Log::info("no telco");
+  return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
+
+}
+
+
+
+
+
+        }
+        else{
+              if (preg_match($saf,$bill_ref_no)) {
+    # code...
+    $productcode="SF01";
+
+  }
+  else if ( preg_match($air,$bill_ref_no)) {
+    $productcode="AP01";
+
+  }
+  else if ( preg_match($tel,$bill_ref_no)) {
+    # code...
+    $productcode="OP01";
+  }
+   Log::info("product code".$productcode);
+        }
+
+
+
+                # code...
+                
+//  $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
+// $apiKey   =env('AFRIAPIKEY');
+
+// $AT       = new AfricasTalking($username, $apiKey);
+
+// $airtime = $AT->airtime();
+// $array=Array("recipients"=>[Array('phoneNumber' => "+".$bill_ref_no,
+// 'currencyCode' => "KES",
+// 'amount' => $transaction_amount)]);
+
+// $result   = $airtime->send($array);
+// \Log::info(json_encode($result));
+// return back()->with("error","An Error Occured, check details and Try Again");
+
+$paybillobj = new paybills();
+$array=Array("PhoneNumber"=>$mpesa->getphone($bill_ref_no),"Amount"=>$transaction_amount*100,"ProductCode"=>$productcode);
+
+$res=$paybillobj->AirtimeTopUp($array);
+
+  Log::info($res);
+ $decdata=json_decode($res);
+  Log::info("product code".$productcode);
+
+if ($decdata==null) {
+  # code...
+     Log::info("returned null");
+    //log the transaction into the database
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+ Log::info("passsed");
+
+$userid=$msisdn;
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+if (($decdata->ResponseCode)=="000")  {
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime");
+ \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($userid)->first()->token,"Thank you for topping up KSh. ".$transaction_amount." airtime with us.","Transaction successful. ",$data);
+
+  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
+
+}
+else{
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+
+$user=\App\User::whereId($userid);
+$obj=$user->first();
+if($obj!=null){
+    $balance=$obj->balance;
+$balance=$balance+$transaction_amount;
+$user->update(["balance"=>$balance]);
+ \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"credited"]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TT'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
+\App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($user->first()->token,"Your airtime purchase request was not successful. The amount has been credited back to your Lipa Mos Mos wallet.","Airtime purchase failed",$data);
+
+}
+
+   return Array("data"=>Array("response"=>$result['data']),"error"=>true);
+    
+}
+
+
+            }    
+
+$pp="/PP/i";
+$ps="/PS/i";
+$zu="/ZU/i";
+$st="/ST/i";
+$go="/GO/i";
+$ds="/DS/i";
+$nw="/NW/i";
+if (preg_match($pp,$bill_ref_no) || preg_match($ps,$bill_ref_no) || preg_match($zu,$bill_ref_no) ||
+ preg_match($st,$bill_ref_no) || preg_match($go,$bill_ref_no) || preg_match($ds,$bill_ref_no) || preg_match($nw,$bill_ref_no)) {
+
+  // $existingLog = \App\BillpaymentLogs::where('TransID',$transaction_id)->first();
+
+  //           if($existingLog!=null){
+
+  //               return "Duplicate Transaction";
+
+  //           }
+
+  //           \App\BillpaymentLogs::insert($paymentLog);
+
+            $log_id = $result->id;
+
+
+
+
+    $paybillobj = new paybills();
+
+$objtopup=new TopupsController();
+
+
+
+$biller_name="";
+$account=substr($bill_ref_no, 2);
+$otherbills=false;
+
+    if (preg_match($pp,$bill_ref_no) ) {
+        # code...
+        $biller_name="kplc_prepaid";
+    }
+    else if (preg_match($ps,$bill_ref_no) ) {
+        # code...
+        $biller_name="kplc_postpaid";
+    }
+      else if (preg_match($zu,$bill_ref_no) ) {
+        # code...
+        $otherbills=true;
+        $biller_name="ZUKU";
+    }
+      else if (preg_match($st,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="STARTIMES";
+    }
+      else if (preg_match($go,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="GOTV";
+    }
+      else if (preg_match($ds,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="DSTV";
+    }
+      else if (preg_match($nw,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="NWATER";
+    }
+    else{
+        return 0;
+    }
+
+
+    //kplc
+if ($biller_name=="kplc_prepaid") {
+  # code...
+  $array=Array("PhoneNumber"=>"0".substr($msisdn, 3),"CustomerName"=>"customer","MeterNumber"=>substr($bill_ref_no,2),"Amount"=>$transaction_amount*100);
+$res=$paybillobj->kplcprepaid($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+    Log::info("returned null");
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+        Log::info("returned ok");
+         \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+$ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
+   $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
+return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
+  # code...
+}
+else{
+        Log::info("returned error");
+      $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
+    return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+
+
+}
+else if ($biller_name=="kplc_postpaid") {
+  # code...
+  $array=Array("MobileNumber"=>"0".substr($msisdn, 3),"CustomerName"=>"customer","CustAccNum"=>substr($bill_ref_no, 2),"Amount"=>$transaction_amount*100);
+$res=$paybillobj->kplcpostpaid($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+     \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+$ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
+return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
+  # code...
+}
+else{
+      $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
+    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+}
+
+
+
+}
+else{
+
+    $array=Array("paymentType"=>$biller_name,"PhoneNumber"=>"0".substr($msisdn, 3),"AccountNumber"=>substr($bill_ref_no, 2),"AccountName"=>"customer","Amount"=>$transaction_amount*100);
+  // $array=Array("MobileNumber"=>"0".substr($phone, 3),"CustomerName"=>"customer","CustAccNum"=>$account,"Amount"=>$amount*100);
+$res=$paybillobj->otherpayments($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+     \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+$ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
+return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
+  # code...
+}
+else{
+
+    $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
+    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+}
+
+}
+
+
 return $result;
 
 
