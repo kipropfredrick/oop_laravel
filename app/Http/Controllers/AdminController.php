@@ -1924,6 +1924,14 @@ $objuser->update(['balance'=>$totalbal]);
 
 
     }
+    function recordbillpayment(Request $request,$id){
+
+$result=\App\BillpaymentLogs::where('id',$id)->first();
+return $result;
+
+
+        
+    }
 
     public function record_payment(Request $request,$id){
 
@@ -2137,6 +2145,9 @@ $objuser->update(['balance'=>$totalbal]);
         return back()->with('success', 'Payment Updated');
 
     }
+
+
+
 
     public function unserviced_bookings(Request $request){
 

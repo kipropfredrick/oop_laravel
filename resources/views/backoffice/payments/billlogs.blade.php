@@ -139,7 +139,7 @@ var t =  $('#table1').DataTable({
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-						<form action="/admin/record-payment/${full.id}" method="post">
+						<form action="/admin/recordbill-payment/${full.id}" method="post">
 							@csrf
 							<div class="modal-body">
 								<label for="">Amount</label>
