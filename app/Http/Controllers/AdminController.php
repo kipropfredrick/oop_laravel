@@ -1949,7 +1949,7 @@ if ($result->status!="unverified") {
 $bill_ref_no=$request->reference;
 $transaction_amount=$result->TransAmount;
 $msisdn=$result->MSISDN;
-$transaction_id=$result->transaction_id;
+$transaction_id=$result->TransID;
 
 $ismobiletopup="/254/i";
 $mob='/^(0)\d{9}$/';
