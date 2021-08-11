@@ -1937,7 +1937,7 @@ $objuser->update(['balance'=>$totalbal]);
 $result=\App\BillpaymentLogs::where('id',$id)->first();
 $mpesa=new MpesaPaymentController();
 
-if ($result) {
+if ($result==null) {
     # code...
     return Back()->with("error","Transaction verification failed");
 }
@@ -1978,7 +1978,7 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
         if (!$msisdn){
              Log::info("Invalid Phone Number");
 
-              return Array("data"=>Array("response"=>"Invalid Phone Number"),"error"=>true);
+                return Back()->with("error","Invalid phone number");
         }else{
             $mobilerec = "0".substr($msisdn, 3);
             
@@ -2015,7 +2015,8 @@ if ($msisdn) {
 }
 else{
  Log::info("no telco");
-  return Array("data"=>Array("response"=>"Mobile Operator Not Supported".$mobilerec),"error"=>true);
+   return Back()->with("error","Mobile Operator Not Supported");
+
 
 }
 
@@ -2072,7 +2073,9 @@ if ($decdata==null) {
   # code...
      Log::info("returned null");
     //log the transaction into the database
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+
+  return Back()->with('error',"An error occured processing your request.");
+
 }
  Log::info("passsed");
 
@@ -2091,8 +2094,8 @@ if (($decdata->ResponseCode)=="000")  {
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
     $obj->exceuteSendNotification(\App\User::whereId($userid)->first()->token,"Thank you for topping up KSh. ".$transaction_amount." airtime with us.","Transaction successful. ",$data);
+  return Back()->with('success',"Airtime top-up successs.");
 
-  return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
 
 }
 else{
@@ -2129,7 +2132,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
 }
 
-   return Array("data"=>Array("response"=>$result['data']),"error"=>true);
+   return Back()->with('error',"Airtime topu was not successful. Amount has been credited to mosmos account.");
     
 }
 
@@ -2220,7 +2223,8 @@ $res=$paybillobj->kplcprepaid($array);
 if ($decdata==null) {
   # code...
     Log::info("returned null");
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+    return Back()->with('error',"An error occured processing your request.");
+  // return Array("data"=>Array("response"=>""),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
@@ -2229,13 +2233,15 @@ if ($decdata==null) {
          \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 $ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
    $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
-return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
+   return Back()->with('success',"Transaction success: tokenno: ".$token);
+// return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
 }
 else{
         Log::info("returned error");
       $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
-    return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+       return Back()->with('error',"An error occured processing your request.Amount credited to mosmos account.");
+    // return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
 
@@ -2250,19 +2256,22 @@ $res=$paybillobj->kplcpostpaid($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+      return Back()->with('success',"An error occured processing your request.");
+  // return Array("data"=>Array("response"=>""),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
      \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 $ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
-return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
+  return Back()->with('success',"Transaction success");
+// return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
   # code...
 }
 else{
       $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
-    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+      return Back()->with('error',"An error occured processing your request.Amount credited to mosmos account.");
+    // return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
 }
 
 
@@ -2278,20 +2287,23 @@ $res=$paybillobj->otherpayments($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+    return Back()->with('error',"An error occured processing your request.");
+  // return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
      \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 $ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
-return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
+  return Back()->with('success',"Transaction success");
+//return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
   # code...
 }
 else{
 
     $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
-    return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+    return Back()->with('error',"An error occured processing your request.Amount credited to mosmos account.");
+    // return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
 }
 
 }
