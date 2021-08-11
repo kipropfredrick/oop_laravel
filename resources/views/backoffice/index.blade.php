@@ -154,7 +154,7 @@ $customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->p
               <div class="icon">
                 <i class="fa fa-shopping-basket"></i>
               </div>
-              <a href="{{route('admin.agall')}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{route('admin.agall')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
