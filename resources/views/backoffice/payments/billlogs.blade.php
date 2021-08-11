@@ -145,7 +145,7 @@ var t =  $('#table1').DataTable({
 								<label for="">Amount</label>
 									<input type="number" name="amount" readonly="readonly" value=${full.TransAmount} class="form-control">
 								<label for="">Correct Account No.</label>
-									<input type="" name="booking_reference" required class="form-control">
+									<input type="" name="reference" required class="form-control">
 							</div>
 							<div class="modal-footer">
 								<button type="submit" class="btn btn-primary">Submit</button>

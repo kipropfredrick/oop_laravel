@@ -2044,22 +2044,6 @@ else{
 
 
 
-                # code...
-                
-//  $username = env('AFRIUSERNAME'); // use 'sandbox' for development in the test environment
-// $apiKey   =env('AFRIAPIKEY');
-
-// $AT       = new AfricasTalking($username, $apiKey);
-
-// $airtime = $AT->airtime();
-// $array=Array("recipients"=>[Array('phoneNumber' => "+".$bill_ref_no,
-// 'currencyCode' => "KES",
-// 'amount' => $transaction_amount)]);
-
-// $result   = $airtime->send($array);
-// \Log::info(json_encode($result));
-// return back()->with("error","An Error Occured, check details and Try Again");
-
 $paybillobj = new paybills();
 $array=Array("PhoneNumber"=>$mpesa->getphone($bill_ref_no),"Amount"=>$transaction_amount*100,"ProductCode"=>$productcode);
 
@@ -2309,7 +2293,7 @@ else{
 }
 
 
-return $result;
+return Back()->with("success","Transaction success");
 
 
        } 
