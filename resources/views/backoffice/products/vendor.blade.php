@@ -64,7 +64,7 @@ var t =  $('#table1').DataTable({
         {data: "product_name",name:"products.product_name"},
         {data: "product_code",name:"products.product_code"},
          {
-          data: "product_price",name:'bookings.product_price',
+          data: "product_price",name:'products.product_price',
           
           render: (data) => 'Ksh. ' + numberFormat(data)
         },
