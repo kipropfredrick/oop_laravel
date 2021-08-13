@@ -698,7 +698,7 @@ $hasbooking=false;
         });
     };
 </script>
-@enddif
+@endif
     </section>
     <!-- /.content -->
 @endsection
