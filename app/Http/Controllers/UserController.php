@@ -22,10 +22,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (!Sentinel::hasAccess('users')) {
-            Flash::warning("Permission Denied");
-            return redirect('/');
-        }
+        // if (!Sentinel::hasAccess('users')) {
+        //     Flash::warning("Permission Denied");
+        //     return redirect('/');
+        // }
         $data = User::with('roles')->where('role','!=','user')->get();
      
         return view('user.data', compact('data'));
