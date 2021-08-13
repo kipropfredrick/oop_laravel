@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
            <label class="control-label">password</label>
-                <input type="rpassword" class="form-control" name="rpassword" required="">
+                <input type="password" class="form-control" name="rpassword" required="">
             </div>
             <div class="form-group">
              <label>Role</label>

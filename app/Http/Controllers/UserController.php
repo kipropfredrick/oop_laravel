@@ -26,7 +26,7 @@ class UserController extends Controller
         //     Flash::warning("Permission Denied");
         //     return redirect('/');
         // }
-        $data = User::with('roles')->where('role','!=','user')->get();
+        $data = User::with('roles')->where('role','=','admin')->get();
      
         return view('user.data', compact('data'));
     }

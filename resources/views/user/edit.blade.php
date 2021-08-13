@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
            <label class="control-label">password</label>
-                <input type="rpassword" class="form-control" name="rpassword">
+                <input type="password" class="form-control" name="rpassword">
             </div>
             <div class="form-group">
              <label>Role {{$user->role}}</label>

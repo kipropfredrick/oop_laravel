@@ -4,6 +4,7 @@
 <!-- Main content -->
 
 <section class="content">
+    @if(Sentinel::hasAccess('dashboard'))
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         @if(auth()->user()->role == "admin")
@@ -697,6 +698,7 @@ $hasbooking=false;
         });
     };
 </script>
+@enddif
     </section>
     <!-- /.content -->
 @endsection
