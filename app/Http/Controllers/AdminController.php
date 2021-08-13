@@ -131,7 +131,9 @@ class AdminController extends Controller
 // $res=Sentinel::authenticate($credentials);
 $user = Sentinel::findById(1);
 
-Sentinel::login($user);
+$res=Sentinel::login($user);
+
+return $res;
 $user = Sentinel::check();
 $user = Sentinel::findById($user->id);
 
