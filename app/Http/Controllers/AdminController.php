@@ -127,8 +127,11 @@ class AdminController extends Controller
     'password' => '11111111',
 ];
 
-Sentinel::activate($credentials);
-$res=Sentinel::authenticate($credentials);
+// Sentinel::activate($credentials);
+// $res=Sentinel::authenticate($credentials);
+$user = Sentinel::findById(1);
+
+Sentinel::login($user);
 $user = Sentinel::check();
 $user = Sentinel::findById($user->id);
 
