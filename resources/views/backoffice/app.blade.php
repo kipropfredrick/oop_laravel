@@ -613,7 +613,7 @@
       <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Promotions</p></a>
     </li>
     @endif
-
+    @if(Sentinel::hasAccess('users'))
 
               <li class="nav-item">
             <a href="#" class="nav-link">
@@ -624,42 +624,42 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-
+  @if(Sentinel::hasAccess('users.view'))
                <li class="nav-item">
                 <a href="/admin/user/data" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>&nbsp;View Users</p>
                 </a></li>
-       
-               
+                @endif
+                  @if(Sentinel::hasAccess('users.roles'))
               <li class="nav-item">
                 <a href="/admin/user/role/data" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Manage Roles</p>
                 </a>
               </li>
-            
-          
+              @endif
+               @if(Sentinel::hasAccess('users.create'))
               <li class="nav-item">
                 <a href="/admin/user/create" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add Users</p>
                 </a>
               </li>
-          
-        
+              @endif
+               @if(Sentinel::hasAccess('users'))
         <li class="nav-item">
                 <a href="/admin/user/permission/data" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Permission</p>
                 </a>
               </li>
-      
+              @endif
               
             </ul>
           </li>
 
-  
+          @endif
 
     
     

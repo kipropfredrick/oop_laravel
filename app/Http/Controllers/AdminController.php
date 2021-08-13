@@ -137,14 +137,14 @@ $user=Sentinel::login($user);
 // // $user = Sentinel::check();
 // $user = Sentinel::findById($user->id);
 
-$role = Sentinel::findRoleByName('Admin');
-if (Sentinel::inRole('Admin')) {
-    # code...
-   $role->users()->detach($user);
-}
+// $role = Sentinel::findRoleByName('Admin');
+// if (Sentinel::inRole('Admin')) {
+//     # code...
+//    $role->users()->detach($user);
+// }
+// 
 
-
-$role->users()->attach($user);
+// $role->users()->attach($user);
 
 
 // if ($user->hasAccess([ 'repayments.view']))
