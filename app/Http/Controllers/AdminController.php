@@ -131,20 +131,20 @@ class AdminController extends Controller
 // $res=Sentinel::authenticate($credentials);
 $user = Sentinel::findById(1);
 
-$res=Sentinel::login($user);
+$user=Sentinel::login($user);
 
-return $res;
-$user = Sentinel::check();
-$user = Sentinel::findById($user->id);
+// return $res;
+// // $user = Sentinel::check();
+// $user = Sentinel::findById($user->id);
 
-$role = Sentinel::findRoleByName('Admin');
-if (Sentinel::inRole('Admin')) {
-    # code...
-   $role->users()->detach($user);
-}
+// $role = Sentinel::findRoleByName('Admin');
+// if (Sentinel::inRole('Admin')) {
+//     # code...
+//    $role->users()->detach($user);
+// }
 // 
 
-$role->users()->attach($user);
+// $role->users()->attach($user);
 
 
 // if ($user->hasAccess([ 'repayments.view']))
