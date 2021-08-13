@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTokenToTopupsTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddTokenToTopupsTable extends Migration
      */
     public function up()
     {
-        Schema::table('topups', function (Blueprint $table) {
-            //
-               $table->text('permissions')->nullable();
-            $table->timestamp('last_login')->nullable();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -27,8 +26,6 @@ class AddTokenToTopupsTable extends Migration
      */
     public function down()
     {
-        Schema::table('topups', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('roles');
     }
 }

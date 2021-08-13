@@ -115,22 +115,22 @@ return Array("response"=>"no records exists","error"=>true);
 
 
         private function get_msisdn_network($msisdn){
-            $regex =  [
-                 'airtel' =>'/^\+?(254|0|)7(?:[38]\d{7}|5[0-6]\d{6})\b/',
-                 'equitel' => '/^\+?(254|0|)76[0-7]\d{6}\b/',
-                 'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
-                 'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
-             ];
+        $regex =  [
+                'airtel' =>'/^\+?(254|0|)7(?:[38]\d{7}|5[0-6]\d{6})\b/',
+                'equitel' => '/^\+?(254|0|)76[0-7]\d{6}\b/',
+                'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
+                'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
+            ];
 
-             foreach ($regex as $operator => $re ) {
-                 if (preg_match($re, $msisdn)) {
-                     return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
-                 }
-             }
-             return [false, false];
-         }
+            foreach ($regex as $operator => $re ) {
+                if (preg_match($re, $msisdn)) {
+                    return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
+                }
+            }
+            return [false, false];
+        }
 
- public function stk_push($amount,$msisdn,$booking_ref){
+public function stk_push($amount,$msisdn,$booking_ref){
 
         $consumer_key =  env('CONSUMER_KEY');
         $consume_secret = env('CONSUMER_SECRET');
@@ -334,7 +334,7 @@ break;
 
         if($request->initial_deposit<100){
 
-         return Array("error"=>true,"response"=>"minimum deposit is Ksh. 100");
+        return Array("error"=>true,"response"=>"minimum deposit is Ksh. 100");
 
         }
 
@@ -379,15 +379,15 @@ $booking->status = "active";
         $booking->platform="mobile";
         $booking->quantity  = '1';
         $booking->discount  = 100;
-      if ($request->setreminder!= null) {
-          $booking->setdate= $request->setdate;
-        $booking->setreminder= $request->setreminder;
-          # code...
-      }
-      else{
-           $booking->setdate='2021-09-09';
-        $booking->setreminder= 0;
-      }
+    if ($request->setreminder!= null) {
+        $booking->setdate= $request->setdate;
+    $booking->setreminder= $request->setreminder;
+        # code...
+    }
+    else{
+        $booking->setdate='2021-09-09';
+    $booking->setreminder= 0;
+    }
 
         $booking->item_cost = $product->product_price;
 
@@ -560,20 +560,20 @@ return $result;
 
         Log::info("STK CALLBACKs => ".print_r($stkResponse,true));
 
-         $body=($request->all())['Body']['stkCallback'];
-         $MerchantRequestID=$body['MerchantRequestID'];
-         $ResultCode=$body['ResultCode'];
+        $body=($request->all())['Body']['stkCallback'];
+        $MerchantRequestID=$body['MerchantRequestID'];
+        $ResultCode=$body['ResultCode'];
 
-          if ($ResultCode==0) {
-  $result=DB::table("monitorpay")->get();
-                if (count($result)==0) {
-                    DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
-                }
-                else{
-                    $total=intval($result[0]->mobile)+1;
-                    DB::table("monitorpay")->update(["mobile"=>$total]);
-                }
-          }
+        if ($ResultCode==0) {
+$result=DB::table("monitorpay")->get();
+            if (count($result)==0) {
+                DB::table("monitorpay")->insert(["total"=>0,"mobile"=>1]);
+            }
+            else{
+                $total=intval($result[0]->mobile)+1;
+                DB::table("monitorpay")->update(["mobile"=>$total]);
+            }
+        }
 
         return 0;
     }
@@ -623,9 +623,9 @@ else{
 }
 
         }
-         $counties=\App\Counties::get();
-         $result['counties']=$counties;
-         $result['error']=false;
+        $counties=\App\Counties::get();
+        $result['counties']=$counties;
+        $result['error']=false;
     return $result;
 
 }
@@ -650,7 +650,7 @@ $array=Array("county_id"=>$county_id,"exact_location"=>$exactlocation);
 \App\Bookings::whereCustomer_id($customer->id)->update($array);
 $array=Array("name"=>$name,"email"=>$email);
 \App\User::whereId($customer->user_id)->update($array);
-   return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>false,"datas"=>\App\User::whereId($customer->user_id)->first());
+return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>false,"datas"=>\App\User::whereId($customer->user_id)->first());
 
 }
 

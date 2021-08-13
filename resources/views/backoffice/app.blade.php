@@ -155,6 +155,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+
           <li class="nav-item">
             <a href="/dashboard/home" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -165,6 +166,7 @@
           </li>
 
 		  @if(auth()->user()->role =='admin')
+      @if(Sentinel::hasAccess('products'))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-shopping-basket"></i>
@@ -174,41 +176,52 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+                @if(Sentinel::hasAccess('products.categories'))
               <li class="nav-item">
                 <a href="/admin/product-categories" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Categories</p>
                 </a>
               </li>
+              @endif
+                @if(Sentinel::hasAccess('products.brands'))
               <li class="nav-item">
                 <a href="/admin/product-brands" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Brands</p>
                 </a>
               </li>
+              @endif
+              @if(Sentinel::hasAccess('products.approved'))
               <li class="nav-item">
                 <a href="/admin/vendor/approved-products" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Approved Products</p>
                 </a>
               </li>
+              @endif
+              @if(Sentinel::hasAccess('products.pending'))
               <li class="nav-item">
                 <a href="/admin/vendor/pending-products" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Pending Products</p>
                 </a>
               </li>
+              @endif
+              @if(Sentinel::hasAccess('products.rejected'))
               <li class="nav-item">
                 <a href="/admin/vendor/rejected-products" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Rejected Products</p>
                 </a>
               </li>
+              @endif
             </ul>
           </li>
           </li>
+          @endif
 
-
+  @if(Sentinel::hasAccess('counties'))
           <li class="nav-item">
               <a href="/admin/counties/view-all" class="nav-link">
                 <i class="nav-icon fas fa-th-large"></i>
@@ -217,6 +230,7 @@
                 </p>
               </a>
             </li>
+            @endif
 
 
           </li>
@@ -245,7 +259,7 @@
             </ul>
           </li>
           </li> -->
-
+  @if(Sentinel::hasAccess('bookings'))
 		  <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-bookmark"></i>
@@ -254,6 +268,7 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+              @if(Sentinel::hasAccess('pending.bookings'))
             <ul class="nav nav-treeview">
             <li class="nav-item">
                 <a href="/admin/pending_bookings" class="nav-link">
@@ -261,30 +276,39 @@
                   <p>Pending Bookings</p>
                 </a>
               </li>
+              @endif
+                @if(Sentinel::hasAccess('active.bookings'))
               <li class="nav-item">
                 <a href="/admin/active_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Active Bookings</p>
                 </a>
               </li>
+              @endif
+                @if(Sentinel::hasAccess('complete.bookings'))
               <li class="nav-item">
                 <a href="/admin/complete_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Complete Bookings</p>
                 </a>
               </li>
+              @endif
+                @if(Sentinel::hasAccess('overdue.bookings'))
               <li class="nav-item">
                 <a href="/admin/overdue_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Overdue Bookings</p>
                 </a>
               </li>
+              @endif
+                @if(Sentinel::hasAccess('revoked.bookings'))
               <li class="nav-item">
                 <a href="/admin/revoked_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Revoked Bookings</p>
                 </a>
               </li>
+              @endif
             <!--   <li class="nav-item">
                 <a href="/admin/delivered_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -297,26 +321,32 @@
                   <p>Confirmed Deliveries</p>
                 </a>
               </li> -->
+                @if(Sentinel::hasAccess('unserviced.bookings'))
               <li class="nav-item">
                 <a href="/admin/unserviced_bookings" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Unserviced Bookings</p>
                 </a>
               </li>
+              @endif
+                @if(Sentinel::hasAccess('transfer.order'))
               <li class="nav-item">
                 <a href="/admin/transfer-order" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Transfer Order</p>
                 </a>
               </li>
+              @endif
             </ul>
           </li>
           </li>
-
+@endif
+  @if(Sentinel::hasAccess('payments'))
 		  <li class="nav-item">
 			<a href="/admin/payments" class="nav-link {{ (request()->is('admin/payments')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <p>&nbsp;Payments</p></a>
 		</li>
-
+    @endif
+ @if(Sentinel::hasAccess('aggregatepayments'))
 
               <li class="nav-item">
             <a href="#" class="nav-link">
@@ -353,22 +383,28 @@
               </li>
             </ul>
           </li>
+          @endif
 
-
+@if(Sentinel::hasAccess('fullpayment.infor'))
 		<li class="nav-item">
 			<a href="/admin/payment-callbacks" class="nav-link {{ (request()->is('admin/payments-callbacks')) ? 'active' : '' }}"><i class="fa fa-credit-card"></i> <p>&nbsp;Full Payment Info</p></a>
 		</li>
+@endif
+@if(Sentinel::hasAccess('payments.monitoring'))
+
           <li class="nav-item">
       <a href="{{route('admin.monitorPayments')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Payments Monitoring</p></a>
     </li>
 
-
+@endif
+@if(Sentinel::hasAccess('commission'))
 		<li class="nav-item">
 			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
 		</li>
+    @endif
 
 
-
+ @if(Sentinel::hasAccess('lmmpayments'))
               <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-bookmark"></i>
@@ -404,6 +440,7 @@
               
             </ul>
           </li>
+          @endif
 <!--
 		<li class="nav-item">
 			<a href="/admin/customers" class="nav-link {{ (request()->is('admin/customers')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Customers</p></a>
@@ -413,7 +450,7 @@
 			<a href="/admin/vendors" class="nav-link {{ (request()->is('admin/vendors')) ? 'active' : '' }}"><i class="fa fa-users"></i> <p>&nbsp;Vendors</p></a>
 		</li> -->
 
-
+ @if(Sentinel::hasAccess('customers'))
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="fas fa-users"></i>
@@ -452,8 +489,9 @@
 
       </ul>
     </li>
+    @endif
 
-
+ @if(Sentinel::hasAccess('vendors'))
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="fas fa-users"></i>
@@ -478,11 +516,15 @@
       </ul>
     </li>
     </li>
+    @endif
+    @if(Sentinel::hasAccess('cities'))
 
 		<li class="nav-item">
 			<a href="/admin/cities" class="nav-link {{ (request()->is('admin/cities')) ? 'active' : '' }}"><i class="fa fa-building"></i> <p>&nbsp;Cities</p></a>
 		</li>
 
+@endif
+ @if(Sentinel::hasAccess('banners'))
 		<li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-bookmark"></i>
@@ -506,12 +548,13 @@
               </li>
             </ul>
           </li>
+          @endif
 
 
 
 
           </li>
-
+ @if(Sentinel::hasAccess('sms'))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-envelope"></i>
@@ -536,9 +579,9 @@
             </ul>
           </li>
 
+@endif
 
-
-
+ @if(Sentinel::hasAccess('notifications'))
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fas fa-envelope"></i>
@@ -564,10 +607,59 @@
 
             </ul>
         </li>
-
+        @endif
+  @if(Sentinel::hasAccess('cities'))
           <li class="nav-item">
       <a href="{{route('admin.promotions')}}" class="nav-link"><i class="fa fa-building"></i> <p>&nbsp;Promotions</p></a>
     </li>
+    @endif
+
+
+              <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-bookmark"></i>
+              <p>
+             Users
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+  @if(Sentinel::hasAccess('users.view'))
+               <li class="nav-item">
+                <a href="/admin/user/data" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>&nbsp;View Users</p>
+                </a></li>
+                @endif
+               
+              <li class="nav-item">
+                <a href="/admin/user/role/data" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Manage Roles</p>
+                </a>
+              </li>
+            
+               @if(Sentinel::hasAccess('users.create'))
+              <li class="nav-item">
+                <a href="/admin/user/create" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Users</p>
+                </a>
+              </li>
+              @endif
+               @if(Sentinel::hasAccess('users'))
+        <li class="nav-item">
+                <a href="/admin/user/permission/data" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Permission</p>
+                </a>
+              </li>
+              @endif
+              
+            </ul>
+          </li>
+
+  
 
     
     

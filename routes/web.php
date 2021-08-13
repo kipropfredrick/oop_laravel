@@ -367,8 +367,30 @@ Route::get('/ag-bookings','AdminController@agbookings')->name('admin.agbookings'
 Route::get('/ag-airtime','AdminController@agairtime')->name('admin.agairtime');
 Route::get('/ag-utility','AdminController@agutility')->name('admin.agutility');
 
+//users
+Route::get('/user/data','UserController@index')->name('admin.user.index');
+Route::get('/user/{id}/show','UserController@show')->name('admin.user.show');
+Route::get('/user/create','UserController@create')->name('admin.user.create');
+Route::post('/user/store','UserController@store')->name('admin.user.store');
+Route::get('/user/{id}/delete','UserController@delete')->name('admin.user.delete');
+Route::get('/user/{id}/edit','UserController@edit')->name('admin.user.edit');
+Route::post('/user/{id}/update','UserController@update')->name('admin.user.update');
 
 
+//manage user roles..
+Route::get('/user/role/data','UserController@indexRole')->name('admin.role.data');
+Route::get('/user/role/create','UserController@createRole')->name('admin.role.create');
+Route::get('/user/role/store','UserController@storeRole')->name('admin.role.store');
+Route::get('/user/role/{id}/delete','UserController@deleteRole')->name('admin.role.delete');
+Route::get('/user/role/{id}/edit','UserController@editRole')->name('admin.role.edit');
+Route::post('/user/role/{id}/update','UserController@updateRole')->name('admin.role.update');
+//permissions
+Route::get('/user/permission/data','UserController@indexPermission')->name('admin.permission.data');
+Route::get('/user/permission/create','UserController@createPermission')->name('admin.permission.create');
+Route::post('/user/permission/store','UserController@storePermission')->name('admin.permission.store');
+Route::get('/user/permission/{id}/delete','UserController@deletePermission')->name('admin.permission.delete');
+Route::get('/user/permission/{id}/edit','UserController@editPermission')->name('admin.permission.edit');
+Route::post('/user/permission/{id}/update','UserController@updatePermission')->name('admin.permission.update');
 
 
 

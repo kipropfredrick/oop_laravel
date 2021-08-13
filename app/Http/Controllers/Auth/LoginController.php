@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use URL;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class LoginController extends Controller
 {
@@ -51,6 +52,16 @@ class LoginController extends Controller
     protected function authenticated($request, $user)
     {
         if ($user->role = 'admin') {
+//                     $credentials = [
+//     'email'    => $user->email,
+// ];
+
+$user = Sentinel::findById($user->id);
+
+Sentinel::login($user);
+// Sentinel::activate($credentials);
+//$res=Sentinel::authenticate($credentials);
+
 
             $this->redirectTo = route('dashboard');
 

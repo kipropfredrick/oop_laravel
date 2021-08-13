@@ -32,6 +32,8 @@ use App\Http\Controllers\autApi;
 use App\Http\Controllers\paybills;
 use App\Http\Controllers\AES;
 
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+
 
 
 
@@ -106,6 +108,50 @@ class AdminController extends Controller
     }
 
     public function dashboard(){
+
+ 
+//        $credentials = [
+//       'email'    => 'test3@example.com',
+//     'password' => 'foobar3',
+//     'name'=>"test brian" 
+// ];
+// // Register a new user
+//  $res=Sentinel::registerAndActivate($credentials);
+
+//$res=Sentinel::authenticate($credentials);
+
+// return $res;
+        
+        $credentials = [
+    'email'    => 'admin@mosmos.co.ke',
+    'password' => '11111111',
+];
+
+Sentinel::activate($credentials);
+$res=Sentinel::authenticate($credentials);
+$user = Sentinel::check();
+$user = Sentinel::findById($user->id);
+
+$role = Sentinel::findRoleByName('Admin');
+if (Sentinel::inRole('Admin')) {
+    # code...
+   $role->users()->detach($user);
+}
+// 
+
+$role->users()->attach($user);
+
+
+// if ($user->hasAccess([ 'repayments.view']))
+// {
+//   return "OK"; // Execute this code if the user has permission
+// }
+// else
+// {
+//     return "No";// Execute this code if the permission check failed
+// }
+
+
 
         $totalBookingAmount = \App\Bookings::sum('total_cost');
         $activeBookingAmount = \App\Bookings::where('status','=','active')->sum('total_cost');
