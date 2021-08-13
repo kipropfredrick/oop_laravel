@@ -122,16 +122,16 @@ class AdminController extends Controller
 
 // return $res;
         
-        $credentials = [
-    'email'    => 'admin@mosmos.co.ke',
-    'password' => '11111111',
-];
+//         $credentials = [
+//     'email'    => 'admin@mosmos.co.ke',
+//     'password' => '11111111',
+// ];
 
 // Sentinel::activate($credentials);
 // $res=Sentinel::authenticate($credentials);
-$user = Sentinel::findById(1);
+// $user = Sentinel::findById(1);
 
-$user=Sentinel::login($user);
+// $user=Sentinel::login($user);
 
 // return $res;
 // // $user = Sentinel::check();
