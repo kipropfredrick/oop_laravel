@@ -29,12 +29,12 @@ $daytogo="0";
 $progress="0";
 
 
-$bookings = $connection->table('bookings')->WhereCustomer_id($customerId)->first();
+$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->first();
 if ($bookings!=null) {
 	# code...
 	$hasbooking=1;
 	$totalactive=$bookings->total_cost;
-	$totalpaid=$bookings->ammount_paid;
+	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
 
 
