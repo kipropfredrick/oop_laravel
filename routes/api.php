@@ -73,7 +73,9 @@ Route::any('/redeem','TopupsController@redeem');
 
 Route::post('/refreshpayment','TopupsController@refreshpayment');
 Route::any('/BillsPayment','TopupsController@BillsPayment');
-Route::any('/checktestconnection','TopupsController@checktestconnection');
+Route::any('/bookings','TravelMosMosBookings@checktestconnection');
+Route::any('/travelmakingpayment','TravelMosMosBookings@makePayment');
+
 
 
 
