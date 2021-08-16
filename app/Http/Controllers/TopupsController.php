@@ -546,56 +546,6 @@ else{
 
 
 
-
-  
-//    $response= json_decode($this->createTransaction($account,$amount,$biller_name,$phone)); 
-
-
-
-
-// //return response()->json($response);
-// if (isset($response->error)) {
-//   # code...
-//   //top up customer account and send an sms and push notification
-//     return Array("data"=>Array("response"=>is_array($response->error)?$response->error[0]->text:$response->error->error),"error"=>true);
-// }
-// else{
-//   //update the account
-// $balance=$main->first()->balance;
-// $sender=$customers->user_id;
-// $sendamount=intval($request->input("amount"));
-// $amount=intval($request->input("amount"));
-// //
-
-
-//       $main->update(["balance"=>intval($balance)-$amount]);
-
-// $balance=\App\User::whereId($sender)->first();
-// $balance=intval($balance->balance);
-
-
-//         for($i=0;$i<1000000;$i++){
-//             $transid = 'TB'.rand(10000,99999)."M";
-//             $res=\App\topups::whereTransid($transid)->first();
-//             if ($res==null) {             # code...
-// break;  }
-          
-//         }
-
-//  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
-// \App\topups::create($credentials);
-//   $obj = new pushNotification();
-//     $data=Array("name"=>"home","value"=>"home");
-//     $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
-
-//   return Array("data"=>Array("response"=>"Airtime top-up successs"),"error"=>false);
-
-// }
-
-//return $this->phonelookup($prefix);
-//return $this->getAccountBalance();
-
-
 }
 
 
@@ -700,6 +650,16 @@ break;  }
              }
              return [false, false];
          }
+
+
+         public checktestconnection(){
+
+
+            $bookings = \DB::connection('mysql2')->table('bookings')->get();
+
+            return $bookings;
+         }
+
 
 
 
