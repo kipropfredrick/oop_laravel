@@ -652,7 +652,7 @@ break;  }
          }
 
 
-         public checktestconnection(){
+         public function checktestconnection(){
 
 
             $bookings = \DB::connection('mysql2')->table('bookings')->get();
