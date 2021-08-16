@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
-
+use Illuminate\Support\Facades\Log;
 class TravelMosMosBookings extends Controller
 {
     //
