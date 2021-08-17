@@ -4,10 +4,11 @@
 <!-- Main content -->
 
 <section class="content">
-    @if(Sentinel::hasAccess('dashboard'))
+  
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         @if(auth()->user()->role == "admin")
+          @if(Sentinel::hasAccess('dashboard'))
 
         <?php 
 
@@ -159,10 +160,43 @@ $customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->p
             </div>
           </div>
 
+
+      <div class="container">
+    <div class="row d-flex justify-content-between">
+     
+        <div class="col-md-12 offset-md-0 card mr-5 ml-2">
+            <div class="panel panel-default">
+                               <div class="panel-body">
+                    <canvas id="canvas" height="125" width="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+           <div class="col-md-12 offset-md-0 card mr-5 ml-2">
+            <div class="panel panel-default">
+                               <div class="panel-body">
+                    <canvas id="canvas1" height="125" width="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 offset-md-0 card mr-5 ml-2">
+            <div class="panel panel-default">
+                               <div class="panel-body">
+                    <canvas id="canvas2" height="125" width="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+      
+    </div>
+</div>
+
           
           <!-- ./col -->
         </div>
         <!-- /.row -->
+           @endif
 
         @elseif(auth()->user()->role =='user')
 
@@ -398,6 +432,7 @@ $hasbooking=false;
         
          
         </div>
+     
          
 
 
@@ -507,36 +542,6 @@ $hasbooking=false;
       </div><!-- /.container-fluid -->
  
 
-      <div class="container">
-    <div class="row d-flex justify-content-between">
-     
-        <div class="col-md-12 offset-md-0 card mr-5 ml-2">
-            <div class="panel panel-default">
-                               <div class="panel-body">
-                    <canvas id="canvas" height="125" width="400"></canvas>
-                </div>
-            </div>
-        </div>
-
-           <div class="col-md-12 offset-md-0 card mr-5 ml-2">
-            <div class="panel panel-default">
-                               <div class="panel-body">
-                    <canvas id="canvas1" height="125" width="400"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-12 offset-md-0 card mr-5 ml-2">
-            <div class="panel panel-default">
-                               <div class="panel-body">
-                    <canvas id="canvas2" height="125" width="400"></canvas>
-                </div>
-            </div>
-        </div>
-
-      
-    </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <script>
@@ -698,7 +703,7 @@ $hasbooking=false;
         });
     };
 </script>
-@endif
+
     </section>
     <!-- /.content -->
 @endsection

@@ -51,31 +51,26 @@ class LoginController extends Controller
     
     protected function authenticated($request, $user)
     {
-
-                            $credentials = [
-    'email'    => $user->email,
-];
         if ($user->role = 'admin') {
-
+//                     $credentials = [
+//     'email'    => $user->email,
+// ];
 
 $user = Sentinel::findById($user->id);
 
-
+Sentinel::login($user);
+// Sentinel::activate($credentials);
 //$res=Sentinel::authenticate($credentials);
 
 
             $this->redirectTo = route('dashboard');
 
         } elseif ($user->role = 'customer') {
-            $user = Sentinel::findById($user->id);
-Sentinel::login($user);
- Sentinel::activate($credentials);
+
             $this->redirectTo = route('dashboard');
 
         }elseif ($user->role = 'agent') {
-   $user = Sentinel::findById($user->id);
-Sentinel::login($user);
- Sentinel::activate($credentials);
+
             $this->redirectTo = route('dashboard');
 
         }else{
