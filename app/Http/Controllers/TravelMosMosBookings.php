@@ -21,7 +21,7 @@ return $bookings;
 function bookings(Request $request){
 	$connection=\DB::connection('mysql2');
 $customerId=1;
-$hasbooking=0;
+$hasbooking=false;
 $totalactive=0;
 $totalpaid=0;
 $balance=0;
@@ -33,7 +33,7 @@ $progress="0";
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->first();
 if ($bookings!=null) {
 	# code...
-	$hasbooking=1;
+	$hasbooking=true;
 	$totalactive=$bookings->total_cost;
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
@@ -72,6 +72,24 @@ function makePayment(Request $request){
 return $this->stk_push($amount,$msisdn,$booking_ref);
 
 }
+
+    public function customertravelbookings(Request $request){
+        $username=$request->input("username");
+        $status=$request->input("status");
+            $connection=\DB::connection('mysql2');
+
+        $customer = Customers::wherePhone($username)->first();
+
+        //$customer->id
+        $bookings = $connection->table('bookings')->where('customer_id','=',1)->where('status','=',$status)->latest()->get();
+        foreach($bookings as $booking){
+            $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+            $booking['progress'] = $progress;
+         
+        }
+
+       return $bookings;
+    }
 
 
 public function stk_push($amount,$msisdn,$booking_ref){
