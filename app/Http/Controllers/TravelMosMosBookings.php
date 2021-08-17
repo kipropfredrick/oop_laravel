@@ -103,7 +103,7 @@ $connection=\DB::connection('mysql2');
 
         return Array("response"=>"Account Data Not Found ","error"=>true);
       }
-
+}
 
 
     public function customertravelbookings(Request $request){
