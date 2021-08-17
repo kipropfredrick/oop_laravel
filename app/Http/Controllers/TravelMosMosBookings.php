@@ -85,7 +85,7 @@ return $this->stk_push($amount,$msisdn,$booking_ref);
         $bookings = $connection->table('bookings')->where('customer_id','=',1)->where('status','=',$status)->latest()->get();
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
-            $booking['progress'] = $progress;
+            $booking->progress = $progress;
          
         }
 
