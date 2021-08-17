@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Customers;
 class TravelMosMosBookings extends Controller
 {
     //
