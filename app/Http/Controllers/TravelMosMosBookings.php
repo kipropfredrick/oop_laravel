@@ -86,8 +86,8 @@ $phone=$customer->phone;
 
         
 $connection=\DB::connection('mysql2');
-
-        $booking =$connection->table('bookings')->where('customer_id','=',$customer->id)->whereIn('status', ['active'])->first();
+//$customer->id
+        $booking =$connection->table('bookings')->where('customer_id','=',1)->whereIn('status', ['active','pending'])->first();
 
         if ($booking!=null) {
           # code...
