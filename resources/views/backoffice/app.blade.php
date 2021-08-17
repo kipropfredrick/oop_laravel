@@ -695,7 +695,7 @@
 		</li>
 		@elseif(auth()->user()->role =='user')
 			<li class="nav-item nav-item-submenu">
-				<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>My Bookings</span></a>
+				<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>My Bookings</span>   <i class="right fas fa-angle-left"></i></a>
 
 				<ul class="nav nav-treeview" data-submenu-title="">
           <li class="nav-item"><a href="/customer/pending-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i><span>Pending Bookings</span></a></li>

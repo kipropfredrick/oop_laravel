@@ -1795,7 +1795,7 @@ $customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
 
          
 
-        return view('backoffice.payments.index',compact('payments'));
+        return view('backoffice.payments.indexold',compact('payments'));
     }
 
     public function MakePayment(Request $request){
