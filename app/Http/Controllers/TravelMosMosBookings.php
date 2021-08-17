@@ -29,6 +29,7 @@ $balance=0;
 $dailyTarget=0;
 $daytogo="0";
 $progress="0";
+$hastarget=0;
 
 
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->first();
@@ -38,11 +39,12 @@ if ($bookings!=null) {
 	$totalactive=$bookings->total_cost;
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
+    $hastarget=1;
 
 
 
 }
-$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress);
+$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"hastarget"=>$hastarget);
 
 
 
