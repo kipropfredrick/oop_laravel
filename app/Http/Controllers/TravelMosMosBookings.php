@@ -75,6 +75,36 @@ function makePayment(Request $request){
 return $this->stk_push($amount,$msisdn,$booking_ref);
 
 }
+ function travelcheckBooking(request $request){
+        $username=$request->input("username");
+$customer=Customers::wherePhone($username)->first();
+        $customer_id = $customer->id;
+$phone=$customer->phone;
+
+   if($customer!=null)
+        {
+
+        
+$connection=\DB::connection('mysql2');
+
+        $booking =$connection->table('bookings')->where('customer_id','=',$customer->id)->whereIn('status', ['active'])->first();
+
+        if ($booking!=null) {
+          # code...
+          $hasbooking=true;
+          return Array("response"=>$booking,"error"=>false);
+        }
+        else{
+            return Array("response"=>"No Active Or Pending Orders in the list","error"=>true);  
+        }
+      }
+
+      else{
+
+        return Array("response"=>"Account Data Not Found ","error"=>true);
+      }
+
+
 
     public function customertravelbookings(Request $request){
         $username=$request->input("username");
