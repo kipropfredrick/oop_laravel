@@ -77,6 +77,9 @@ Route::any('/travelbookings','TravelMosMosBookings@bookings');
 Route::any('/travelmakingpayment','TravelMosMosBookings@makePayment');
 Route::any('/customertravelbookings','TravelMosMosBookings@customertravelbookings');
 Route::any('/travelcheckbooking','TravelMosMosBookings@travelcheckBooking');
+Route::any('/maketravelpayment','TravelMosMosBookings@makePayment');
+
+
 
 
 

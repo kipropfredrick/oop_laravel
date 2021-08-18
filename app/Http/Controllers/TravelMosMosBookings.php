@@ -127,8 +127,8 @@ $connection=\DB::connection('mysql2');
 
 public function stk_push($amount,$msisdn,$booking_ref){
 
-        $consumer_key =  env('CONSUMER_KEY');
-        $consume_secret = env('CONSUMER_SECRET');
+        $consumer_key =  env('CONSUMER_KEY1');
+        $consume_secret = env('CONSUMER_SECRET1');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
 
@@ -149,9 +149,9 @@ public function stk_push($amount,$msisdn,$booking_ref){
 
         $timestamp = date("YmdHis");
 
-        $BusinessShortCode = env('MPESA_SHORT_CODE');
+        $BusinessShortCode = env('MPESA_SHORT_CODE1');
 
-        $passkey = env('STK_PASSKEY');
+        $passkey = env('STK_PASSKEY1');
 
         $lipa_time = Carbon::rawParse('now')->format('YmdHms');
 
@@ -165,13 +165,13 @@ public function stk_push($amount,$msisdn,$booking_ref){
 
         $curl_post_data = array(
 
-            'BusinessShortCode' => env('MPESA_SHORT_CODE'),
+            'BusinessShortCode' => env('MPESA_SHORT_CODE1'),
             'Password'          => $apiPassword,
             'Timestamp'         => $lipa_time,
             'TransactionType'   => 'CustomerPayBillOnline',
             'Amount'            => $amount,
             'PartyA'            => $msisdn,
-            'PartyB'            =>env('MPESA_SHORT_CODE'),
+            'PartyB'            =>env('MPESA_SHORT_CODE1'),
             'PhoneNumber'       => $msisdn,
             'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
             'AccountReference'  => $booking_ref,
@@ -195,7 +195,7 @@ public function stk_push($amount,$msisdn,$booking_ref){
         \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
 
         if(array_key_exists("errorCode", $responseArray)){
-            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
+            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE1') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
 
             return Array("response"=>$message,"success"=>false,"error"=>false);
         }else{
@@ -233,8 +233,8 @@ public function stk_push($amount,$msisdn,$booking_ref){
     public function lipaNaMpesaPassword($lipa_time)
     {
 
-        $passkey = env('STK_PASSKEY');
-        $BusinessShortCode = env('MPESA_SHORT_CODE');
+        $passkey = env('STK_PASSKEY1');
+        $BusinessShortCode = env('MPESA_SHORT_CODE1');
         $timestamp =$lipa_time;
         $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
         return $lipa_na_mpesa_password;
