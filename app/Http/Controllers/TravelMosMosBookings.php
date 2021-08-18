@@ -60,7 +60,6 @@ function makePayment(Request $request){
 	$phone=$request->phone;
 	$booking_ref=$request->booking_ref;
 
-
   list($msisdn, $network) = $this->get_msisdn_network($phone);
 
         if (!$msisdn){
@@ -128,7 +127,7 @@ $connection=\DB::connection('mysql2');
 
 public function stk_push($amount,$msisdn,$booking_ref){
 
-        $consumer_key =  env('CONSUMER_KEY1');
+        $CONSUMER_KEY1 =  env('CONSUMER_KEY1');
         $consume_secret = env('CONSUMER_SECRET1');
         $headers = ['Content-Type:application/json','Charset=utf8'];
         $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
@@ -137,7 +136,7 @@ public function stk_push($amount,$msisdn,$booking_ref){
         curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl,CURLOPT_USERPWD,$consumer_key.':'.$consume_secret);
+        curl_setopt($curl,CURLOPT_USERPWD,$CONSUMER_KEY1.':'.$consume_secret);
 
         $curl_response = curl_exec($curl);
         $result = json_decode($curl_response);
@@ -152,7 +151,7 @@ public function stk_push($amount,$msisdn,$booking_ref){
 
         $BusinessShortCode = env('MPESA_SHORT_CODE1');
 
-        $passkey = env('STK_PASSKEY1');
+        $passkey = env('STK_PASSKEY');
 
         $lipa_time = Carbon::rawParse('now')->format('YmdHms');
 
