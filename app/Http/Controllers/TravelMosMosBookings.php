@@ -71,6 +71,7 @@ function makePayment(Request $request){
             $valid_phone=$msisdn;
          
         }
+        return $msisdn;
 
 return $this->stk_push(10,'254790535349','TT1');
 
