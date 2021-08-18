@@ -58,7 +58,7 @@ function makePayment(Request $request){
 	$amount=$request->amount;
 
 	$phone=$request->phone;
-	$booking_ref=$request->booking_ref;
+	$booking_ref=$request->input("bookingref");
 
   list($msisdn, $network) = $this->get_msisdn_network($phone);
 
@@ -71,9 +71,9 @@ function makePayment(Request $request){
             $valid_phone=$msisdn;
          
         }
-        return $msisdn;
 
-return $this->stk_push(10,'254790535349','TT1');
+
+return $this->stk_push($amount,$msisdn,$booking_ref);
 
 }
  function travelcheckBooking(request $request){
@@ -192,7 +192,6 @@ public function stk_push($amount,$msisdn,$booking_ref){
         $success = true;
         $message = "STK Request Success";
         $httpCode = 200;
-return $responseArray;
         \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
 
         if(array_key_exists("errorCode", $responseArray)){
