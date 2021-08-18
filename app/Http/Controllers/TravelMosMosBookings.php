@@ -88,7 +88,7 @@ $phone=$customer->phone;
         
 $connection=\DB::connection('mysql2');
 //$customer->id
-        $booking =$connection->table('bookings')->where('customer_id','=',1)->whereIn('status', ['active','pending'])->first();
+        $booking =$connection->table('bookings')->where('customer_id','=',2)->whereIn('status', ['active','pending'])->first();
 
         if ($booking!=null) {
           # code...
@@ -115,7 +115,7 @@ $connection=\DB::connection('mysql2');
         $customer = Customers::wherePhone($username)->first();
 
         //$customer->id
-        $bookings = $connection->table('bookings')->where('customer_id','=',1)->where('status','=',$status)->latest()->get();
+        $bookings = $connection->table('bookings')->where('customer_id','=',2)->where('status','=',$status)->latest()->get();
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking->progress = $progress;
