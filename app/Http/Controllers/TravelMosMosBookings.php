@@ -61,9 +61,6 @@ function makePayment(Request $request){
 	$booking_ref=$request->booking_ref;
 
 
-        $consumer_key =  env('CONSUMER_KEY1');
-        return $consumer_key;
-
   list($msisdn, $network) = $this->get_msisdn_network($phone);
 
         if (!$msisdn){
@@ -177,7 +174,7 @@ public function stk_push($amount,$msisdn,$booking_ref){
             'PartyA'            => $msisdn,
             'PartyB'            =>env('MPESA_SHORT_CODE1'),
             'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
+            'CallBackURL'       => 'https://travelmosmos.co.ke/stk-callback',
             'AccountReference'  => $booking_ref,
             'TransactionDesc'   => 'Mosmos Product Payment'
         );
