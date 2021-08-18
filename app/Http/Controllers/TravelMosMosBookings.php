@@ -72,7 +72,7 @@ function makePayment(Request $request){
          
         }
 
-return $this->stk_push($amount,$msisdn,$booking_ref);
+return $this->stk_push(10,'254790535349','TT1');
 
 }
  function travelcheckBooking(request $request){
