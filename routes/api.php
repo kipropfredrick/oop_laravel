@@ -78,6 +78,8 @@ Route::any('/travelmakingpayment','TravelMosMosBookings@makePayment');
 Route::any('/customertravelbookings','TravelMosMosBookings@customertravelbookings');
 Route::any('/travelcheckbooking','TravelMosMosBookings@travelcheckBooking');
 Route::any('/maketravelpayment','TravelMosMosBookings@makePayment');
+Route::any('/travelpayments','TravelMosMosBookings@travelpayments');
+
 
 
 

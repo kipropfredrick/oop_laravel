@@ -125,6 +125,23 @@ $connection=\DB::connection('mysql2');
        return $bookings;
     }
 
+    function travelpayments($Request $request){
+        $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+        $allPayments=[];
+
+
+  
+for ($i=0; $i < count($payments); $i++) { 
+    # code...
+    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']?$payments[$i]['mpesapayment']->transac_code:"","booking_reference"=>$payments[$i]['booking']?$payments[$i]['booking']->booking_reference:"","transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
+    array_push($allPayments, $array);
+
+}
+         
+return $allPayments;
+    }
+
 
 public function stk_push($amount,$msisdn,$booking_ref){
 
