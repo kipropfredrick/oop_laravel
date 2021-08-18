@@ -32,7 +32,7 @@ $progress="0";
 $hastarget=0;
 
 
-$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->first();
+$bookings = $connection->table('bookings')->first();
 if ($bookings!=null) {
 	# code...
 	$hasbooking=true;
