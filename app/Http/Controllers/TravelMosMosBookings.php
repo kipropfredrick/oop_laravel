@@ -125,7 +125,7 @@ $connection=\DB::connection('mysql2');
        return $bookings;
     }
 
-    function travelpayments($Request $request){
+    function travelpayments(Request $request){
         $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
         $allPayments=[];
