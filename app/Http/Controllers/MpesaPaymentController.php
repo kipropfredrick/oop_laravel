@@ -279,7 +279,7 @@ class MpesaPaymentController extends Controller
             $paymentLog = (array) $decoded;
 
             
-            $travelPattern = "/tt/i";
+            $travelPattern = "/t/i";
     
             $travelTrue = preg_match($travelPattern,$bill_ref_no);
 
@@ -1503,18 +1503,21 @@ else{
 
           $recipients = $customer->phone;
 
-          $payment_data = [
-                            'payment_log_id'=>$log_id,
-                            'customer_id'=>$customer->id,
-                            'booking_id'=>$booking->id,
-                            'amount'=>$transaction_amount,
-                            'created_at'=>now(),
-                            'updated_at'=>now()
-                          ];
+         $admin_commission = (3.5/100)*$transaction_amount;
+
+         $payment_data = [
+            'payment_log_id'=>$log_id,
+            'customer_id'=>$customer->id,
+            'booking_id'=>$booking->id,
+            'amount'=>$transaction_amount,
+            'admin_commission'=>$admin_commission,
+            'created_at'=>now(),
+            'updated_at'=>now()
+          ];
 
           DB::connection('mysql2')->table('payments')->insert($payment_data);
 
-          $package = DB::connection('mysql2')->table('travel_packages')->where('id',$booking->package_id)->first();
+          $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
 
           $amount_paid = $booking->amount_paid + $transaction_amount;
 
@@ -1526,9 +1529,15 @@ else{
          
           SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
+          $wallet_balance = $agent->wallet_balance;
+
+          $n_wallet_balance = $wallet_balance+($transaction_amount - $admin_commission);
+
+          DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->update(['wallet_balance'=>$n_wallet_balance]);
+
           if($balance<1){
 
-            $message = "Congratulations, You have completed Payment for ".$package->package_name.".";
+            $message = "Congratulations, You have completed Payment for ".$booking->package_name.".";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_completion_notification");
 
