@@ -60,6 +60,10 @@ function makePayment(Request $request){
 	$phone=$request->phone;
 	$booking_ref=$request->booking_ref;
 
+
+        $consumer_key =  env('CONSUMER_KEY1');
+        return $consumer_key;
+
   list($msisdn, $network) = $this->get_msisdn_network($phone);
 
         if (!$msisdn){
