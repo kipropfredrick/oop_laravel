@@ -25,7 +25,7 @@ function bookings(Request $request){
     $username=$request->input("username");
 $customer=Customers::wherePhone($username)->first();
 $customerId=$customer->id;
-$hasbooking=true;
+$hasbooking=false;
 $totalactive=0;
 $totalpaid=0;
 $balance=0;
