@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Customers;
+use App\Http\Controllers\autApi;
 class TravelMosMosBookings extends Controller
 {
     //
@@ -81,9 +82,9 @@ function makePayment(Request $request){
             $valid_phone=$msisdn;
          
         }
+$authobj=new autApi();
 
-
-return $this->stk_push($amount,$msisdn,$booking_ref);
+return $authobj->stk_push($amount,$msisdn,$booking_ref);
 
 }
  function travelcheckBooking(request $request){
@@ -153,168 +154,6 @@ return $allPayments;
     }
 
 
-public function stk_push($amount,$msisdn,$booking_ref){
-
-        // $CONSUMER_KEY1 =  env('CONSUMER_KEY1');
-        // $consume_secret = env('CONSUMER_SECRET1');
-        // $headers = ['Content-Type:application/json','Charset=utf8'];
-        // $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
-
-        // $curl = curl_init($url);
-        // curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
-        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($curl, CURLOPT_HEADER, false);
-        // curl_setopt($curl,CURLOPT_USERPWD,$CONSUMER_KEY1.':'.$consume_secret);
-
-        // $curl_response = curl_exec($curl);
-        // $result = json_decode($curl_response);
-
-        // $token = $result->access_token;
-
-        // $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-
-        // Log::info("Generated access token " . $token);
-
-        // $timestamp = date("YmdHis");
-
-        // $BusinessShortCode = env('MPESA_SHORT_CODE1');
-
-        // $passkey = env('STK_PASSKEY');
-
-        // $lipa_time = Carbon::rawParse('now')->format('YmdHms');
-
-        // $apiPassword = $this->lipaNaMpesaPassword($lipa_time);
-
-        // Log::info("Generated Password " . $apiPassword);
-
-        // $curl = curl_init();
-        // curl_setopt($curl, CURLOPT_URL, $url);
-        // curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
-
-        // $curl_post_data = array(
-
-        //     'BusinessShortCode' => env('MPESA_SHORT_CODE1'),
-        //     'Password'          => $apiPassword,
-        //     'Timestamp'         => $lipa_time,
-        //     'TransactionType'   => 'CustomerPayBillOnline',
-        //     'Amount'            => $amount,
-        //     'PartyA'            => $msisdn,
-        //     'PartyB'            =>env('MPESA_SHORT_CODE1'),
-        //     'PhoneNumber'       => $msisdn,
-        //     'CallBackURL'       => 'https://travelmosmos.co.ke/stk-callback',
-        //     'AccountReference'  => $booking_ref,
-        //     'TransactionDesc'   => 'Mosmos Product Payment'
-        // );
-
-        // $data_string = json_encode($curl_post_data);
-
-        // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($curl, CURLOPT_POST, true);
-        // curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-
-        // $curl_response = curl_exec($curl);
-
-        // $responseArray = json_decode($curl_response, true);
-        // $status = 200;
-        // $success = true;
-        // $message = "STK Request Success";
-        // $httpCode = 200;
-        // \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
-
-        // if(array_key_exists("errorCode", $responseArray)){
-        //     $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE1') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
-
-        //     return Array("response"=>$message,"success"=>false,"error"=>false);
-        // }else{
-        //     $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
-        //    return Array("response"=>$message,"success"=>true,"error"=>false);
-        // }
-
-
-
-        // return $message;
-
-    
-        $consumer_key =  env('CONSUMER_KEY');
-        $consume_secret = env('CONSUMER_SECRET');
-        $headers = ['Content-Type:application/json','Charset=utf8'];
-        $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
-
-        $curl = curl_init($url);
-        curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl,CURLOPT_USERPWD,$consumer_key.':'.$consume_secret);
-
-        $curl_response = curl_exec($curl);
-        $result = json_decode($curl_response);
-
-        $token = $result->access_token;
-
-        $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-
-        Log::info("Generated access token " . $token);
-
-        $timestamp = date("YmdHis");
-
-        $BusinessShortCode = env('MPESA_SHORT_CODE');
-
-        $passkey = env('STK_PASSKEY');
-
-        $lipa_time = Carbon::rawParse('now')->format('YmdHms');
-
-        $apiPassword = $this->lipaNaMpesaPassword($lipa_time);
-
-        Log::info("Generated Password " . $apiPassword);
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
-
-        $curl_post_data = array(
-
-            'BusinessShortCode' => env('MPESA_SHORT_CODE'),
-            'Password'          => $apiPassword,
-            'Timestamp'         => $lipa_time,
-            'TransactionType'   => 'CustomerPayBillOnline',
-            'Amount'            => $amount,
-            'PartyA'            => $msisdn,
-            'PartyB'            =>env('MPESA_SHORT_CODE'),
-            'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
-            'AccountReference'  => $booking_ref,
-            'TransactionDesc'   => 'Mosmos Product Payment'
-        );
-
-        $data_string = json_encode($curl_post_data);
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-
-        $curl_response = curl_exec($curl);
-
-        $responseArray = json_decode($curl_response, true);
-        $status = 200;
-        $success = true;
-        $message = "STK Request Success";
-        $httpCode = 200;
-
-        \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
-
-        if(array_key_exists("errorCode", $responseArray)){
-            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
-
-            return Array("response"=>$message,"success"=>false,"error"=>false);
-        }else{
-            $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
-           return Array("response"=>$message,"success"=>true,"error"=>false);
-        }
-
-
-
-        return $message;
-    }
 
         private function get_msisdn_network($msisdn){
         $regex =  [
