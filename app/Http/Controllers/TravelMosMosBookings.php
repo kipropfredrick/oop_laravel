@@ -55,7 +55,7 @@ if ($bookings!=null) {
 	$totalactive=$bookings->total_cost;
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
-    $hastarget=1;
+    $hastarget=0;
     $booking_reference=$bookings->booking_reference;
 
   $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
