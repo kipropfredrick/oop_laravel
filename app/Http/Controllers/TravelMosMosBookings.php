@@ -34,6 +34,12 @@ $progress="0";
 $hastarget=0;
 
 
+$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereIn('status',['active','pending'])->first();
+if ($bookings!=null) {
+    # code...
+   $hasbooking=true; 
+}
+
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereStatus('active')->first();
 if ($bookings!=null) {
 	# code...
@@ -47,11 +53,7 @@ if ($bookings!=null) {
 
 }
 
-$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereIn('status',['active','pending'])->first();
-if ($bookings!=null) {
-    # code...
-   $hasbooking=true; 
-}
+
 $array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"hastarget"=>$hastarget,"booking_reference"=>$bookings->booking_reference);
 
 
