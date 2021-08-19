@@ -33,12 +33,19 @@ $dailyTarget=0;
 $daytogo="0";
 $progress="0";
 $hastarget=0;
-
-
+$progresspercentage=0;
+$booking_reference="";
+$progressmessage="Track";
+$dailytarget=0;
+$daystogo=0;
+$setdate="";
+$setreminder=0;
+$targettype="Daily";
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereIn('status',['active','pending'])->first();
 if ($bookings!=null) {
     # code...
    $hasbooking=true; 
+   $booking_reference=$bookings->booking_reference;
 }
 
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereStatus('active')->first();
@@ -49,13 +56,65 @@ if ($bookings!=null) {
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
     $hastarget=1;
+    $booking_reference=$bookings->booking_reference;
+
+  $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+         $createdat = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
+    $setreminder=intval($connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
+  $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+
+$bookingbalances=intval($bookings->balance);
+$totalBookingAmounts=$bookings->total_cost;
+$progresspercentage=intval(($amountPaids/$totalBookingAmounts)*100);
+
+
+$date = Carbon::parse($completionDate);
+$now = Carbon::now();
+
+$daystogo =( $date->diffInDays($now))." Days";
+
+$cdate = Carbon::parse($completionDate);
+$createddate = Carbon::parse($createdat);
+
+$days=intval(($cdate->diffInDays($createddate)));
+
+if($days>0){
+    if ($setreminder==1) {
+        # code...
+            $dailytarget=intval($totalBookingAmounts/$days);
+            $targettype="Daily target";
+    }
+    else if ($setreminder==2) {
+        # code...
+            $dailytarget=intval($totalBookingAmounts/$days) * 7;
+             $targettype="Weekly target";
+    }
+    else if ($setreminder==3) {
+        # code...
+          $dailytarget=intval($totalBookingAmounts/$days) * 30;
+           $targettype="Monthly target";
+    }
+
+}
+$dayspassed=intval(($createddate->diffInDays($now)));
+$amountsbepaid=intval($dayspassed*$dailytarget);
+$paymentbalance=$amountsbepaid-$amountPaids;
+if ($paymentbalance<0) {
+  # code...
+  $progressmessage="On Track";
+
+}
+else{
+   $daysdue=intval($paymentbalance/$dailytarget);
+   $progressmessage=$daysdue."-Days behind Ksh. ".number_format($paymentbalance);
+}
 
 
 
 }
 
 
-$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"hastarget"=>$hastarget,"booking_reference"=>$bookings->booking_reference);
+$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"hastarget"=>$hastarget,"booking_reference"=>$booking_reference,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$booking_reference,"targettype"=>$targettype);
 
 
 
