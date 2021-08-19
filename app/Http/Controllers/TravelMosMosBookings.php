@@ -32,7 +32,7 @@ $balance=0;
 $dailyTarget=0;
 $daytogo="0";
 $progress="0";
-$hastarget=0;
+$hastarget=1;
 $progresspercentage=0;
 $booking_reference="";
 $progressmessage="Track";
@@ -55,7 +55,7 @@ if ($bookings!=null) {
 	$totalactive=$bookings->total_cost;
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
-    $hastarget=0;
+    $hastarget=1;
     $booking_reference=$bookings->booking_reference;
 
   $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
@@ -116,7 +116,7 @@ else{
 }
 
 
-$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"hastarget"=>$hastarget,"booking_reference"=>$booking_reference,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$booking_reference,"targettype"=>$targettype);
+$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"booking_reference"=>$booking_reference,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$booking_reference,"targettype"=>$targettype);
 
 
 
