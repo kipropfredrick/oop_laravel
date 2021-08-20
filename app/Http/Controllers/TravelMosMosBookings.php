@@ -60,10 +60,10 @@ if ($bookings!=null) {
 
     $booking_reference=$bookings->booking_reference;
 
-  $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
-         $createdat = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
-    $setreminder=intval($connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+  $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->setdate;
+         $createdat = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->created_at;
+    $setreminder=intval($connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->setreminder);
+  $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->setdate;
 return $setreminder;
 $bookingbalances=intval($bookings->balance);
 $totalBookingAmounts=$bookings->total_cost;
