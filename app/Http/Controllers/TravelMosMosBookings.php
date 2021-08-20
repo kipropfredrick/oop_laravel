@@ -64,7 +64,7 @@ if ($bookings!=null) {
          $createdat = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
     $setreminder=intval($connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
   $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setDate;
-return $setreminder.$setdate;
+return $setdate;
 $bookingbalances=intval($bookings->balance);
 $totalBookingAmounts=$bookings->total_cost;
 $progresspercentage=intval(($amountPaids/$totalBookingAmounts)*100);
