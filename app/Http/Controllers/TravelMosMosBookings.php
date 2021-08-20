@@ -218,7 +218,7 @@ $connection=\DB::connection('mysql2');
   
 for ($i=0; $i < count($payments); $i++) { 
     # code...
-    $array=Array("product_name"=>'package 1',"payment_ref"=>$payments->TransID ,"booking_reference"=>$payments->BillRefNumber,"transaction_amount"=>$payments->TransAmount,"date"=>$payments[$i]->created_at);
+    $array=Array("product_name"=>'package 1',"payment_ref"=>$payments[$i]->TransID ,"booking_reference"=>$payments[$i]->BillRefNumber,"transaction_amount"=>$payments[$i]->TransAmount,"date"=>$payments[$i]->created_at);
     array_push($allPayments, $array);
 
 }
