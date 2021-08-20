@@ -252,4 +252,24 @@ return $allPayments;
         return $lipa_na_mpesa_password;
     }
 
+    function updateTraveTarget(Request $request){
+
+$bookingreference=$request->bookingreference;
+$setdate=$request->setdate;
+$setreminder=$request->setreminder;
+$connection=\DB::connection('mysql2');
+$obj=$connection->table('bookings')->whereBooking_reference($bookingreference);
+$booking=$obj->first();
+if ($booking!=null) {
+  # code...
+$array=Array("setdate"=>$setdate,"setreminder"=>$setreminder);
+$obj->update($array);
+  return Array("data"=>Array("response"=>"Your payment target has been updated successfully."),"error"=>false);
+}
+else{
+  return Array("data"=>Array("response"=>"No booking reference found."),"error"=>true);
+}
+
+    }
+
 }

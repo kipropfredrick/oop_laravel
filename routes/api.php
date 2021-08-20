@@ -79,6 +79,7 @@ Route::any('/customertravelbookings','TravelMosMosBookings@customertravelbooking
 Route::any('/travelcheckbooking','TravelMosMosBookings@travelcheckBooking');
 Route::any('/maketravelpayment','TravelMosMosBookings@makePayment');
 Route::any('/travelpayments','TravelMosMosBookings@travelpayments');
+Route::post('/updateTraveTarget','TravelMosMosBookings@updateTraveTarget');
 
 
 
