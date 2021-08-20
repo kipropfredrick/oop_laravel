@@ -63,7 +63,7 @@ if ($bookings!=null) {
   $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
          $createdat = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
     $setreminder=intval($connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setDate;
+  $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
 return $setdate;
 $bookingbalances=intval($bookings->balance);
 $totalBookingAmounts=$bookings->total_cost;
