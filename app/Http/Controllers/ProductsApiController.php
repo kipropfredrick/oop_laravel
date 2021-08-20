@@ -298,7 +298,7 @@ if ($paymentbalance<0) {
 }
 else{
    $daysdue=intval($paymentbalance/$dailytarget);
-   $progressmessage=$daysdue." behind ".$paymentbalance;
+   $progressmessage=$daysdue."-Days behind Ksh. ".number_format($paymentbalance);
 }
 }
           # code...

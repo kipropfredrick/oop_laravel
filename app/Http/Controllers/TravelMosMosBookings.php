@@ -7,6 +7,7 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Customers;
+use App\Http\Controllers\autApi;
 class TravelMosMosBookings extends Controller
 {
     //
@@ -21,7 +22,9 @@ return $bookings;
 
 function bookings(Request $request){
 	$connection=\DB::connection('mysql2');
-$customerId=1;
+    $username=$request->input("username");
+$customer=Customers::wherePhone($username)->first();
+$customerId=$customer->id;
 $hasbooking=false;
 $totalactive=0;
 $totalpaid=0;
@@ -30,21 +33,99 @@ $dailyTarget=0;
 $daytogo="0";
 $progress="0";
 $hastarget=0;
+$progresspercentage=0;
+$booking_reference="";
+$progressmessage="Track";
+$dailytarget=0;
+$daystogo=0;
+$setdate="";
+$setreminder=0;
 
+$targettype="Daily";
+$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereIn('status',['active','pending'])->first();
+if ($bookings!=null) {
+    # code...
+   $hasbooking=true; 
+   $booking_reference=$bookings->booking_reference;
 
-$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->first();
+}
+
+$bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereStatus('active')->first();
 if ($bookings!=null) {
 	# code...
 	$hasbooking=true;
 	$totalactive=$bookings->total_cost;
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
-    $hastarget=1;
+
+    $booking_reference=$bookings->booking_reference;
+
+  $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->setdate;
+         $createdat = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->created_at;
+    $setreminder=intval($connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->setreminder);
+  $setdate=$connection->table('bookings')->where('status','=','active')->where('customer_id',$customerId)->first()->setdate;
+
+$bookingbalances=intval($bookings->balance);
+$totalBookingAmounts=$bookings->total_cost;
+$progresspercentage=intval(($amountPaids/$totalBookingAmounts)*100);
+
+
+$date = Carbon::parse($completionDate);
+$now = Carbon::now();
+
+$daystogo =( $date->diffInDays($now))." Days";
+
+$cdate = Carbon::parse($completionDate);
+$createddate = Carbon::parse($createdat);
+$hastarget=$setreminder;
+$days=intval(($cdate->diffInDays($createddate)));
+
+if($days>0){
+    if ($setreminder==1) {
+        # code...
+            $dailytarget=intval($totalBookingAmounts/$days);
+            $targettype="Daily target";
+    }
+    else if ($setreminder==2) {
+        # code...
+            $dailytarget=intval($totalBookingAmounts/$days) * 7;
+             $targettype="Weekly target";
+    }
+    else if ($setreminder==3) {
+        # code...
+          $dailytarget=intval($totalBookingAmounts/$days) * 30;
+           $targettype="Monthly target";
+    }
 
 
 
 }
-$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"hastarget"=>$hastarget,"booking_reference"=>$bookings->booking_reference);
+$dayspassed=intval(($createddate->diffInDays($now)));
+$amountsbepaid=intval($dayspassed*$dailytarget);
+$paymentbalance=$amountsbepaid-$amountPaids;
+if ($paymentbalance<0) {
+  # code...
+  $progressmessage="On Track";
+
+}
+else{
+  if($dailytarget>0){
+     $daysdue=intval($paymentbalance/$dailytarget);
+  }
+  else{
+    $daysdue=0;
+  }
+   $progressmessage=$daysdue."-Days behind Ksh. ".number_format($paymentbalance);
+}
+
+
+
+}
+
+
+
+
+$array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"booking_reference"=>$booking_reference,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$booking_reference,"targettype"=>$targettype);
 
 
 
@@ -71,9 +152,9 @@ function makePayment(Request $request){
             $valid_phone=$msisdn;
          
         }
+$authobj=new autApi();
 
-
-return $this->stk_push($amount,$msisdn,$booking_ref);
+return $authobj->stk_push($amount,$msisdn,$booking_ref);
 
 }
  function travelcheckBooking(request $request){
@@ -88,7 +169,7 @@ $phone=$customer->phone;
         
 $connection=\DB::connection('mysql2');
 //$customer->id
-        $booking =$connection->table('bookings')->where('customer_id','=',1)->whereIn('status', ['active','pending'])->first();
+        $booking =$connection->table('bookings')->where('customer_id','=',$customer_id)->whereIn('status', ['active','pending'])->first();
 
         if ($booking!=null) {
           # code...
@@ -115,7 +196,7 @@ $connection=\DB::connection('mysql2');
         $customer = Customers::wherePhone($username)->first();
 
         //$customer->id
-        $bookings = $connection->table('bookings')->where('customer_id','=',1)->where('status','=',$status)->latest()->get();
+        $bookings = $connection->table('bookings')->where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking->progress = $progress;
@@ -125,88 +206,27 @@ $connection=\DB::connection('mysql2');
        return $bookings;
     }
 
+    function travelpayments(Request $request){
+         $connection=\DB::connection('mysql2');
+        $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
+        $bookings=$connection->table('bookings')->whereCustomer_id($customer_id)->pluck('booking_reference')->toArray();
 
-public function stk_push($amount,$msisdn,$booking_ref){
-
-        $CONSUMER_KEY1 =  env('CONSUMER_KEY1');
-        $consume_secret = env('CONSUMER_SECRET1');
-        $headers = ['Content-Type:application/json','Charset=utf8'];
-        $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
-
-        $curl = curl_init($url);
-        curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl,CURLOPT_USERPWD,$CONSUMER_KEY1.':'.$consume_secret);
-
-        $curl_response = curl_exec($curl);
-        $result = json_decode($curl_response);
-
-        $token = $result->access_token;
-
-        $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-
-        Log::info("Generated access token " . $token);
-
-        $timestamp = date("YmdHis");
-
-        $BusinessShortCode = env('MPESA_SHORT_CODE1');
-
-        $passkey = env('STK_PASSKEY');
-
-        $lipa_time = Carbon::rawParse('now')->format('YmdHms');
-
-        $apiPassword = $this->lipaNaMpesaPassword($lipa_time);
-
-        Log::info("Generated Password " . $apiPassword);
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
-
-        $curl_post_data = array(
-
-            'BusinessShortCode' => env('MPESA_SHORT_CODE1'),
-            'Password'          => $apiPassword,
-            'Timestamp'         => $lipa_time,
-            'TransactionType'   => 'CustomerPayBillOnline',
-            'Amount'            => $amount,
-            'PartyA'            => $msisdn,
-            'PartyB'            =>env('MPESA_SHORT_CODE1'),
-            'PhoneNumber'       => $msisdn,
-            'CallBackURL'       => 'https://travelmosmos.co.ke/stk-callback',
-            'AccountReference'  => $booking_ref,
-            'TransactionDesc'   => 'Mosmos Product Payment'
-        );
-
-        $data_string = json_encode($curl_post_data);
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-
-        $curl_response = curl_exec($curl);
-
-        $responseArray = json_decode($curl_response, true);
-        $status = 200;
-        $success = true;
-        $message = "STK Request Success";
-        $httpCode = 200;
-        \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
-
-        if(array_key_exists("errorCode", $responseArray)){
-            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE1') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
-
-            return Array("response"=>$message,"success"=>false,"error"=>false);
-        }else{
-            $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
-           return Array("response"=>$message,"success"=>true,"error"=>false);
-        }
+        $payments = $connection->table('payment_logs')->whereIn("BillRefNumber",$bookings)->orderBy('id', 'DESC')->get();
+        $allPayments=[];
 
 
+  
+for ($i=0; $i < count($payments); $i++) { 
+    # code...
+    $array=Array("product_name"=>'package 1',"payment_ref"=>$payments[$i]->TransID ,"booking_reference"=>$payments[$i]->BillRefNumber,"transaction_amount"=>intval($payments[$i]->TransAmount),"date"=>$payments[$i]->created_at);
+    array_push($allPayments, $array);
 
-        return $message;
+}
+         
+return $allPayments;
     }
+
+
 
         private function get_msisdn_network($msisdn){
         $regex =  [
@@ -238,6 +258,26 @@ public function stk_push($amount,$msisdn,$booking_ref){
         $timestamp =$lipa_time;
         $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
         return $lipa_na_mpesa_password;
+    }
+
+    function updateTraveTarget(Request $request){
+
+$bookingreference=$request->bookingreference;
+$setdate=$request->setdate;
+$setreminder=$request->setreminder;
+$connection=\DB::connection('mysql2');
+$obj=$connection->table('bookings')->whereBooking_reference($bookingreference);
+$booking=$obj->first();
+if ($booking!=null) {
+  # code...
+$array=Array("setdate"=>$setdate,"setreminder"=>$setreminder);
+$obj->update($array);
+  return Array("data"=>Array("response"=>"Your payment target has been updated successfully."),"error"=>false);
+}
+else{
+  return Array("data"=>Array("response"=>"No booking reference found."),"error"=>true);
+}
+
     }
 
 }
