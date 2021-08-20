@@ -32,7 +32,7 @@ $balance=0;
 $dailyTarget=0;
 $daytogo="0";
 $progress="0";
-$hastarget=1;
+$hastarget=0;
 $progresspercentage=0;
 $booking_reference="";
 $progressmessage="Track";
@@ -40,12 +40,14 @@ $dailytarget=0;
 $daystogo=0;
 $setdate="";
 $setreminder=0;
+
 $targettype="Daily";
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereIn('status',['active','pending'])->first();
 if ($bookings!=null) {
     # code...
    $hasbooking=true; 
    $booking_reference=$bookings->booking_reference;
+
 }
 
 $bookings = $connection->table('bookings')->whereCustomer_id($customerId)->whereStatus('active')->first();
@@ -55,7 +57,7 @@ if ($bookings!=null) {
 	$totalactive=$bookings->total_cost;
 	$totalpaid=$bookings->amount_paid;
 	$balance=$bookings->balance;
-    $hastarget=1;
+
     $booking_reference=$bookings->booking_reference;
 
   $completionDate = $connection->table('bookings')->where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
@@ -75,7 +77,7 @@ $daystogo =( $date->diffInDays($now))." Days";
 
 $cdate = Carbon::parse($completionDate);
 $createddate = Carbon::parse($createdat);
-
+$hastarget=$setreminder;
 $days=intval(($cdate->diffInDays($createddate)));
 
 if($days>0){
@@ -114,6 +116,8 @@ else{
 
 
 }
+
+
 
 
 $array=Array("hasbooking"=>$hasbooking,"totalactive"=>$totalactive,"totalpaid"=>$totalpaid,"balance"=>$balance,"dailyTarget"=>$dailyTarget,"daytogo"=>$daytogo,"progress"=>$progress,"booking_reference"=>$booking_reference,"progressmessage"=>$progressmessage,"dailytarget"=>$dailytarget,"daystogo"=>$daystogo,"progresspercentage"=>$progresspercentage,"hastarget"=>$hastarget,"setdate"=>$setdate,"setreminder"=>$setreminder,"bookingreference"=>$booking_reference,"targettype"=>$targettype);
