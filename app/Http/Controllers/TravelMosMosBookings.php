@@ -109,7 +109,7 @@ if ($paymentbalance<0) {
 
 }
 else{
-  if($dailytarget<=0){
+  if($dailytarget>0){
      $daysdue=intval($paymentbalance/$dailytarget);
   }
   else{
