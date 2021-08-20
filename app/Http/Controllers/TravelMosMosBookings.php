@@ -97,6 +97,8 @@ if($days>0){
            $targettype="Monthly target";
     }
 
+
+
 }
 $dayspassed=intval(($createddate->diffInDays($now)));
 $amountsbepaid=intval($dayspassed*$dailytarget);
@@ -107,7 +109,7 @@ if ($paymentbalance<0) {
 
 }
 else{
-  if($dailytarget>0){
+  if($dailytarget<=0){
      $daysdue=intval($paymentbalance/$dailytarget);
   }
   else{
@@ -205,15 +207,18 @@ $connection=\DB::connection('mysql2');
     }
 
     function travelpayments(Request $request){
+         $connection=\DB::connection('mysql2');
         $customer_id=DB::table("customers")->wherePhone($request->input('username'))->first()->id;
-        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
+        $bookings=$connection->table('bookings')->whereCustomer_id($customer_id)->pluck('booking_reference')->toArray();
+
+        $payments = $connection->table('payment_logs')->whereIn("BillRefNumber",$bookings)->orderBy('id', 'DESC')->get();
         $allPayments=[];
 
 
   
 for ($i=0; $i < count($payments); $i++) { 
     # code...
-    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']?$payments[$i]['mpesapayment']->transac_code:"","booking_reference"=>$payments[$i]['booking']?$payments[$i]['booking']->booking_reference:"","transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
+    $array=Array("product_name"=>'package 1',"payment_ref"=>$payments->TransID ,"booking_reference"=>$payments->BillRefNumber,"transaction_amount"=>$payments->TransAmount,"date"=>$payments[$i]->created_at);
     array_push($allPayments, $array);
 
 }
