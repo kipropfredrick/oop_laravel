@@ -278,12 +278,15 @@ class MpesaPaymentController extends Controller
 
             $paymentLog = (array) $decoded;
 
-            
+
+            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('slug',$bill_ref_no)->first();
+
+
             $travelPattern = "/t/i";
     
             $travelTrue = preg_match($travelPattern,$bill_ref_no);
 
-            if($travelTrue ==1){
+            if($travelTrue ==1 || !empty($sms_credit_payment)){
 
                 $existingLog = \DB::connection('mysql2')->table('payment_logs')->where('TransID',$transaction_id)->first();
 
@@ -292,6 +295,12 @@ class MpesaPaymentController extends Controller
                     return "Duplicate Transaction";
     
                 }
+
+                if(!empty($sms_credit_payment)){
+
+                    $paymentLog['TransactionType'] = "SMS Credit Topup";
+      
+                  }
 
                 $paymentLog['created_at'] = now();
                 $paymentLog['updated_at'] = now();
@@ -1492,6 +1501,37 @@ else{
     }
 
     public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
+
+       $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('slug',$bill_ref_no)->first();
+
+       if(!empty($sms_credit_payment)){
+
+        // s_m_s_top_ups
+            $top_up_data = [
+            'payment_log_id'=>$log_id,
+            'agent_id'=>$sms_credit_payment->id,
+            'amount'=>$transaction_amount,
+            'channel'=>"Mpesa",
+            'created_at'=>now(),
+            'updated_at'=>now()
+            ];
+
+            \DB::connection('mysql2')->table('s_m_s_top_ups')->insert($top_up_data);
+
+            $c_sms_credits = $sms_credit_payment->sms_credits;
+            $n_sms_credits = $c_sms_credits+$transaction_amount;
+
+            \DB::connection('mysql2')->table('travel_agents')
+                                     ->where('slug',$bill_ref_no)
+                                     ->update([
+                                          'sms_credits'=>$n_sms_credits, 
+                                          'created_at'=>now(),
+                                          'updated_at'=>now()
+                                        ]);
+
+            return "Success";
+
+       }
 
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
