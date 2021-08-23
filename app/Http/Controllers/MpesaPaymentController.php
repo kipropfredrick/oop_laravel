@@ -1504,21 +1504,33 @@ else{
 
           $recipients = $customer->phone;
 
-         $admin_commission = (3.5/100)*$transaction_amount;
+          $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
+
+          $current_online_payments = $agent->online_payments;
+        $current_offline_payments = $agent->offline_payments;
+        $current_total_payments = $agent->total_payments;
+
+        $new_online_payments = $current_online_payments + $transaction_amount;
+        $new_total_payments = $agent->total_payments + $transaction_amount;
+
+        $n_wallet_balance = 0.965 * $current_online_payments;
+
+        DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)
+                                ->update([
+                                        'online_payments'=>$new_online_payments,
+                                        'total_payments'=>$new_total_payments
+                                        ]);
 
          $payment_data = [
             'payment_log_id'=>$log_id,
             'customer_id'=>$customer->id,
             'booking_id'=>$booking->id,
             'amount'=>$transaction_amount,
-            'admin_commission'=>$admin_commission,
             'created_at'=>now(),
             'updated_at'=>now()
           ];
 
           DB::connection('mysql2')->table('payments')->insert($payment_data);
-
-          $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
 
           $amount_paid = $booking->amount_paid + $transaction_amount;
 
@@ -1529,12 +1541,6 @@ else{
           $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
          
           SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
-
-          $wallet_balance = $agent->wallet_balance;
-
-          $n_wallet_balance = $wallet_balance+($transaction_amount - $admin_commission);
-
-          DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->update(['wallet_balance'=>$n_wallet_balance]);
 
           if($balance<1){
 
