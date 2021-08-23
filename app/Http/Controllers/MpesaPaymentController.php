@@ -1689,7 +1689,7 @@ if ($customer!=null) {
     $userid=$user->id;
     # code...
 }
- $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"Bills(".$biller_name.")");
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"Bills(".$biller_name.")","token"=>$token);
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
