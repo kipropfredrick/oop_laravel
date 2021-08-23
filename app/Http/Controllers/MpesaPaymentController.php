@@ -633,8 +633,9 @@ if ($decdata==null) {
     //return $array['TransID'];
         Log::info("returned ok");
          \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
-$ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
-   $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
+         $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
+$ret=$this->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name,$token);
+   
 return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
   # code...
 }
@@ -1672,7 +1673,7 @@ else{
 return $recipient;
     }
 
-    function paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name){
+    function paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name,$token=""){
 
         $userid=$msisdn;
 $customer=\App\Customers::wherePhone($msisdn)->first();
