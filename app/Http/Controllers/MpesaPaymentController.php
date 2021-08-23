@@ -379,16 +379,16 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
 //     $recipient=$bill_ref_no;
 // }
 
-  list($msisdn, $network) = $this->get_msisdn_network($bill_ref_no);
+  list($msisdn1, $network) = $this->get_msisdn_network($bill_ref_no);
 
-        if (!$msisdn){
+        if (!$msisdn1){
              Log::info("Invalid Phone Number");
 
               return Array("data"=>Array("response"=>"Invalid Phone Number"),"error"=>true);
         }else{
-            $mobilerec = "0".substr($msisdn, 3);
+            $mobilerec = "0".substr($msisdn1, 3);
             
-            $valid_phone=$msisdn;
+            $valid_phone=$msisdn1;
          
         }
 
@@ -398,7 +398,7 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
 // $obz=new TopupsController();
 // $response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
 
-if ($msisdn) {
+if ($msisdn1) {
   # code...
   $operator=$network;
 
