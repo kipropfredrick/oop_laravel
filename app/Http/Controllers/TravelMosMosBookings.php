@@ -159,7 +159,7 @@ function makePayment(Request $request){
         
 $connection=\DB::connection('mysql2');
 //$customer->id
-        $booking =$connection->table('bookings')->whereBooking_reference($bookingref)->first();
+        $booking =$connection->table('bookings')->whereBooking_reference($booking_ref)->first();
 if ($booking==null) {
 
 return Array("response"=>"Booking data not found.","error"=>true);  
