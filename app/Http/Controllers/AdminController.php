@@ -3843,7 +3843,7 @@ array_push($ids, $result[$i]->id);
 
 
  $obj = new pushNotification();
- return $devices1;
+
 
   $data=Array("name"=>"home","value"=>"home");
     //$messages = str_replace('{customerName}',$value->name, $message);
