@@ -317,7 +317,7 @@ else{
 
         $curl_response = curl_exec($curl);
         $result = json_decode($curl_response);
-
+return $curl_response;
         $token = $result->access_token;
 
         $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
