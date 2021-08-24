@@ -368,7 +368,7 @@ else{
         $success = true;
         $message = "STK Request Success";
         $httpCode = 200;
-
+return $responseArray;
         \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
 
         if(array_key_exists("errorCode", $responseArray)){
