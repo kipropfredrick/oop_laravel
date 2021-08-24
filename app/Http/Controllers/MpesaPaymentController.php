@@ -1714,6 +1714,8 @@ if ($customer!=null) {
              return [false, false];
          }
 
+         
+
 
 
 }
