@@ -153,7 +153,7 @@ var s=`
                                                     </div>
                                                 </div>
                                             </div>
-                                                <button type="submit" class="btn btn-primary">Make Booking</button>
+                                                <button type="submit" class="btn btn-primary">Book Now</button>
                                           
                                             </form>
                                               </div>
