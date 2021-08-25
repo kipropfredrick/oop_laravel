@@ -62,81 +62,7 @@ var s=`
                         <img src="not set" id="mosmosproductimage" class="col-12">
                         </div>
                     </div>
-                <div class="mdg-features">
-  
-
-                    <div class="mdgf">
-                        <div class="row">
-                            <div class="col-2">
-                                <div class="mdgf-icon">
-                                    <span class="fas fa-coins fa-1x"></span>
-                                </div>
-                            </div>
-                            <div class="col-10">
-                                <div class="mdgf-text">  
-                                    <span>Minimum deposit</span>
-                                    <h6>
-                                        Ksh.100
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mdgf">
-                        <div class="row">
-                            <div class="col-2">
-                                <div class="mdgf-icon">
-                                    <span class="far fa-clock fa-1x"></span>
-                                </div>
-                            </div>
-                            <div class="col-10">
-                                <div class="mdgf-text">  
-                                    <span>Payment period</span>
-                                    <h6>
-                                        Pay at your own pace
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mdgf">
-                        <div class="row">
-                            <div class="col-2">
-                                <div class="mdgf-icon">
-                                    <span class="fas fa-percent fa-1x"></span>
-                                </div>
-                            </div>
-                            <div class="col-10">
-                                <div class="mdgf-text">  
-                                    <span>No extra fees</span>
-                                    <h6>
-                                        0% interest rates
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mdgf">
-                        <div class="row">
-                            <div class="col-2">
-                                <div class="mdgf-icon">
-                                    <span class="fas fa-truck fa-1x"></span>
-                                </div>
-                            </div>
-                            <div class="col-10">
-                                <div class="mdgf-text">  
-                                    <span>Doorstep delivery</span>
-                                    <h6>
-                                        Countrywide delivery Upon completion of payment
-                                    </h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-      </div>
+              
       
     </div>
                     <div class="col-12 col-lg-6 col-xl-7">
@@ -180,8 +106,8 @@ var s=`
                                                 <input required name="phone" type="" value="" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> (Ksh.100 minimum)</label>
-                                                <input min="100" required name="initial_deposit" value="" type="number" class="form-control" id="checkout-street-address" placeholder="Initial deposit">
+                                                <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> </label>
+                                                <input min="500" required name="initial_deposit" value="" type="number" class="form-control" id="checkout-street-address" placeholder="KSh.500 minimum">
                                              </div>
                                           </div>
 
@@ -256,14 +182,14 @@ $('body').append(s);
       document.getElementById("mosmosproductimage").src =image;
        document.getElementById("productName").innerHTML =itemName;
     });
-});	
+}); 
 
 
 
 
 
     });
-});	
+}); 
 
 
 
