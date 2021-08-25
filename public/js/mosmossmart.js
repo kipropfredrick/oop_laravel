@@ -71,7 +71,7 @@ var s=`
 
                                 <div class="">
                                 <div>
-                                <p>You are making a booking for<strong><span id="productName"></span></strong>. Minimum deposit is <strong>KSh.500</strong>.</p>
+                                <p>You are making a booking for <strong><span id="productName"></span></strong>. Minimum deposit is <strong>KSh.500</strong>.</p>
                          
                             </div>
                                       
