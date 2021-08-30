@@ -279,7 +279,7 @@ class MpesaPaymentController extends Controller
             $paymentLog = (array) $decoded;
 
 
-            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('slug',$bill_ref_no)->first();
+            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
 
 
             $travelPattern = "/t/i";
@@ -1502,7 +1502,7 @@ else{
 
     public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
 
-       $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('slug',$bill_ref_no)->first();
+       $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
 
        if(!empty($sms_credit_payment)){
 
@@ -1539,7 +1539,6 @@ else{
            return "Booking Does not exist!";
        }else{
            
-        
           $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
           $recipients = $customer->phone;
