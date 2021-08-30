@@ -3844,6 +3844,7 @@ array_push($ids, $result[$i]->id);
 
  $obj = new pushNotification();
 
+
   $data=Array("name"=>"home","value"=>"home");
     //$messages = str_replace('{customerName}',$value->name, $message);
      $messages= "Buy airtime and pay utility bills for yourself or your loved ones bila stress with the Lipa Mos Mos app.";

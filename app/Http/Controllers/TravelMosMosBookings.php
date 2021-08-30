@@ -152,9 +152,43 @@ function makePayment(Request $request){
             $valid_phone=$msisdn;
          
         }
+
+
+
+
+        
+$connection=\DB::connection('mysql2');
+//$customer->id
+        $booking =$connection->table('bookings')->whereBooking_reference($booking_ref)->first();
+if ($booking==null) {
+
+return Array("response"=>"Booking data not found.","error"=>true);  
+}
+
+$travel_agent=$connection->table('travel_agents')->whereId($booking->agent_id)->first();
+if ($travel_agent==null) {
+  # code...
+  return Array("response"=>"An error occured processing your request.","error"=>true);   
+}
+
+if ($travel_agent->mpesa_approved=="approved") {
+  # code...
+  $consumer_key=$travel_agent->CONSUMER_KEY;
+  $consume_secret=$travel_agent->CONSUMER_SECRET;
+  $MPESA_SHORT_CODE=$travel_agent->MPESA_SHORT_CODE;
+  $STK_PASSKEY=$travel_agent->STK_PASSKEY;
+
+
+  return $this->stk_push($amount,$msisdn,$booking_ref,$consumer_key,$consume_secret,$MPESA_SHORT_CODE,$STK_PASSKEY);
+}
+else{
 $authobj=new autApi();
 
 return $authobj->stk_push($amount,$msisdn,$booking_ref);
+
+}
+
+
 
 }
  function travelcheckBooking(request $request){
@@ -244,21 +278,7 @@ return $allPayments;
             return [false, false];
         }
 
-           /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function lipaNaMpesaPassword($lipa_time)
-    {
 
-        $passkey = env('STK_PASSKEY1');
-        $BusinessShortCode = env('MPESA_SHORT_CODE1');
-        $timestamp =$lipa_time;
-        $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
-        return $lipa_na_mpesa_password;
-    }
 
     function updateTraveTarget(Request $request){
 
@@ -278,6 +298,107 @@ else{
   return Array("data"=>Array("response"=>"No booking reference found."),"error"=>true);
 }
 
+    }
+
+
+
+    public function stk_push($amount,$msisdn,$booking_ref,$consumer_key,$consume_secret,$MPESA_SHORT_CODE,$STK_PASSKEY){
+
+        // $consumer_key =  env('CONSUMER_KEY');
+        // $consume_secret = env('CONSUMER_SECRET');
+        $headers = ['Content-Type:application/json','Charset=utf8'];
+        $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+
+        $curl = curl_init($url);
+        curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl,CURLOPT_USERPWD,$consumer_key.':'.$consume_secret);
+
+        $curl_response = curl_exec($curl);
+        $result = json_decode($curl_response);
+
+        $token = $result->access_token;
+
+        $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+
+        Log::info("Generated access token " . $token);
+
+        $timestamp = date("YmdHis");
+
+        $BusinessShortCode = $MPESA_SHORT_CODE;
+
+        $passkey = $STK_PASSKEY;
+
+        $lipa_time = Carbon::rawParse('now')->format('YmdHms');
+
+        $apiPassword = $this->lipaNaMpesaPassword($STK_PASSKEY,$MPESA_SHORT_CODE,$lipa_time);
+
+        Log::info("Generated Password " . $apiPassword);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
+
+        $curl_post_data = array(
+
+            'BusinessShortCode' =>$MPESA_SHORT_CODE,
+            'Password'          => $apiPassword,
+            'Timestamp'         => $lipa_time,
+            'TransactionType'   => 'CustomerPayBillOnline',
+            'Amount'            => $amount,
+            'PartyA'            => $msisdn,
+            'PartyB'            =>$MPESA_SHORT_CODE,
+            'PhoneNumber'       => $msisdn,
+            'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
+            'AccountReference'  => $booking_ref,
+            'TransactionDesc'   => 'Mosmos Product Payment'
+        );
+
+        $data_string = json_encode($curl_post_data);
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+
+        $curl_response = curl_exec($curl);
+
+        $responseArray = json_decode($curl_response, true);
+        $status = 200;
+        $success = true;
+        $message = "STK Request Success";
+        $httpCode = 200;
+
+        \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
+
+        if(array_key_exists("errorCode", $responseArray)){
+            $message = "Automatic payment failed. Go to your MPESA, Select Paybill Enter : env('MPESA_SHORT_CODE') and Account Number : ".$booking_ref."Enter Amount : ".number_format($amount,2)." Thank you.";
+
+            return Array("response"=>$message,"success"=>false,"error"=>false);
+        }else{
+            $message = "A payment prompt has been sent to your phone.Enter MPesa PIN if prompted.";
+           return Array("response"=>$message,"success"=>true,"error"=>false);
+        }
+
+
+
+        return $message;
+    }
+
+      /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function lipaNaMpesaPassword($passkey,$BusinessShortCode,$lipa_time)
+    {
+
+        // $passkey = env('STK_PASSKEY');
+        // $BusinessShortCode = env('MPESA_SHORT_CODE');
+        $timestamp =$lipa_time;
+        $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
+        return $lipa_na_mpesa_password;
     }
 
 }
