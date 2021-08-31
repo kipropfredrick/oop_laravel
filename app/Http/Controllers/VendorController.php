@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendOrderTransferedMail;
+use App\Http\Controllers\FrontPageController;
+use File;
+use Exception;
+use AfricasTalking\SDK\AfricasTalking;
+use \App\Mail\SendRegistrationEmail;
 
 class VendorController extends Controller
 {
@@ -527,4 +532,326 @@ class VendorController extends Controller
            }
 
        }
+
+       function create_bookings(Request $request){
+        $categories=\App\categories::get();
+        return view('backoffice.bookings.newbooking',compact('categories'));
+       }
+
+       function getproducts(Request $request){
+$level= $request->level;
+$id=$request->id;
+if ($level==1) {
+    # code...
+    return \App\SubCategories::whereCategory_id($id)->get();
+}
+if ($level==2) {
+    # code...
+    return \App\ThirdLevelCategory::whereSubcategory_id($id)->get();
+}
+if ($level==3) {
+    # code...
+    return \App\Products::whereThirdLevelCategory_id($id)->whereVendor_id($request->vendor)->get();
+}
+if ($level==4) {
+    # code...
+    return \App\Products::whereId($id)->first();
+}
+
+       }
+
+       function make_booking(Request $request){
+          $county_id = $request->county_id;
+        $exact_location = $request->exact_location;
+        $vendor_code = $request->vendor_code;
+        $obj=new FrontPageController();
+
+        $categories = \App\Categories::all();
+        
+        list($msisdn, $network) = $obj->get_msisdn_network($request->phone);
+
+        if (!$msisdn){
+
+            return redirect()->back()->with('error',"Please enter a valid phone number!");
+        }else{
+            $valid_phone = $msisdn;
+        }
+        //Valid email
+        $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
+        
+        $product = \App\Products::find($request->product_id);
+
+        if($product->weight != 0){
+            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
+        }else{
+            $weight_array = (['0','g']);
+        }
+        // For Other counties
+        $county = \App\Counties::find($request->county_id);
+
+        $product_weight = $weight_array;
+
+        if($product_weight[1] == 'g'){
+            $shipping_cost = 500;
+        }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+            $shipping_cost = 500;
+        }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+            $extra_kg = $product_weight[0] - 5;
+            $extra_cost = (50 * $extra_kg);
+            $shipping_cost = 500 + $extra_cost;
+        }
+
+        $total_cost = $product->product_price + $shipping_cost;
+
+        $total_cost = $obj->roundToTheNearestAnything($total_cost, 5);
+        
+        $existingUser = \App\User::where('email',  $request->input('email'))->first();
+
+        if($existingUser!=null)
+        {
+
+        $user = $existingUser;
+
+        $existingCustomer = \App\Customers::where('user_id','=',$existingUser->id)->first();
+
+
+        $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
+
+        if($booking!=null){
+            return Back()->with("error","Customer has already existing booking");
+        }
+
+        //\Auth::login($user);
+
+        $booking_reference = $obj->get_booking_reference();
+
+        $booking_date = now();
+
+        $due_date = Carbon::now()->addMonths(3);
+
+        
+        $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
+
+        
+        if($request->initial_deposit<100){
+
+          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(100,0));
+         
+        }
+
+        $balance=$existingUser->balance;
+
+        $booking = new \App\Bookings();
+        $recipients = $valid_phone;
+        if (intval($balance)==0) {
+        $booking->balance =   $total_cost; 
+        $booking->amount_paid = "0";
+        $booking->status = "pending";
+        }
+        else{
+
+            if (intval($total_cost)<intval($balance)) {
+                # code...
+                \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
+                $booking->status = "complete";
+                $booking->amount_paid = $total_cost;
+                $booking->balance="0";
+
+                $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
+            }
+            else{
+
+                \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
+                $booking->balance =   $total_cost-(intval($balance)); 
+                $booking->amount_paid = $balance;
+                $booking->status = "active";
+                $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
+            }
+                
+            SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+        }
+
+        
+        $booking->customer_id = $existingCustomer->id; 
+        $booking->product_id  = $request->product_id;
+        $booking->booking_reference = $obj->get_booking_reference();
+        $booking->quantity  = '1';
+       
+        $booking->item_cost = $product->product_price;
+        
+        $booking->payment_mode  = 'Mpesa';
+        $booking->date_started  = now();
+        $booking->due_date = $due_date;
+       
+        $booking->vendor_code = $vendor_code;
+        $booking->location_type = "Exact Location";
+        $booking->item_cost = $product->product_price;
+        $booking->shipping_cost = $shipping_cost;
+        $booking->county_id = $request->county_id;
+        $booking->exact_location = $request->exact_location;
+        $booking->total_cost =  $total_cost;
+       // $booking->booking_reference = $this->get_booking_reference();
+
+        $booking->save();
+        
+        
+        $booking_id = DB::getPdo()->lastInsertId();
+
+        $recipients = $valid_phone;
+      
+        $booking_id = DB::getPdo()->lastInsertId();
+
+        $product = \App\Products::find($request->product_id);
+
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+        
+        $message = $obj->stk_push($amount,$msisdn,$booking_ref);
+
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+return Back()->with("success",$stkMessage);
+            
+        }
+
+        
+        $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
+
+        if($existingCustomer)
+        {
+            
+        $booking_date = now();
+
+        $$booking_date = strtotime($booking_date);
+
+        $product = \App\Products::find($request->product_id);
+
+       $due_date = Carbon::now()->addMonths(3);
+
+        if($request->initial_deposit<100){
+
+          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(100));
+         
+        }
+
+        $booking = new \App\Bookings();
+        $booking->customer_id = $existingCustomer->id; 
+        $booking->product_id  = $request->product_id;
+        $booking->county_id = $request->county_id;
+        $booking->exact_location = $exact_location;
+        $booking->booking_reference = $obj->get_booking_reference();
+        $booking->quantity  = "1";
+        $booking->amount_paid = "0";
+        $booking->balance = $total_cost;
+        $booking->item_cost = $product->product_price;
+        $booking->shipping_cost = $shipping_cost;
+        $booking->payment_mode  = 'Mpesa';
+        $booking->vendor_code = $vendor_code;
+        $booking->date_started  = now();
+        $booking->due_date = $due_date;
+        $booking->status = "pending";
+        $booking->total_cost = $total_cost;
+        $booking->save();
+
+        $booking_id = DB::getPdo()->lastInsertId();
+
+        $recipients = $valid_phone;
+       
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+
+        $product = \App\Products::find($request->product_id);
+
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+        $message = $obj->stk_push($amount,$msisdn,$booking_ref);
+
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+
+      return Back()->with("success",$stkMessage);
+            
+        }
+
+        $user = new \App\User();
+        $user->email = $request->input('email');
+        $user->name = $request->input('name');
+        $user->password = Hash::make($request->input('phone'));
+        $user->save();
+
+        $user_id = DB::getPdo()->lastInsertId();
+
+        $customer = new \App\Customers();
+        $customer->user_id = $user_id; 
+        $customer->phone  = $valid_phone;
+        $customer->save();
+
+        $customer_id = DB::getPdo()->lastInsertId();
+
+        $booking_date = now();
+
+        $booking_date = strtotime($booking_date);
+
+        $product = \App\Products::find($request->product_id);
+
+       $due_date = Carbon::now()->addMonths(3);
+
+       $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
+
+
+        $booking = new \App\Bookings();
+        $booking->customer_id = $customer_id; 
+        $booking->product_id  = $request->product_id;
+        $booking->county_id = $request->county_id;
+        $booking->exact_location = $exact_location;
+        $booking->booking_reference = $obj->get_booking_reference();
+        $booking->quantity  = "1";
+        $booking->status = "pending";
+        $booking->vendor_code = $vendor_code;
+        $booking->item_cost = $product->product_price;
+        $booking->balance = $total_cost;
+        $booking->shipping_cost = $shipping_cost;
+        $booking->amount_paid = "0";
+        $booking->payment_mode  = 'Mpesa';
+        $booking->date_started  = now();
+        $booking->due_date = $due_date;
+        $booking->total_cost = $total_cost;
+        $booking->save();
+
+        $booking_id = DB::getPdo()->lastInsertId();
+
+       $recipients = $valid_phone;
+
+       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+
+       SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+       $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone')
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
+
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+
+        $product = \App\Products::find($request->product_id);
+
+        $message = $obj->stk_push($amount,$msisdn,$booking_ref);
+
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+return Back()->with("success",$stkMessage);
+
+    }
 }

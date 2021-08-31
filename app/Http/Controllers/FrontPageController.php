@@ -23,7 +23,7 @@ class FrontPageController extends Controller
      */
 
 
-    private function roundToTheNearestAnything($value, $roundTo)
+    public function roundToTheNearestAnything($value, $roundTo)
     {
         $mod = $value%$roundTo;
         return $value+($mod<($roundTo/2)?-$mod:$roundTo-$mod);
@@ -1166,7 +1166,7 @@ if ($existingUser->role == "user" ) {
     
 
 
-        private function get_msisdn_network($msisdn){
+        public function get_msisdn_network($msisdn){
             $regex =  [
                  'airtel' =>'/^\+?(254|0|)7(?:[38]\d{7}|5[0-6]\d{6})\b/',
                  'equitel' => '/^\+?(254|0|)76[0-7]\d{6}\b/',
@@ -1305,13 +1305,6 @@ if ($existingUser->role == "user" ) {
 
     public function get_booking_reference(){
 
- //        $latest_booking = \App\Bookings::latest()->first();
- //        $latest_ref = $latest_booking->booking_reference;
- //        $latest_ref = substr($latest_ref, 2);
-        
- // $latest_ref +=1;
- //            $booking_reference = 'MM'.$latest_ref;
-
 
 for($i=0;$i<1000000;$i++){
 $booking_reference = 'MM'.rand(10000,99999);
@@ -1322,14 +1315,6 @@ break;
 }
 
 }
-
-        // if(strlen($latest_ref) == 6){
-            
-           
-
-        // }else{
-        //   $booking_reference = 'MM100000';   
-        // }
 
         return $booking_reference;
 

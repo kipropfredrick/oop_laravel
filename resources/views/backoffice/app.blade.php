@@ -668,8 +668,9 @@
           </li>
 
          @elseif(auth()->user()->role =='vendor')
+          <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li>
 		 <li class="nav-item">
-			<a href="#" class="nav-link"><i class="fa fa-shopping-basket"></i> <span>Products</span><i class="right fas fa-angle-left"></i></a>
+			<a href="#" class="nav-link">&nbsp   <i class="fa fa-shopping-basket"></i> <span>  Products</span><i class="right fas fa-angle-left"></i></a>
 
 			<ul class="nav nav-treeview" data-submenu-title="Products">
         <li class="nav-item"><a href="/vendor/approved-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Approved Products</span></a></li>
@@ -679,9 +680,10 @@
 			</ul>
 		</li>
 		<li class="nav-item">
-			<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>Bookings</span><i class="right fas fa-angle-left"></i></a>
+			<a href="#" class="nav-link">&nbsp   <i class="fa fa-bookmark"></i> <span>Bookings</span><i class="right fas fa-angle-left"></i></a>
 
 			<ul class="nav nav-treeview" data-submenu-title="Bookings">
+  <!--       <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li> -->
         <li class="nav-item"><a href="/vendor/pending-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Bookings</span></a></li>
 				<li class="nav-item"><a href="/vendor/active-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Active Bookings</span></a></li>
 				<li class="nav-item"><a href="/vendor/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Complete Bookings</span></a></li>
