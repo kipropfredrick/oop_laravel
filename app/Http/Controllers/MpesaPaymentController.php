@@ -279,7 +279,7 @@ class MpesaPaymentController extends Controller
             $paymentLog = (array) $decoded;
 
 
-            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('slug',$bill_ref_no)->first();
+            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
 
 
             $travelPattern = "/t/i";
@@ -1502,7 +1502,7 @@ else{
 
     public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
 
-       $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('slug',$bill_ref_no)->first();
+       $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
 
        if(!empty($sms_credit_payment)){
 
@@ -1539,50 +1539,50 @@ else{
            return "Booking Does not exist!";
        }else{
            
-        
-          $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
+            $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
-          $recipients = $customer->phone;
+            $recipients = $customer->phone;
 
-          $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
+            $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
 
-          $current_online_payments = $agent->online_payments;
-        $current_offline_payments = $agent->offline_payments;
-        $current_total_payments = $agent->total_payments;
+            $current_online_payments = $agent->online_payments;
+            $current_offline_payments = $agent->offline_payments;
+            $current_total_payments = $agent->total_payments;
 
-        $new_online_payments = $current_online_payments + $transaction_amount;
-        $new_total_payments = $agent->total_payments + $transaction_amount;
+            $new_online_payments = $current_online_payments + $transaction_amount;
+            $new_total_payments = $agent->total_payments + $transaction_amount;
 
-        $n_wallet_balance = 0.965 * $current_online_payments;
+            $n_wallet_balance = 0.965 * $current_online_payments;
 
-        DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)
-                                ->update([
-                                        'online_payments'=>$new_online_payments,
-                                        'total_payments'=>$new_total_payments
-                                        ]);
+            DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)
+                    ->update([
+                            'online_payments'=>$new_online_payments,
+                            'total_payments'=>$new_total_payments
+                            ]);
 
-         $payment_data = [
+            $payment_data = [
             'payment_log_id'=>$log_id,
             'customer_id'=>$customer->id,
+            'agent_id'=>$agent->id,
             'booking_id'=>$booking->id,
             'amount'=>$transaction_amount,
             'created_at'=>now(),
             'updated_at'=>now()
-          ];
+            ];
 
-          DB::connection('mysql2')->table('payments')->insert($payment_data);
+            DB::connection('mysql2')->table('payments')->insert($payment_data);
 
-          $amount_paid = $booking->amount_paid + $transaction_amount;
+            $amount_paid = $booking->amount_paid + $transaction_amount;
 
-          $balance = $booking->balance - $transaction_amount;
+            $balance = $booking->balance - $transaction_amount;
 
-          $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
+            $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
-          $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
-         
-          SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-          if($balance<1){
+            SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+            if($balance<1){
 
             $message = "Congratulations, You have completed Payment for ".$booking->package_name.".";
 
@@ -1590,11 +1590,11 @@ else{
 
             $data['status'] = 'complete';
 
-          }
+            }
 
-          DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
+            DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
 
-          return "Success";
+            return "Success";
 
        }
 
