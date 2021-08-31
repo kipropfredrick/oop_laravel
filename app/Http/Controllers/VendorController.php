@@ -534,7 +534,7 @@ class VendorController extends Controller
        }
 
        function create_bookings(Request $request){
-        $categories=\App\categories::get();
+        $categories=\App\Categories::get();
         return view('backoffice.bookings.newbooking',compact('categories'));
        }
 
