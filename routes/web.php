@@ -225,7 +225,13 @@ Route::prefix('vendor')->group(function () {
         Route::get('/image-delete/{id}', 'VendorController@image_delete');
         Route::post('/update-product/{id}', 'VendorController@update_product');
         Route::post('/save-product', 'VendorController@save_product');
-        Route::get('/complete-bookings','VendorController@complete_bookings');
+        Route::get('/create-bookings','VendorController@create_bookings');
+          Route::post('/make-booking','VendorController@make_booking');
+        
+         Route::get('/getproducts','VendorController@getproducts');
+
+
+         Route::get('/active-bookings','VendorController@active_bookings');
         Route::get('/active-bookings','VendorController@active_bookings');
         Route::get('/pending-products','VendorController@pending_products');
         Route::get('/approved-products','VendorController@approved_products');
