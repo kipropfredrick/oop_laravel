@@ -1506,15 +1506,16 @@ else{
 
        if(!empty($sms_credit_payment)){
 
-        // s_m_s_top_ups
+            // s_m_s_top_ups
+
             $top_up_data = [
-            'payment_log_id'=>$log_id,
-            'agent_id'=>$sms_credit_payment->id,
-            'amount'=>$transaction_amount,
-            'channel'=>"Mpesa",
-            'created_at'=>now(),
-            'updated_at'=>now()
-            ];
+                            'payment_log_id'=>$log_id,
+                            'agent_id'=>$sms_credit_payment->id,
+                            'amount'=>$transaction_amount,
+                            'channel'=>"Mpesa",
+                            'created_at'=>now(),
+                            'updated_at'=>now()
+                            ];
 
             \DB::connection('mysql2')->table('s_m_s_top_ups')->insert($top_up_data);
 
@@ -1552,23 +1553,36 @@ else{
             $new_online_payments = $current_online_payments + $transaction_amount;
             $new_total_payments = $agent->total_payments + $transaction_amount;
 
-            $n_wallet_balance = 0.965 * $current_online_payments;
+            $admin_commission = ($agent->commission/100)*$transaction_amount;
 
-            DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)
-                    ->update([
-                            'online_payments'=>$new_online_payments,
-                            'total_payments'=>$new_total_payments
-                            ]);
+            $payment_balance = $transaction_amount - $admin_commission;
+
+            DB::connection('mysql2')->table('travel_agents')
+                                    ->where('id',$booking->agent_id)
+                                    ->update([
+                                            'online_payments'=>$new_online_payments,
+                                            'total_payments'=>$new_total_payments
+                                            ]);
+
+            $admin_wallet = DB::table('admin_wallets')->first();
+            if(empty($admin_wallet)){
+                DB::table('admin_wallets')->insert(['previous_balance'=>0,'current_balance'=>$admin_commission]);
+            }else{
+                DB::table('admin_wallets')->update(['previous_balance'=>$admin_wallet->previous_balance,'current_balance'=>($admin_wallet->current_balance + $admin_commission)]);
+            }
 
             $payment_data = [
-            'payment_log_id'=>$log_id,
-            'customer_id'=>$customer->id,
-            'agent_id'=>$agent->id,
-            'booking_id'=>$booking->id,
-            'amount'=>$transaction_amount,
-            'created_at'=>now(),
-            'updated_at'=>now()
-            ];
+                            'payment_log_id'=>$log_id,
+                            'customer_id'=>$customer->id,
+                            'agent_id'=>$agent->id,
+                            'booking_id'=>$booking->id,
+                            'transaction_type'=>"Pay Bill",
+                            'amount'=>$transaction_amount,
+                            'admin_commission'=>$admin_commission,
+                            'balance'=>$payment_balance,
+                            'created_at'=>now(),
+                            'updated_at'=>now()
+                            ];
 
             DB::connection('mysql2')->table('payments')->insert($payment_data);
 
