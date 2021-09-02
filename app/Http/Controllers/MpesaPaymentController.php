@@ -1553,7 +1553,7 @@ else{
             $new_online_payments = $current_online_payments + $transaction_amount;
             $new_total_payments = $agent->total_payments + $transaction_amount;
 
-            $admin_commission = ($agent->commission/100)*$transaction_amount;
+            $admin_commission = $agent->system_payment_cost;
 
             $payment_balance = $transaction_amount - $admin_commission;
 
