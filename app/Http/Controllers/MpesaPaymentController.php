@@ -1561,10 +1561,12 @@ else{
                                     ->where('id',$booking->agent_id)
                                     ->update([
                                             'online_payments'=>$new_online_payments,
+                                            'wallet_balance'=>$agent->wallet_balance + $payment_balance,
                                             'total_payments'=>$new_total_payments
                                             ]);
 
             $admin_wallet = DB::connection('mysql2')->table('admin_wallets')->first();
+            
             if(empty($admin_wallet)){
                 DB::connection('mysql2')->table('admin_wallets')->insert(['previous_balance'=>0,'current_balance'=>$admin_commission]);
             }else{
