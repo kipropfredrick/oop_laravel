@@ -1564,11 +1564,11 @@ else{
                                             'total_payments'=>$new_total_payments
                                             ]);
 
-            $admin_wallet = DB::table('admin_wallets')->first();
+            $admin_wallet = DB::connection('mysql2')->table('admin_wallets')->first();
             if(empty($admin_wallet)){
-                DB::table('admin_wallets')->insert(['previous_balance'=>0,'current_balance'=>$admin_commission]);
+                DB::connection('mysql2')->table('admin_wallets')->insert(['previous_balance'=>0,'current_balance'=>$admin_commission]);
             }else{
-                DB::table('admin_wallets')->update(['previous_balance'=>$admin_wallet->previous_balance,'current_balance'=>($admin_wallet->current_balance + $admin_commission)]);
+                DB::connection('mysql2')->table('admin_wallets')->update(['previous_balance'=>$admin_wallet->previous_balance,'current_balance'=>($admin_wallet->current_balance + $admin_commission)]);
             }
 
             $payment_data = [
