@@ -84,7 +84,7 @@ Route::post('/updateTraveTarget','TravelMosMosBookings@updateTraveTarget');
 
 //web interface api smart xhewckout
 
-Route::post('/smartchekout','ApiBookingController@index');
+Route::any('/smartchekout','ApiBookingController@index');
 
 
 
