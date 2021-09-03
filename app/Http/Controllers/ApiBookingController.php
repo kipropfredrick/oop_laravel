@@ -9,6 +9,6 @@ class ApiBookingController extends Controller
     //
 
     function index(Request $request){
-    	return Array("status"=>false,"data"=>$request);
+    	return Array("status"=>true,"data"=>$request->all());
     }
 }
