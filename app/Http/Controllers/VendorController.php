@@ -428,6 +428,7 @@ class VendorController extends Controller
         $data['product_code'] = 'P'.rand(10,1000000);
         $data['product_image'] = $image;
         $data['slug'] = $slug;
+        $data['status']="approved";
         $data['vendor_id'] = $vendor->id;
         $data['created_at'] = now();
         $data['updated_at'] = now();
