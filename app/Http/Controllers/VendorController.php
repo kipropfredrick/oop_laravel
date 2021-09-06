@@ -135,9 +135,8 @@ class VendorController extends Controller
         
        
 
-    }
-
-     public function transfer_orderID(Request $request, $id){
+    }   
+    public function transfer_orderID(Request $request, $id){
 
         $booking = \App\Bookings::where('id','=',$id)->first();
 
@@ -147,47 +146,63 @@ class VendorController extends Controller
             return back()->with('error','You cannot exchange with the same item');
         }
 
-
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
 
         if($newProduct == null){
             return back()->with('error','Sorry Product Code does not exist.');
         }
 
-        if($newProduct->weight != 0){
-            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
-        }else{
-            $weight_array = (['0','g']);
-        }
+            if($newProduct->weight != 0){
+                $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
+            }else{
+                $weight_array = (['0','g']);
+            }
 
-        $product_weight = $weight_array;
+            $product_weight = $weight_array;
 
-        if($product_weight[1] == 'g'){
-            $shipping_cost = 500;
-        }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-            $shipping_cost = 500;
-        }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
-        $extra_kg = $product_weight[0] - 5;
-        $extra_cost = (30 * $extra_kg);
-        $vat = 0.16*$extra_cost;
-        $shipping_cost = 500 + $extra_cost + $vat;
-        }
-
-        $booking = \App\Bookings::where('product_id','=',$id)->first();
+            if($product_weight[1] == 'g'){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+            $extra_kg = $product_weight[0] - 5;
+            $extra_cost = (30 * $extra_kg);
+            $vat = 0.16*$extra_cost;
+            $shipping_cost = 500 + $extra_cost + $vat;
+            }
 
         $total_cost = ($newProduct->product_price + $shipping_cost);
 
         $balance = $total_cost - $booking->amount_paid;
- 
-        \App\Bookings::where('id','=',$booking->id)->update([
-                                    "product_id"=>$newProduct->id,
-                                    "balance"=>$balance,
-                                    "shipping_cost"=>$shipping_cost,
-                                    "item_cost"=>$newProduct->product_price,
-                                    "total_cost"=>$total_cost
-                                    ]);
+          $customer = \App\Customers::where('id',$booking->customer_id)->first();
 
-        $customer = \App\Customers::where('id',$booking->customer_id)->first();
+       if ($balance>0) {
+           # code...
+         \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>$balance,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        "total_cost"=>$total_cost
+                        ]);
+       }
+       else{
+ \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>0,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        'status'=>"complete",
+                        "total_cost"=>$total_cost
+                        ]);
+
+$objuser=\App\User::whereId($customer->user_id);
+$firstobjuser=$objuser->first();
+$totalbal=intval($firstobjuser->balance)+ ($balance *-1);
+$objuser->update(['balance'=>$totalbal]);
+       }
+
+      
 
         $message = "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).". Use Paybill 4040299 and Account Number ".$booking->booking_reference.". Thank you.";
 
@@ -204,14 +219,12 @@ class VendorController extends Controller
 
         ];
 
-        //Mail::to($booking->customer->user->email)->send(new SendOrderTransferedMail($details));
+        Mail::to($booking->customer->user->email)->send(new SendOrderTransferedMail($details));
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 
-        
 
     }
-
        public function product_edit($id)
         {
             $product = \App\Products::with('category','gallery')->find($id);
