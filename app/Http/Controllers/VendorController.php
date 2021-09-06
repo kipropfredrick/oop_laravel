@@ -146,7 +146,7 @@ class VendorController extends Controller
         if($product->product_code == $request->product_code){
             return back()->with('error','You cannot exchange with the same item');
         }
-      
+
 
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
 
@@ -178,7 +178,7 @@ class VendorController extends Controller
         $total_cost = ($newProduct->product_price + $shipping_cost);
 
         $balance = $total_cost - $booking->amount_paid;
-  return $product->first();
+ 
         \App\Bookings::where('id','=',$booking->id)->update([
                                     "product_id"=>$newProduct->id,
                                     "balance"=>$balance,
@@ -204,7 +204,7 @@ class VendorController extends Controller
 
         ];
 
-        Mail::to($booking->customer->user->email)->send(new SendOrderTransferedMail($details));
+        //Mail::to($booking->customer->user->email)->send(new SendOrderTransferedMail($details));
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 
