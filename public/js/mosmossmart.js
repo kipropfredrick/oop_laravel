@@ -107,7 +107,7 @@ var s=`
                                 
                                 <div class="form-row">
                                     <div class="form-group col-md-12">
-                                    <form action="http://mosmos.sale/api/smartchekout" method="post" id="mosmos-form">
+                                    <form action="https://mosmos.co.ke/api/smartchekout" method="post" id="mosmos-form">
                                        
                                         <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="product_id" value="1">
@@ -115,7 +115,7 @@ var s=`
                                         <input name="minDeposit" value="1" type="hidden">
                                         <div class="form-row">
 <div class="form-group col-md-6">
-                                        <input name="vendor_code" value="xx" hidden="">
+                                       
                                         <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
                                         <input required name="name" type="text" class="form-control" id="checkout-first-name" value="" placeholder="Full Name">
                                         </div>
@@ -289,15 +289,18 @@ $("#mosmos-form").submit(function(e) {
 $("#spinner").show();
     var form = $(this);
 
-var productName='<input type="hidden" name="name" value="'+itemName+'">';
+var productName='<input type="hidden" name="product_name" value="'+itemName+'">';
 var keyInput='<input type="hidden" name="secret_key" value="'+secret_key+'">';
 var productPrice='<input type="hidden" name="productPrice" value="'+price+'">';
+var weight='<input type="hidden" name="weight" value="'+"10"+'">';
 
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
 form.append(productName);
+
 form.append(keyInput);
 form.append(productPrice);
+form.append(weight);
     var url = form.attr('action');
     
     $.ajax({
@@ -310,7 +313,7 @@ form.append(productPrice);
             if(data.status){
               // $("#mosmosmodal").modal('hide');
               //onApprovefunc(data);
-              $("#responsedivmosmos").html("<p><strong> "+itemName+"</strong> booked successfuly. Use Paybill <strong>4040299</strong> and account number <strong>test</strong> for all your next payments.</p>"+
+              $("#responsedivmosmos").html("<p><strong> "+data.message+"</strong>.</p>"+
                 '<img src="https://t3.ftcdn.net/jpg/03/55/05/12/360_F_355051279_iCFYD4WdBAfkLljJQlyWYDgii03rinlH.jpg" style="width: 100px;height: 100px;margin-left: auto;margin-right: auto;display: block;" style="">');
                       console.log(data);
 
