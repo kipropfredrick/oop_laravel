@@ -95,7 +95,7 @@
                                 <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Click to Order</a>
                              
                             </div>
-                               <button id="mosmoss-id" ></button>
+                               <button id="mosmos" ></button>
                             
                             <div class="highlights">
                                 <h5>Key Highlights</h5>

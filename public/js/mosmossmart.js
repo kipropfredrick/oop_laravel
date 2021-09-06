@@ -50,9 +50,9 @@ include('https://code.jquery.com/jquery-3.6.0.js', function() {
     $(document).ready(function() {
           //const mosmosobj = new mosmos("Lipa Mos Mos");
 
-$('#mosmoss-id').addClass('alert alert-warning');
-$('#mosmoss-id').attr("data-target", "#mosmosmodal");
-$('#mosmoss-id').attr("data-toggle",'modal');
+$('#mosmos').addClass('alert alert-warning');
+$('#mosmos').attr("data-target", "#mosmosmodal");
+$('#mosmos').attr("data-toggle",'modal');
 
 var s=`
 <div class="modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -325,7 +325,7 @@ class mosmos {
   constructor( {name="Lipa Mosmos",productName="product name not set correctly",
     imageSource="not set",productPrice=0,onApprove=function(data){alert("sasa")}, onDecline=function(data){}} = {}) {
     this.name = name;
-    document.getElementById("mosmoss-id").innerHTML ="Lipa mos mos";
+    document.getElementById("mosmos").innerHTML ="Lipa mos mos";
     image=imageSource;
     itemName=productName;
     onApprovefunc=onApprove;
