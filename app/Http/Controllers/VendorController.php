@@ -152,7 +152,7 @@ class VendorController extends Controller
 
 $user_id=Auth()->user()->id;
 $vendor_id=\App\Vendor::whereUser_id($user_id)->first()->id;
-if ($vendor_code!=$newProduct->vendor_id) {
+if ($vendor_id!=$newProduct->vendor_id) {
     # code...
     return back()->with('error','You are not authorized to make this order transfer');
 }
