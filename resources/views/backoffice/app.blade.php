@@ -669,6 +669,8 @@
 
          @elseif(auth()->user()->role =='vendor')
           <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li>
+
+                 <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Manual Booking</span></a></li>
 		 <li class="nav-item">
 			<a href="#" class="nav-link">&nbsp   <i class="fa fa-shopping-basket"></i> <span>  Products</span><i class="right fas fa-angle-left"></i></a>
 

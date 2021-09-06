@@ -34,6 +34,30 @@ $request['vendor_code']=$decrypted;
     	return Array("status"=>false,"data"=>$request->all(),"message"=>json_encode($request->all()));
     }
 
+
+
+        function vendorbooking(Request $request){
+
+    	$vendor_code=Vendor::whereVendor_code($request->vendor_code)->first();
+
+    	if ($vendor_code==null) {
+    		# code...
+
+    		return Back()->with("error","An error occured processing your request. contact support for help making a booking.");
+
+    	}
+
+    	$data= $this->make_booking($request);
+    	if ($data['status']) {
+    		# code...
+    		return back()->with("success",$data['message']);
+    	}
+    	else{
+    			return back()->with("error",$data['message']);
+    	}
+    	
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -152,7 +176,7 @@ $data=Array();
 
         if (!$msisdn){
 
-             	return Array("success"=>false,"data"=>"","message"=>"The phone number format is not supported please check and try again.");
+             	return Array("status"=>false,"data"=>"","message"=>"The phone number format is not supported please check and try again.");
         }else{
 
              	
@@ -203,10 +227,10 @@ $data=Array();
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-         	return Array("success"=>false,"data"=>"","message"=>"You already have an existing booking with lipa mos mos");
+         	return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with lipa mos mos");
         }
 
-        \Auth::login($user);
+       // \Auth::login($user);
 
         $booking_reference = $this->get_booking_reference();
 
@@ -222,7 +246,7 @@ $data=Array();
 
           //return redirect()->back()->with('error',);
 
-          return Array("success"=>false,"data"=>"","message"=>"The Minimum deposit for this product is : KES ".number_format(100,0));
+          return Array("status"=>false,"data"=>"","message"=>"The Minimum deposit for this product is : KES ".number_format(100,0));
          
         }
 
@@ -328,7 +352,7 @@ $data=Array();
         if($request->initial_deposit<100){
 
      
-          return Array("success"=>false,"data"=>"","message"=>"The Minimum deposit for this product is : KES ".number_format(100,0));
+          return Array("status"=>false,"data"=>"","message"=>"The Minimum deposit for this product is : KES ".number_format(100,0));
          
          
         }

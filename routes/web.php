@@ -220,7 +220,10 @@ Route::prefix('influencer')->group(function () {
 Route::prefix('vendor')->group(function () {
     Route::group(['middleware' => ['auth']], function (){
         
-          Route::get('/key', 'VendorController@keySettings');
+        Route::get('/key', 'VendorController@keySettings');
+        Route::get('/vendor-booking', 'VendorController@manualBooking');
+        Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');
+          
         Route::get('/assigned-products', 'VendorController@assigned_products');
         Route::get('/product-view/{id}','VendorController@view_product');
         Route::get('/add-product', 'VendorController@add_product');

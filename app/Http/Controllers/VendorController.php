@@ -877,5 +877,10 @@ function encrypt($pure_string, $encryption_key) {
     return $encrypted_string;
 }
 
+function manualBooking(Request $request){
+    $product_quantity=1;
+    return view('backoffice.vendors.manualBooking',compact('product_quantity'));
+}
+
 
 }
