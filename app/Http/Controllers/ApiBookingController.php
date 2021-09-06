@@ -30,7 +30,7 @@ $request['vendor_code']=$decrypted;
 
     	}
 
-    	return $this->make_booking($request);
+    	return $this->make_booking($request,'api');
     	return Array("status"=>false,"data"=>$request->all(),"message"=>json_encode($request->all()));
     }
 
@@ -47,7 +47,7 @@ $request['vendor_code']=$decrypted;
 
     	}
 
-    	$data= $this->make_booking($request);
+    	$data= $this->make_booking($request,'direct');
     	if ($data['status']) {
     		# code...
     		return back()->with("success",$data['message']);
@@ -161,7 +161,7 @@ $data=Array();
         return $product_id;
     }
 
-    public function make_booking(Request $request){
+    public function make_booking(Request $request,$source){
 
 
  $product_id=$this->addProduct($request);
@@ -258,7 +258,7 @@ $data=Array();
         $booking->balance =   $total_cost; 
         $booking->amount_paid = "0";
         $booking->status = "pending";
-      $booking->platform="api";
+    $booking->platform=$source;
        
        
         }
@@ -280,7 +280,7 @@ $data=Array();
                 $booking->amount_paid = $balance;
                 $booking->status = "active";
                 $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
-                 $booking->platform="api";
+               $booking->platform=$source;
             }
                 
             SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
@@ -297,7 +297,7 @@ $data=Array();
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
         $booking->due_date = $due_date;
-         $booking->platform="api";
+       $booking->platform=$source;
        
         $booking->vendor_code = $vendor_code;
         $booking->location_type = "Exact Location";
@@ -374,7 +374,7 @@ $data=Array();
         $booking->due_date = $due_date;
         $booking->status = "pending";
         $booking->total_cost = $total_cost;
-        $booking->platform="api";
+      $booking->platform=$source;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
@@ -442,7 +442,7 @@ $data=Array();
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->total_cost = $total_cost;
-        $booking->platform="api";
+      $booking->platform=$source;
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
