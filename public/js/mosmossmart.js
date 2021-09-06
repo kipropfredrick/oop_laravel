@@ -388,7 +388,7 @@ function include(filename, onload) {
 
 
 class mosmos {
-  constructor( {productweight=0,name="Lipa mos mos",productName="product name not set correctly",
+  constructor( {productweight=0,name="Lipa mosmos",productName="product name not set correctly",
     imageSource="not set",productPrice=0,onApprove=function(data){alert("sasa")}, onDecline=function(data){}} = {}) {
     this.name = name;
     document.getElementById("mosmos").innerHTML =name;
