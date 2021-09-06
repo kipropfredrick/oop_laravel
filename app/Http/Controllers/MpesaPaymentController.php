@@ -281,12 +281,13 @@ class MpesaPaymentController extends Controller
 
             $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
 
+            $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
 
             $travelPattern = "/t/i";
     
             $travelTrue = preg_match($travelPattern,$bill_ref_no);
 
-            if($travelTrue ==1 || !empty($sms_credit_payment)){
+            if($travelTrue ==1 || !empty($sms_credit_payment) || !empty($invoice_payment)){
 
                 $existingLog = \DB::connection('mysql2')->table('payment_logs')->where('TransID',$transaction_id)->first();
 
@@ -1503,6 +1504,7 @@ else{
     public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
 
        $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
+       $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
 
        if(!empty($sms_credit_payment)){
 
@@ -1533,6 +1535,34 @@ else{
             return "Success";
 
        }
+
+
+       if(!empty($invoice_payment)){
+
+            $amount_paid = $transaction_amount;
+            $balance = $invoice_payment->amount - $amount_paid;
+
+            if($balance<1){
+                $status = "paid";
+            }else{
+                $status = "partially_paid";
+            }
+
+            \DB::connection('mysql2')->table('invoices')
+                                    ->where('id',$invoice_payment->id)
+                                    ->update([
+                                        'balance'=>$balance,
+                                        'amount_paid'=>$amount_paid,
+                                        'status'=>$status
+                                    ]);
+
+            return "Success";
+
+           
+       }
+
+
+
 
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
