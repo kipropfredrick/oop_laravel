@@ -321,11 +321,11 @@ function include(filename, onload) {
 }
 
 
-class mosmos {
+class mosmoscs {
   constructor( {name="Lipa Mosmos",productName="product name not set correctly",
     imageSource="not set",productPrice=0,onApprove=function(data){alert("sasa")}, onDecline=function(data){}} = {}) {
     this.name = name;
-    document.getElementById("mosmos").innerHTML =name;
+    document.getElementById("mosmos").innerHTML ="Lipa mos mos";
     image=imageSource;
     itemName=productName;
     onApprovefunc=onApprove;

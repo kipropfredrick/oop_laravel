@@ -93,7 +93,9 @@
 
                             <div>
                                 <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Click to Order</a>
+                             
                             </div>
+                               <button id="mosmos" ></button>
                             
                             <div class="highlights">
                                 <h5>Key Highlights</h5>
@@ -278,4 +280,24 @@
     </div>
     <!-- end products carousel -->
 </div>
+
+
+<script type="text/javascript">
+var mosmosx=new mosmoscs(
+    {name:"Lipa Pole Pole",productName:"Dell Latitude E5420 Intel Core I5 4GB Ram 500GB HDD 14 Inches",imageSource:"https://mosmos.co.ke/storage/images/2021-03-09-09-25-05samsung-galaxy-tab-a7-10-4-lte-gold-32gb-and-3gb-ram-sm-t505n.jpg", productPrice:10,
+
+    onApprove: function(data){
+
+alert("approved");
+alert(JSON.stringify(data));
+},
+onDecline:function(data){
+    alert("declined");
+    alert(JSON.stringify(data))
+}
+
+
+});
+</script>
+
 @endsection
