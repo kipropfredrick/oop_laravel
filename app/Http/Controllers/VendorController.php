@@ -101,7 +101,7 @@ class VendorController extends Controller
                $payment = \App\Payments::where('booking_id','=',$booking->id)->latest()->first();
                $booking['date_completed'] = $payment->date_paid;
            }
-           return view('backoffice.bookings.complete',compact('bookings'));  
+           return view('backoffice.bookings.completeold',compact('bookings'));  
        }
 
        public function pending_bookings(){
@@ -115,7 +115,7 @@ class VendorController extends Controller
             $booking['progress'] = $progress;
         }
 
-        return view('backoffice.bookings.pending',compact('bookings'));  
+        return view('backoffice.bookings.pendingold',compact('bookings'));  
      }
 
      public function transfer_order(){
@@ -131,7 +131,7 @@ class VendorController extends Controller
 
         // $bookings = [];
 
-        return view('backoffice.bookings.transfer',compact('bookings')); 
+        return view('backoffice.bookings.transferold',compact('bookings')); 
         
        
 
@@ -345,7 +345,7 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.overdue',compact('bookings'));  
+           return view('backoffice.bookings.overdueold',compact('bookings'));  
        }
 
        public function delivered_bookings(){
@@ -479,7 +479,7 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.revoked',compact('bookings'));  
+           return view('backoffice.bookings.revokedold',compact('bookings'));  
        }
    
        public function unserviced_bookings(){
@@ -492,7 +492,7 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.unserviced',compact('bookings'));  
+           return view('backoffice.bookings.unservicedold',compact('bookings'));  
        }
    
        public function active_bookings(){
@@ -507,7 +507,9 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.active',compact('bookings'));  
+
+      
+           return view('backoffice.bookings.activeold',compact('bookings'));  
        }
 
        public function profile()
