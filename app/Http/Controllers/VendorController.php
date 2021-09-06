@@ -142,11 +142,25 @@ class VendorController extends Controller
 
         $product = \App\Products::find($booking->product_id);
 
+
+
         if($product->product_code == $request->product_code){
             return back()->with('error','You cannot exchange with the same item');
         }
 
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
+
+$user_id=Auth()->user()->id;
+$vendor_id=\App\Vendor::whereUser_id($user_id)->first()->id;
+if ($vendor_code!=$newProduct->vendor_id) {
+    # code...
+    return back()->with('error','You are not authorized to make this order transfer');
+}
+
+
+
+
+
 
         if($newProduct == null){
             return back()->with('error','Sorry Product Code does not exist.');
