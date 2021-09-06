@@ -9,6 +9,6 @@ class ApiBookingController extends Controller
     //
 
     function index(Request $request){
-    	return Array("status"=>false,"data"=>$request->all());
+    	return Array("status"=>false,"data"=>$request->all(),"message"=>"You already have an existing booking test response.");
     }
 }
