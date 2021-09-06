@@ -146,6 +146,7 @@ class VendorController extends Controller
         if($product->product_code == $request->product_code){
             return back()->with('error','You cannot exchange with the same item');
         }
+        return $product->first();
 
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
 
