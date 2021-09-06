@@ -18,6 +18,7 @@ var onApprovefunc= function(data){
 var onDeclinefunc=function(data){
 };
 var price=0;
+var weight=0;
 // Create new link Element
         var link = document.createElement('link'); 
   
@@ -292,7 +293,7 @@ $("#spinner").show();
 var productName='<input type="hidden" name="product_name" value="'+itemName+'">';
 var keyInput='<input type="hidden" name="secret_key" value="'+secret_key+'">';
 var productPrice='<input type="hidden" name="productPrice" value="'+price+'">';
-var weight='<input type="hidden" name="weight" value="'+"10"+'">';
+var weight='<input type="hidden" name="weight" value="'+weight+'">';
 
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
@@ -387,7 +388,7 @@ function include(filename, onload) {
 
 
 class mosmos {
-  constructor( {name="Lipa Mosmos",productName="product name not set correctly",
+  constructor( {productweight=0,name="Lipa Mosmos",productName="product name not set correctly",
     imageSource="not set",productPrice=0,onApprove=function(data){alert("sasa")}, onDecline=function(data){}} = {}) {
     this.name = name;
     document.getElementById("mosmos").innerHTML =name;
@@ -396,6 +397,7 @@ class mosmos {
     onApprovefunc=onApprove;
     onDeclinefunc=onDecline;
     price=productPrice;
+    weight=productweight;
 
   }
 
