@@ -89,6 +89,14 @@ Route::any('/smartchekout','ApiBookingController@index');
 
 
 
+//vendor api controller 
+Route::prefix('vendor')->group(function () {
+ Route::get('/login','vendorApiController@login');
+});
+
+
+
+
 
 
 
