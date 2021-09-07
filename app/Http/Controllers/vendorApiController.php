@@ -26,7 +26,7 @@ $credentials=Array("email"=>$username,"password"=>$password);
 
 	}
 	else{
-	return Array("response"=>"Incorrect Username or password"."brian".$password,"error"=>true);
+	return Array("response"=>"Incorrect Username or password","error"=>true);
 	}
 
 	} 
