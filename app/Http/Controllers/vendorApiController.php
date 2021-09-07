@@ -15,7 +15,7 @@ class vendorApiController extends Controller
 $credentials=Array("email"=>$username,"password"=>$password);
 	if (Auth::attempt($credentials)) {
 	// Authentication passed...
-		if (Auth::user()->role='vendor') {
+		if (Auth::user()->role!='vendor') {
 			# code...
 			$vendor=Vendor::whereUser_id(Auth::user()->id)->first();
 		return Array("response"=>Auth::user(),"error"=>false,"vendor"=>$vendor);
