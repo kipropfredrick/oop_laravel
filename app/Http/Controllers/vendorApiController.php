@@ -21,7 +21,7 @@ $credentials=Array("email"=>$username,"password"=>$password);
 		return Array("response"=>Auth::user(),"error"=>false,"vendor"=>$vendor);
 		}
 		else{
-				return Array("response"=>"Account blocked.Only vendor accounts are authorized to access service.","error"=>true);
+				return Array("response"=>"Only available for vendors.","error"=>true);
 		}
 
 	}
