@@ -669,6 +669,8 @@
 
          @elseif(auth()->user()->role =='vendor')
           <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li>
+
+                 <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Manual Booking</span></a></li>
 		 <li class="nav-item">
 			<a href="#" class="nav-link">&nbsp   <i class="fa fa-shopping-basket"></i> <span>  Products</span><i class="right fas fa-angle-left"></i></a>
 
@@ -695,6 +697,8 @@
 				<li class="nav-item"><a href="/vendor/unserviced-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Unserviced Bookings</span></a></li>
 			</ul>
 		</li>
+
+      <li class="nav-item"><a href="/vendor/key" class="nav-link"><i class="fas fa-cogs nav-icon"></i> <span>Settings</span></a></li>
 		@elseif(auth()->user()->role =='user')
 			<li class="nav-item nav-item-submenu">
 				<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>My Bookings</span>   <i class="right fas fa-angle-left"></i></a>
