@@ -19,6 +19,9 @@
 
 <!-- The text field -->
 <div class="card p-3 row ">
+<h3>Settings - API Key</h3>
+<p>An API Key helps us authenticate requests that you make to our APIs.</p>
+
 	<textarea class="w-50" id="myInput" rows="5">{{$encrypted}}</textarea>
 		<button onclick="myFunction()" class="col-1 mt-1 btn btn-secondary" >Copy Key</button>
         
