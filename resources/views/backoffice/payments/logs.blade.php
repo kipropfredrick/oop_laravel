@@ -61,6 +61,13 @@
 	</div>
 @endsection
 
+<select class="form-control" name="type" id="">
+	<option value="Shopping" value="shopping"></option>
+	<option value="Travel Booking" value="travel_booking"></option>
+	<option value="Travel SMS Top Up" value="travel_sms"></option>
+	<option value="Travel Invoice Payment" value="travel_invoice"></option>
+</select>
+
 @section('extra-js')
 
 <script>
