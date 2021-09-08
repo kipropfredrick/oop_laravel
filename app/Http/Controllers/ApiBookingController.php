@@ -331,7 +331,7 @@ $data=Array();
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
-         	return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_referenceoo);
+         	return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
             
         }
 
@@ -472,7 +472,7 @@ $data=Array();
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
-	return Array("status"=>true,"data"=>'',"message"=>$stkMessage);
+	return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
 
     }
 
