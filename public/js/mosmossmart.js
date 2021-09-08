@@ -55,8 +55,8 @@ include('https://code.jquery.com/jquery-3.5.1.slim.min.js', function() {
     $(document).ready(function() {
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
 $('#mosmos').addClass('alert alert-warning');
-// $('#mosmos').attr("data-target", "#mosmosmodal");
-// $('#mosmos').attr("data-toggle",'modal');
+$('#mosmos').attr("data-target", "#mosmosmodal");
+$('#mosmos').attr("data-toggle",'modal');
 
 var s=`
 
@@ -286,28 +286,9 @@ var s=`
   </style>
 `;
 
+$('body').append(s);
 
 
-$( "#mosmos" ).click(function() {
-// $('body').append(s);
-// $("#").modal('show');
-
- var checkeventcount = 1,prevTarget;
-    $('#mosmosmodal').on('show.bs.modal', function (e) {
-        if(typeof prevTarget == 'undefined' || (checkeventcount==1 && e.target!=prevTarget))
-        {  
-          prevTarget = e.target;
-          checkeventcount++;
-          e.preventDefault();
-          $(e.target).appendTo('body').modal('show');
-        }
-        else if(e.target==prevTarget && checkeventcount==2)
-        {
-          checkeventcount--;
-        }
-     });
-
-});
 
 // this is the id of the form
     // var checkeventcount = 1,prevTarget;
