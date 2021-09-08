@@ -42,6 +42,7 @@ a {
     background: #006de1;
     color: #ffffff;
     border-radius: 0;
+    margin-bottom: 10px;
 }
 
 .p-btn:hover {

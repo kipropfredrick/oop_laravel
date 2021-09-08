@@ -227,7 +227,7 @@ $data=Array();
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-         	return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with lipa mos mos");
+         	return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
         }
 
        // \Auth::login($user);
@@ -331,7 +331,7 @@ $data=Array();
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
-         	return Array("status"=>true,"data"=>'',"message"=>$stkMessage);
+         	return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_referenceoo);
             
         }
 
