@@ -105,15 +105,14 @@ class MpesaPaymentController extends Controller
                     if($vendor == null){
                         
                        }else {
-
-                                 $commission_rate=$vendor->commission_rate;
+                    $commission_rate=$vendor->commission_rate;
                     $commision_cap=$vendor->commission_cap;
-$admin_commission=$product->product_price*($commission_rate/100);
-if ($admin_commission>$commision) {
- $admin_commission=$commision_cap;
-    # code...
-}
-$vendor_commission=$product->product_price-$admin_commission;
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
 
                     // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
                     // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
@@ -965,16 +964,14 @@ else{
                     if($vendor == null){
                         
                        }else {
-
-                        $commission_rate=$vendor->commission_rate;
-                        $commision_cap=$vendor->commission_cap;
-                        $admin_commission=$product->product_price*($commission_rate/100);
-                        if ($admin_commission>$commision) {
-                        $admin_commission=$commision_cap;
-                        # code...
-                        }
-                        $vendor_commission=$product->product_price-$admin_commission;
-
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
                     // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
                     // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
 
@@ -1200,15 +1197,14 @@ else{
                     if($vendor == null){
                         
                        }else {
-
-                        $commission_rate=$vendor->commission_rate;
-                        $commision_cap=$vendor->commission_cap;
-                        $admin_commission=$product->product_price*($commission_rate/100);
-                        if ($admin_commission>$commision) {
-                        $admin_commission=$commision_cap;
-                        # code...
-                        }
-                        $vendor_commission=$product->product_price-$admin_commission;
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
 
                     // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
                     // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
