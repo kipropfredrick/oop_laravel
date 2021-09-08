@@ -2448,10 +2448,8 @@ return Back()->with("success","Transaction success");
 
             unset($log['id']);
 
-            \DB::connection('mysql2')->table('payment_logs')->insert((array)$log);
-
-            \Log::info(json_encode($log));
-
+            \DB::connection('mysql2')->table('payment_logs')->insert(json_decode(json_encode($log), true));
+            
             $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
 
             $customer = \DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
