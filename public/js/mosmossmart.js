@@ -27,14 +27,14 @@ var weight=0;
       
         link.type = 'text/css';
       
-        link.href = 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'; 
+        link.href = 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'; 
   
         // Get HTML head element to append 
         // link element to it 
         document.getElementsByTagName('HEAD')[0].appendChild(link); 
 
 
-include('https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js', function() {
+include('https://code.jquery.com/jquery-3.5.1.slim.min.js', function() {
     $(document).ready(function() {
 
 
@@ -51,6 +51,9 @@ include('https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.m
  //    $(document).ready(function() {
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
 
+  include('https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js', function() {
+    $(document).ready(function() {
+ //          //const mosmosobj = new mosmos("Lipa Mos Mos");
 $('#mosmos').addClass('alert alert-warning');
 $('#mosmos').attr("data-target", "#mosmosmodal");
 $('#mosmos').attr("data-toggle",'modal');
@@ -349,8 +352,8 @@ form.append(weight);
 
 
 
-//     });
-// }); 
+    });
+}); 
 
 
 
