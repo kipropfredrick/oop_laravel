@@ -31,10 +31,10 @@
                                 <th class="thead">No.</th>
 								<th class="thead">Booking Reference</th>
                                 <th class="thead">Product Code</th>
-								<th class="thead">Total Cost</th>
+								<th class="thead">Item Cost</th>
                                 <th class="thead">Admin's Commisssion</th>
                                 <th class="thead">Agent/Vendor</th>
-                                <th class="thead">Agent/Vendor's Commission</th>
+                                <th class="thead">Vendor payout</th>
 								<!-- <th class="thead">Completed On</th> -->
 							</tr>
 						</thead>

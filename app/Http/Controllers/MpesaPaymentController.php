@@ -105,8 +105,21 @@ class MpesaPaymentController extends Controller
                     if($vendor == null){
                         
                        }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
+
+                                 $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+$admin_commission=$product->product_price*($commission_rate/100);
+if ($admin_commission>$commision) {
+ $admin_commission=$commision_cap;
+    # code...
+}
+$vendor_commission=$product->product_price-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                        // $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
 
                         DB::table('commissions')->insert([
                             'product_id' => $product->id,
@@ -952,8 +965,21 @@ else{
                     if($vendor == null){
                         
                        }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        $commission_rate=$vendor->commission_rate;
+                        $commision_cap=$vendor->commission_cap;
+                        $admin_commission=$product->product_price*($commission_rate/100);
+                        if ($admin_commission>$commision) {
+                        $admin_commission=$commision_cap;
+                        # code...
+                        }
+                        $vendor_commission=$product->product_price-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                        // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
 
                         $recipients = $vendor->phone;
 
@@ -1174,8 +1200,21 @@ else{
                     if($vendor == null){
                         
                        }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
+
+                        $commission_rate=$vendor->commission_rate;
+                        $commision_cap=$vendor->commission_cap;
+                        $admin_commission=$product->product_price*($commission_rate/100);
+                        if ($admin_commission>$commision) {
+                        $admin_commission=$commision_cap;
+                        # code...
+                        }
+                        $vendor_commission=$product->product_price-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                        // $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
 
                         DB::table('commissions')->insert([
                             'product_id' => $product->id,
