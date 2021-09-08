@@ -2446,10 +2446,27 @@ return Back()->with("success","Transaction success");
 
             }else{
 
-            unset($log['id']);
-
-            \DB::connection('mysql2')->table('payment_logs')->insert($log);
-
+            \DB::connection('mysql2')->table('payment_logs')->insert([
+                                                'TransactionType' => $log->TransactionType,
+                                                'TransID'=>$log->TransID,
+                                                'TransTime'=>$log->TransTime,
+                                                'TransAmount'=>$log->TransAmount	,
+                                                'BusinessShortCode'=>$log->BusinessShortCode,
+                                                'BillRefNumber'=>$log->BillRefNumber,
+                                                'InvoiceNumber'=>$log->InvoiceNumber,
+                                                'OrgAccountBalance'=>$log->OrgAccountBalance,
+                                                'ThirdPartyTransID'=>$log->ThirdPartyTransID,
+                                                'MSISDN'=>$log->MSISDN,
+                                                'FirstName'=>$log->FirstName,
+                                                'MiddleName'=>$log->MiddleName,
+                                                'LastName'=>$log->LastName,
+                                                'status'=>'verified',
+                                                'date_recorded'=>$log->date_recorded,
+                                                'comment'=>$log->comment,
+                                                'created_at'=>now(),
+                                                'updated_at'=>now(),
+                                            ]);
+            
             $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
 
             $customer = \DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
