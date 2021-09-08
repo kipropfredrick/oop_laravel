@@ -60,7 +60,7 @@ $('#mosmos').addClass('alert alert-warning');
 
 var s=`
 
-<div class=" modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modall-container modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
 
