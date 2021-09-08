@@ -2448,6 +2448,10 @@ return Back()->with("success","Transaction success");
 
             unset($log['id']);
 
+            $log['created_at'] = now();
+
+            $log['updated_at'] = now();
+
             \DB::connection('mysql2')->table('payment_logs')->insert(json_decode(json_encode($log), true));
             
             $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
