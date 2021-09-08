@@ -34,7 +34,52 @@ var weight=0;
         document.getElementsByTagName('HEAD')[0].appendChild(link); 
 
 
-include('https://code.jquery.com/jquery-3.5.1.slim.min.js', function() {
+
+            var link1 = document.createElement('link'); 
+  
+        // set the attributes for link element
+           link1.rel = 'stylesheet'; 
+      
+        link1.type = 'text/css';
+      
+        link1.href = 'api.css'; 
+  
+        // Get HTML head element to append 
+        // link element to it 
+        document.getElementsByTagName('HEAD')[0].appendChild(link1); 
+
+
+            var link2 = document.createElement('link'); 
+  
+        // set the attributes for link element
+           link2.rel = 'preconnect'; 
+      
+   
+      
+        link2.href = 'https://fonts.gstatic.com'; 
+  
+        // Get HTML head element to append 
+        // link element to it 
+        document.getElementsByTagName('HEAD')[0].appendChild(link2); 
+
+
+
+
+            var link3 = document.createElement('link'); 
+  
+        // set the attributes for link element
+           link3.rel = 'stylesheet'; 
+      
+        link3.type = 'text/css';
+      
+        link3.href = 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap'; 
+  
+        // Get HTML head element to append 
+        // link element to it 
+        document.getElementsByTagName('HEAD')[0].appendChild(link3);
+
+
+include('https://code.jquery.com/jquery-3.5.1.min.js', function() {
     $(document).ready(function() {
 
 
@@ -59,100 +104,67 @@ $('#mosmos').attr("data-target", "#mosmosmodal");
 $('#mosmos').attr("data-toggle",'modal');
 
 var s=`
-
-<div class="modall-container modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
-    <div class="modal-content">
-
-
-
-
-      <div class=" text-center mr-3 mt-2">
-        
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" style="color:red;font-weight: bold;">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <div class="site__body">
-        
-           
-        <div style="margin-top:20px" class="checkout block">
-            <div class="container">
-                <div class="row">
-                                                <!-- features -->
-
-            <div class="col-sm-4">
-
-                    <div class="mdgf">
-                        <div class="row" >
-                        <img src="not set" id="mosmosproductimage" class="col-12">
-
-                   
-                        </div>
+ <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Order now, Lipa Mos Mos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-              
-      
-    </div>
-                    <div class="col-12 col-lg-6 col-xl-7" id="responsedivmosmos">
-                        <div class="card mb-lg-0">
-                            <div class="card-body">
 
-                                <div class="">
-                                <div>
-                               <p>You are making a booking for <strong><span id="productName"></span></strong>. Minimum deposit is <strong>KSh.500</strong>.</p>
-                         
-                            </div>
-                                      
-                                </div>
-                                
-                                    <hr>
-                                    <h5>Personal Details</h5>
-                                
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                    <form action="https://mosmos.co.ke/api/smartchekout" method="post" id="mosmos-form">
+                    <div class="modal-body">
+                    <div id="successdiv" class="bg-success text-white">
+
+                    </div> 
+                       <div id="failurediv" class="bg-danger text-white ">
+
+                    </div>
+
+                     <div class="co-intro" id="desc">
+                            You are booking <strong><span id="productName"></span></strong>. Pay conveniently in flexible installments within 90 days at 0% interest.
+                            Minimum deposit is <strong>KSh.500</strong>.
+                        </div>
+
+
+                       <form action="https://mosmos.co.ke/api/smartchekout" method="post" id="mosmos-form">
                                        
                                         <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="product_id" value="1">
                                         <input name="status" value="pending" type="hidden">
                                         <input name="minDeposit" value="1" type="hidden">
-                                        <div class="form-row">
-<div class="form-group col-md-6">
-                                       
-                                        <label for="checkout-first-name">Full name</label><span style="color:red">*</span>
-                                        <input required name="name" type="text" class="form-control" id="checkout-first-name" value="" placeholder="Full Name">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label for="checkout-last-name">Email</label><span style="color:red">*</span>
-                                            <input required type="email" value="" name="email" type="text" class="form-control" id="checkout-last-name" placeholder="Email Address">
-                                            </div>
-                                        </div>
-                                          <div class="form-row">
-                                          <div class="form-group col-md-6">
-                                                <label for="checkout-company-name">Phone Number<span style="color:red">*</span>
-                                                </label>
-                                                <input required name="phone" type="" value="" class="form-control" id="checkout-company-name" placeholder="07XXXXXXXX">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Initial Deposit <span style="color:red">*</span> </label>
-                                                <input min="500" required name="initial_deposit" value="" type="number" class="form-control" id="checkout-street-address" placeholder="KSh.500 minimum">
-                                             </div>
-                                          </div>
+                        
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Full Name*</label>
+                                    <input required="" name="name" type="text" class="form-control" placeholder="Full Name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Phone Number*</label>
+                                    <input  type="tel" required name="phone" class="form-control" placeholder="Phone Number">
+                                </div>
+                            </div>
 
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Email Address*</label>
+                                    <!-- make it required for now -->
+                                    <input required="" type="email" name="email" class="form-control" placeholder="Email Address">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Initial Deposit*</label>
+                                    <input type="number" min="500" required name="initial_deposit" class="form-control" placeholder="Ksh.500 minimum">
+                                </div>
+                            </div>
 
-                                          <h5>Delivery Details</h5>
-
-                                         
-                                          <div  id="location-fields" class="location-fields">
-
-                                          <div class="form-row">
-                                          <div class="form-group col-md-6">
-                                            <label for="checkout-company-name">County</label><span style="color:red">*</span>
-                                            
-                                              <select id="counties" class="form-control js-example-basic-single" name="county_id" placeholder="Enter name" type="text" class="form-control "  required>
-                                                <option value="">Select/search county</option>
-                                            <option value="2" class="counties">Mombasa</option>
+                            <!-- outside nairobi (select2) -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>Select your county*</label>
+                                    <select id="county" class="form-control" name="county_id">
+                                        <option selected>-- Select your county --</option>
+                                         <option value="2" class="counties">Mombasa</option>
                                                                                     <option value="3" class="counties">Kwale</option>
                                                                                     <option value="4" class="counties">Kilifi</option>
                                                                                     <option value="5" class="counties">Tana River</option>
@@ -199,42 +211,30 @@ var s=`
                                                                                     <option value="46" class="counties">Kisii</option>
                                                                                     <option value="47" class="counties">Nyamira</option>
                                                                                     <option value="48" class="counties">Nairobi</option>
-                                                </select>
-                                           
-                                                </div>
-                                            
-                                                <div class="form-group col-md-6">
-                                                <label for="checkout-street-address">Exact Location</label><span style="color:red">*</span>
-                                                
-                                                <input min="100" required name="exact_location" value="" type="" class="form-control" id="checkout-street-address" placeholder="Eg. City, Town, street name">
+                                    </select>
+                                </div>
 
-                                                <div class="col-lg-10">
-                                                   
-                                            </div>
-                                             </div>
-                                          </div>
+                                <div class="form-group col-md-6">
+                                    <label>Exact Location*</label>
+                                    <input type="text" required name="exact_location" class="form-control" placeholder="E.g. Town, street">
+                                </div>
+                            </div>
 
+                            <!-- terms -->
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms">
+                                    <label class="form-check-label" for="terms">
+                                        I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>*
+                                    </label>
+                                    </div>
+                                </div>
+                            </div>
 
-                                          </div>
-
-                                             <!-- terms -->
-                                            <div class="mb-2">
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" checked id="terms" required>
-                                                    <label class="form-check-label" for="terms">
-                                                        I agree to the <a href="https://mosmos.co.ke/terms" target="_blank">Terms of Service</a> and <a href="https://mosmos.co.ke/privacy-policy" target="_blank">Privacy Policy</a>.*
-                                                    </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                                <button type="submit" class="btn btn-primary">Make Booking</button>
-
-                                          
-
-
-
-      <div class="col-12 overlay" style="position:absolute;display:none;" id="spinner">
+                            <button type="submit" class="btn btn-block p-btn">Complete Booking</button>
+                        
+  <div class="col-12 overlay" style="position:absolute;display:none;" id="spinner">
       <div class="d-flex justify-content-center">  
       
 
@@ -256,23 +256,18 @@ var s=`
  }
 
  </style>
+                        </form>
 
 
-                                            </form>
-                                              </div>
-                                            <div class="card-divider"></div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-   <div style="background-color: blue;">
-                          <a href="https://mosmos.co.ke" target=”_blank”>
-                            <img src="https://mosmos.co.ke/assets/img/logo/web-logo.png" class="col-sm-6 col-lg-4 col-md-4" style="margin-left: auto;margin-right: auto;display: block;" >
-                          </a>
-                      </div>
-        
-  </div>
-</div>
+                    </div>
+
+                <div class="powered">
+                    <small></span><a href="https://mosmos.co.ke/" target="_blank">Powered by Mosmos Payments</a></small>
+                </div>
+
+            </div>
+        </div>
+        </div>
 
 <style>
 .mdg-features {
@@ -336,18 +331,18 @@ form.append(weight);
             if(data.status){
               // $("#mosmosmodal").modal('hide');
               //onApprovefunc(data);
-              $("#responsedivmosmos").html("<p><strong> "+data.message+"</strong>.</p>"+
-                '<img src="https://t3.ftcdn.net/jpg/03/55/05/12/360_F_355051279_iCFYD4WdBAfkLljJQlyWYDgii03rinlH.jpg" style="width: 100px;height: 100px;margin-left: auto;margin-right: auto;display: block;" style="">');
+              $("#successdiv").html("<p class='p-1'><h6>Booking success </h6><strong> "+data.message+"</strong>.</p>");
                       console.log(data);
-
+                      $("#desc").hide();
+                      // $("#mosmos-form").hide();
+   $("#failurediv").html("<p> "+""+"</p>");
             }
             else{
               //onDeclinefunc(data);
           
-                   $("#responsedivmosmos").html("<p> "+data.message+"</p> <br>"+
-                '<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4cHYs5t8hc25yl3SAA2caI5JDWezWPKligQ&usqp=CAU" style="width: 100px;height: 100px;margin-left: auto;margin-right: auto;display: block;" style="">');
+                   $("#failurediv").html("<p class='p-1'> "+data.message+"</p>");
                       console.log(data);
-
+$("#successdiv").html("<p > "+""+"</p>");
                       console.log(data);
             }
               // alert(JSON.stringify(data)); // show response from the php script.
@@ -362,7 +357,7 @@ form.append(weight);
     
 });
 
-      document.getElementById("mosmosproductimage").src =image;
+      // document.getElementById("mosmosproductimage").src =image;
        document.getElementById("productName").innerHTML =itemName;
 //     });
 // }); 
