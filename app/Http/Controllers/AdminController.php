@@ -2446,6 +2446,8 @@ return Back()->with("success","Transaction success");
 
             }else{
 
+            \App\PaymentLog::where('id',$id)->update(['status'=>'verified']);
+                
             \DB::connection('mysql2')->table('payment_logs')->insert([
                                                 'TransactionType' => $log->TransactionType,
                                                 'TransID'=>$log->TransID,
