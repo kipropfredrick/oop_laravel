@@ -1,0 +1,51 @@
+/* general */
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.modal-title {
+    font-weight: 800;
+}
+
+.powered {
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+/* modal */
+.modal-content {
+    border-radius: 0;
+}
+
+.co-intro {
+    background: #f5f8f9;
+    border-bottom: 5px solid #f68b1e;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+/* form */
+label {
+    font-size: 14px;
+}
+
+.form-control {
+    border-radius: 0;
+}
+
+/* buttons and links */
+a {
+    color: #1e22a9;
+}
+
+.p-btn {
+    background: #006de1;
+    color: #ffffff;
+    border-radius: 0;
+}
+
+.p-btn:hover {
+    background: #f68b1e;
+    color: #ffffff;
+    animation: none;
+}
