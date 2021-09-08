@@ -331,10 +331,9 @@ form.append(weight);
             if(data.status){
               // $("#mosmosmodal").modal('hide');
               //onApprovefunc(data);
-              $("#successdiv").html("<p class='p-1'><h6>Booking success </h6><strong> "+data.message+"</strong>.</p>");
+              $("#desc").html("<h3>Booking successful</h3><p>Activate your order by paying <strong>KSh.500</strong> to Paybill Number <strong>4040299</strong> and Account Number <strong>"+'test account'+"</strong>. Thank you.</p>");
                       console.log(data);
-                      $("#desc").hide();
-                      // $("#mosmos-form").hide();
+                      $("#mosmos-form").hide();
    $("#failurediv").html("<p> "+""+"</p>");
             }
             else{
