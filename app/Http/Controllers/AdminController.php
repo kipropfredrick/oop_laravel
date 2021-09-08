@@ -2442,9 +2442,7 @@ return Back()->with("success","Transaction success");
 
             if($booking == null && $sms_credit_payment == null && $invoice_payment == null){
 
-                toast('Booking/Bill With that Ref does not exist!','error','top-right');
-
-                return back();
+                return back()->with('error', 'Booking/Bill With that Ref does not exist!');
 
             }else{
 
@@ -2458,9 +2456,7 @@ return Back()->with("success","Transaction success");
 
             MpesaPaymentController::validateTravelPayments($bill_ref_no = $booking_ref,$transaction_amount = $log->TransAmount,$msisdn = $customer->phone,$first_name = $log->FirstName,$middle_name = $log->MiddleName,$last_name = $log->LastName,$code = $log->TransID,$log_id);
 
-            toast('Payment Updated!','success','top-right');
-
-            return redirect('/admin/payment-logs');
+            return back()->with('success', 'Payment Updated!');
 
             }
 
