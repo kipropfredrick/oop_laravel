@@ -2462,7 +2462,7 @@ return Back()->with("success","Transaction success");
                                                 'FirstName'=>$log->FirstName,
                                                 'MiddleName'=>$log->MiddleName,
                                                 'LastName'=>$log->LastName,
-                                                'status'=>'verified',
+                                                'status'=>'valid',
                                                 'date_recorded'=>$log->date_recorded,
                                                 'comment'=>$log->comment,
                                                 'created_at'=>now(),
