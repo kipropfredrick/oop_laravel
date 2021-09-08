@@ -99,8 +99,8 @@ include('https://code.jquery.com/jquery-3.5.1.min.js', function() {
   include('https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js', function() {
     $(document).ready(function() {
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
-$('#mosmos').addClass('alert alert-warning');
-$('#mosmos').attr("data-target", "#mosmosmodal");
+$('#mosmos').addClass('btn p-btn');
+$('#mosmos').attr("data-target", "#exampleModal");
 $('#mosmos').attr("data-toggle",'modal');
 
 var s=`
