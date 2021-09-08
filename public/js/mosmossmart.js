@@ -289,8 +289,23 @@ var s=`
 
 
 $( "#mosmos" ).click(function() {
-$('body').append(s);
-$("#mosmosmodal").modal('show');
+// $('body').append(s);
+// $("#").modal('show');
+
+ var checkeventcount = 1,prevTarget;
+    $('#mosmosmodal').on('show.bs.modal', function (e) {
+        if(typeof prevTarget == 'undefined' || (checkeventcount==1 && e.target!=prevTarget))
+        {  
+          prevTarget = e.target;
+          checkeventcount++;
+          e.preventDefault();
+          $(e.target).appendTo('body').modal('show');
+        }
+        else if(e.target==prevTarget && checkeventcount==2)
+        {
+          checkeventcount--;
+        }
+     });
 
 });
 
