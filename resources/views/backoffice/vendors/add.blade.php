@@ -98,6 +98,38 @@
 				
 				</div>
 
+				   <div class="row">
+
+			   <div class="col-md-6">
+
+			   <div class="form-group">
+				<label>Commission rate</label>
+					<input required value="{{ old('commission_rate') }}" tclass="form-control" name="commission_rate" placeholder="3" type="number" class="form-control @if($errors->has('commission_rate')) invalid_field @endif" required step=".01">
+				
+					@error('commission_rate')
+								<div class="invalid-feedback">
+									{{ $message }}
+								</div>
+					@enderror
+				</div>
+			   
+			   </div>
+
+				<div class="col-md-6">
+				<div class="form-group">
+					<label>Commission cap</label>
+						<input required value="{{ old('commission_cap') }}"  class="form-control" name="commission_cap" placeholder="5000" type="number" class="form-control @if($errors->has('commission_cap')) invalid_field @endif" required>
+					
+						@error('commission_cap')
+									<div class="invalid-feedback">
+										{{ $message }}
+									</div>
+						@enderror
+				</div>
+				</div>
+			   
+			   </div>
+
 				
 				<div class="row">
 
