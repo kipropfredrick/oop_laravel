@@ -2434,7 +2434,7 @@ return Back()->with("success","Transaction success");
 
         if($type == "travel"){
 
-            $log = PaymentLog::find($id);
+            $log = \App\PaymentLog::find($id);
 
             $booking = \DB::connection('mysql2')->table('bookings')->where('booking_reference',$bill_ref_no)->first();
             $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
