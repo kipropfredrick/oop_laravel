@@ -1642,6 +1642,50 @@ else{
                 DB::connection('mysql2')->table('admin_wallets')->update(['previous_balance'=>$admin_wallet->previous_balance,'current_balance'=>($admin_wallet->current_balance + $admin_commission)]);
             }
 
+           
+           $current_date = date('Y-m-d');
+
+           $date_from = date('Y-m-01', strtotime($current_date));
+
+           $date_to = date("Y-m-t", strtotime($date_from));
+
+           $period = date('M jS'.', '.'Y', strtotime($date_from))." to ".date('M jS'.', '.'Y', strtotime($date_to));
+
+           $commission = \DB::connection('mysql2')->table('system_commissions')->where('agent_id',$booking->agent_id)->where('period',$period)->first();
+
+           if(!empty($commission)){
+
+            $amount = $commission->transaction_amount + $admin_commission;
+
+            $transactions = $commission->transactions + 1;
+            $amount = $commission->transaction_amount + $admin_commission;
+
+            \DB::connection('mysql2')->table('system_commissions')->where('id',$commission->id)
+                         ->update([
+                                    'transactions'=>$transactions,
+                                    'transaction_amount'=>$commission->transaction_amount + $transaction_amount,
+                                    'commission_paid'=>$commission->commission_paid + $admin_commission,
+                                    'unit'=>$agent->system_payment_cost,
+                                ]);
+
+           }else{
+
+            $commission = [];
+            $commission['agent_id'] = $booking->agent_id;
+            $commission['period'] = $period;
+            $commission['unit'] = $agent->system_payment_cost;
+            $commission['transaction_amount'] = $transaction_amount;
+            $commission['commission_paid'] = $admin_commission;
+            $commission['date_from'] = $date_from;
+            $commission['date_to'] = $date_to;
+            $commission['transactions'] = 1;
+            $commission['created_at'] = now();
+            $commission['updated_at'] = now();
+
+            \DB::connection('mysql2')->table('system_commissions')->insert($commission);
+
+           }
+
             $payment_data = [
                             'payment_log_id'=>$log_id,
                             'customer_id'=>$customer->id,
