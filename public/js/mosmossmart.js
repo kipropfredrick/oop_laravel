@@ -60,7 +60,7 @@ $('#mosmos').attr("data-toggle",'modal');
 
 var s=`
 
-<div class="modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-container modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
 
@@ -282,7 +282,14 @@ var s=`
     margin: 0;
     border-bottom: 5px solid #f68b1e;
 }
+.modal-container{
+     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
+}
   </style>
 `;
 
