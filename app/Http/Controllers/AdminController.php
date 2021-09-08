@@ -2428,7 +2428,43 @@ return Back()->with("success","Transaction success");
 
     public function record_payment(Request $request,$id){
 
+        $type = $request->type;
+
         $bill_ref_no = $request->booking_reference;
+
+        if($type == "travel"){
+
+            $log = PaymentLog::find($id);
+
+            $booking = \DB::connection('mysql2')->table('bookings')->where('booking_reference',$bill_ref_no)->first();
+            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
+            $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
+
+            if($booking == null && $sms_credit_payment == null && $invoice_payment == null){
+
+                toast('Booking/Bill With that Ref does not exist!','error','top-right');
+
+                return back();
+
+            }else{
+
+            unset($log['id']);
+
+            \DB::connection('mysql2')->table('payment_logs')->insert($log);
+
+            $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
+
+            $customer = \DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
+
+            MpesaPaymentController::validateTravelPayments($bill_ref_no = $booking_ref,$transaction_amount = $log->TransAmount,$msisdn = $customer->phone,$first_name = $log->FirstName,$middle_name = $log->MiddleName,$last_name = $log->LastName,$code = $log->TransID,$log_id);
+
+            toast('Payment Updated!','success','top-right');
+
+            return redirect('/admin/payment-logs');
+
+            }
+
+        }
 
         $date_paid = Carbon::today()->toDateString();
 
