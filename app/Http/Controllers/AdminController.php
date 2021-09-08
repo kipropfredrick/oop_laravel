@@ -3267,7 +3267,7 @@ $users=json_decode($users,true);
     public function commissions()
     {
 
-      $commissions =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->get();
+      $commissions =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC');->get();
 
     //   return response()->json($commissions);
 
