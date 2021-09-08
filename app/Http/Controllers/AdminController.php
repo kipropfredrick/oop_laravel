@@ -2446,6 +2446,8 @@ return Back()->with("success","Transaction success");
 
             }else{
 
+            \App\PaymentLog::where('id',$id)->update(['status'=>'verified']);
+                
             \DB::connection('mysql2')->table('payment_logs')->insert([
                                                 'TransactionType' => $log->TransactionType,
                                                 'TransID'=>$log->TransID,
@@ -2471,9 +2473,9 @@ return Back()->with("success","Transaction success");
 
             $customer = \DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
-            $message =  MpesaPaymentController::validateTravelPayments($bill_ref_no = $booking_ref,$transaction_amount = $log->TransAmount,$msisdn = $customer->phone,$first_name = $log->FirstName,$middle_name = $log->MiddleName,$last_name = $log->LastName,$code = $log->TransID,$log_id);
+            $message =  MpesaPaymentController::validateTravelPayments($bill_ref_no,$transaction_amount = $log->TransAmount,$msisdn = $customer->phone,$first_name = $log->FirstName,$middle_name = $log->MiddleName,$last_name = $log->LastName,$code = $log->TransID,$log_id);
 
-            return back()->with('success', 'Payment Updated! '.$ $message);
+            return back()->with('success', 'Payment Updated! ');
 
             }
 
