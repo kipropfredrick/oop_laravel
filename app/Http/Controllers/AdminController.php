@@ -2565,8 +2565,18 @@ return Back()->with("success","Transaction success");
                 if($vendor == null){
 
                    }else {
-                    $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                    $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
 
                     $recipients = $vendor->phone;
 
@@ -3293,7 +3303,7 @@ $users=json_decode($users,true);
     public function commissions()
     {
 
-      $commissions =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->get();
+      $commissions =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
 
     //   return response()->json($commissions);
 
