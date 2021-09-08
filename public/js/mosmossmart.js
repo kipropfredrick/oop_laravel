@@ -55,12 +55,12 @@ include('https://code.jquery.com/jquery-3.5.1.slim.min.js', function() {
     $(document).ready(function() {
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
 $('#mosmos').addClass('alert alert-warning');
-$('#mosmos').attr("data-target", "#mosmosmodal");
-$('#mosmos').attr("data-toggle",'modal');
+// $('#mosmos').attr("data-target", "#mosmosmodal");
+// $('#mosmos').attr("data-toggle",'modal');
 
 var s=`
 
-<div class="modal-container modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class=" modal fade" id="mosmosmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
 
@@ -282,20 +282,22 @@ var s=`
     margin: 0;
     border-bottom: 5px solid #f68b1e;
 }
-.modal-container{
-     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-        z-index: 100;
-
-}
+.modal-container { z-index: 9999999}
   </style>
 `;
 
 $('body').append(s);
 // this is the id of the form
+
+$("#mosmosmodal").dialog({
+    autoOpen : false, modal : true, show : "blind", hide : "blind"
+  });
+
+  // next add the onclick handler
+  $("#mosmos").click(function() {
+    $("#mosmosmodal").dialog("open");
+    return false;
+  });
 $("#mosmos-form").submit(function(e) {
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
