@@ -42,14 +42,14 @@ include('https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.m
 
 
 
-        include('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', function() {
-    $(document).ready(function() {
- // add bootstrap script 
+ //        include('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', function() {
+ //    $(document).ready(function() {
+ // // add bootstrap script 
 
 
-  include('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', function() {
-    $(document).ready(function() {
-          //const mosmosobj = new mosmos("Lipa Mos Mos");
+ //  include('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', function() {
+ //    $(document).ready(function() {
+ //          //const mosmosobj = new mosmos("Lipa Mos Mos");
 
 $('#mosmos').addClass('alert alert-warning');
 $('#mosmos').attr("data-target", "#mosmosmodal");
@@ -342,15 +342,15 @@ form.append(weight);
 
       document.getElementById("mosmosproductimage").src =image;
        document.getElementById("productName").innerHTML =itemName;
-    });
-}); 
+//     });
+// }); 
 
 
 
 
 
-    });
-}); 
+//     });
+// }); 
 
 
 
