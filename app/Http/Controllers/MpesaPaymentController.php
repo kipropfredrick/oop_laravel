@@ -1598,10 +1598,6 @@ else{
 
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
-       \Log::info('bill_ref_no => '.$bill_ref_no);
-
-       \Log::info('Booking => '.json_encode($booking));
-
        if($booking == null){
            return "Booking Does not exist!";
        }else{

@@ -2475,7 +2475,7 @@ return Back()->with("success","Transaction success");
 
             $message =  MpesaPaymentController::validateTravelPayments($bill_ref_no,$transaction_amount = $log->TransAmount,$msisdn = $customer->phone,$first_name = $log->FirstName,$middle_name = $log->MiddleName,$last_name = $log->LastName,$code = $log->TransID,$log_id);
 
-            return back()->with('success', 'Payment Updated! '.$ $message);
+            return back()->with('success', 'Payment Updated! ');
 
             }
 
