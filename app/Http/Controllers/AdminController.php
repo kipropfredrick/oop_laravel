@@ -2450,7 +2450,7 @@ return Back()->with("success","Transaction success");
                                                 'TransactionType' => $log->TransactionType,
                                                 'TransID'=>$log->TransID,
                                                 'TransTime'=>$log->TransTime,
-                                                'TransAmount	'=>$log->TransAmount	,
+                                                'TransAmount'=>$log->TransAmount	,
                                                 'BusinessShortCode'=>$log->BusinessShortCode,
                                                 'BillRefNumber'=>$log->BillRefNumber,
                                                 'InvoiceNumber'=>$log->InvoiceNumber,
