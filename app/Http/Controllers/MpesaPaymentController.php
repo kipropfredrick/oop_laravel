@@ -1596,9 +1596,6 @@ else{
            
        }
 
-
-
-
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
        if($booking == null){
