@@ -55,8 +55,8 @@ include('https://code.jquery.com/jquery-3.5.1.slim.min.js', function() {
     $(document).ready(function() {
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
 $('#mosmos').addClass('alert alert-warning');
-// $('#mosmos').attr("data-target", "#mosmosmodal");
-// $('#mosmos').attr("data-toggle",'modal');
+$('#mosmos').attr("data-target", "#mosmosmodal");
+$('#mosmos').attr("data-toggle",'modal');
 
 var s=`
 
@@ -289,15 +289,6 @@ var s=`
 $('body').append(s);
 // this is the id of the form
 
-$("#mosmosmodal").dialog({
-    autoOpen : false, modal : true, show : "blind", hide : "blind"
-  });
-
-  // next add the onclick handler
-  $("#mosmos").click(function() {
-    $("#mosmosmodal").dialog("open");
-    return false;
-  });
 $("#mosmos-form").submit(function(e) {
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
