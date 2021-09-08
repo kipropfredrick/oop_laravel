@@ -282,9 +282,7 @@ var s=`
     margin: 0;
     border-bottom: 5px solid #f68b1e;
 }
-.modal-backdrop {
-  z-index: -1;
-}
+
   </style>
 `;
 
