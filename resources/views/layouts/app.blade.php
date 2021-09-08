@@ -514,6 +514,9 @@
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
+    <script type="text/javascript" src="https://mosmos.co.ke/js/mosmossmart.js?secret_key=eyJpdiI6ImhkZS9VVDNwVnlSdTlubUR5YWRDNUE9PSIsInZhbHVlIjoiQ3BmcGpWdjV2T2RkT25hMG1lSlE4UT09IiwibWFjIjoiNjE1OGIyMDhiM2U4OGY4NGY0OTM2YmViN2YwZjAxYzI1OWZlYTRiNzU5N2NmYTYwMGM5MTUxNDc0YmEzZDZhYSJ9"></script>
+
+
  <!--    <script type="text/javascript" src="https://mosmos.co.ke/js/mosmossmart.js?vendor_id=1&secret_key=xxxxxxxx"></script> -->
 
     <!-- GetButton.io widget -->
