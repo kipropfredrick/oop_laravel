@@ -41,6 +41,7 @@ class VendorController extends Controller
     public function approved_products(){
 
         $vendor = Vendor::where('user_id','=',Auth::id())->first();
+        return $vendor;
         
         $products = \App\Products::with('category')->where('status','=','approved')->where('vendor_id','=',$vendor->id)->orderBy('id', 'DESC')->get();
         
