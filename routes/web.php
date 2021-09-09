@@ -219,6 +219,9 @@ Route::prefix('influencer')->group(function () {
 
 Route::prefix('vendor')->group(function () {
     Route::group(['middleware' => ['auth']], function (){
+        Route::get('/view-booking/{id}','VendorController@bookingdetails')->name('vendor.bookingdetails');
+
+  Route::post('/view-booking/{id}/payments','VendorController@bookingpayments')->name('vendor.bookingpayments');
         
         Route::get('/key', 'VendorController@keySettings');
         Route::get('/vendor-booking', 'VendorController@manualBooking');
@@ -300,6 +303,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/revoke-booking/{id}', 'AdminController@revoke_booking')->name('admin.revoke-booking');
 
     Route::get('/storepicking-booking/{id}','AdminController@storepicking_booking')->name('admin.storepicking-booking');
+    Route::get('/view-booking/{id}','AdminController@bookingdetails')->name('admin.bookingdetails');
+
+  Route::post('/view-booking/{id}/payments','AdminController@bookingpayments')->name('admin.bookingpayments');
     Route::get('/remove-booking/{id}', 'AdminController@remove_booking')->name('admin.remove-booking');
     Route::get('/complete_bookings', 'AdminController@complete_bookings')->name('admin.complete_bookings');
     Route::get('/delivered_bookings','AdminController@delivered_bookings');
@@ -454,6 +460,8 @@ Route::post('/user/permission/{id}/update','UserController@updatePermission')->n
     });
 
     Route::prefix('vendor')->group(function () {
+
+
         Route::get('/delete-account/{id}','AdminController@vendor_delete_account');
         Route::get('/pending-products','AdminController@vendor_pending_products');
         Route::get('/approved-products','AdminController@vendor_approved_products');

@@ -19,6 +19,7 @@ use File;
 use Exception;
 use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendRegistrationEmail;
+use DataTables;
 
 class VendorController extends Controller
 {
@@ -912,6 +913,28 @@ function encrypt($pure_string, $encryption_key) {
 function manualBooking(Request $request){
     $product_quantity=1;
     return view('backoffice.vendors.manualBooking',compact('product_quantity'));
+}
+
+function bookingdetails(Request $request,$id){
+    $booking=\App\Bookings::whereId($id)->first();
+    $customer=\App\Customers::whereId($booking->customer_id)->first();
+    $user=\App\User::whereId($customer->user_id)->first();
+    $product=\App\Products::whereId($booking->product_id)->first();
+
+
+return view('backoffice.bookings.bookingsdetails', compact('booking','customer','user','product'));
+}
+function bookingpayments(Request $request,$id){
+  if($request->ajax()){ 
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->where("payments.booking_id","=",$id)->orderBy('payments.id', 'DESC');
+       
+            
+
+            return DataTables::of($payments)->make(true);
+
+        }
 }
 
 

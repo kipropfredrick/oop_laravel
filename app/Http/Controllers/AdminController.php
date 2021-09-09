@@ -3134,7 +3134,7 @@ $users=json_decode($users,true);
 
     public function vendors(){
         $vendors =  \App\Vendor::with('user')->orderBy('id', 'DESC')->get();
-      
+
         return view('backoffice.vendors.index',compact('vendors'));
     }
 
@@ -4186,4 +4186,27 @@ $payments=array_reverse($payments, true);
 
     return view('backoffice.aggregate.utility',compact('payments','year','month'));
 }
+
+function bookingdetails(Request $request,$id){
+    $booking=\App\Bookings::whereId($id)->first();
+    $customer=\App\Customers::whereId($booking->customer_id)->first();
+    $user=\App\User::whereId($customer->user_id)->first();
+    $product=\App\Products::whereId($booking->product_id)->first();
+
+
+return view('backoffice.bookings.bookingsdetails', compact('booking','customer','user','product'));
+}
+function bookingpayments(Request $request,$id){
+  if($request->ajax()){ 
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->where("payments.booking_id","=",$id)->orderBy('payments.id', 'DESC');
+       
+            
+
+            return DataTables::of($payments)->make(true);
+
+        }
+}
+
 }
