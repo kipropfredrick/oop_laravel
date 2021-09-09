@@ -123,7 +123,7 @@ var s=`
                     </div>
 
                      <div class="co-intro" id="desc">
-                            You are booking <strong><span id="productName"></span></strong>. Pay conveniently in flexible installments within 90 days at 0% interest.
+                            You are booking <strong><span id="productName"></span></strong> for <strong>KSh. <span id="productPrice"></span></strong>. Pay conveniently in flexible installments within 90 days at 0% interest.
                             Minimum deposit is <strong>KSh.500</strong>.
                         </div>
 
@@ -226,7 +226,7 @@ var s=`
                                     <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="terms">
                                     <label class="form-check-label" for="terms">
-                                        I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>*
+                                        I agree to the <a href="https://mosmos.co.ke/terms" target="_blank">Terms of Service</a> and <a href="https://mosmos.co.ke/privacy-policy" target="_blank">Privacy Policy</a>*
                                     </label>
                                     </div>
                                 </div>
@@ -358,6 +358,8 @@ $("#successdiv").html("<p > "+""+"</p>");
 
       // document.getElementById("mosmosproductimage").src =image;
        document.getElementById("productName").innerHTML =itemName;
+        document.getElementById("productPrice").innerHTML =price;
+       
 //     });
 // }); 
 

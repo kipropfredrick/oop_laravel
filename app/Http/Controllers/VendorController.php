@@ -494,7 +494,7 @@ $objuser->update(['balance'=>$totalbal]);
 
         }
 
-        return redirect('/vendor/pending-products')->with('success','Product Added.');
+        return Back()->with('success','Product Added.');
 
     }
    

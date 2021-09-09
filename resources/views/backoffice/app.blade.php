@@ -668,16 +668,19 @@
           </li>
 
          @elseif(auth()->user()->role =='vendor')
-          <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li>
+ <li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Add Product</span></a></li>
 
-                 <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Manual Booking</span></a></li>
+          <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Product Booking</span></a></li>
+
+                 <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Direct Booking
+</span></a></li>
 		 <li class="nav-item">
 			<a href="#" class="nav-link">&nbsp   <i class="fa fa-shopping-basket"></i> <span>  Products</span><i class="right fas fa-angle-left"></i></a>
 
 			<ul class="nav nav-treeview" data-submenu-title="Products">
         <li class="nav-item"><a href="/vendor/approved-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Approved Products</span></a></li>
 				<li class="nav-item"><a href="/vendor/pending-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Rejected Products</span></a></li>
+				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Inactive Products</span></a></li>
 				<li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Add Product</span></a></li>
 			</ul>
 		</li>
@@ -691,10 +694,12 @@
 				<li class="nav-item"><a href="/vendor/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Complete Bookings</span></a></li>
 				<li class="nav-item"><a href="/vendor/overdue-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Overdue Bookings</span></a></li>
 				<li class="nav-item"><a href="/vendor/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Revoked Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Delivered Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
+			<!-- 	<li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Delivered Bookings</span></a></li> -->
+			
 				<!-- <li class="nav-item"><a href="/vendor/confirmed-deliveries" class="nav-link"><span>Confirmed Deliveries</span></a></li> -->
 				<li class="nav-item"><a href="/vendor/unserviced-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Unserviced Bookings</span></a></li>
+
+          <li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
 			</ul>
 		</li>
 

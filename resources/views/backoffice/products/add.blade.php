@@ -14,6 +14,22 @@
     <form action="/vendor/save-product" method="post"  enctype="multipart/form-data"  id="crud-form" >
     @endif
        @csrf
+        <div class="container">
+        @if (session()->has('success'))
+
+            <div class="alert alert-success fade show" role="alert">
+                {{ session()->get('success') }}
+            </div>
+
+            @elseif (session()->has('error'))
+
+                <div class="alert alert-danger fade show" role="alert">
+                    {{ session()->get('error') }}
+                </div>
+
+            @endif
+        </div>
+        
          <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -83,10 +99,10 @@
 
         </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6" style="display: none;">
             <div class="form-group">
             <label>Buying price</label>
-                <input min="1" tclass="form-control" name="buying_price" placeholder="Enter Product Buying price" type="number" class="form-control @if($errors->has('buying_price')) invalid_field @endif" required>
+                <input min="0" tclass="form-control" name="buying_price" placeholder="Enter Product Buying price" value="0" type="number" class="form-control @if($errors->has('buying_price')) invalid_field @endif" required>
                
                 @error('buying_price')
                             <div class="invalid-feedback">
@@ -98,10 +114,7 @@
 
             </div>
 
-            </div>
-
-            <div class="row">
-             <div class="col-md-6">
+                  <div class="col-md-6">
              <div class="form-group">
                <label class="col-form-label">Selling price</label>
                 <input min="1" tclass="form-control" name="product_price" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('product_price')) invalid_field @endif" required>
@@ -113,6 +126,35 @@
                  @enderror
 
             </div>
+
+        </div>
+
+            </div>
+
+            <div class="row">
+             <div class="col-md-6">
+          <!--    <div class="form-group">
+               <label class="col-form-label">Selling price</label>
+                <input min="1" tclass="form-control" name="product_price" placeholder="Enter Product price" type="number" class="form-control @if($errors->has('product_price')) invalid_field @endif" required>
+               
+                @error('product_price')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                 @enderror
+
+            </div> -->
+                 <div class="form-group">
+            <label class="">Product quantity</label>
+                <input tclass="form-control" name="quantity" placeholder="Enter Product quantity" type="number" class="form-control @if($errors->has('quantity')) invalid_field @endif" required>
+               
+                @error('quantity')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                 @enderror
+
+        </div>
 
         </div>
         
@@ -205,17 +247,7 @@
 
      </div>
 
-     <div class="form-group">
-            <label class="">Product quantity</label>
-                <input tclass="form-control" name="quantity" placeholder="Enter Product quantity" type="number" class="form-control @if($errors->has('quantity')) invalid_field @endif" required>
-               
-                @error('quantity')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                 @enderror
 
-        </div>
 
      <div class="form-group">
             <label class="">Highlights</label>
