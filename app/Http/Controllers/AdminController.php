@@ -3134,6 +3134,7 @@ $users=json_decode($users,true);
 
     public function vendors(){
         $vendors =  \App\Vendor::with('user')->orderBy('id', 'DESC')->get();
+      
         return view('backoffice.vendors.index',compact('vendors'));
     }
 
