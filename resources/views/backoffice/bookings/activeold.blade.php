@@ -59,6 +59,7 @@
 								@endif
 
 								<th>Action</th>
+								<th>More</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -66,9 +67,9 @@
                             @foreach($bookings as $booking) 
                                 <tr>
                                     <td>{{$index = $index+1}}.</td>
-									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">{{$booking->product->product_name}}</td>
+									<td style="height: 1.5em; overflow: hidden;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;"></td>
 									<td>{{$booking->booking_reference}}</td>
-									<td>{{$booking->product->product_code}}</td>
+									<td></td>
 
 									@if(auth()->user()->role !== 'influencer')
 									<td>{{ucfirst($booking->customer->user->name)}}</td>
@@ -76,13 +77,7 @@
 									<td>{{ucfirst($booking->agent)}}</td>
 									@endif
 									<td>
-										@if($booking->county !=null)
-										 {{$booking->county->county_name}} County,{{$booking->location['town']}} @if(isset($booking->location['center_name'])) Town ({{$booking->location['center_name']}}) @else {{ $booking->exact_location}} @endif
-										@elseif(isset($booking->zone))
-										 {{$booking->zone->zone_name}} ({{$booking->dropoff['dropoff_name']}})
-										@else
-										 No Location
-										@endif
+										
 									</td>
 									@if(auth()->user()->role !== 'vendor')
 									<td>{{ucfirst($booking->customer->phone)}}</td>
@@ -114,6 +109,9 @@
 									<td>KES {{number_format($commission)}}</td>
 									@endif
 									<td><a class="btn btn-outline-danger" href="/admin/revoke-booking/{{$booking->id}}" onclick="return confirm('Are you sure you want to revoke this booking?') ? true : false">Revoke</a></td>
+									<td>
+										<div><a class="btn btn-outline-success mt-1" href="/vendor/view-booking/{{$booking->id}}"><i class="fa fa-eye"> </i></a></div>
+									</td>
 									</tr>
                             @endforeach
 						</tbody>

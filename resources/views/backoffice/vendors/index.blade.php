@@ -30,6 +30,7 @@
 							<tr>
                                 <th class="thead">No.</th>
 								<th class="thead">Full Name</th>
+									<th class="thead">Business Name</th>
 								<th class="thead">Phone</th>
 								<th>Email</th>
 								<th class="thead">Location</th>
@@ -49,10 +50,13 @@
 										{{$vendor->user->name}}
 									</td>
 									<td>
+										{{$vendor->business_name}}
+									</td>
+									<td>
 										{{$vendor->phone}}
 									</td>
 									<td>
-									 {{$vendor->email}}
+									 {{$vendor->user->email}}
 									</td>
 									<td>
 										{{$vendor->location}}
