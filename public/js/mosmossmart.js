@@ -10,15 +10,17 @@ var secret_key = url.searchParams.get("secret_key");
 
 
 
-var image="";
-var itemName=""
+var mmimage="";
+var mmitemName=""
+var mmis_in_stock=false;
+var mmprice=0;
+var mmweight=0;
 var onApprovefunc= function(data){
   
 };
 var onDeclinefunc=function(data){
 };
-var price=0;
-var weight=0;
+
 // Create new link Element
         var link = document.createElement('link'); 
   
@@ -102,6 +104,21 @@ include('https://code.jquery.com/jquery-3.5.1.min.js', function() {
 $('#mosmos').addClass('btn p-btn');
 $('#mosmos').attr("data-target", "#exampleModal");
 $('#mosmos').attr("data-toggle",'modal');
+$('#mosmos').html('Lipa Mos Mos');
+$( "#mosmos" ).click(function() {
+if (!mmis_in_stock) {
+    alert('This product is out of stock.');
+setTimeout(
+  function() 
+  {
+$("#exampleModal").modal('hide');
+  }, 500);
+
+}
+
+      document.getElementById("productName").innerHTML =mmitemName;
+        document.getElementById("productPrice").innerHTML =mmprice;
+});
 
 var s=`
  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -307,10 +324,10 @@ $("#mosmos-form").submit(function(e) {
 $("#spinner").show();
     var form = $(this);
 
-var productName='<input type="hidden" name="product_name" value="'+itemName+'">';
+var productName='<input type="hidden" name="product_name" value="'+mmitemName+'">';
 var keyInput='<input type="hidden" name="secret_key" value="'+secret_key+'">';
-var productPrice='<input type="hidden" name="productPrice" value="'+price+'">';
-var weight='<input type="hidden" name="weight" value="'+weight+'">';
+var productPrice='<input type="hidden" name="productPrice" value="'+mmprice+'">';
+var weight='<input type="hidden" name="weight" value="'+mmweight+'">';
 
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
@@ -357,8 +374,7 @@ $("#successdiv").html("<p > "+""+"</p>");
 });
 
       // document.getElementById("mosmosproductimage").src =image;
-       document.getElementById("productName").innerHTML =itemName;
-        document.getElementById("productPrice").innerHTML =price;
+   
        
 //     });
 // }); 
@@ -405,21 +421,21 @@ function include(filename, onload) {
 }
 
 
-class mosmos {
-  constructor( {productweight=0,name="Lipa mosmos",productName="product name not set correctly",
-    imageSource="not set",productPrice=0,onApprove=function(data){alert("sasa")}, onDecline=function(data){}} = {}) {
-    this.name = name;
-    document.getElementById("mosmos").innerHTML =name;
-    image=imageSource;
-    itemName=productName;
-    onApprovefunc=onApprove;
-    onDeclinefunc=onDecline;
-    price=productPrice;
-    weight=productweight;
+// class mosmos {
+//   constructor( {productweight=0,name="Lipa mosmos",productName="product name not set correctly",
+//     imageSource="not set",productPrice=0,onApprove=function(data){alert("sasa")}, onDecline=function(data){}} = {}) {
+//     this.name = name;
+//     document.getElementById("mosmos").innerHTML =name;
+//     image=imageSource;
+//     itemName=productName;
+//     onApprovefunc=onApprove;
+//     onDeclinefunc=onDecline;
+//     price=productPrice;
+//     weight=productweight;
 
-  }
+//   }
 
-}
+// }
 
 
 
