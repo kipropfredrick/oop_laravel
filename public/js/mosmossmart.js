@@ -106,14 +106,22 @@ $('#mosmos').attr("data-target", "#exampleModal");
 $('#mosmos').attr("data-toggle",'modal');
 $('#mosmos').html('Lipa Mos Mos');
 $( "#mosmos" ).click(function() {
+    if (price!=0) {
 if (!mmis_in_stock) {
     alert('This product is out of stock.');
-setTimeout(
+     setTimeout(
   function() 
   {
 $("#exampleModal").modal('hide');
   }, 1000);
 
+}}else{
+        alert('Please select some product options before proceeding with Lipa Mos Mos.');
+        setTimeout(
+  function() 
+  {
+$("#exampleModal").modal('hide');
+  }, 1000);
 }
 
       document.getElementById("productName").innerHTML =mmitemName;
