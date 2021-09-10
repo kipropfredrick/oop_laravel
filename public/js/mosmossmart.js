@@ -112,7 +112,7 @@ setTimeout(
   function() 
   {
 $("#exampleModal").modal('hide');
-  }, 500);
+  }, 1000);
 
 }
 
