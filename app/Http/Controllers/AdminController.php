@@ -3920,20 +3920,20 @@ array_push($ids, $result[$i]->id);
 
 
     function updateunservicedoverdue(Request $request){
-        $result=Bookings::whereIn("status",["active","unserviced"])->get();
-for ($i=0; $i <count($result) ; $i++) {
-    # code..
-    $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
-   if ($res==1 || $res==0) {
-       # code...
-     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"unserviced"]);
-   }
-   else{
-     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"overdue"]);
+            $result=Bookings::whereIn("status",["active","unserviced"])->get();
+            for ($i=0; $i <count($result) ; $i++) {
+                # code..
+                $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
+            if ($res==1 || $res==0) {
+                # code...
+                \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"unserviced"]);
+            }
+            else{
+                \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"overdue"]);
 
-   }
+            }
 
-}
+        }
     }
 
     function monitorPayments(Request $request){

@@ -1710,6 +1710,12 @@ else{
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_completion_notification");
 
+            $user = \DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
+            $message = $user->name." has completed Payment for ".$booking->package_name.".";
+
+            SendSMSController::sendMessage($recipients = $agent->phone,$message,$type="travel_payment_completion_notification");
+
             $data['status'] = 'complete';
 
             }
