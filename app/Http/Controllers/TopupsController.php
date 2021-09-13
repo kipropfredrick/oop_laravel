@@ -653,7 +653,7 @@ break;  }
 
          function generateMosmosid(Request $request){
 
-$unassignedusers=\App\User::whereId(17573)->limit(300)->get();
+$unassignedusers=\App\User::whereNull('mosmosid')->limit(500)->get();
 
 foreach ($unassignedusers as $key => $value) {
   $count=0;
