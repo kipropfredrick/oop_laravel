@@ -1400,7 +1400,8 @@ break;
          
         }
 
-        $balance=$existingUser->balance;
+        $balance=0;
+        //$existingUser->balance;
 
         $booking = new \App\Bookings();
         $recipients = $valid_phone;
