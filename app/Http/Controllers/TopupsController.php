@@ -655,6 +655,7 @@ break;  }
 
 $unassignedusers=\App\User::whereNull('mosmosid')->get();
 foreach ($unassignedusers as $key => $value) {
+  $count=0;
   # code...
        for($i=0;$i<1000000;$i++){
             $mosmosid = 'MID'.rand(10000,99999);
@@ -665,9 +666,14 @@ break;  }
         }
 $array=Array("mosmosid"=>$mosmosid);
         \App\User::whereId($value->id)->update($array);
+        $count++;
+        if ($count>500) {
+          # code...
+          break;
+        }
 }
 
-return 0;
+return $count;
 
          }
 
