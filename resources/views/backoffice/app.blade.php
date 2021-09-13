@@ -702,7 +702,7 @@
           <li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
 			</ul>
 		</li>
-
+  <li class="nav-item"><a href="/vendor/payments" class="nav-link"><i class="fas fa-wallet nav-icon"></i> <span>Payments</span></a></li>
       <li class="nav-item"><a href="/vendor/key" class="nav-link"><i class="fas fa-cogs nav-icon"></i> <span>Settings</span></a></li>
 		@elseif(auth()->user()->role =='user')
 			<li class="nav-item nav-item-submenu">
