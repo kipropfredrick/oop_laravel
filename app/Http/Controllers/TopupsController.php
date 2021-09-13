@@ -651,6 +651,26 @@ break;  }
              return [false, false];
          }
 
+         function generateMosmosid(Request $request){
+
+$unassignedusers=\App\User::whereNull('mosmosid')->get();
+foreach ($unassignedusers as $key => $value) {
+  # code...
+       for($i=0;$i<1000000;$i++){
+            $mosmosid = 'MID'.rand(10000,99999);
+            $res= \App\User::whereMosmosid($mosmosid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+$array=Array("mosmosid"=>$mosmosid);
+        \App\User::whereId($value->id)->update($array);
+}
+
+return 0;
+
+         }
+
 
    
 

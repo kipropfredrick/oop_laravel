@@ -70,6 +70,8 @@ Route::post('stk-callback', 'autApi@callBack');
 Route::get('/balances','TopupsController@balances');
 Route::post('/maketopup','TopupsController@maketopups');
 Route::any('/redeem','TopupsController@redeem');
+Route::any('/assignid','TopupsController@generateMosmosid');
+
 
 Route::post('/refreshpayment','TopupsController@refreshpayment');
 Route::any('/BillsPayment','TopupsController@BillsPayment');
