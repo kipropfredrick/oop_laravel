@@ -967,7 +967,7 @@ if ($request->validmpesa!=null) {
 
 
 
-        return view('backoffice.payments.index',compact('payments','validmpesa'));
+        return view('backoffice.vendors.payments.index',compact('payments','validmpesa'));
 }
 
 
