@@ -663,13 +663,6 @@ $bill_ref_no=$request->input("bookingref");
  //$message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
 
- //return $message;
- $user=\App\User::whereId($booking->customer->user_id);
-$obj=$user->first();
-if ($obj->balance<$amount) {
-    # code...
-          return Array("response"=>"yion.".$obj->name,"success"=>false,"error"=>true);
-}
 
 
 
@@ -685,6 +678,14 @@ if ($obj->balance<$amount) {
         if($booking == null){
             return Array("response"=>"Booking does not exist","success"=>false,"error"=>true);
         }
+
+ //return $message;
+ $user=\App\User::whereId($booking->customer->user_id);
+$obj=$user->first();
+if ($obj->balance<$amount) {
+    # code...
+          return Array("response"=>"you have insufficient balance to complete this transaction.","success"=>false,"error"=>true);
+}
 
 
         if($booking->status == 'pending'){
