@@ -655,6 +655,17 @@ return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>
 
 }
 
+function MakeWalletPayment(Request $Request){
+          $msisdn=$request->input("phone");
+        $amount=$request->input('amount');
+        $booking_ref=$request->input("bookingref");
+
+ $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+
+
+ return $message;
+}
+
 
 
 }

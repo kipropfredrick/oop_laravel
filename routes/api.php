@@ -44,6 +44,7 @@ Route::get('/phoneExists','autApi@ifPhoneExists');
 Route::get('/resetpassword','autApi@resetPassword');
 Route::get('/search','ProductsApiController@search');
 Route::post('/makepayment','autApi@MakePayment');
+Route::post('/makewalletpayment','autApi@MakeWalletPayment');
 Route::get('/checkbooking','ProductsApiController@checkBooking');
 Route::post('/makebooking','autApi@make_booking');
 Route::post('/hasBooking','autApi@hasBooking');
