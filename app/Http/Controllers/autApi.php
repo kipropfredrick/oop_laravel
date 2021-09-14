@@ -659,11 +659,243 @@ function MakeWalletPayment(Request $request){
           $msisdn=$request->input("phone");
         $amount=$request->input('amount');
         $booking_ref=$request->input("bookingref");
+$bill_ref_no=$request->input("bookingref");
+ //$message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
- $message =  $this->stk_push($amount,$msisdn,$booking_ref);
+
+ //return $message;
 
 
- return $message;
+ $date_paid = Carbon::today()->toDateString();
+
+        $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$bookingref)->first();
+
+
+        if($booking == null){
+            return Array("response"=>"Booking does not exist","success"=>false,"error"=>true);
+        }
+
+
+        if($booking->status == 'pending'){
+
+           if($booking->vendor_code !== null){
+                $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
+                if($vendor == null){
+
+                   }else {
+
+                    $recipients = $vendor->phone;
+
+                    $details = [
+                        'customer'=> $booking->customer->user->name,
+                        'booking_reference'=>$booking->booking_reference
+
+                    ];
+
+                    Mail::to($vendor->user->email)->send(new SendBookingMail($details));
+
+                 }
+            }
+        }
+
+        $payment = new \App\Payments();
+        $payment->booking_id = $booking->id;
+        $payment->customer_id = $booking->customer_id;
+        $payment->product_id  = $booking->product_id;
+        $payment->transaction_amount = $request->amount;
+        $payment->booking_status = 'active';
+        $payment->date_paid = now();
+        $payment->save();
+
+        $payment_id = DB::getPdo()->lastInsertId();
+
+        $amount_paid = $booking->amount_paid + $request->amount;
+
+        $balance = $booking->total_cost - $amount_paid;
+
+        if($balance<1){
+
+            DB::table('bookings')
+            ->where('booking_reference','=',$booking_ref)
+            ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'complete','updated_at'=>now()]);
+
+            $recipients = $booking->customer->phone;
+
+            if($booking->location_type == 'store_pickup'){
+
+                if($booking->vendor_code !== null){
+
+                    if($vendor == null){
+
+                    }else {
+                        $location = " Your will pick your product at ".$vendor->location;
+                    }
+
+                }elseif($booking->agent_code !== null){
+
+                    $agent = \App\Agents::where('agent_code','=',$booking->agent_code)->first();
+                    if($agent == null){
+
+                    }else {
+                     $location = " Your will pick your product at ".$agent->location;
+                    }
+
+                }
+
+            }
+
+
+            $message = "Congratulations, You have completed Payment of ".$booking->product->product_name.$location.", You will be contacted for more information.";
+
+            SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
+
+            $product = \App\Products::with('subcategory')->where('id','=',$booking->product_id)->first();
+
+            if($booking->vendor_code !== null){
+                $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
+                if($vendor == null){
+
+                   }else {
+
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                    $recipients = $vendor->phone;
+
+                    $message = $booking->customer->user->name . " has completed payment of booking ref ".$booking->booking_reference;
+
+                    SendSMSController::sendMessage($recipients,$message,$type="booking_completed_notification");
+
+                    DB::table('commissions')->insert([
+                        'product_id' => $product->id,
+                        'booking_id' => $booking->id,
+                        'vendor_id' =>  $vendor->id,
+                        'admin_commission' =>$admin_commission,
+                        'other_party_commission' => $vendor_commission,
+                        'created_at'=>now(),
+                        'updated_at'=>now(),
+                        ]);
+
+                   }
+            }
+
+        }else{
+
+            DB::table('bookings')
+            ->where('booking_reference','=',$booking_ref)
+            ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
+        }
+        $user=\App\User::whereId($booking->customer->user_id;);
+$obj=$user->first();
+if($obj!=null){
+    $mosmosbalance=$obj->balance;
+$mosmosbalance=$mosmosbalance-$amount;
+$user->update(["balance"=>$mosmosbalance]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TB'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+$credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id,"type"=>"bookingp");
+\App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
+
+}
+
+        //DB::table('payment_logs')->where('id',$)->update(['status'=>'valid']);
+
+        DB::table('mpesapayments')
+            ->insert([
+                      'payment_id'=>$payment_id,
+                      'amount_paid'=>$request->amount,
+                      'phone'=>$msisdn,
+                      'transac_code'=>$transid,
+                      'date_paid'=>$date_paid,
+                      'created_at'=>now(),
+                      'updated_at'=>now()
+                      ]);
+
+        $message = 'Success';
+
+        $recipients = $recipients = $booking->customer->phone;
+
+        $request->amount = number_format($request->amount,2);
+        $balance =number_format($balance,2);
+
+        $payment_count = \App\PaymentLog::where('BillRefNumber',$booking->booking_reference)->count();
+
+
+        if($payment_count<2){
+                    $shipping_cost = $booking->shipping_cost;
+                    //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+
+                    $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$transid}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+
+
+        }else{
+
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+
+        }
+
+
+        SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+        $data['receiver'] = $recipients;
+        $data['type'] = 'payment_notification';
+        $data['message'] = $message;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        DB::table('s_m_s_logs')->insert($data);
+
+        $details = [
+            'customer'=> $booking->customer->user->name,
+            'booking_reference'=>$booking->booking_reference,
+            'amount_paid'=>$request->amount,
+            'product'=>$booking->product->product_name,
+            'mpesa_ref'=>$transid,
+            'balance'=> $booking->balance
+
+        ];
+
+        Mail::to('order@mosmos.co.ke')->send(new SendPaymentMailToAdmin($details));
+
+
+        $latestPayment = \App\Payments::with('mpesapayment')->where('booking_id',$booking->id)->latest()->first();
+
+        $details  = [
+            'customer_name'=>$booking->customer->user->name,
+            'product_name'=>$booking->product->product_name,
+            'booking_reference'=>$booking->booking_reference,
+            'total_cost'=>number_format($booking->total_cost,2),
+            'amount_paid'=>number_format($booking->amount_paid),
+            'balance'=>$balance,
+            'date_paid'=>$date_paid,
+            'product_price'=>number_format($booking->product->product_price),
+            'payments'=>$booking->payments,
+            'latestPayment'=>$latestPayment
+        ];
+
+        Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
+
+        Array("response"=>"Payment successful","success"=>true,"error"=>false);
 }
 
 
