@@ -664,6 +664,17 @@ $bill_ref_no=$request->input("bookingref");
 
 
  //return $message;
+ $user=\App\User::whereId($booking->customer->user_id);
+$obj=$user->first();
+if ($obj->balance<$amount) {
+    # code...
+          return Array("response"=>"you have insufficient balance to complete this transaction.","success"=>false,"error"=>true);
+}
+
+
+
+
+
 
 
  $date_paid = Carbon::today()->toDateString();
@@ -809,7 +820,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id,"type"=>"bookingp");
+$credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$transid,"sender"=>$obj->id,"type"=>"bookingp");
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
@@ -863,7 +874,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"se
         $data['created_at'] = now();
         $data['updated_at'] = now();
 
-        DB::table('s_m_s_logs')->insert($data);
+        //DB::table('s_m_s_logs')->insert($data);
 
         $details = [
             'customer'=> $booking->customer->user->name,
@@ -895,7 +906,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"se
 
         Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
 
-        Array("response"=>"Payment successful","success"=>true,"error"=>false);
+        return Array("response"=>"Payment successful","success"=>true,"error"=>false);
 }
 
 
