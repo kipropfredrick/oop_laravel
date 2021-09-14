@@ -668,7 +668,7 @@ $bill_ref_no=$request->input("bookingref");
 $obj=$user->first();
 if ($obj->balance<$amount) {
     # code...
-          return Array("response"=>"you have insufficient balance to complete this transaction.".$obj->name,"success"=>false,"error"=>true);
+          return Array("response"=>"yion.".$obj->name,"success"=>false,"error"=>true);
 }
 
 
