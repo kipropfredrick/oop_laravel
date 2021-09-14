@@ -668,7 +668,7 @@ $bill_ref_no=$request->input("bookingref");
 
  $date_paid = Carbon::today()->toDateString();
 
-        $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$bookingref)->first();
+        $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$booking_ref)->first();
 
 
         if($booking == null){
