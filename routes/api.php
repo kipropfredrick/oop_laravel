@@ -84,7 +84,7 @@ Route::any('/travelpayments','TravelMosMosBookings@travelpayments');
 Route::post('/updateTraveTarget','TravelMosMosBookings@updateTraveTarget');
 
 
-//web interface api smart xhewckout
+//web interface api smart chewckout
 
 Route::any('/smartchekout','ApiBookingController@index');
 
@@ -94,6 +94,8 @@ Route::any('/smartchekout','ApiBookingController@index');
 //vendor api controller 
 Route::prefix('vendor')->group(function () {
  Route::get('/login','vendorApiController@login');
+  Route::get('/dashboard','vendorApiController@index');
+ 
 });
 
 
