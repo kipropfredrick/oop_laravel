@@ -655,7 +655,7 @@ return Array("data"=>Array("response"=>"Account updated successfully"),"error"=>
 
 }
 
-function MakeWalletPayment(Request $Request){
+function MakeWalletPayment(Request $request){
           $msisdn=$request->input("phone");
         $amount=$request->input('amount');
         $booking_ref=$request->input("bookingref");
