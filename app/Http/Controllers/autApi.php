@@ -794,7 +794,7 @@ $bill_ref_no=$request->input("bookingref");
             ->where('booking_reference','=',$booking_ref)
             ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
         }
-        $user=\App\User::whereId($booking->customer->user_id;);
+        $user=\App\User::whereId($booking->customer->user_id);
 $obj=$user->first();
 if($obj!=null){
     $mosmosbalance=$obj->balance;
