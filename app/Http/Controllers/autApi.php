@@ -664,7 +664,7 @@ $bill_ref_no=$request->input("bookingref");
 
 
  //return $message;
- $user=\App\User::whereId($booking->customer->user_id);
+ $user=\App\User::whereId(1901);
 $obj=$user->first();
 if ($obj->balance<$amount) {
     # code...
