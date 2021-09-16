@@ -823,7 +823,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$transid,"sender"=>$obj->id,"type"=>$booking_ref;
+$credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$transid,"sender"=>$obj->id,"type"=>$booking_ref);
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
