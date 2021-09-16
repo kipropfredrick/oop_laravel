@@ -15,6 +15,7 @@ use \App\Mail\SendRegistrationEmail;
 use App\Http\Controllers\pushNotification;
 use \App\Mail\SendPaymentEmail;
 use App\Mail\SendPaymentMailToAdmin;
+use App\Mail\SendBookingMail;
 
 class autApi extends Controller
 {
