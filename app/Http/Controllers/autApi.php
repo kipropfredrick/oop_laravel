@@ -823,12 +823,15 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$transid,"sender"=>$obj->id,"type"=>"bookingp");
+$credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$transid,"sender"=>$obj->id,"type"=>$booking_ref;
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
-    $data=Array("name"=>"home","value"=>"home");
-    $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
+    //$data=Array("name"=>"home","value"=>"home");
+    // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
+    $data=Array("name"=>"payment","value"=>"Payments");
+    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$request->amount ." for Order Ref ".$booking_ref." has been received.","Payment Received",$data);
+
 
 }
 
