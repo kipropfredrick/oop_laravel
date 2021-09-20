@@ -30,4 +30,42 @@ $credentials=Array("email"=>$username,"password"=>$password);
 	}
 
 	} 
+
+	function index(Request $request){
+		$vendor_code=$request->vendor_code;
+		$vendor_id=\App\Vendor::whereVendor_code($vendor_code)->first()->id;
+		$activeBookingAmount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->sum('total_cost');
+        $activeBookingCount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->count();
+
+        $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('vendor_code',$vendor_code)->sum('total_cost');
+        $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('vendor_code',$vendor_code)->count();
+        $completeBookingAmount = \App\Bookings::where('status','=','complete')->where('vendor_code',$vendor_code)->sum('total_cost');
+        $completeBookingCount = \App\Bookings::where('status','=','complete')->where('vendor_code',$vendor_code)->count();
+        $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->sum('total_cost');
+        $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->count();
+        $products=\App\Products::whereVendor_id($vendor_id)->count();
+
+        $array=Array("completebookingamount"=>$completeBookingAmount,"completebookingcount"=>$completeBookingCount,"activebookingamount"=>$activeBookingAmount,"activebookingcount"=>$activeBookingCount,"revokedbookingamount"=>$revokedBookingAmount,"revokedbookingcount"=>$revokedBookingCount,"pendingbookingamount"=>$pendingBookingAmount,"pendingbookingcount"=>$pendingBookingCount,'totalproducts'=>$products);
+
+        return $array;
+
+
+
+	}
+
+	      public function bookings(Request $request){
+        $username=$request->input("vendor_code");
+        $status=$request->input("type");
+        $bookings = \App\Bookings::where('vendor_code','=',$username)->where('status','=',$status)->latest()->get();
+        foreach($bookings as $booking){
+            $progress = round(($booking->amount_paid/$booking->total_cost)*100);
+            $booking['progress'] = $progress;
+            $booking['product_name']=\App\Products::whereId($booking->product_id)->first()->product_name;
+              $booking['product_code']=\App\Products::whereId($booking->product_id)->first()->product_code;
+            $booking['customer_name']=\App\User::whereId(\App\Customers::whereId($booking->customer_id)->first()->user_id)->first()->name;
+        }
+
+       return $bookings;
+    }
+
 }

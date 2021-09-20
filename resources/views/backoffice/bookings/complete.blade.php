@@ -47,6 +47,7 @@
 								<th class="thead">Total Price</th>
                                 <th class="thead">Amount Paid</th>
                                 <th class="thead">Balance</th>
+                                  <th class="thead">Sent to Wallet</th>
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
                                 <th class="thead">Progress</th>
@@ -203,6 +204,13 @@ return `
 		  "width": "400px",
 		  render: (data) => 'Ksh. ' + numberFormat(data)
 		},{
+		data:"balance","render": function(data, type, full, meta){
+            		var totalbalance=full.amount_paid-full.total_cost;
+            	
+return 'Ksh. ' + numberFormat(totalbalance);
+
+            	}
+            },{
 		data:"created_at","render": function(data, type, full, meta){
             		var agent=full;
             		var strdate = new Date(data);

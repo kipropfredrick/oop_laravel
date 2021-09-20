@@ -44,6 +44,7 @@ Route::get('/phoneExists','autApi@ifPhoneExists');
 Route::get('/resetpassword','autApi@resetPassword');
 Route::get('/search','ProductsApiController@search');
 Route::post('/makepayment','autApi@MakePayment');
+Route::post('/makewalletpayment','autApi@MakeWalletPayment');
 Route::get('/checkbooking','ProductsApiController@checkBooking');
 Route::post('/makebooking','autApi@make_booking');
 Route::post('/hasBooking','autApi@hasBooking');
@@ -70,6 +71,8 @@ Route::post('stk-callback', 'autApi@callBack');
 Route::get('/balances','TopupsController@balances');
 Route::post('/maketopup','TopupsController@maketopups');
 Route::any('/redeem','TopupsController@redeem');
+Route::any('/assignid','TopupsController@generateMosmosid');
+
 
 Route::post('/refreshpayment','TopupsController@refreshpayment');
 Route::any('/BillsPayment','TopupsController@BillsPayment');
@@ -82,7 +85,7 @@ Route::any('/travelpayments','TravelMosMosBookings@travelpayments');
 Route::post('/updateTraveTarget','TravelMosMosBookings@updateTraveTarget');
 
 
-//web interface api smart xhewckout
+//web interface api smart chewckout
 
 Route::any('/smartchekout','ApiBookingController@index');
 
@@ -92,6 +95,10 @@ Route::any('/smartchekout','ApiBookingController@index');
 //vendor api controller 
 Route::prefix('vendor')->group(function () {
  Route::get('/login','vendorApiController@login');
+  Route::get('/dashboard','vendorApiController@index');
+  Route::any('/bookings','vendorApiController@bookings');
+  
+ 
 });
 
 

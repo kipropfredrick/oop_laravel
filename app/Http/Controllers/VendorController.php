@@ -937,5 +937,38 @@ function bookingpayments(Request $request,$id){
         }
 }
 
+function payments(Request $request){
+    // $payments =  DB::table('payments')->get();
+        $payments=[];
+        $validpaymentreferences=[];
+        $validmpesa=[];
+if ($request->validmpesa!=null) {
+    # code...$vali
+    $validmpesa=json_decode($request->validmpesa, true);
+}
+
+             if($request->ajax()){ 
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereHas('product', function($q){
+            $vendor=\App\Vendor::whereUser_id(Auth()->user()->id)->first()->id;
+    $q->where('vendor_id', '=', $vendor);
+})->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
+       
+            
+
+            return DataTables::of($payments)->make(true);
+
+        }
+        else{
+            $validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
+  $validmpesa=json_encode(\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray());
+        }
+
+
+
+        return view('backoffice.vendors.payments.index',compact('payments','validmpesa'));
+}
+
 
 }

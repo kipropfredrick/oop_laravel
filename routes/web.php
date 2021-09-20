@@ -224,6 +224,8 @@ Route::prefix('vendor')->group(function () {
   Route::post('/view-booking/{id}/payments','VendorController@bookingpayments')->name('vendor.bookingpayments');
         
         Route::get('/key', 'VendorController@keySettings');
+        
+          Route::any('/payments', 'VendorController@payments');
         Route::get('/vendor-booking', 'VendorController@manualBooking');
         Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');
           

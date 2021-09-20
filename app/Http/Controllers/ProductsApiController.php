@@ -106,6 +106,7 @@ $bestSellers = \App\Products::with('category','subcategory')
                                 # code...
     $Products['description']="";
     $Products['highlights']="";
+    $Products['buying_price']=$Products->product_price;
 
                             }
     return $bestSellers;
@@ -121,6 +122,7 @@ $bestSellers = \App\Products::with('category','subcategory')
                                 # code...
     $Products['description']="";
     $Products['highlights']="";
+    $Products['buying_price']=$Products->product_price;
 
                             }
 
