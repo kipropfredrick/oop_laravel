@@ -43,7 +43,7 @@ $credentials=Array("email"=>$username,"password"=>$password);
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->count();
 
-        $array=Array("completebookingamount"=>$completeBookingAmount,"completebookingcount"=>$completeBookingCount,"activebookingamount"=>$activeBookingAmount,"activebookingcount"=>$activeBookingCount,"revokedbookingamount"=>$revokedBookingAmount,"revokedBookingCount"=>$revokedBookingCount,"pendingbookingamount"=>$pendingBookingAmount,"pendingbookingcount"=>$pendingBookingCount);
+        $array=Array("completebookingamount"=>$completeBookingAmount,"completebookingcount"=>$completeBookingCount,"activebookingamount"=>$activeBookingAmount,"activebookingcount"=>$activeBookingCount,"revokedbookingamount"=>$revokedBookingAmount,"revokedbookingcount"=>$revokedBookingCount,"pendingbookingamount"=>$pendingBookingAmount,"pendingbookingcount"=>$pendingBookingCount);
 
         return $array;
 
