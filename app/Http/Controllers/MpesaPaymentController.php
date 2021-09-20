@@ -1699,11 +1699,14 @@ else{
 
             $amount_paid = $booking->amount_paid + $transaction_amount;
 
-            $balance = $booking->balance - $transaction_amount;
+            $balance = $booking->balance - $transaction_amount; 
+
+            $f_balance = number_format($balance,2);
+            $f_transaction_amount =  number_format($transaction_amount);
 
             $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+            $message    ="Payment of KES. {$f_transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1739,7 +1742,6 @@ else{
 
 
             // Send Invoice End
-
 
 
             if($balance<1){
