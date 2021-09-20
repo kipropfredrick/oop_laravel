@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
+use \App\Mail\SendTravelPaymentEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
@@ -1604,6 +1605,8 @@ else{
            
             $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
+            $user_customer = DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
             $recipients = $customer->phone;
 
             $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
@@ -1703,6 +1706,41 @@ else{
             $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+
+            // Send Invoice
+
+            // $payments = DB::connection('mysql2')->table('payments')
+            //                 ->join('payment_logs','payments.payment_log_id','payment_logs.id')
+            //                 ->where('booking_id',$booking->id)
+            //                 ->select('payments.*','paymentSend Invoice_logs.*')
+            //                 ->orderBy('payments.id','DESC')
+            //                 ->get();
+
+            // $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
+
+
+            // $details  = [
+            //     'customer'=>$user_customer,
+            //     'customer_name'=>$user_customer->name,
+            //     'agent'=>$agent,
+            //     'payments'=>$payments,
+            //     'product_name'=>$booking->package_name,
+            //     'booking_reference'=>$booking->booking_reference,
+            //     'total_cost'=>number_format($booking->total_cost,2),
+            //     'amount_paid'=>number_format($booking->amount_paid),
+            //     'balance'=>$balance,
+            //     'booking'=>$booking,
+            //     'latestPayment'=>$latestPayment
+            // ];
+  
+
+            // Mail::to($user_customer->email)->send(new SendTravelPaymentEmail($details));
+
+
+            // Send Invoice End
+
+
 
             if($balance<1){
 

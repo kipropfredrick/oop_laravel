@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>New Booking | Lipa Mos mos</title>
+    <title>Payment Invoice | Travel Mos Mos</title>
     <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -9,11 +9,8 @@
 
     <style>
 
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-
         body {
         background-color: #f8f8f8;
-        font-family: 'Source Sans Pro', sans-serif;
     }
 
     .main-body {
@@ -21,7 +18,7 @@
     }
 
     .email-header {
-        background-color: #1e22a9;
+        background-color: #CCC;
         padding: 10px;
     }
 
@@ -103,34 +100,60 @@
 <body>
 
 <div class="email-header">
-    <img src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
+    <img style="height:50px;width:100px;object-fit:contain;" src="https://travelmosmos.co.ke/storage/images/{{$details['agent']['company_logo']}}" alt="Travel Mos Mos">
 </div>
 
 <div class="container mt-5 mb-5">
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
             <div class="card" style="padding:10px;">
-                        <p>Hello, <strong>{{ucfirst($details['customer'])}}</strong> has booked your product, The booking reference is  <strong>{{$details['booking_reference']}}</strong>.</p>
-                </div>
 
-                <p>Thank you,<br/>
-                        Lipa Mos Mos Team</p>
+             <?php $now = now(); ?>
 
-            <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
-                <div style="text-align: center;" class="ftr-socials">
-                    <a href="https://facebook.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
-                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://travelmosmos.co.ke/assets/img/social/insta.png" alt=""></a>
+                {{date('M d'.', '.'Y', strtotime($now))}}
+        
+                    <h3><strong>{{ucfirst($details['customer']->name)}} Payment History</strong></h3>
+
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-md-5">
+                            <table id="invoice" class="table table-striped table-hover">
+
+                                <thead class="">
+                                    <tr>
+                                        <th scope="col">No. </th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">TXN Ref</th>
+                                        <th scope="col">Amount Paid (KES)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="totals">
+                               
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <h4>Summary</h4>
+                    
+                    <table>
+                        <tr>
+                            <td>Total Paid</td>
+                            <td>KSh.{{number_format($details['booking']->amount_paid)}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Cost</td>
+                            <td>KSh.{{$details['booking']->total_cost}}</td>
+                        </tr>
+                        <tr>
+                            <td>Balance</td>
+                            <td>KSh.{{$details['booking']->balance}}</td>
+                        </tr>
+                  </table>
+                    <!-- end -->
+                    
                 </div>
-                <div>
-                    <span>
-                        <a href="https://mosmos.co.ke">Visit Website</a>
-                    </span> |
-                    <span>
-                        <a href="mailto:support@mosmos.co.ke">Email Support</a>
-                    </span>
-                </div>
-                <p>&copy; Lipa Mos Mos | All Rights Reserved</p>
-            </div>
 
             </div>
         </div>
