@@ -55,13 +55,13 @@ $credentials=Array("email"=>$username,"password"=>$password);
 
 	      public function bookings(Request $request){
         $username=$request->input("vendor_code");
-        $status=$request->input("status");
+        $status=$request->input("type");
         $bookings = \App\Bookings::where('vendor_code','=',$username)->where('status','=',$status)->latest()->get();
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
             $booking['product_name']=\App\Products::whereId($booking->product_id)->first()->product_name;
-            $booking['customer_name']=\App\User::whereId(\App\Customers::whereCustomer_id($booking->customer_id)->first()->user_id)->first()->name;
+            $booking['customer_name']=\App\User::whereId(\App\Customers::whereId($booking->customer_id)->first()->user_id)->first()->name;
         }
 
        return $bookings;
