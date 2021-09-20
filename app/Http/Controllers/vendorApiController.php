@@ -61,6 +61,7 @@ $credentials=Array("email"=>$username,"password"=>$password);
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
             $booking['product_name']=\App\Products::whereId($booking->product_id)->first()->product_name;
+              $booking['product_code']=\App\Products::whereId($booking->product_id)->first()->product_code;
             $booking['customer_name']=\App\User::whereId(\App\Customers::whereId($booking->customer_id)->first()->user_id)->first()->name;
         }
 
