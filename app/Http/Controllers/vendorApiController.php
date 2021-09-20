@@ -33,6 +33,7 @@ $credentials=Array("email"=>$username,"password"=>$password);
 
 	function index(Request $request){
 		$vendor_code=$request->vendor_code;
+		$vendor_id=\App\Vendor::whereVendor_code($vendor_code)->first()->id;
 		$activeBookingAmount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->sum('total_cost');
         $activeBookingCount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->count();
 
@@ -42,8 +43,9 @@ $credentials=Array("email"=>$username,"password"=>$password);
         $completeBookingCount = \App\Bookings::where('status','=','complete')->where('vendor_code',$vendor_code)->count();
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->count();
+        $products=\App\Products::whereVendor_id($vendor_id)->count();
 
-        $array=Array("completebookingamount"=>$completeBookingAmount,"completebookingcount"=>$completeBookingCount,"activebookingamount"=>$activeBookingAmount,"activebookingcount"=>$activeBookingCount,"revokedbookingamount"=>$revokedBookingAmount,"revokedbookingcount"=>$revokedBookingCount,"pendingbookingamount"=>$pendingBookingAmount,"pendingbookingcount"=>$pendingBookingCount);
+        $array=Array("completebookingamount"=>$completeBookingAmount,"completebookingcount"=>$completeBookingCount,"activebookingamount"=>$activeBookingAmount,"activebookingcount"=>$activeBookingCount,"revokedbookingamount"=>$revokedBookingAmount,"revokedbookingcount"=>$revokedBookingCount,"pendingbookingamount"=>$pendingBookingAmount,"pendingbookingcount"=>$pendingBookingCount,'totalproducts'=>$products);
 
         return $array;
 
