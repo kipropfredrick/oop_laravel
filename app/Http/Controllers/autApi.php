@@ -925,8 +925,7 @@ $hashkey = 'demoCHANGED';
 $ivid='demo';
 
 $ilive             = "0";
-$icbk              = "http://smssystem.intrepidprojects.co.ke/autopaytest/callback.php";
-$security_key     = "Wa98htr672WTc";
+$icbk              = "http://xxxx.com/xx/callback.php";
 $iamount           = "1000";
 $p1               = "callbackworks";
 $p2               = "value2test";
@@ -944,7 +943,7 @@ $iinv='ffesrtc';
 
 $data_string = $live.$ioid .$iinv.$amount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 // $data_string = "live=".$live."&oid=".$ioid."&inv".$iinv."&amount=".$amount."&tel=".$itel."&email=".$ieml."&vid=".$ivid."&curr=".$icurr."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&cbk=".$icbk."&cst=".$icst."&crl".$icrl;
-$hashed = hash_hmac("sha256", $datastring, $hashkey);
+$hashed = hash_hmac("sha1", $datastring, $hashkey);
 // $datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
 $url="https://payments.ipayafrica.com/v3/ke?live=" .$ilive ."&mm=1&mb=1&dc=1&cc=1&mer=ipay"."&mpesa=0&airtel=0&equity=0&creditcard=1&elipa=0&debitcard=0" ."&oid=".$ioid."&inv=".$iinv."&ttl=".$iamount."&tel=".$itel."&eml=".$ieml. "&vid=".$ivid ."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&crl=".$icrl."&cbk=".$icbk."&cst=".$icst."&curr=".$icurr."&hsh=".$hashed;
 
