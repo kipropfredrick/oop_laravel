@@ -13,6 +13,7 @@ use App\Http\Controllers\pushNotification;
 use Carbon\Carbon;
 use App\Http\Controllers\paybills;
 use App\Http\Controllers\AES;
+use Illuminate\Support\Facades\Log;
 class TopupsController extends Controller
 {
     //
@@ -707,6 +708,23 @@ $array=Array("mosmosid"=>$mosmosid);
 return $count;
 
          }
+
+         function capturepayment(Request $request){
+
+Log::info(json_encode($request));
+
+if ($request->status=="aei7p7yrx4ae34") {
+  # code...
+  return redirect('/success');
+}
+else{
+    return redirect('/ipayfailed',compact('error'));
+}
+
+         
+
+
+       }
 
 
    

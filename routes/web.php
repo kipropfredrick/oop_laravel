@@ -35,10 +35,16 @@ Route::get('/privacy-policy', function () {
 Route::get('/success', function () {
     return view('front.ipaysuccess');
 });
+Route::get('/ipayfailed', function () {
+    return view('front.ipayfailed');
+});
 
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
+
+Route::any('/capturepayment', 'TopupsController@capturepayment')->name('admin.capturepayment');
+
 
 Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
 Route::get('/updateAccountNumbers', 'autApi@updateAccountNumbers')->name('admin.updateAccountNumbers');
