@@ -920,31 +920,40 @@ public function createCardTransaction(Request $request){
 
 // $hashkey = env('IpayKey');
 // $IpayId=env('IpayId');
+$msisdn=$request->input("phone");
+$amount=$request->input('amount');
+$booking_ref=$request->input("bookingref");
 
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer==null) {
+    # code...
+    return Array("successs"=>false,"an error occured try again later");
+}
+$user=\App\User::whereUser_id($customer->user_id)->first();
 $hashkey = '89siusx8siys8sus7';
 $ivid='rdfyne';
 
 // $hashkey =  env('IpayKey');
 // $ivid=env('IpayId');
-$trans_amount=100;
+$trans_amount=$amount;
 $rate=0.035;
 
 $ilive             = "1";
 $icbk              = "https://mosmos.co.ke/capturepayment";
 $iamount           = round(0.035*$trans_amount)+$trans_amount;
-$p1               = "callbackworks";
-$p2               = "value2test";
-$p3               = "value3test";
-$p4               = "value4test";
+$p1               = $amount;
+$p2               = "xx";
+$p3               = "xx";
+$p4               = "xx";
 $curr             = "KES"; //or USD
-$itel     = "254705118708";
-$ieml            = "kiseej@gmail.com";
+$itel     = $msisdn;
+$ieml            = $user->email;
 
 $icst = "1";
 $icrl = "0";
 $icurr = $curr;
-$ioid='MM248';
-$iinv='ffesrtc';
+$ioid=$booking_ref;
+$iinv=$booking_ref;
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 
