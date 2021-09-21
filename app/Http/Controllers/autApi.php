@@ -942,7 +942,7 @@ $ioid='MM248';
 $iinv='ffesrtc';
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
-return $data_string;
+
 // $data_string = "live=".$live."&oid=".$ioid."&inv".$iinv."&amount=".$amount."&tel=".$itel."&email=".$ieml."&vid=".$ivid."&curr=".$icurr."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&cbk=".$icbk."&cst=".$icst."&crl".$icrl;
 $hashed = hash_hmac("sha1", $datastring, $hashkey);
 // $datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
