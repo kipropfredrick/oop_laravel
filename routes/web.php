@@ -32,6 +32,9 @@ Route::get('/terms', function () {
 Route::get('/privacy-policy', function () {
     return view('privacy');
 });
+Route::get('/success', function () {
+    return view('front.ipaysuccess');
+});
 
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');

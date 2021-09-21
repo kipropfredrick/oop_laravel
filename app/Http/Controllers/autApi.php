@@ -930,7 +930,7 @@ $trans_amount=100;
 $rate=0.035;
 
 $ilive             = "1";
-$icbk              = "http://xxxx.com/xx/callback.php";
+$icbk              = "https://mosmos.co.ke/success";
 $iamount           = round(0.035*$trans_amount)+$trans_amount;
 $p1               = "callbackworks";
 $p2               = "value2test";
