@@ -921,8 +921,8 @@ public function createCardTransaction(Request $request){
 // $hashkey = env('IpayKey');
 // $IpayId=env('IpayId');
 
-$hashkey = 'demo';
-$ivid='demoCHANGED';
+$hashkey = 'demoCHANGED';
+$ivid='demo';
 
 $ilive             = "0";
 $icbk              = "http://smssystem.intrepidprojects.co.ke/autopaytest/callback.php";
