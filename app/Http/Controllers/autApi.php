@@ -929,7 +929,7 @@ if ($customer==null) {
     # code...
     return Array("successs"=>false,"an error occured try again later");
 }
-$user=\App\User::whereUser_id($customer->user_id)->first();
+$user=\App\User::whereId($customer->user_id)->first();
 $hashkey = '89siusx8siys8sus7';
 $ivid='rdfyne';
 
