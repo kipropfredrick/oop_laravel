@@ -921,11 +921,11 @@ public function createCardTransaction(Request $request){
 // $hashkey = env('IpayKey');
 // $IpayId=env('IpayId');
 
-// $hashkey = 'demoCHANGED';
-// $ivid='demo';
+$hashkey = '89siusx8siys8sus7';
+$ivid='rdfyne';
 
-$hashkey =  env('IpayKey');
-$ivid=env('IpayId');
+// $hashkey =  env('IpayKey');
+// $ivid=env('IpayId');
 
 $ilive             = "1";
 $icbk              = "http://xxxx.com/xx/callback.php";
