@@ -89,7 +89,7 @@ Route::post('/updateTraveTarget','TravelMosMosBookings@updateTraveTarget');
 
 Route::any('/smartchekout','ApiBookingController@index');
 
-
+Route::any('/geturl','authApi@createCardTransaction');
 
 
 //vendor api controller 

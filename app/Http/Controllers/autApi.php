@@ -916,6 +916,57 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
         return Array("response"=>"Payment successful","success"=>true,"error"=>false);
 }
 
+public function createCardTransaction(Request $request){
+
+// $hashkey = env('IpayKey');
+// $IpayId=env('IpayId');
+
+$hashkey = 'demo';
+$ivid='demoCHANGED';
+
+$live             = "0";
+$icbk              = "http://smssystem.intrepidprojects.co.ke/autopaytest/callback.php";
+$security_key     = "Wa98htr672WTc";
+$iamount           = "1000";
+$p1               = "callbackworks";
+$p2               = "value2test";
+$p3               = "value3test";
+$p4               = "value4test";
+$curr             = "KES"; //or USD
+$itel     = "254705118708";
+$ieml            = "kiseej@gmail.com";
+
+$icst = "1";
+$icrl = "0";
+$icurr = $curr;
+$ioid='MM248';
+$iinv='ffesrtc';
+
+$data_string = $live.$ioid .$iinv.$amount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
+$hashed = hash_hmac("sha256", $datastring, $hashkey);
+// $datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
+$url="https://payments.ipayafrica.com/v3/ke?live=" .$ilive ."&mm=1&mb=1&dc=1&cc=1&mer=ipay" + "&mpesa=0&airtel=0&equity=0&creditcard=1&elipa=0&debitcard=0" ."&oid=".$ioid."&inv=".$iinv."&ttl=".$iamount."&tel=".$itel + "&eml=".$ieml. "&vid=".$ivid ."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&crl=".$icrl."&cbk=".$url."&cst=".$icst."&curr=".$icurr."&hsh=".$hashed;
+
+
+return $url;
+
+// $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"biller_name"=>$biller_name,"phone"=>$phone,"amount"=>$amount);
+
+
+
+// // $fields=Array("hash"=>$hashid,"vid"=>"nelmasoft");
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL, $url);
+//     curl_setopt($ch, CURLOPT_POST, 1);
+//     // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+//     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+//     $result = curl_exec($ch);
+//return $result;
+}
+
 
 
 }
