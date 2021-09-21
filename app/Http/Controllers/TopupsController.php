@@ -711,7 +711,7 @@ return $count;
 
          function capturepayment(Request $request){
 
-Log::info(json_encode($request));
+Log::info(json_encode($request->all()));
 
 if ($request->status=="aei7p7yrx4ae34") {
   # code...
