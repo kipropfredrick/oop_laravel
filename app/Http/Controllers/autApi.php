@@ -954,7 +954,7 @@ $hashed = hash_hmac("sha1", $data_string, $hashkey);
 $url="https://payments.ipayafrica.com/v3/ke?live=".$ilive."&mm=1&mb=1&dc=1&cc=1&mer=ipay"."&mpesa=0&airtel=0&equity=0&creditcard=1&elipa=0&debitcard=0"."&oid=".$ioid."&inv=".$iinv."&ttl=".$iamount."&tel=".$itel."&eml=".$ieml."&vid=".$ivid."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&crl=".$icrl."&cbk=".$icbk."&cst=".$icst."&curr=".$icurr."&hsh=".$hashed;
 return $url;
 
-return Array("url"=>$url,"fee"=>(round(0.035*$trans_amount)),"trans_amount"=>(round(0.035*$trans_amount)+$trans_amount ));
+return Array("url"=>$parsed = parse_url($url),"fee"=>(round(0.035*$trans_amount)),"trans_amount"=>(round(0.035*$trans_amount)+$trans_amount ));
 
 // $fields=Array("vid"=>$IpayId,"hash"=>$hashid,"account"=>$account,"biller_name"=>$biller_name,"phone"=>$phone,"amount"=>$amount);
 
