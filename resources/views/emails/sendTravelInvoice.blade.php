@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>New Booking | Lipa Mos mos</title>
+    <title>New Payment | Lipa Mos mos</title>
     <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -110,7 +110,20 @@
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
             <div class="card" style="padding:10px;">
-                        <p>Hello, <strong>{{ucfirst($details['customer'])}}</strong> has booked your product, The booking reference is  <strong>{{$details['booking_reference']}}</strong>.</p>
+            <p>Hello, {{ucfirst($details['customer_name'])}}.</p>
+
+            <p>Your payment of <strong>KSh. {{number_format($details['latestPayment']->transaction_amount,2)}}</strong> for <strong>{{$details['product_name']}}</strong> has been received. The balance remaining is <strong>Ksh. {{$details['balance']}}</strong></p>
+
+            <p>Booking Code: <strong>{{$details['booking_reference']}}</strong><br>
+                M-PESA Reference: <strong>{{$details['latestPayment']->mpesapayment->transac_code}}</strong><br>
+                Payment Date: <strong>{{date('M d'.', '.'Y', strtotime($details['latestPayment']->mpesapayment->date_paid))}}</strong></p>
+             <p>APP NOW AVAILABLE</p>
+            <a href="http://bit.ly/MosMosApp" target="_blank">
+                Download our app to easily track your payments - http://bit.ly/MosMosApp.
+            </a>
+
+            <p>Find Invoice attached.</p>
+
                 </div>
 
                 <p>Thank you,<br/>
@@ -119,7 +132,7 @@
             <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
                 <div style="text-align: center;" class="ftr-socials">
                     <a href="https://facebook.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
-                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://travelmosmos.co.ke/assets/img/social/insta.png" alt=""></a>
+                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/insta.png" alt=""></a>
                 </div>
                 <div>
                     <span>

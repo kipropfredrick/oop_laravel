@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
+use \App\Mail\SendTravelPaymentEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
@@ -199,7 +200,7 @@ class MpesaPaymentController extends Controller
             $balance =number_format($balance,2);
 
             // Set your message
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             // Set your shortCode or senderId
             $from       = "Mosmos";
@@ -1028,7 +1029,7 @@ else{
 
             if($payment_count<2){
                 $shipping_cost = $booking->shipping_cost;
-                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
                 $message="Payment of KSh.{$transaction_amount} for {$bill_ref_no} received. Txn. {$code}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
@@ -1045,8 +1046,8 @@ else{
 
             }else{
 
-                // $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
-                $message="Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Txn.{$code}. Bal is KSh. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                // $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                $message="Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Txn.{$code}. Bal is KSh. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp";
                    $result=DB::table("monitorpay")->get();
                 if (count($result)==0) {
                     DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
@@ -1287,7 +1288,7 @@ else{
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
             
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
            
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1604,9 +1605,43 @@ else{
            
             $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
+            $user_customer = DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
             $recipients = $customer->phone;
 
             $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
+
+            $a_user = DB::connection('mysql2')->table('users')->where('id',$agent->user_id)->first();
+
+            if($booking->status == "pending"){
+
+                //   Booking made Notification
+    
+                // self::send_booking_made_mails($customer = $user_customer->name, $user_email = $user_customer->email,
+                //                               $agent_email = $a_user->email,$package_name = $booking->package_name,
+                //                               $booking_reference = $booking->booking_reference, $total_cost = $booking->total_cost
+                //                             );
+                $data = [];
+                $data['customer'] = $user_customer->name;
+                $data['user_email'] = $user_customer->email;
+                $data['agent_email'] = $a_user->email;
+                $data['package_name'] = $booking->package_name;
+                $data['booking_reference'] = $booking->booking_reference;
+                $data['total_cost'] = $booking->total_cost;
+                
+
+                $url = "127.0.0.1:8000/api/send-booking-made-email";
+
+                $curl = curl_init($url);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($curl);
+                $response = json_decode($response);
+                // return array($response);
+                curl_close($curl);
+    
+            }
 
             $current_online_payments = $agent->online_payments;
             $current_offline_payments = $agent->offline_payments;
@@ -1696,13 +1731,50 @@ else{
 
             $amount_paid = $booking->amount_paid + $transaction_amount;
 
-            $balance = $booking->balance - $transaction_amount;
+            $balance = $booking->balance - $transaction_amount; 
+
+            $f_balance = number_format($balance,2);
+            $f_transaction_amount =  number_format($transaction_amount);
 
             $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+            $message    ="Payment of KES. {$f_transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+
+            // Send Invoice
+
+            // $payments = DB::connection('mysql2')->table('payments')
+            //                 ->join('payment_logs','payments.payment_log_id','payment_logs.id')
+            //                 ->where('booking_id',$booking->id)
+            //                 ->select('payments.*','paymentSend Invoice_logs.*')
+            //                 ->orderBy('payments.id','DESC')
+            //                 ->get();
+
+            // $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
+
+
+            // $details  = [
+            //     'customer'=>$user_customer,
+            //     'customer_name'=>$user_customer->name,
+            //     'agent'=>$agent,
+            //     'payments'=>$payments,
+            //     'product_name'=>$booking->package_name,
+            //     'booking_reference'=>$booking->booking_reference,
+            //     'total_cost'=>number_format($booking->total_cost,2),
+            //     'amount_paid'=>number_format($booking->amount_paid),
+            //     'balance'=>$balance,
+            //     'booking'=>$booking,
+            //     'latestPayment'=>$latestPayment
+            // ];
+  
+
+            // Mail::to($user_customer->email)->send(new SendTravelPaymentEmail($details));
+
+
+            // Send Invoice End
+
 
             if($balance<1){
 
