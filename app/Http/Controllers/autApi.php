@@ -945,7 +945,7 @@ $iinv='ffesrtc';
 $data_string = $live.$ioid .$iinv.$amount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 $hashed = hash_hmac("sha256", $datastring, $hashkey);
 // $datastring = "account=".$account."&amount=".$amount."&biller_name=".$biller_name."&phone=".$phone."&vid=".$IpayId ;
-$url="https://payments.ipayafrica.com/v3/ke?live=" .$ilive ."&mm=1&mb=1&dc=1&cc=1&mer=ipay" + "&mpesa=0&airtel=0&equity=0&creditcard=1&elipa=0&debitcard=0" ."&oid=".$ioid."&inv=".$iinv."&ttl=".$iamount."&tel=".$itel + "&eml=".$ieml. "&vid=".$ivid ."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&crl=".$icrl."&cbk=".$url."&cst=".$icst."&curr=".$icurr."&hsh=".$hashed;
+$url="https://payments.ipayafrica.com/v3/ke?live=" .$ilive ."&mm=1&mb=1&dc=1&cc=1&mer=ipay"."&mpesa=0&airtel=0&equity=0&creditcard=1&elipa=0&debitcard=0" ."&oid=".$ioid."&inv=".$iinv."&ttl=".$iamount."&tel=".$itel."&eml=".$ieml. "&vid=".$ivid ."&p1=".$p1."&p2=".$p2."&p3=".$p3."&p4=".$p4."&crl=".$icrl."&cbk=".$url."&cst=".$icst."&curr=".$icurr."&hsh=".$hashed;
 
 
 return $url;
