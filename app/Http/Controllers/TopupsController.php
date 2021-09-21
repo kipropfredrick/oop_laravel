@@ -718,7 +718,7 @@ if ($request->status=="aei7p7yrx4ae34") {
   return redirect('/success');
 }
 else{
-    return redirect('/ipayfailed',compact('error'));
+    return redirect('/ipayfailed');
 }
 
          
