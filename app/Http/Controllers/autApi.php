@@ -921,11 +921,11 @@ public function createCardTransaction(Request $request){
 // $hashkey = env('IpayKey');
 // $IpayId=env('IpayId');
 
-$hashkey = '89siusx8siys8sus7';
-$ivid='rdfyne';
+// $hashkey = '89siusx8siys8sus7';
+// $ivid='rdfyne';
 
-// $hashkey =  env('IpayKey');
-// $ivid=env('IpayId');
+$hashkey =  env('IpayKey');
+$ivid=env('IpayId');
 $trans_amount=100;
 $rate=0.035;
 
