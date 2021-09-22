@@ -1258,12 +1258,12 @@ else{
 
 
  $recipients = $msisdn;
-
- $user=\App\User::whereId($booking->customer->user_id);
+$customer=\App\Customers::whereCustomer_id($booking->customer_id)->first();
+ $user=\App\User::whereId($customer->user_id);
 $obj=$user->first();
 if ($obj->balance<$transaction_amount) {
     # code...
-          return Array("response"=>"you have insufficient balance to complete this transaction.".json_encode($booking),"success"=>false,"error"=>true);
+          return Array("response"=>"you have insufficient balance to complete this transaction.".json_encode($user),"success"=>false,"error"=>true);
 }
 
            
