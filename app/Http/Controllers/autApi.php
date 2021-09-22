@@ -665,6 +665,18 @@ function MakeWalletPayment(Request $request){
 $bill_ref_no=$request->input("bookingref");
  //$message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
+            $travelPattern = "/t/i";
+    
+            $travelTrue = preg_match($travelPattern,$booking_ref);
+
+            if ($travelTrue==1) {
+
+
+
+                # code...
+                return $this->TravelWalletPayments($bill_ref_no,$amount,$phone,'','','',0);
+            }
+
 
 
 
@@ -1235,6 +1247,187 @@ else{
 
 
        }
+
+
+       public static function TravelWalletPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id){
+       $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
+       
+       if($booking == null){
+           return Array('response'=>"Booking Does not exist!","success"=>false);
+       }else{
+
+
+
+ $user=\App\User::whereId($booking->customer->user_id);
+$obj=$user->first();
+if ($obj->balance<$amount) {
+    # code...
+          return Array("response"=>"you have insufficient balance to complete this transaction.","success"=>false,"error"=>true);
+}
+
+           
+            $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
+
+            $user_customer = DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
+            $recipients = $customer->phone;
+
+            $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
+
+            $a_user = DB::connection('mysql2')->table('users')->where('id',$agent->user_id)->first();
+
+
+            $current_online_payments = $agent->online_payments;
+            $current_offline_payments = $agent->offline_payments;
+            $current_total_payments = $agent->total_payments;
+
+            $new_online_payments = $current_online_payments + $transaction_amount;
+            $new_total_payments = $agent->total_payments + $transaction_amount;
+
+            $admin_commission = $agent->system_payment_cost;
+
+            $payment_balance = $transaction_amount - $admin_commission;
+
+            DB::connection('mysql2')->table('travel_agents')
+                                    ->where('id',$booking->agent_id)
+                                    ->update([
+                                            'online_payments'=>$new_online_payments,
+                                            'wallet_balance'=>$agent->wallet_balance + $payment_balance,
+                                            'total_payments'=>$new_total_payments
+                                            ]);
+
+            $admin_wallet = DB::connection('mysql2')->table('admin_wallets')->first();
+            
+            if(empty($admin_wallet)){
+                DB::connection('mysql2')->table('admin_wallets')->insert(['previous_balance'=>0,'current_balance'=>$admin_commission]);
+            }else{
+                DB::connection('mysql2')->table('admin_wallets')->update(['previous_balance'=>$admin_wallet->previous_balance,'current_balance'=>($admin_wallet->current_balance + $admin_commission)]);
+            }
+
+           
+           $current_date = date('Y-m-d');
+
+           $date_from = date('Y-m-01', strtotime($current_date));
+
+           $date_to = date("Y-m-t", strtotime($date_from));
+
+           $period = date('M jS'.', '.'Y', strtotime($date_from))." to ".date('M jS'.', '.'Y', strtotime($date_to));
+
+           $commission = \DB::connection('mysql2')->table('system_commissions')->where('agent_id',$booking->agent_id)->where('period',$period)->first();
+
+           if(!empty($commission)){
+
+            $amount = $commission->transaction_amount + $admin_commission;
+
+            $transactions = $commission->transactions + 1;
+            $amount = $commission->transaction_amount + $admin_commission;
+
+            \DB::connection('mysql2')->table('system_commissions')->where('id',$commission->id)
+                         ->update([
+                                    'transactions'=>$transactions,
+                                    'transaction_amount'=>$commission->transaction_amount + $transaction_amount,
+                                    'commission_paid'=>$commission->commission_paid + $admin_commission,
+                                    'unit'=>$agent->system_payment_cost,
+                                ]);
+
+           }else{
+
+            $commission = [];
+            $commission['agent_id'] = $booking->agent_id;
+            $commission['period'] = $period;
+            $commission['unit'] = $agent->system_payment_cost;
+            $commission['transaction_amount'] = $transaction_amount;
+            $commission['commission_paid'] = $admin_commission;
+            $commission['date_from'] = $date_from;
+            $commission['date_to'] = $date_to;
+            $commission['transactions'] = 1;
+            $commission['created_at'] = now();
+            $commission['updated_at'] = now();
+
+            \DB::connection('mysql2')->table('system_commissions')->insert($commission);
+
+           }
+
+            $payment_data = [
+                            'payment_log_id'=>$log_id,
+                            'customer_id'=>$customer->id,
+                            'agent_id'=>$agent->id,
+                            'booking_id'=>$booking->id,
+                            'transaction_type'=>"Pay Bill",
+                            'amount'=>$transaction_amount,
+                            'admin_commission'=>$admin_commission,
+                            'balance'=>$payment_balance,
+                            'created_at'=>now(),
+                            'updated_at'=>now()
+                            ];
+
+            DB::connection('mysql2')->table('payments')->insert($payment_data);
+
+            $amount_paid = $booking->amount_paid + $transaction_amount;
+
+            $balance = $booking->balance - $transaction_amount; 
+
+            $f_balance = number_format($balance,2);
+            $f_transaction_amount =  number_format($transaction_amount);
+
+            $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
+
+         
+
+            if($balance<1){
+
+            $message = "Congratulations, You have completed Payment for ".$booking->package_name.".";
+
+            SendSMSController::sendMessage($recipients,$message,$type="payment_completion_notification");
+
+            $user = \DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
+            $message = $user->name." has completed Payment for ".$booking->package_name.".";
+
+            SendSMSController::sendMessage($recipients = $agent->phone,$message,$type="travel_payment_completion_notification");
+
+            $data['status'] = 'complete';
+
+            }
+
+            DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
+
+
+$user=\App\User::whereId($booking->customer->user_id);
+$obj=$user->first();
+if($obj!=null){
+    $mosmosbalance=$obj->balance;
+$mosmosbalance=$mosmosbalance-$trans_amount;
+$user->update(["balance"=>$mosmosbalance]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TB'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+
+           $message    ="Payment of KES. {$f_transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+
+            SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+$credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$transid,"sender"=>$obj->id,"type"=>$bill_ref_no);
+\App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    //$data=Array("name"=>"home","value"=>"home");
+    // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
+    $data=Array("name"=>"payment","value"=>"Payments");
+    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$trans_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+
+ return Array('response'=>"success","success"=>true);;
+
+       }
+
+    }
+
 
 
 
