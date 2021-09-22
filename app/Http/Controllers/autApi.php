@@ -1043,8 +1043,7 @@ $obj=$user->first();
                  }
             }
         }
-        Log::info(json_encode($booking));
-return 0;
+      
 
         $payment = new \App\Payments();
         $payment->booking_id = $booking->id;
