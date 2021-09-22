@@ -843,7 +843,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
     //$data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
     $data=Array("name"=>"payment","value"=>"Payments");
-    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$request->p1 ." for Order Ref ".$booking_ref." has been received.","Payment Received",$data);
+    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$request->amount ." for Order Ref ".$booking_ref." has been received.","Payment Received",$data);
 
 
 }
@@ -853,7 +853,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
         DB::table('mpesapayments')
             ->insert([
                       'payment_id'=>$payment_id,
-                      'amount_paid'=>$request->p1,
+                      'amount_paid'=>$request->amount,
                       'phone'=>$msisdn,
                       'transac_code'=>$transid,
                       'date_paid'=>$date_paid,
@@ -865,7 +865,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
 
         $recipients = $recipients = $booking->customer->phone;
 
-       $request->amount = number_format($request->p1,2);
+       $request->amount = number_format($request->amount,2);
         $balance =number_format($balance,2);
 
         $payment_count = \App\PaymentLog::where('BillRefNumber',$booking->booking_reference)->count();
@@ -875,12 +875,12 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
                     $shipping_cost = $booking->shipping_cost;
                     //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-                    $message="Payment of KSh.{$request->p1} for {$bill_ref_no} received. Txn. {$transid}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                    $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$transid}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
 
         }else{
 
-            $message    ="Payment of KES. {$request->p1} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
 
         }
 
@@ -898,7 +898,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
         $details = [
             'customer'=> $booking->customer->user->name,
             'booking_reference'=>$booking->booking_reference,
-            'amount_paid'=>$request->p1,
+            'amount_paid'=>$request->amount,
             'product'=>$booking->product->product_name,
             'mpesa_ref'=>$transid,
             'balance'=> $booking->balance
@@ -986,18 +986,18 @@ function capturepayment(Request $request){
 if ($request->status=="aei7p7yrx4ae34") {
   # code...
 
-$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->amount,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
 
 
     $carddetails=\App\Cardpayments::create($details);
     $request->phone=$request->mc;
-   $request->amount=$request->p1;
+   $request->amount=$request->amount;
     $request->bookingref=$request->id;
 
 
  $msisdn=$request->msisdn_idnum;
-        $amount=$request->p1;
+        $amount=$request->amount;
         $booking_ref=$request->id;
 $bill_ref_no=$request->id;
  //$message =  $this->stk_push($amount,$msisdn,$booking_ref);
@@ -1163,7 +1163,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
     //$data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
     $data=Array("name"=>"payment","value"=>"Payments");
-    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$request->p1 ." for Order Ref ".$booking_ref." has been received.","Payment Received",$data);
+    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$request->amount ." for Order Ref ".$booking_ref." has been received.","Payment Received",$data);
 
 
 }
@@ -1173,7 +1173,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
         DB::table('mpesapayments')
             ->insert([
                       'payment_id'=>$payment_id,
-                      'amount_paid'=>$request->p1,
+                      'amount_paid'=>$request->amount,
                       'phone'=>$msisdn,
                       'transac_code'=>$transid,
                       'date_paid'=>$date_paid,
@@ -1185,7 +1185,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
 
         $recipients = $recipients = $booking->customer->phone;
 
-       $request->amount = number_format($request->p1,2);
+       $request->amount = number_format($request->amount,2);
         $balance =number_format($balance,2);
 
         $payment_count = \App\PaymentLog::where('BillRefNumber',$booking->booking_reference)->count();
@@ -1195,12 +1195,12 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
                     $shipping_cost = $booking->shipping_cost;
                     //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-                    $message="Payment of KSh.{$request->p1} for {$bill_ref_no} received. Txn. {$transid}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                    $message="Payment of KSh.{$request->amount} for {$bill_ref_no} received. Txn. {$transid}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
 
 
         }else{
 
-            $message    ="Payment of KES. {$request->p1} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+            $message    ="Payment of KES. {$request->amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
 
         }
 
@@ -1218,7 +1218,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
         $details = [
             'customer'=> $booking->customer->user->name,
             'booking_reference'=>$booking->booking_reference,
-            'amount_paid'=>$request->p1,
+            'amount_paid'=>$request->amount,
             'product'=>$booking->product->product_name,
             'mpesa_ref'=>$transid,
             'balance'=> $booking->balance
