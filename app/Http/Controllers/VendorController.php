@@ -21,6 +21,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendRegistrationEmail;
 use DataTables;
 
+
 class VendorController extends Controller
 {
     /**

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Vendor;
 use Auth;
-
+use App\Products;
 class vendorApiController extends Controller
 {
     
