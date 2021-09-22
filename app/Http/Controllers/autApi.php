@@ -1257,7 +1257,7 @@ else{
        }else{
 
 
- $recipients = $msisdn;
+
 $customer=\App\Customers::whereId($booking->customer_id)->first();
  $user=\App\User::whereId($customer->user_id);
 $obj=$user->first();
@@ -1393,8 +1393,8 @@ if ($obj->balance<$transaction_amount) {
 
             DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
 
-
-$user=\App\User::whereId($booking->customer->user_id);
+$customer=\App\Customers::whereId($booking->customer_id)->first();
+ $user=\App\User::whereId($customer->user_id);
 $obj=$user->first();
 if($obj!=null){
     $mosmosbalance=$obj->balance;
