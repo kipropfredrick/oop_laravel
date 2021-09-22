@@ -983,8 +983,12 @@ function capturepayment(Request $request){
 
 Log::info(json_encode($request->all()));
 
-if ($request->status=="aei7p7yrx4ae34") {
+if ($request->status!="aei7p7yrx4ae34") {
   # code...
+
+$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->oid,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+
+    $carddetails=\App\Cardpayments::create($details);
     $request['phone']=$request->mc;
     $request['amount']=$request->p1;
     $request['bookingref']=$request->id;
@@ -1249,7 +1253,7 @@ else{
        }
 
 
-       public static function TravelWalletPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id){
+       public static function TravelWalletPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id,$type='topup'){
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
        if($booking == null){
@@ -1261,9 +1265,13 @@ else{
 $customer=\App\Customers::whereId($booking->customer_id)->first();
  $user=\App\User::whereId($customer->user_id);
 $obj=$user->first();
+if ($type=='topup') {
+    # code...
+
 if ($obj->balance<$transaction_amount) {
     # code...
           return Array("response"=>"you have insufficient balance to complete this transaction.".json_encode($user),"success"=>false,"error"=>true);
+}
 }
 
            
@@ -1392,10 +1400,13 @@ if ($obj->balance<$transaction_amount) {
             }
 
             DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->update($data);
-
-$customer=\App\Customers::whereId($booking->customer_id)->first();
+ $customer=\App\Customers::whereId($booking->customer_id)->first();
  $user=\App\User::whereId($customer->user_id);
 $obj=$user->first();
+if ($type=='topup') {
+    # code...
+
+
 if($obj!=null){
     $mosmosbalance=$obj->balance;
 $mosmosbalance=$mosmosbalance-$transaction_amount;
@@ -1424,11 +1435,27 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$mosmosbalance,"tran
  $obj->exceuteSendNotification(\App\User::whereId($customer->user_id)->first()->token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
 
 
- return Array('response'=>"success","success"=>true);;
+ return Array('response'=>"success","success"=>true);
 
        }
 
+}
+else{
+
+      $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+
+            SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+  $obj = new pushNotification();
+  
+    $data=Array("name"=>"payment","value"=>"Payments");
+ $obj->exceuteSendNotification(\App\User::whereId($customer->user_id)->first()->token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+
+
+ return Array('response'=>"success","success"=>true);
+
     }
+}
 }
 
 
