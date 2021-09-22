@@ -988,8 +988,7 @@ if ($request->status!="aei7p7yrx4ae34") {
 
 $details=Array('txncd'=>'test',"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
-Log::info(json_encode($details));
-return 0;
+
 
     $carddetails=\App\Cardpayments::create($details);
     $request->phone=$request->mc;
@@ -1013,9 +1012,11 @@ $bill_ref_no=$request->id;
 
  $date_paid = Carbon::today()->toDateString();
 
+Log::info(json_encode($booking_ref));
         $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$booking_ref)->first();
 
-
+Log::info(json_encode($booking));
+return 0;
  //return $message;
  $user=\App\User::whereId($booking->customer->user_id);
 $obj=$user->first();
