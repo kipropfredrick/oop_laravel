@@ -1258,7 +1258,7 @@ else{
 
 
  $recipients = $msisdn;
-$customer=\App\Customers::whereCustomer_id($booking->customer_id)->first();
+$customer=\App\Customers::whereId($booking->customer_id)->first();
  $user=\App\User::whereId($customer->user_id);
 $obj=$user->first();
 if ($obj->balance<$transaction_amount) {
