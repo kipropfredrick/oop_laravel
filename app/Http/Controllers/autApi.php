@@ -1257,10 +1257,11 @@ else{
        }else{
 
 
+ $recipients = $msisdn;
 
  $user=\App\User::whereId($booking->customer->user_id);
 $obj=$user->first();
-if (10<$amount) {
+if ($obj->balance<$transaction_amount) {
     # code...
           return Array("response"=>"you have insufficient balance to complete this transaction.","success"=>false,"error"=>true);
 }
@@ -1420,7 +1421,8 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
     //$data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
     $data=Array("name"=>"payment","value"=>"Payments");
-    $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$trans_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+   $result= $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$trans_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+    Log::info(json_encode($result));
 
  return Array('response'=>"success","success"=>true);;
 
