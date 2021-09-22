@@ -989,9 +989,9 @@ if ($request->status!="aei7p7yrx4ae34") {
 $details=Array('txncd'=>'test',"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->oid,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
     $carddetails=\App\Cardpayments::create($details);
-    $request['phone']=$request->mc;
-    $request['amount']=$request->p1;
-    $request['bookingref']=$request->id;
+    $request->phone=$request->mc;
+    $request->amount=$request->p1;
+    $request->bookingref=$request->id;
 
 
  $msisdn=$request->input("phone");
