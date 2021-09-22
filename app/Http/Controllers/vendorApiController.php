@@ -69,8 +69,11 @@ $credentials=Array("email"=>$username,"password"=>$password);
     }
 
       function getProducts(Request $request){
+
+      	$vendor_code=$request->vendor_code;
+		$vendor_id=\App\Vendor::whereVendor_code($vendor_code)->first()->id;
  
-       $products= Products::select('id','product_name','product_price','product_image','status')->where('status','=','approved')->inRandomOrder()->paginate(20);
+       $products= Products::select('id','product_name','product_price','product_image','status')->where('status','=','approved')->whereVendor_id($vendor_id)->inRandomOrder()->paginate(20);
 
        return $products->items();
 
