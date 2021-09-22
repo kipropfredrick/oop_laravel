@@ -669,9 +669,9 @@ $bill_ref_no=$request->input("bookingref");
     
             $travelTrue = preg_match($travelPattern,$booking_ref);
 
-            if ($travelTrue==1) {
+            if ($travelTrue) {
 
-
+ //return Array("response"=>"Booking does not exist","success"=>false,"error"=>true);
 
                 # code...
                 return $this->TravelWalletPayments($bill_ref_no,$amount,$phone,'','','',0);
@@ -1260,7 +1260,7 @@ else{
 
  $user=\App\User::whereId($booking->customer->user_id);
 $obj=$user->first();
-if ($obj->balance<$amount) {
+if (10<$amount) {
     # code...
           return Array("response"=>"you have insufficient balance to complete this transaction.","success"=>false,"error"=>true);
 }
