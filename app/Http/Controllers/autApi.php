@@ -983,10 +983,10 @@ function capturepayment(Request $request){
 
 
 
-if ($request->status!="aei7p7yrx4ae34") {
+if ($request->status=="aei7p7yrx4ae34") {
   # code...
 
-$details=Array('txncd'=>'test',"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
 
 
@@ -1043,7 +1043,7 @@ $obj=$user->first();
                  }
             }
         }
-      
+
 
         $payment = new \App\Payments();
         $payment->booking_id = $booking->id;
