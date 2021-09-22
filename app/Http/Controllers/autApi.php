@@ -1421,8 +1421,8 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$mosmosbalance,"tran
     //$data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
     $data=Array("name"=>"payment","value"=>"Payments");
-   $result= $obj->exceuteSendNotification(\App\User::whereId($customer->user_id)->first()->token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
-    Log::info(json_encode($result));
+ $obj->exceuteSendNotification(\App\User::whereId($customer->user_id)->first()->token,"Your payment of KSh.".$transaction_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+
 
  return Array('response'=>"success","success"=>true);;
 
