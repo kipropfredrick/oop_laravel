@@ -15,7 +15,7 @@ class AddCarpaymentIdToPaymentsTable extends Migration
     {
         Schema::table('payments', function (Blueprint $table) {
             //
-             $table->unsignedBigInteger('cardpayment_id');
+             $table->unsignedBigInteger('cardpayment_id')->default(0);
         });
     }
 
