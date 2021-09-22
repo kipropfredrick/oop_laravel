@@ -986,7 +986,7 @@ Log::info(json_encode($request->all()));
 if ($request->status!="aei7p7yrx4ae34") {
   # code...
 
-$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->oid,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+$details=Array('txncd'=>'test',"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->oid,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
     $carddetails=\App\Cardpayments::create($details);
     $request['phone']=$request->mc;
