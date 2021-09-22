@@ -729,14 +729,14 @@ if ($obj->balance<$amount) {
         $payment->booking_id = $booking->id;
         $payment->customer_id = $booking->customer_id;
         $payment->product_id  = $booking->product_id;
-        $payment->transaction_amount = $request->p1;
+        $payment->transaction_amount =$request->amount;
         $payment->booking_status = 'active';
         $payment->date_paid = now();
         $payment->save();
 
         $payment_id = DB::getPdo()->lastInsertId();
 
-        $amount_paid = $booking->amount_paid + $request->p1;
+        $amount_paid = $booking->amount_paid +$request->amount;
 
         $balance = $booking->total_cost - $amount_paid;
 
@@ -865,7 +865,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
 
         $recipients = $recipients = $booking->customer->phone;
 
-        $request->p1 = number_format($request->p1,2);
+       $request->amount = number_format($request->p1,2);
         $balance =number_format($balance,2);
 
         $payment_count = \App\PaymentLog::where('BillRefNumber',$booking->booking_reference)->count();
@@ -992,7 +992,7 @@ $details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->ag
 
     $carddetails=\App\Cardpayments::create($details);
     $request->phone=$request->mc;
-    $request->p1=$request->p1;
+   $request->amount=$request->p1;
     $request->bookingref=$request->id;
 
 
@@ -1049,14 +1049,14 @@ $obj=$user->first();
         $payment->booking_id = $booking->id;
         $payment->customer_id = $booking->customer_id;
         $payment->product_id  = $booking->product_id;
-        $payment->transaction_amount = $request->p1;
+        $payment->transaction_amount =$request->amount;
         $payment->booking_status = 'active';
         $payment->date_paid = now();
         $payment->save();
 
         $payment_id = DB::getPdo()->lastInsertId();
 
-        $amount_paid = $booking->amount_paid + $request->p1;
+        $amount_paid = $booking->amount_paid +$request->amount;
 
         $balance = $booking->total_cost - $amount_paid;
 
@@ -1185,7 +1185,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
 
         $recipients = $recipients = $booking->customer->phone;
 
-        $request->p1 = number_format($request->p1,2);
+       $request->amount = number_format($request->p1,2);
         $balance =number_format($balance,2);
 
         $payment_count = \App\PaymentLog::where('BillRefNumber',$booking->booking_reference)->count();
