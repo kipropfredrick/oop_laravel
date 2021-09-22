@@ -1263,7 +1263,7 @@ else{
 $obj=$user->first();
 if ($obj->balance<$transaction_amount) {
     # code...
-          return Array("response"=>"you have insufficient balance to complete this transaction.".json_encode($user),"success"=>false,"error"=>true);
+          return Array("response"=>"you have insufficient balance to complete this transaction.".json_encode($booking),"success"=>false,"error"=>true);
 }
 
            
