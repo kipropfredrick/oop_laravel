@@ -79,5 +79,19 @@ $credentials=Array("email"=>$username,"password"=>$password);
 
 
     }
+    
+       public function search(Request $request){
+
+$search=$request->input('search');
+     
+
+            $products =   \App\Products::select('id','product_name','product_price','product_image','status')->where ( 'product_name', 'LIKE', '%' . $search . '%' )->where('status','=','approved')->paginate(20);
+                        
+
+return $products->items();
+       
+
+    }
+
 
 }

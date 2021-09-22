@@ -98,6 +98,7 @@ Route::prefix('vendor')->group(function () {
   Route::get('/dashboard','vendorApiController@index');
   Route::any('/bookings','vendorApiController@bookings');
   Route::get('/getProducts','vendorApiController@getProducts');
+  Route::get('/search','vendorApiController@search');
   
  
 });
