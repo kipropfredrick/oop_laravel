@@ -1015,8 +1015,7 @@ $bill_ref_no=$request->id;
 Log::info(json_encode($booking_ref));
         $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$booking_ref)->first();
 
-Log::info(json_encode($booking->id));
-return 0;
+
  //return $message;
  $user=\App\User::whereId($booking->customer->user_id);
 $obj=$user->first();
@@ -1044,6 +1043,8 @@ $obj=$user->first();
                  }
             }
         }
+        Log::info(json_encode($booking));
+return 0;
 
         $payment = new \App\Payments();
         $payment->booking_id = $booking->id;
