@@ -68,4 +68,13 @@ $credentials=Array("email"=>$username,"password"=>$password);
        return $bookings;
     }
 
+      function getProducts(Request $request){
+ 
+       $products= Products::select('id','product_name','product_price','product_image','status')->where('status','=','approved')->inRandomOrder()->paginate(20);
+
+       return $products->items();
+
+
+    }
+
 }
