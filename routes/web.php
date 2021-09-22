@@ -43,7 +43,7 @@ Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
 
-Route::any('/capturepayment', 'TopupsController@capturepayment')->name('admin.capturepayment');
+Route::any('/capturepayment', 'autApi@capturepayment')->name('admin.capturepayment');
 
 
 Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
