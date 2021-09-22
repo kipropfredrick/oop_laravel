@@ -1398,7 +1398,7 @@ $customer=\App\Customers::whereId($booking->customer_id)->first();
 $obj=$user->first();
 if($obj!=null){
     $mosmosbalance=$obj->balance;
-$mosmosbalance=$mosmosbalance-$trans_amount;
+$mosmosbalance=$mosmosbalance-$transaction_amount;
 $user->update(["balance"=>$mosmosbalance]);
 
         for($i=0;$i<1000000;$i++){
@@ -1410,7 +1410,7 @@ break;  }
         }
 
 
-           $message    ="Payment of KES. {$f_transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+           $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1421,7 +1421,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
     //$data=Array("name"=>"home","value"=>"home");
     // $obj->exceuteSendNotification($user->first()->token,"Buy Airtime and pay utility bills at KSh.0 transaction cost.","Booking payment successful!",$data);
     $data=Array("name"=>"payment","value"=>"Payments");
-   $result= $obj->exceuteSendNotification($user->first()->token,"Your payment of KSh.".$trans_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
+   $result= $obj->exceuteSendNotification(\App\User::whereId($customer->user_id)->first()->token,"Your payment of KSh.".$trans_amount ." for Order Ref ".$bill_ref_no." has been received.","Payment Received",$data);
     Log::info(json_encode($result));
 
  return Array('response'=>"success","success"=>true);;
