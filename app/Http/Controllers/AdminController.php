@@ -3976,7 +3976,7 @@ foreach ($topups as $key => $value) {
 return view("backoffice.topups.topups",compact('topups','title'));
     }
     function utilities(Request $request){
-              $topups= topups::whereNotIn("type",['topup','airtime'])->latest()->get();
+              $topups= topups::whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->latest()->get();
 foreach ($topups as $key => $value) {
     # code...
     $value->user=\App\User::whereId($value->sender)->first();
