@@ -186,7 +186,7 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','airtime'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->sum('amount');
 
   // $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->distinct('customer_id')->count();
 
@@ -200,7 +200,7 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
 
   $uc=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->distinct('sender')->count();
-  $ub=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','airtime'])->distinct('sender')->count();
+  $ub=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->distinct('sender')->count();
 
 
 
@@ -4171,9 +4171,9 @@ for ($i=0; $i <$days ; $i++) {
 
  // $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','airtime'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->sum('amount');
 
-  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','airtime'])->distinct('sender')->count();
+  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->distinct('sender')->count();
 
 $array=Array("date"=>$currentday,"total"=>$dayutility,"unique"=>$uniquecustomers);
  array_push($payments, $array);
