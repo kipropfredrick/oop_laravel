@@ -1038,6 +1038,8 @@ return redirect($url);
         $msisdn=$request->input("phone");
         $amount=$request->input('amount');
         $booking_ref=$request->input("bookingref");
+          $kk=$request->input("bookingref");
+        
  list($msisdn, $network) = $this->get_msisdn_network($request->phone);
 
         if (!$msisdn){
@@ -1047,7 +1049,7 @@ return redirect($url);
 
         }
  $message =  $this->stk_push($amount,$valid_phone,$booking_ref);
-return $bookingref;
+return $kk;
 
  $encrypted = encrypt($booking_ref, "mosmos#$#@!89&^");
  return redirect('http://travel.test/payments/'.$encrypted."/invoice");
