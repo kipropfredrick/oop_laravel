@@ -44,6 +44,8 @@ Route::get('/register-email', function (){
 });
 
 Route::any('/capturepayment', 'autApi@capturepayment')->name('admin.capturepayment');
+Route::any('/TravelCardTransaction', 'autApi@TravelCardTransaction')->name('admin.TravelCardTransaction');
+
 
 
 Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');

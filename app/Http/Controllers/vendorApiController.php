@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Vendor;
 use Auth;
 use App\Products;
+use DB;
 class vendorApiController extends Controller
 {
     
@@ -93,5 +94,22 @@ return $products->items();
 
     }
 
+     public function payments(Request $request){
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product','booking')->select('product_name')->orderBy('id', 'DESC')->limit(1)->get();
+        $allPayments=[];
+
+
+  
+for ($i=0; $i < count($payments); $i++) { 
+    # code...
+    $array=Array("product_name"=>$payments[$i]['product']->product_name,"payment_ref"=>$payments[$i]['mpesapayment']?$payments[$i]['mpesapayment']->transac_code:"","booking_reference"=>$payments[$i]['booking']?$payments[$i]['booking']->booking_reference:"","transaction_amount"=>$payments[$i]->transaction_amount,"date"=>$payments[$i]->date_paid);
+    array_push($allPayments, $array);
+
+}
+return $payments;
+     
+}
 
 }

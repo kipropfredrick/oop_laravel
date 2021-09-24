@@ -99,6 +99,7 @@ Route::prefix('vendor')->group(function () {
   Route::any('/bookings','vendorApiController@bookings');
   Route::get('/getProducts','vendorApiController@getProducts');
   Route::get('/search','vendorApiController@search');
+  Route::get('/payments','vendorApiController@payments');
   
  
 });
