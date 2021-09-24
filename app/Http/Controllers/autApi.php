@@ -1033,6 +1033,26 @@ return redirect($url);
 }
 
 
+      public function TravelMpesaTransaction(Request $request){
+
+        $msisdn=$request->input("phone");
+        $amount=$request->input('amount');
+        $booking_ref=$request->input("bookingref");
+ list($msisdn, $network) = $this->get_msisdn_network($request->phone);
+
+        if (!$msisdn){
+            return Array("response"=>"Please enter a valid phone number!","error"=>true);
+        }else{
+            $valid_phone = $msisdn;
+
+        }
+ $message =  $this->stk_push($amount,$valid_phone,$booking_ref);
+
+
+ return back();
+    }
+
+
 function capturepayment(Request $request){
 
   return redirect('/success');
