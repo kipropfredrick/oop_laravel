@@ -1048,9 +1048,19 @@ return redirect($url);
         }
  $message =  $this->stk_push($amount,$valid_phone,$booking_ref);
 
-
- return back();
+ $encrypted = encrypt($booking_ref, "mosmos#$#@!89&^");
+ return redirect('http://travel.test/payments/'.$encrypted."/invoice");
     }
+    /**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
+
 
 
 function capturepayment(Request $request){
