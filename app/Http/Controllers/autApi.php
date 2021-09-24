@@ -1053,7 +1053,7 @@ return redirect($url);
 
  $encrypted = encrypt("T85300", "mosmos#$#@!89&^");
 
- return redirect('http://travel.test/payments/'.$encrypted."/invoice");
+ return "success";
     }
     /**
  * Returns an encrypted & utf8-encoded
