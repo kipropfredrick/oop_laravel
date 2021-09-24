@@ -1052,7 +1052,7 @@ return redirect($url);
 
 
 
- return redirect("http://travel.test/payments/".encrypt($kk, "mosmos#$#@!89&^")."/invoice");
+ return back();
     }
     /**
  * Returns an encrypted & utf8-encoded
