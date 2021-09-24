@@ -1049,9 +1049,10 @@ return redirect($url);
 
         }
  $message =  $this->stk_push($amount,$valid_phone,$booking_ref);
-return $kk;
+
 
  $encrypted = encrypt($kk, "mosmos#$#@!89&^");
+ return $encrypted;
  return redirect('http://travel.test/payments/'.$encrypted."/invoice");
     }
     /**
