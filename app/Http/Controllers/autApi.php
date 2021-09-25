@@ -930,8 +930,8 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
 
 public function createCardTransaction(Request $request){
 
-// $hashkey = env('IpayKey');
-// $IpayId=env('IpayId');
+$hashkey = env('IpayKey');
+$IpayId=env('IpayId');
 $msisdn=$request->input("phone");
 $amount=$request->input('amount');
 $booking_ref=$request->input("bookingref");
@@ -942,8 +942,8 @@ if ($customer==null) {
     return Array("successs"=>false,"an error occured try again later");
 }
 $user=\App\User::whereId($customer->user_id)->first();
-$hashkey = '89siusx8siys8sus7';
-$ivid='rdfyne';
+// $hashkey = '89siusx8siys8sus7';
+// $ivid='rdfyne';
 
 // $hashkey =  env('IpayKey');
 // $ivid=env('IpayId');
