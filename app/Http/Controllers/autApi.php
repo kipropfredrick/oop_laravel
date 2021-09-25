@@ -931,7 +931,7 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
 public function createCardTransaction(Request $request){
 
 $hashkey = env('IpayKey');
-$IpayId=env('IpayId');
+$ivid=env('IpayId');
 $msisdn=$request->input("phone");
 $amount=$request->input('amount');
 $booking_ref=$request->input("bookingref");
