@@ -34,7 +34,7 @@ label {
 }
 
 /* buttons and links */
-a {
+.powered a, .form-check-label a {
     color: #1e22a9;
 }
 
@@ -42,7 +42,7 @@ a {
     background: #006de1;
     color: #ffffff;
     border-radius: 0;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .p-btn:hover {

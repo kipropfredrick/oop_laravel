@@ -98,8 +98,8 @@ button.mdg-btn-search:hover {
 
 .dropdown-item {
     padding: 5px;
+    white-space: normal !important;
 }
-
 /* mega menu */
 .megamenu-li {
 	position: static;
