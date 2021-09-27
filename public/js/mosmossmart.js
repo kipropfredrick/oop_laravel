@@ -114,7 +114,7 @@ if (!mmis_in_stock) {
         document.getElementById("productPrice").innerHTML =mmprice;
 
 };
-});
+
 
 
 var s=`
@@ -423,7 +423,7 @@ document.getElementById("successdiv").innerHTML="<p > "+""+"</p>";
 });
 
       // document.getElementById("mosmosproductimage").src =image;
-   
+});   
        
 //     });
 // }); 
