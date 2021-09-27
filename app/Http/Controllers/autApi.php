@@ -994,9 +994,10 @@ if ($customer==null) {
     return Array("successs"=>false,"an error occured try again later");
 }
 $user=\App\User::whereId($customer->user_id)->first();
-$hashkey = '89siusx8siys8sus7';
-$ivid='rdfyne';
-
+// $hashkey = '89siusx8siys8sus7';
+// $ivid='rdfyne';
+$hashkey = env('IpayKey');
+$ivid=env('IpayId');
 // $hashkey =  env('IpayKey');
 // $ivid=env('IpayId');
 $trans_amount=$amount;
