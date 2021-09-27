@@ -21,15 +21,15 @@ label {
     font-size: 14px;
 }
 
-input[type=text], 
-input[type=email], 
-input[type=password], 
-input[type=search], 
-input[type=number], 
-input[type=url], 
-input[type=tel], 
-input[type=date], 
-select, textarea {
+.mm-form-group input[type=text], 
+.mm-form-group input[type=email], 
+.mm-form-group input[type=password], 
+.mm-form-group input[type=search], 
+.mm-form-group input[type=number], 
+.mm-form-group input[type=url], 
+.mm-form-group input[type=tel], 
+.mm-form-group input[type=date], 
+.mm-form-group select, .mm-form-group textarea {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
