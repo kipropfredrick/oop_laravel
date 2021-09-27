@@ -23,6 +23,8 @@ label {
 
 .mmf-custom {
     width: 100%;
+    max-width: 100%;
+    height: 46px;
     padding: 12px 20px;
     margin: 8px 0;
     border: 2px solid rgba(129,129,129,.2);
@@ -42,14 +44,16 @@ label {
 /* form on large screens */
 @media screen and (min-width: 480px) {
     .mm-form-group {
-        max-width: 48%;
+        width: 47%;
+        max-width: 47%;
     }
 }
 
 /* form on mobile phones */
 @media screen and (max-width: 480px) {
     .mm-form-group {
-        max-width: 100%;
+        width: 97%;
+        max-width: 97%;
     }
 }
 
