@@ -21,7 +21,7 @@ class ApiBookingController extends Controller
     function index(Request $request){
 
     	// $decrypted = decrypt($request->secret_key, "mosmos#$#@!89&^");
-$request['vendor_code']="VD8";
+$request['vendor_code']="VD10";
     	$vendor_code=Vendor::whereVendor_code($request->vendor_code)->first();
 
     	if ($vendor_code==null) {
