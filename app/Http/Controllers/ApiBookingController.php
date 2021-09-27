@@ -19,7 +19,7 @@ class ApiBookingController extends Controller
 {
 
     function index(Request $request){
-
+Log::info(json_encode($request));
     	 $decrypted = decrypt($request->secret_key, "mosmos#$#@!89&^");
 $request['vendor_code']=$decrypted;
     	$vendor_code=Vendor::whereVendor_code($request->vendor_code)->first();
