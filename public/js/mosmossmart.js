@@ -44,7 +44,7 @@ var onDeclinefunc=function(data){
       
         link1.type = 'text/css';
       
-        link1.href = 'api.css'; 
+        link1.href = 'https://mosmos.co.ke/css/api.css'; 
   
         // Get HTML head element to append 
         // link element to it 
