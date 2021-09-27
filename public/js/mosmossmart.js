@@ -105,6 +105,7 @@ if (!mmis_in_stock) {
         alert('Please select some product options before proceeding with Lipa Mos Mos.');
      
 }
+alert(mmitemName);
 
       document.getElementById("productName").innerHTML =mmitemName;
         document.getElementById("productPrice").innerHTML =mmprice;
@@ -468,6 +469,8 @@ function include(filename, onload) {
 //   }
 
 // }
+
+
 
 
 
