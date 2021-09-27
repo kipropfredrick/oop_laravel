@@ -21,19 +21,19 @@ var onApprovefunc= function(data){
 var onDeclinefunc=function(data){
 };
 
-// Create new link Element
-        var link = document.createElement('link'); 
   
-        // set the attributes for link element
-           link.rel = 'stylesheet'; 
-      
-        link.type = 'text/css';
-      
-        link.href = 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css'; 
-  
-        // Get HTML head element to append 
-        // link element to it 
-        document.getElementsByTagName('HEAD')[0].appendChild(link); 
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                    var modal = document.getElementById("LMMPopUp");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+    
+
+
+
 
 
 
@@ -44,7 +44,7 @@ var onDeclinefunc=function(data){
       
         link1.type = 'text/css';
       
-        link1.href = 'https://mosmos.co.ke/css/api.css'; 
+        link1.href = 'api.css'; 
   
         // Get HTML head element to append 
         // link element to it 
@@ -80,67 +80,53 @@ var onDeclinefunc=function(data){
         // link element to it 
         document.getElementsByTagName('HEAD')[0].appendChild(link3);
 
-
-include('https://code.jquery.com/jquery-3.5.1.min.js', function() {
-    $(document).ready(function() {
-
-
-//add other scripts
-
-
-
- //        include('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js', function() {
- //    $(document).ready(function() {
- // // add bootstrap script 
-
-
- //  include('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', function() {
- //    $(document).ready(function() {
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
-
-  include('https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js', function() {
-    $(document).ready(function() {
- //          //const mosmosobj = new mosmos("Lipa Mos Mos");
-$('#mosmos').addClass('btn p-btn');
-$('#mosmos').attr("data-target", "#exampleModal");
-$('#mosmos').attr("data-toggle",'modal');
-$('#mosmos').html('Lipa Mos Mos');
-$( "#mosmos" ).click(function() {
+ var mosmosbutton=document.getElementById("mmBtn");
+mosmosbutton.classList.add('btn');
+mosmosbutton.classList.add('p-btn');
+// $('#mosmos').attr("data-target", "#exampleModal");
+// $('#mosmos').attr("data-toggle",'modal');
+mosmosbutton.innerHTML='Lipa Mos Mos';
+mosmosbutton.onclick=function() {
     if (mmprice!=0) {
 if (!mmis_in_stock) {
     alert('This product is out of stock.');
-     setTimeout(
-  function() 
-  {
-$("#exampleModal").modal('hide');
-  }, 1000);
+   
 
-}}else{
+}else{
+      var modal = document.getElementById("LMMPopUp");
+     modal.style.display = "block";
+   
+}
+
+
+
+}else{
         alert('Please select some product options before proceeding with Lipa Mos Mos.');
-        setTimeout(
-  function() 
-  {
-$("#exampleModal").modal('hide');
-  }, 1000);
+     
 }
 
       document.getElementById("productName").innerHTML =mmitemName;
         document.getElementById("productPrice").innerHTML =mmprice;
-});
+};
 
 var s=`
- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Order now, Lipa Mos Mos</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
+ 
+
+
+
+
+  
+            <!-- modal content -->
+            <div class="mm-modal-main">
+                <div class="mm-modal-content">
+                    <div class="mm-modal-header">
+                        <span class="mm-modal-title" id="modalTitle">Order now, Lipa Mos Mos</span>
+                        <span class="close">&times;</span>
                     </div>
 
-                    <div class="modal-body">
-                    <div id="successdiv" class="bg-success text-white">
+                    <div class="mm-modal-body">
+                        <div id="successdiv" class="bg-success text-white">
 
                     </div> 
                        <div id="failurediv" class="bg-danger text-white ">
@@ -152,42 +138,40 @@ var s=`
                             Minimum deposit is <strong>KSh.500</strong>.
                         </div>
 
-
-                       <form action="https://mosmos.co.ke/api/smartchekout" method="post" id="mosmos-form">
-                                       
+                        <form action="https://mosmos.co.ke/api/smartchekout" method="post" id="mosmos-form">
+                          
                                         <input type="hidden" name="quantity" value="1">
                                         <input type="hidden" name="product_id" value="1">
                                         <input name="status" value="pending" type="hidden">
                                         <input name="minDeposit" value="1" type="hidden">
-                        
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+                            <div class="mm-form-row">
+                                <div class="mm-form-group">
                                     <label>Full Name*</label>
-                                    <input required="" name="name" type="text" class="form-control" placeholder="Full Name">
+                                             <input required="" id="name" name="name" type="text" placeholder="Full Name">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="mm-form-group">
                                     <label>Phone Number*</label>
-                                    <input  type="tel" required name="phone" class="form-control" placeholder="Phone Number">
+                                    <input  type="tel" id="phone" required name="phone" placeholder="Phone Number">
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+                            <div class="mm-form-row">
+                                <div class="mm-form-group">
                                     <label>Email Address*</label>
                                     <!-- make it required for now -->
-                                    <input required="" type="email" name="email" class="form-control" placeholder="Email Address">
+                                  <input required="" id="email" type="email" name="email" placeholder="Email Address">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="mm-form-group">
                                     <label>Initial Deposit*</label>
-                                    <input type="number" min="500" required name="initial_deposit" class="form-control" placeholder="Ksh.500 minimum">
+                                        <input id="amount" type="number" min="500" required name="initial_deposit" placeholder="Ksh.500 minimum">
                                 </div>
                             </div>
 
                             <!-- outside nairobi (select2) -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
+                            <div class="mm-form-row">
+                                <div class="mm-form-group">
                                     <label>Select your county*</label>
-                                    <select id="county" class="form-control" name="county_id">
+                                 <select id="county"  name="county_id">
                                         <option selected>-- Select your county --</option>
                                          <option value="2" class="counties">Mombasa</option>
                                                                                     <option value="3" class="counties">Kwale</option>
@@ -239,27 +223,24 @@ var s=`
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                <div class="mm-form-group">
                                     <label>Exact Location*</label>
-                                    <input type="text" required name="exact_location" class="form-control" placeholder="E.g. Town, street">
+                                    <input id="location" type="text" required name="exact_location"  placeholder="E.g. Town, street">
                                 </div>
                             </div>
 
                             <!-- terms -->
-                            <div class="mb-2">
-                                <div class="form-group">
-                                    <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terms">
+                            <div class="mm-terms">
+                                <div>
+                                    <input type="checkbox" id="terms">
                                     <label class="form-check-label" for="terms">
                                         I agree to the <a href="https://mosmos.co.ke/terms" target="_blank">Terms of Service</a> and <a href="https://mosmos.co.ke/privacy-policy" target="_blank">Privacy Policy</a>*
                                     </label>
-                                    </div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-block p-btn">Complete Booking</button>
-                        
-  <div class="col-12 overlay" style="position:absolute;display:none;" id="spinner">
+                            <button type="submit" class="p-btn-block p-btn">Complete Booking</button>
+                              <div class="col-12 overlay" style="position:absolute;display:none;" id="spinner">
       <div class="d-flex justify-content-center">  
       
 
@@ -283,30 +264,43 @@ var s=`
  </style>
                         </form>
 
-  <div class="powered">
-                    <small></span><a href="https://mosmos.co.ke/" target="_blank">Powered by Mosmos Payments</a></small>
-                </div>
                     </div>
 
-              
+                    <div class="powered">
+                        <small></span><a href="https://mosmos.co.ke/" target="_blank">Powered by Mosmos Payments</a></small>
+                    </div>
+                </div>
 
             </div>
-        </div>
-        </div>
+            <!-- end -->
+       
 
-<style>
-.mdg-features {
-    background: #333;
-    color: #ffffff;
-    padding: 20px;
-    margin: 0;
-    border-bottom: 5px solid #f68b1e;
-}
-.modal-container { z-index: 9999999}
-  </style>
+        <script>
+
+
+                </script>
 `;
+var htmlObject = document.createElement('div');
 
-$('body').append(s);
+  htmlObject.setAttribute("id","LMMPopUp");
+   htmlObject.setAttribute("class","mm-modal");
+htmlObject.innerHTML = s;
+
+ document.body.appendChild(htmlObject);
+
+
+        var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                    var modal = document.getElementById("LMMPopUp");
+                modal.style.display = "none";
+                }
+
+
 
 
 
@@ -326,57 +320,96 @@ $('body').append(s);
     //     }
     //  });
 
-$("#mosmos-form").submit(function(e) {
+document.getElementById("mosmos-form").addEventListener('submit',function(e) {
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
-$("#spinner").show();
-    var form = $(this);
+document.getElementById("spinner").style.display='block';
+    var form = document.getElementById("mosmos-form");
 
 var productName='<input type="hidden" name="product_name" value="'+mmitemName+'">';
 var keyInput='<input type="hidden" name="secret_key" value="'+secret_key+'">';
 var productPrice='<input type="hidden" name="productPrice" value="'+mmprice+'">';
 var weight='<input type="hidden" name="weight" value="'+mmweight+'">';
-
+var allitems=document.createElement("div");
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
 // var productPrice='<input type="hidden" name="name" value="'+productPrice+'">';
-form.append(productName);
+allitems.innerHTML=productName+keyInput+productPrice+weight;
+form.appendChild(allitems);
 
-form.append(keyInput);
-form.append(productPrice);
-form.append(weight);
-    var url = form.attr('action');
-    
-    $.ajax({
-           type: "POST",
-           url: url,
-           data: form.serialize(), // serializes the form's elements.
-           success: function(data)
-           {
-            $("#spinner").hide();
+// form.appendChild(keyInput);
+// form.appendChild(productPrice);
+// form.appendChild(weight);
+    var url = form.action;
+    var name=document.getElementById("name").value;
+    var email=document.getElementById("email").value;
+    var phone=document.getElementById("phone").value;
+    var amount=document.getElementById("amount").value;
+    var location=document.getElementById("location").value;
+    var county=document.getElementById("county").value
+    var data = {name:name,email:email,phone:phone,initial_deposit:amount,exact_location:location,county_id:county,product_name:mmitemName,secret_key:secret_key,productPrice:mmprice,weight:mmweight};
+
+
+var request = new XMLHttpRequest();
+               
+                request.open("POST", url, true);
+                request.setRequestHeader("Content-Type", "application/json");
+                request.onreadystatechange = function () {
+                    if (request.readyState === 4 && request.status === 200) {
+                       var data=JSON.parse(request.responseText);
+                        document.getElementById("spinner").style.display='none';
             if(data.status){
               // $("#mosmosmodal").modal('hide');
               //onApprovefunc(data);
-              $("#desc").html("<h3>Booking successful</h3><p>Activate your order by paying <strong>KSh.500</strong> to Paybill Number <strong>4040299</strong> and Account Number <strong>"+data.booking_reference+"</strong>. Thank you.</p>");
+              document.getElementById("desc").innerHTML="<h3>Booking successful</h3><p>Activate your order by paying <strong>KSh.500</strong> to Paybill Number <strong>4040299</strong> and Account Number <strong>"+data.booking_reference+"</strong>. Thank you.</p>";
                       console.log(data);
-                      $("#mosmos-form").hide();
-   $("#failurediv").html("<p> "+""+"</p>");
+                      document.getElementById("mosmos-form").style.display='none';
+   document.getElementById("failurediv").innerHTML="<p> "+""+"</p>";
             }
             else{
               //onDeclinefunc(data);
           
-                   $("#failurediv").html("<p class='p-1'> "+data.message+"</p>");
+                   document.getElementById("failurediv").innerHTML="<p class='p-1'> "+data.message+"</p>";
                       console.log(data);
-$("#successdiv").html("<p > "+""+"</p>");
+document.getElementById("successdiv").innerHTML="<p > "+""+"</p>";
                       console.log(data);
             }
-              // alert(JSON.stringify(data)); // show response from the php script.
-           },
-           error:function(data){
-            console.log(data);
-            alert("An error occured processing your request");
-            $("#spinner").hide();
-           }
-         });
+                    }
+                };
+            
+                request.send(JSON.stringify(data));
+
+    
+//     $.ajax({
+//            type: "POST",
+//            url: url,
+//            data: form.serialize(), // serializes the form's elements.
+//            success: function(data)
+//            {
+//             $("#spinner").hide();
+//             if(data.status){
+//               // $("#mosmosmodal").modal('hide');
+//               //onApprovefunc(data);
+//               $("#desc").html("<h3>Booking successful</h3><p>Activate your order by paying <strong>KSh.500</strong> to Paybill Number <strong>4040299</strong> and Account Number <strong>"+data.booking_reference+"</strong>. Thank you.</p>");
+//                       console.log(data);
+//                       $("#mosmos-form").hide();
+//    $("#failurediv").html("<p> "+""+"</p>");
+//             }
+//             else{
+//               //onDeclinefunc(data);
+          
+//                    $("#failurediv").html("<p class='p-1'> "+data.message+"</p>");
+//                       console.log(data);
+// $("#successdiv").html("<p > "+""+"</p>");
+//                       console.log(data);
+//             }
+//               // alert(JSON.stringify(data)); // show response from the php script.
+//            },
+//            error:function(data){
+//             console.log(data);
+//             alert("An error occured processing your request");
+//             $("#spinner").hide();
+//            }
+//          });
 
     
 });
@@ -391,20 +424,8 @@ $("#successdiv").html("<p > "+""+"</p>");
 
 
 
-    });
-}); 
-
-
-
-
-
-    });
-});
-
 
 //
-include('https://kit.fontawesome.com/a076d05399.js', function() {
- }); 
 
 
 
