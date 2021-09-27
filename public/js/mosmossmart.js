@@ -88,6 +88,9 @@ mosmosbutton.classList.add('p-btn');
 // $('#mosmos').attr("data-toggle",'modal');
 mosmosbutton.innerHTML='Lipa Mos Mos';
 mosmosbutton.onclick=function() {
+    if (!varProduct) {
+        simpleassign();
+    }
     if (mmprice!=0) {
 if (!mmis_in_stock) {
     alert('This product is out of stock.');
