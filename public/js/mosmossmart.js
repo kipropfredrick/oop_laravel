@@ -284,11 +284,13 @@ var s=`
  </style>
                         </form>
 
-                    </div>
-
-                    <div class="powered">
+                        <div class="powered">
                         <small></span><a href="https://mosmos.co.ke/" target="_blank">Powered by Mosmos Payments</a></small>
                     </div>
+
+                    </div>
+
+                    
                 </div>
 
             </div>
