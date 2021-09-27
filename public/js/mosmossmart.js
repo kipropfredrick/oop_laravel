@@ -154,11 +154,11 @@ var s=`
                             <div class="mm-form-row">
                                 <div class="mm-form-group">
                                     <label>Full Name*</label>
-                                             <input required="" id="name" name="name" type="text" placeholder="Full Name">
+                                             <input required="" id="mmname" name="name" type="text" placeholder="Full Name">
                                 </div>
                                 <div class="mm-form-group">
                                     <label>Phone Number*</label>
-                                    <input  type="tel" id="phone" required name="phone" placeholder="Phone Number">
+                                    <input  type="tel" id="mmphone" required name="phone" placeholder="Phone Number">
                                 </div>
                             </div>
 
@@ -166,11 +166,11 @@ var s=`
                                 <div class="mm-form-group">
                                     <label>Email Address*</label>
                                     <!-- make it required for now -->
-                                  <input required="" id="email" type="email" name="email" placeholder="Email Address">
+                                  <input required="" id="mmemail" type="email" name="email" placeholder="Email Address">
                                 </div>
                                 <div class="mm-form-group">
                                     <label>Initial Deposit*</label>
-                                        <input id="amount" type="number" min="500" required name="initial_deposit" placeholder="Ksh.500 minimum">
+                                        <input id="mmamount" type="number" min="500" required name="initial_deposit" placeholder="Ksh.500 minimum">
                                 </div>
                             </div>
 
@@ -232,7 +232,7 @@ var s=`
 
                                 <div class="mm-form-group">
                                     <label>Exact Location*</label>
-                                    <input id="location" type="text" required name="exact_location"  placeholder="E.g. Town, street">
+                                    <input id="mmlocation" type="text" required name="exact_location"  placeholder="E.g. Town, street">
                                 </div>
                             </div>
 
@@ -348,12 +348,12 @@ form.appendChild(allitems);
 // form.appendChild(productPrice);
 // form.appendChild(weight);
     var url = form.action;
-    var name=document.getElementById("name").value;
-    var email=document.getElementById("email").value;
-    var phone=document.getElementById("phone").value;
-    var amount=document.getElementById("amount").value;
-    var location=document.getElementById("location").value;
-    var county=document.getElementById("county").value
+    var name=document.getElementById("mmname").value;
+    var email=document.getElementById("mmemail").value;
+    var phone=document.getElementById("mmphone").value;
+    var amount=document.getElementById("mmamount").value;
+    var location=document.getElementById("mmlocation").value;
+    var county=document.getElementById("mmcounty").value
     var data = {name:name,email:email,phone:phone,initial_deposit:amount,exact_location:location,county_id:county,product_name:mmitemName,secret_key:secret_key,productPrice:mmprice,weight:mmweight};
 
 
