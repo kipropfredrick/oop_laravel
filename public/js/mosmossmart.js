@@ -154,11 +154,15 @@ var s=`
                             <div class="mm-form-row">
                                 <div class="mm-form-group">
                                     <label>Full Name*</label>
-                                             <input required="" id="mmname" name="name" type="text" placeholder="Full Name">
+                                             <input required="" id="mmname" name="name" type="text" class="mmf-custom"
+
+ placeholder="Full Name">
                                 </div>
                                 <div class="mm-form-group">
                                     <label>Phone Number*</label>
-                                    <input  type="tel" id="mmphone" required name="phone" placeholder="Phone Number">
+                                    <input  type="tel" class="mmf-custom"
+
+ id="mmphone"  required name="phone" placeholder="Phone Number">
                                 </div>
                             </div>
 
@@ -166,11 +170,15 @@ var s=`
                                 <div class="mm-form-group">
                                     <label>Email Address*</label>
                                     <!-- make it required for now -->
-                                  <input required="" id="mmemail" type="email" name="email" placeholder="Email Address">
+                                  <input required="" id="mmemail" type="email" class="mmf-custom"
+
+ name="email" placeholder="Email Address">
                                 </div>
                                 <div class="mm-form-group">
                                     <label>Initial Deposit*</label>
-                                        <input id="mmamount" type="number" min="500" required name="initial_deposit" placeholder="Ksh.500 minimum">
+                                        <input id="mmamount" type="number" class="mmf-custom"
+
+ min="500" required name="initial_deposit" placeholder="Ksh.500 minimum">
                                 </div>
                             </div>
 
@@ -178,7 +186,9 @@ var s=`
                             <div class="mm-form-row">
                                 <div class="mm-form-group">
                                     <label>Select your county*</label>
-                                 <select id="county"  name="county_id">
+                                 <select id="county" class="mmf-custom"
+
+  name="county_id">
                                         <option selected>-- Select your county --</option>
                                          <option value="2" class="counties">Mombasa</option>
                                                                                     <option value="3" class="counties">Kwale</option>
@@ -232,7 +242,9 @@ var s=`
 
                                 <div class="mm-form-group">
                                     <label>Exact Location*</label>
-                                    <input id="mmlocation" type="text" required name="exact_location"  placeholder="E.g. Town, street">
+                                    <input id="mmlocation" type="text" class="mmf-custom"
+
+ required name="exact_location"  placeholder="E.g. Town, street">
                                 </div>
                             </div>
 
