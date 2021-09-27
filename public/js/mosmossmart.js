@@ -241,7 +241,8 @@ var s=`
 
                             <button type="submit" class="p-btn-block p-btn">Complete Booking</button>
                               <div class="col-12 overlay" style="position:absolute;display:none;" id="spinner">
-      <div class="d-flex justify-content-center">  
+      <div class="row d-flex justify-content-center" style=" display: flex;
+  justify-content: center;">  
       
 
         <span class="fa fa-spinner fa-spin fa-4x " style="color: orange;"></span></div>
