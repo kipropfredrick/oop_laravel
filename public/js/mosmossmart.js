@@ -81,7 +81,10 @@ var onDeclinefunc=function(data){
         document.getElementsByTagName('HEAD')[0].appendChild(link3);
 
  //          //const mosmosobj = new mosmos("Lipa Mos Mos");
- var mosmosbutton=document.getElementById("mmBtn");
+
+ window.addEventListener("load", function(){
+    // ....
+     var mosmosbutton=document.getElementById("mmBtn");
 mosmosbutton.classList.add('btn');
 mosmosbutton.classList.add('p-btn');
 // $('#mosmos').attr("data-target", "#exampleModal");
@@ -109,8 +112,10 @@ if (!mmis_in_stock) {
 
       document.getElementById("productName").innerHTML =mmitemName;
         document.getElementById("productPrice").innerHTML =mmprice;
-        
+
 };
+});
+
 
 var s=`
  
