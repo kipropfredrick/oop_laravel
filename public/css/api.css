@@ -22,14 +22,14 @@ label {
 }
 
 .mmf-custom {
-    width: 100%;
-    max-width: 100%;
-    height: 46px;
-    padding: 12px 20px;
-    margin: 8px 0;
-    border: 2px solid rgba(129,129,129,.2);
-    border-radius: 4px;
-    box-sizing: border-box;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 48px !important;
+    padding: 12px 20px !important;
+    margin: 8px 0 !important;
+    border: 2px solid rgba(129,129,129,.2) !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
 }
 
 .mm-form-row {
