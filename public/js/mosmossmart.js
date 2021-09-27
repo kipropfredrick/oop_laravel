@@ -353,7 +353,7 @@ form.appendChild(allitems);
     var phone=document.getElementById("mmphone").value;
     var amount=document.getElementById("mmamount").value;
     var location=document.getElementById("mmlocation").value;
-    var county=document.getElementById("mmcounty").value
+    var county=document.getElementById("county").value
     var data = {name:name,email:email,phone:phone,initial_deposit:amount,exact_location:location,county_id:county,product_name:mmitemName,secret_key:secret_key,productPrice:mmprice,weight:mmweight};
 
 
