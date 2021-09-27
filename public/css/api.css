@@ -21,15 +21,7 @@ label {
     font-size: 14px;
 }
 
-input[type=text].mmf-custom, 
-input[type=email].mmf-custom, 
-input[type=password].mmf-custom, 
-input[type=search].mmf-custom, 
-input[type=number].mmf-custom, 
-input[type=url].mmf-custom, 
-input[type=tel].mmf-custom, 
-input[type=date].mmf-custom, 
-select.mmf-custom, textarea.mmf-custom {
+.mmf-custom {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
