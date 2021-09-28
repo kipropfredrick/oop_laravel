@@ -1459,7 +1459,7 @@ $message = "Congratulations, You have completed Payment for ".$product->product_
  // return $bookings;
                 if($request->ajax()){
 
-              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('bookings.status','=','complete')->orderBy('bookings.updated_at', 'DESC');
+              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->withCount('payments')->where('bookings.status','=','complete')->orderBy('bookings.updated_at', 'DESC');
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);

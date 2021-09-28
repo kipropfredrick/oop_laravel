@@ -50,6 +50,7 @@
                                   <th class="thead">Sent to Wallet</th>
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
+                                 <th class="thead">Count</th>
                                 <th class="thead">Progress</th>
                                 <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
@@ -233,7 +234,12 @@ ${date}
 								 `;
 
             	}
-            }
+            },
+            {
+		  data: "payments_count",name:'bookings.payments_count',
+		  "width": "400px",
+		  render: (data) => numberFormat(data)
+		}
 
                 ,{
 		data:"due_date","render": function(data, type, full, meta){
