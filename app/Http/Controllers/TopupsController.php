@@ -268,7 +268,8 @@ $res=$paybillobj->AirtimeTopUp($array);
 
 if ($decdata==null) {
   # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+  Log::info("error".json_encode($res));
+  return Array("data"=>Array("response"=>"an error occured processing your request."),"error"=>true);
 }
 
  if (($decdata->ResponseCode)=="000") {

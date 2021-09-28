@@ -748,6 +748,18 @@ if ($level==4) {
         $message = $obj->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+               $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+            'total_cost'=>$total_cost,
+        'productname'=>$product->product_name,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 return Back()->with("success",$stkMessage);
             
         }
@@ -808,6 +820,18 @@ return Back()->with("success",$stkMessage);
         $message = $obj->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+               $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'productname'=>$product->product_name,
+        'total_cost'=>$total_cost,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
       return Back()->with("success",$stkMessage);
             
@@ -862,19 +886,34 @@ return Back()->with("success",$stkMessage);
 
        $recipients = $valid_phone;
 
-       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking->booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+       // $details = [
+       //  'email' => $request->email,
+       //  'name'=>$request->name,
+       //  'booking_reference'=>$booking_reference,
+       //  'initial_deposit'=>number_format($request->initial_deposit),
+       //  'password'=>$request->input('phone'),
+       //  'url'=>encrypt($booking->booking_reference, "mosmos#$#@!89&^");
+       //  ];
+
+       //  Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
        $details = [
         'email' => $request->email,
         'name'=>$request->name,
+        'productname'=>$product->product_name,
         'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone')
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
+
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;

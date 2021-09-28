@@ -46,6 +46,13 @@ Route::get('/register-email', function (){
 Route::any('/capturepayment', 'autApi@capturepayment')->name('admin.capturepayment');
 Route::any('/TravelCardTransaction', 'autApi@TravelCardTransaction')->name('admin.TravelCardTransaction');
 Route::any('/simulatetransaction', 'autApi@TravelMpesaTransaction')->name('admin.TravelMpesaTransaction');
+Route::prefix('payments')->group(function () {
+  Route::get('/{ordernumber}/invoice','InvoicePaymentController@index');
+  Route::get('/{ordernumber}/pay','InvoicePaymentController@pay');
+    Route::get('keysettings','InvoicePaymentController@keySettings');
+  
+
+});
 
 
 

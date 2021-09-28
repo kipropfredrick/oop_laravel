@@ -147,33 +147,47 @@ $token=$value->token;
 
 
   }
-    if (in_array("pending", $category))
+    if (in_array("nobooking", $category))
   {
   $customers=\App\Bookings::pluck('customer_id')->toArray();
     $users = \App\Customers::whereNotIn("id",$customers)->pluck('user_id')->toArray();
 $users=User::whereIn("id",$users)->whereNotNull("token")->get();
 
-
-// foreach ($users as $key => $value) {
-
-// $token=$value->token;
-//     if ($token==null) {
-//         # code...
-
-//     }
-//     else{
-//         $count=$count+1;
-//     $data=Array("name"=>"home","value"=>"home");
-//     // $obj->exceuteSendNotification($token,$message,$title,$data);
-
-//        $messages = str_replace('{customerName}',$value->name, $message);
-//     $obj->exceuteSendNotification($token,$messages,$title,$data);
-//         }
-
-// }
-
 $devices=array();
 
+foreach ($users as $key => $value) {
+
+$token=$value->token;
+    if ($token==null) {
+        # code...
+
+    }
+    else{
+        $count=$count+1;
+        array_push($devices, $token);
+
+        }
+
+}
+
+
+    $data=Array("name"=>"home","value"=>"home");
+    //$messages = str_replace('{customerName}',$value->name, $message);
+     $messages= $message;
+    $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);
+
+
+
+  }
+
+
+
+  if (in_array("pending", $category))
+  {
+  $customers=\App\Bookings::where('status','=','pending')->pluck('customer_id')->toArray();
+$users = \App\Customers::whereIn("id",$customers)->pluck('user_id')->toArray();
+  $users=User::whereIn("id",$users)->get();
+$devices=array();
 foreach ($users as $key => $value) {
 
 $token=$value->token;

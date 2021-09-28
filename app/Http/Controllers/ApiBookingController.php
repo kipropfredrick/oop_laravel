@@ -331,6 +331,16 @@ $data=Array();
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+        \       $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
          	return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
             
@@ -393,6 +403,16 @@ $data=Array();
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
+               $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
@@ -459,7 +479,8 @@ $data=Array();
         'name'=>$request->name,
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone')
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
@@ -476,6 +497,16 @@ $data=Array();
 	return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
 
     }
+
+       /**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
 
 
     /**

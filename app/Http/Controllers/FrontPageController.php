@@ -1436,7 +1436,7 @@ break;
         
         $booking->customer_id = $existingCustomer->id; 
         $booking->product_id  = $request->product_id;
-        $booking->booking_reference = $this->get_booking_reference();
+        $booking->booking_reference = $booking_reference;
         $booking->quantity  = '1';
        
         $booking->item_cost = $product->product_price;
@@ -1476,6 +1476,18 @@ break;
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+         $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'productname'=>$product->product_name,
+        'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
             
@@ -1506,7 +1518,7 @@ break;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
-        $booking->booking_reference = $this->get_booking_reference();
+        $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = $total_cost;
@@ -1537,6 +1549,18 @@ break;
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+         $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'productname'=>$product->product_name,
+        'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
             
@@ -1573,7 +1597,7 @@ break;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
-        $booking->booking_reference = $this->get_booking_reference();
+        $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
@@ -1595,12 +1619,25 @@ break;
 
        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
-       $details = [
+       // $details = [
+       //  'email' => $request->email,
+       //  'name'=>$request->name,
+       //  'booking_reference'=>$booking_reference,
+       //  'initial_deposit'=>number_format($request->initial_deposit),
+       //  'password'=>$request->input('phone')
+       //  ];
+
+       //  Mail::to($request->email)->send(new SendRegistrationEmail($details));
+
+         $details = [
         'email' => $request->email,
         'name'=>$request->name,
+        'productname'=>$product->product_name,
         'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone')
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
@@ -1618,6 +1655,16 @@ break;
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
 
     }
+
+    /**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
 
 
     /**
