@@ -1070,18 +1070,18 @@ function encrypt($pure_string, $encryption_key) {
 
 function capturepayment(Request $request){
 
-  return redirect('/success');
+
 
 if ($request->status=="aei7p7yrx4ae34") {
   # code...
 
-$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->amount,"total_amount"=>$request->mc,"channel"=>$request->channel);
+$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
 
 
     $carddetails=\App\Cardpayments::create($details);
     $request->phone=$request->mc;
-   $request->amount=$request->amount;
+   $request->amount=$request->p1;
     $request->bookingref=$request->id;
 
 
@@ -1332,9 +1332,10 @@ $credentials=Array("amount"=>$amount,"balance"=>$mosmosbalance,"transid"=>$trans
             'latestPayment'=>$latestPayment
         ];
 
-        Mail::to($booking->customer->user->email)->send(new SendPaymentEmail($details));
 
-  return redirect('/success');
+
+  return redirect(route('cardsuccess',["details"=>$booking->booking_reference]));
+
 }
 else{
     return redirect('/ipayfailed');
@@ -1550,6 +1551,24 @@ else{
     }
 }
 }
+
+function cardsuccess(Request $request, $details){
+
+      $booking = \App\Bookings::with('product','payments','payments.mpesapayment','customer','customer.user','county','location')->where('booking_reference','=',$details)->first();
+        $details  = [
+            'customer_name'=>$booking->customer->user->name,
+            'product_name'=>$booking->product->product_name,
+            'booking_reference'=>$booking->booking_reference,
+            'total_cost'=>number_format($booking->total_cost,2),
+            'amount_paid'=>number_format($booking->amount_paid),
+            'balance'=>$booking->balance,
+            "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+            
+        ];
+    return view('front.cardconfirmation',["details"=>$details]);
+}
+
+
 
 
 

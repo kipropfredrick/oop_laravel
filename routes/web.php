@@ -32,9 +32,7 @@ Route::get('/terms', function () {
 Route::get('/privacy-policy', function () {
     return view('privacy');
 });
-Route::get('/success', function () {
-    return view('front.ipaysuccess');
-});
+Route::get('/cardsuccess/{details}', 'autApi@cardsuccess')->name('cardsuccess');
 Route::get('/ipayfailed', function () {
     return view('front.ipayfailed');
 });
