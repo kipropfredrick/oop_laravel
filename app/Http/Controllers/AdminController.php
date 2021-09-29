@@ -1009,8 +1009,20 @@ $products=[];
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
-    $vendor->commission_rate  = $request->input('commission_rate');
+ 
+    $vendor->commssionrate_enabled= $request->input('commissionrate_enabled');
+
+    if ($request->input('commissionrate_enabled')==1) {
+        # code...
+        $vendor->commission_rate  = $request->input('commission_rate');
     $vendor->commission_cap  = $request->input('commission_cap');
+    }
+    else{
+      $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
+    $vendor->fixed_bank= $request->input('fixed_bank');
+    }
+
+    
     $vendor->country  = $request->input('country');
 
     $vendor->save();

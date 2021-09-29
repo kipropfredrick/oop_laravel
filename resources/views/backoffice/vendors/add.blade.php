@@ -98,13 +98,29 @@
 				
 				</div>
 
-				   <div class="row">
+<div>
+	<label>Commission Type</label>
+		<div class="form-check">
+  <input class="form-check-input" type="radio" id="flexRadioDefault1" onchange="updateWidget(this)" checked="" value="1" name="commissionrate_enabled">
+  <label class="form-check-label" for="flexRadioDefault1">
+    Commission Rate
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="commissionrate_enabled" id="flexRadioDefault2" value="0" onchange="return updateWidget(this)" >
+  <label class="form-check-label" for="flexRadioDefault2" >
+    Fixed Commission
+  </label>
+</div>
+</div>
+
+				   <div class="row" id="commissionrate">
 
 			   <div class="col-md-6">
 
 			   <div class="form-group">
 				<label>Commission rate</label>
-					<input required value="{{ old('commission_rate') }}" tclass="form-control" name="commission_rate" placeholder="3" type="number" class="form-control @if($errors->has('commission_rate')) invalid_field @endif" required step=".01">
+					<input  value="{{ old('commission_rate') }}" tclass="form-control" name="commission_rate" placeholder="3" type="number" class="form-control @if($errors->has('commission_rate')) invalid_field @endif"  step=".01">
 				
 					@error('commission_rate')
 								<div class="invalid-feedback">
@@ -118,7 +134,7 @@
 				<div class="col-md-6">
 				<div class="form-group">
 					<label>Commission cap</label>
-						<input required value="{{ old('commission_cap') }}"  class="form-control" name="commission_cap" placeholder="5000" type="number" class="form-control @if($errors->has('commission_cap')) invalid_field @endif" required>
+						<input  value="{{ old('commission_cap') }}"  class="form-control" name="commission_cap" placeholder="5000" type="number" class="form-control @if($errors->has('commission_cap')) invalid_field @endif" >
 					
 						@error('commission_cap')
 									<div class="invalid-feedback">
@@ -130,7 +146,37 @@
 			   
 			   </div>
 
+					   <div class="row" id="fixed">
+
+			   <div class="col-md-6">
+
+			   <div class="form-group">
+				<label>Mobile Money</label>
+					<input  value="{{ old('fixed_mobile_money') }}" tclass="form-control" name="fixed_mobile_money" placeholder="3" type="number" class="form-control @if($errors->has('fixed_mobile_money')) invalid_field @endif"  step="1">
 				
+					@error('fixed_mobile_money')
+								<div class="invalid-feedback">
+									{{ $message }}
+								</div>
+					@enderror
+				</div>
+			   
+			   </div>
+
+				<div class="col-md-6">
+				<div class="form-group">
+					<label>Bank/Card Payments</label>
+						<input  value="{{ old('fixed_bank') }}"  class="form-control" name="fixed_bank" placeholder="5000" type="number" class="form-control @if($errors->has('fixed_bank')) invalid_field @endif" >
+					
+						@error('fixed_bank')
+									<div class="invalid-feedback">
+										{{ $message }}
+									</div>
+						@enderror
+				</div>
+				</div>
+			   
+			   </div>
 				<div class="row">
 
 				 <div class="col-md-6">
@@ -207,4 +253,28 @@
 		
         
 		</div>
+		
+
 @endsection
+
+
+@section('extra-js')
+
+
+<script type="text/javascript">
+		
+
+			window.addEventListener("load", function(){
+    	$("#fixed").hide();
+		
+});
+				function updateWidget(item){
+			 	$("#fixed").toggle();
+			 	 	$("#commissionrate").toggle();
+			}
+		</script>
+
+
+
+
+@endsetion

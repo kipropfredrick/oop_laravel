@@ -739,7 +739,7 @@ if ($obj->balance<$amount) {
         $amount_paid = $booking->amount_paid +$request->amount;
 
         $balance = $booking->total_cost - $amount_paid;
-
+\App\commission_records::create(Array("amount"=>$amount_paid,"booking_reference"=>$booking_ref,"transaction_origin"=>"wallet"));
         if($balance<1){
 
             DB::table('bookings')
@@ -1074,6 +1074,34 @@ function capturepayment(Request $request){
 
 if ($request->status=="aei7p7yrx4ae34") {
   # code...
+     $travelPattern = "/t/i";
+    
+    $travelTrue = preg_match($travelPattern,$request->id);
+
+    if ($travelTrue) {
+        # code...
+        $details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+
+        //$bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id,$type='topup'
+
+ DB::connection('mysql2')->table('cardpayments')->insert($details);
+
+ $log_id=DB::getPdo()->lastInsertId();
+
+ $res=$this->TravelWalletPayments($request->txncd,$request->id,$request->p1,$request->msisdn_idnum,"","","",$log_id,"card");
+
+ if ($res['success']) {
+     # code...
+    return redirect("http://travel.test/cardsuccess/".$request->id);
+ }
+ else {
+    return redirect("/failed");
+ }
+
+
+    }
+
+
 
 $details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
@@ -1347,7 +1375,7 @@ else{
        }
 
 
-       public static function TravelWalletPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id,$type='topup'){
+       public static function TravelWalletPayments($transid='xx',$bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id,$type='topup'){
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
        if($booking == null){
@@ -1380,11 +1408,11 @@ if ($obj->balance<$transaction_amount) {
             $a_user = DB::connection('mysql2')->table('users')->where('id',$agent->user_id)->first();
 
 
-            $current_online_payments = $agent->online_payments;
-            $current_offline_payments = $agent->offline_payments;
+            $current_card_payments = $agent->card_payments;
+            //$current_offline_payments = $agent->offline_payments;
             $current_total_payments = $agent->total_payments;
 
-            $new_online_payments = $current_online_payments + $transaction_amount;
+            $new_card_payments = $current_card_payments + $transaction_amount;
             $new_total_payments = $agent->total_payments + $transaction_amount;
 
             $admin_commission = $agent->system_payment_cost;
@@ -1394,9 +1422,9 @@ if ($obj->balance<$transaction_amount) {
             DB::connection('mysql2')->table('travel_agents')
                                     ->where('id',$booking->agent_id)
                                     ->update([
-                                            'online_payments'=>$new_online_payments,
-                                            'wallet_balance'=>$agent->wallet_balance + $payment_balance,
-                                            'total_payments'=>$new_total_payments
+                                            'card_payments'=>$new_card_payments,
+                                            'usd_wallet_balance'=>$agent->usd_wallet_balance + $payment_balance,
+                                           'cardtotal_payments'=>$new_total_payments
                                             ]);
 
             $admin_wallet = DB::connection('mysql2')->table('admin_wallets')->first();
