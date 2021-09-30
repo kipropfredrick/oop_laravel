@@ -706,6 +706,8 @@ class FrontPageController extends Controller
 
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
 
+        $brand = \App\Brand::where('slug','!=',$request->brand)->first();
+
         $current_b = $brand;
 
         $brands = \App\Brand::where('id','!=',$brand->id)->get();
@@ -752,6 +754,12 @@ class FrontPageController extends Controller
                                                         $query->where('subcategory_id', $current_sub->id);
                                                     }
                                             })
+                                            ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
                                             ->inRandomOrder()
                                             ->paginate(20);
                                             
@@ -769,6 +777,12 @@ class FrontPageController extends Controller
                                                         $query->where('subcategory_id', $current_sub->id);
                                                     }
                                         })
+                                        ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
                                         ->orderBy($p,$o)
                                         ->paginate(20);
 
@@ -784,6 +798,12 @@ class FrontPageController extends Controller
                                                         $query->where('subcategory_id', $current_sub->id);
                                                     }
                                          })
+                                         ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
                                         ->inRandomOrder()
                                         ->paginate(20);
         }
@@ -802,6 +822,8 @@ class FrontPageController extends Controller
         $categories = \App\Categories::all();
         
         $sub_slug = $request->sub;
+
+        $brand = \App\Brand::where('slug','!=',$request->brand)->first();
         
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
         
@@ -832,6 +854,12 @@ class FrontPageController extends Controller
                                             {
                                                     if (!empty($current_sub)) {
                                                         $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                        })
+                                        ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
                                                     }
                                         })
                                         ->orderBy($p,$o)
