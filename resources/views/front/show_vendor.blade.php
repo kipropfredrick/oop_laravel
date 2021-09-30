@@ -107,7 +107,7 @@
                                             <label class="col-3 col-form-label">Sort by:</label>
                                             <div class="col-7">
                                             
-                                            <form action="/vendors/{{$vendor->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_d">
+                                            <form action="/vendors/{{$c_vendor->slug}}<?php if(!empty($current_b)){echo "?brand=".$current_b->slug;} ?><?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_d">
                                                 <select onchange="filter_d(this);" name="sort_by" id="sort_by_d" class="form-control">
                                                     <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                                     <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
@@ -231,7 +231,7 @@
             <div class="hh-ft-sort">
                 <div class="form-group">
                     <div class="">
-                        <form action="/vendors/{{$vendor->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_mob">
+                        <form action="/vendors/{{$c_vendor->slug}}<?php if(!empty($current_b)){echo "?brand=".$current_b->slug;} ?><?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_mob">
                             <select onchange="filter_mob(this);" name="sort_by" id="sort_by" class="form-control">
                                 <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                 <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
