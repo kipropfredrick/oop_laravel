@@ -3383,7 +3383,7 @@ $value->commission=$totalbanktransfers+$totalmobiletransfers;
         }
       }
 $commissions=$result;
-
+return $result;
     //   return response()->json($commissions);
 
       return view('backoffice.commissions.fixedpayout',compact('commissions'));
