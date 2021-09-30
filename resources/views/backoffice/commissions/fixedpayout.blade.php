@@ -41,6 +41,7 @@
                                 <th class="thead">Admin's Commisssion</th>
                                 <th class="thead">Agent/Vendor</th>
                                 <th class="thead">Vendor payout</th>
+                                    <th class="thead">Action</th>
 								<!-- <th class="thead">Completed On</th> -->
 							</tr>
 						</thead>
@@ -77,6 +78,8 @@
                                     @endif
                                     </td>
                                     <td>KES {{number_format($commision->vendor_payout)}}</td>
+                                    <th><a href="{{route('showcommissions',$commision->booking->id)}}">View</a></th>
+
 									<!-- <td>{{date('M d'.', '.'Y', strtotime($commision->created_at))}}</td> -->
                                 </tr>
                             @endforeach
