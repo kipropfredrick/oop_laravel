@@ -3378,7 +3378,7 @@ $value->totalmobiletransfers=$totalmobiletransfers;
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
                    array_push($result, $value);
 
-
+return $value;
             }
         }
       }
