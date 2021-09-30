@@ -78,7 +78,7 @@
                                     @endif
                                     </td>
                                     <td>KES {{number_format($commision->vendor_payout)}}</td>
-                                    <th><a href="{{route('showcommissions',$commision->booking->id)}}">View</a></th>
+                                    <th><a href="{{route('showcommissions',['id'=>$commision->booking->id])}}">View</a></th>
 
 									<!-- <td>{{date('M d'.', '.'Y', strtotime($commision->created_at))}}</td> -->
                                 </tr>
