@@ -74,6 +74,8 @@ Route::get('/update_bookings_agent_or_vendor','FrontPageController@update_bookin
 
 Route::post('/checkpayment','MpesaPaymentController@checkpayment');
 
+Route::get('/vendor/{slug}','FrontPageController@vendor');
+
 Route::prefix('c2b')->group(function () {
     Route::post('/confirm-7CavgY5gFFwzktQH6XjcS2','MpesaPaymentController@mpesapayment');
     Route::post('/validate-UjQerTLb4EM78rHBSmYgCG','MpesaPaymentController@validation_url');

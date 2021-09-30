@@ -1002,9 +1002,16 @@ $products=[];
 
     $user_id = DB::getPdo()->lastInsertId();
 
+    $slug =  str_replace(' ', '-', $request->business_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
     $vendor = new \App\Vendor();
     $vendor->user_id = $user_id;
     $vendor->business_name = $request->business_name;
+    $vendor->slug = $slug;
     $vendor->status = "approved";
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');

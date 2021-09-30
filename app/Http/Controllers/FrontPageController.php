@@ -693,6 +693,105 @@ class FrontPageController extends Controller
         
     }
 
+
+    public function vendor(Request $request, $slug){
+
+        $categories = \App\Categories::all();
+
+        $sub_slug = $request->sub;
+
+        $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
+        
+        $brand = \App\Brand::where('slug','=',$slug)->first();
+
+        $current_b = $brand;
+
+        $brands = \App\Brand::where('id','!=',$brand->id)->get();
+
+        $cat_ids = DB::table('products')->where('brand_id',$brand->id)->distinct('category_id')->pluck('category_id')->toArray();
+
+        $b_categories = \App\Categories::with('subcategories')->whereIn('id',$cat_ids)->get();
+
+        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                    ->where('quantity','>',0)
+                                    ->where('brand_id',$brand->id)
+                                    ->inRandomOrder()
+                                    ->take(10)->get();
+
+        $sort_by = $request->sort_by;
+
+        if($sort_by !=null){
+
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }elseif($sort_by == "id"){
+                $p = "id";
+                $o = "DESC";
+            }elseif($sort_by == "best-sellers"){
+
+                $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
+
+                $product_ids = [];
+        
+                foreach($bookings as $booking){
+                    array_push($product_ids,$booking->product_id);
+                }
+        
+                $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                            ->where('brand_id','=',$brand->id)
+                                            ->where('quantity','>',0)
+                                            ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                            })
+                                            ->inRandomOrder()
+                                            ->paginate(20);
+                                            
+
+                return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','sort_by','categories','brand','trendingProducts'));
+            }
+
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('brand_id','=',$brand->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                        })
+                                        ->orderBy($p,$o)
+                                        ->paginate(20);
+
+        }else{
+            $sort_by = "id";
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('brand_id','=',$brand->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                         })
+                                        ->inRandomOrder()
+                                        ->paginate(20);
+        }
+
+        
+        
+        return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
+        
+    }
+
     public function search_brand(Request $request){
 
         $searchTerm = $request->searchTerm;
