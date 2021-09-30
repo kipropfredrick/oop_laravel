@@ -3372,18 +3372,18 @@ $result=[];
                   $vendor_payout=$value->booking->amount_paid-($totalmobiletransfers+$totalbanktransfers);
 $value->vendor_payout=$vendor_payout;
 $value->countbanktransfers=$countbanktransfers;
-$value->countmobiletransfers=$countbanktransfers;
+$value->countmobiletransfers=$countmobiletransfers;
 $value->totalbanktransfers=$totalbanktransfers;
 $value->totalmobiletransfers=$totalmobiletransfers;
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
                    array_push($result, $value);
 
-return $countmobiletransfers;
+
             }
         }
       }
 $commissions=$result;
-return $result;
+
     //   return response()->json($commissions);
 
       return view('backoffice.commissions.fixedpayout',compact('commissions'));
