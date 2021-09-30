@@ -14,7 +14,7 @@
   <div class="tab-content">
     <div id="mobile" class="tab-pane fade in active">
       <h3>Mobile</h3>
-     <table class="table-striped table-bordered">
+     <table class="table-striped table">
      	<tr>
      		<th class="thead"> 
      			Date 
@@ -42,7 +42,7 @@
     </div>
     <div id="bank" class="tab-pane fade">
       <h3>Bank</h3>
-      <table class="table-striped table-bordered">
+      <table class="table-striped table">
      	<tr>
      		<th class="thead"> 
      			Date 
