@@ -3355,6 +3355,7 @@ $commissions=$result;
 
         $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
 $result=[];
+
       foreach ($commision as $key => $value) {
           # code...
         if ($value->vendor!=null) {
