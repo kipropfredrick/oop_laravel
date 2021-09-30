@@ -4,10 +4,10 @@
 
 
 <div class="card p-10">
-  <h2>Dynamic Tabs</h2>
+  <h2>Order Transaction History</h2>
   <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#mobile">Mobile Payments </a></li>
-    <li><a data-toggle="tab" href="#bank">Bank Payments</a></li>
+    <li class="btn btn-default active"><a data-toggle="tab" href="#mobile">Mobile Payments </a></li>
+    <li class="btn btn-default"><a data-toggle="tab" href="#bank">Bank Payments</a></li>
  
   </ul>
 
@@ -69,6 +69,11 @@
 
   </div>
 </div>
-
+<style type="text/css">
+	li.active{
+		background: green;
+		color: white;
+	}
+</style>
 
 @endsection()
