@@ -3365,8 +3365,8 @@ $result=[];
                 # code...
                
 
-                $countbanktransfers=\App\commission_records::whereBooking_id($value->booking->booking_id)->whereTransaction_origin('bank')->count();
-                  $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->booking_id)->whereTransaction_origin('mobile')->count();
+                $countbanktransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('bank')->count();
+                  $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('mobile')->count();
                     $totalbanktransfers=$value->vendor->fixed_bank*($countbanktransfers);
                   $totalmobiletransfers=$value->vendor->fixed_mobile_money*($countmobiletransfers);
                   $vendor_payout=$value->booking->amount_paid-($totalmobiletransfers+$totalbanktransfers);
