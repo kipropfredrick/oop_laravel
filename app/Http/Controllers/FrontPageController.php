@@ -700,9 +700,9 @@ class FrontPageController extends Controller
 
         $sub_slug = $request->sub;
 
+        $vendor = \App\Vendor::where('slug','=',$slug)->first();
+
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
-        
-        $brand = \App\Brand::where('slug','=',$slug)->first();
 
         $current_b = $brand;
 
@@ -714,7 +714,7 @@ class FrontPageController extends Controller
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('quantity','>',0)
-                                    ->where('brand_id',$brand->id)
+                                    ->where('vendor_id',$vendor->id)
                                     ->inRandomOrder()
                                     ->take(10)->get();
 
@@ -742,7 +742,7 @@ class FrontPageController extends Controller
                 }
         
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                                            ->where('brand_id','=',$brand->id)
+                                            ->where('vendor_id',$vendor->id)
                                             ->where('quantity','>',0)
                                             ->where(function($query) use ($current_sub)
                                             {
@@ -754,11 +754,11 @@ class FrontPageController extends Controller
                                             ->paginate(20);
                                             
 
-                return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','sort_by','categories','brand','trendingProducts'));
+                return view('front.show_vendor',compact('products','current_sub','vendor','current_b','brands','b_categories','sort_by','sort_by','categories','trendingProducts'));
             }
 
             $products =   \App\Products::with('category','subcategory','gallery')
-                                        ->where('brand_id','=',$brand->id)
+                                        ->where('vendor_id',$vendor->id)
                                         ->where('quantity','>',0)
                                         ->where('status','=','approved')
                                         ->where(function($query) use ($current_sub)
@@ -773,7 +773,7 @@ class FrontPageController extends Controller
         }else{
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')
-                                        ->where('brand_id','=',$brand->id)
+                                        ->where('vendor_id',$vendor->id)
                                         ->where('quantity','>',0)
                                         ->where('status','=','approved')
                                         ->where(function($query) use ($current_sub)
@@ -788,8 +788,65 @@ class FrontPageController extends Controller
 
         
         
-        return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
+        return view('front.show_vendor',compact('products','current_sub','vendor','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
         
+    }
+
+
+    public function vendor_load_more(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+        
+        $categories = \App\Categories::all();
+        
+        $sub_slug = $request->sub;
+        
+        $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
+        
+        $vendor = \App\Vendor::where('slug','=',$slug)->first();
+        
+        if($request->ajax()){
+        
+            $skip=$request->skip;
+            $take=12;
+        
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }else{
+                $p = "id";
+                $o = "DESC";
+            }
+        
+        
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('vendor_id',$vendor->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                        })
+                                        ->orderBy($p,$o)
+                                        ->skip($skip)
+                                        ->take($take)
+                                        ->get();
+        
+            foreach($products as $product){
+        
+                $product->product_price = number_format($product->product_price);
+                
+            }
+        
+            return response()->json($products);
+        }else{
+            return response()->json('Direct Access Not Allowed!!');
+        }
     }
 
     public function search_brand(Request $request){

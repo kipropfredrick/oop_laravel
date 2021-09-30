@@ -71,6 +71,12 @@
                                 Product Code: <span class="p-code">{{$product->product_code}}</span>
                             </div>
 
+
+                            <div>
+                                <a style="color:#F68B1E !important;margin-top:10px;margin-bottom:10px" href="/vendor/{{$product->vendor->slug}}">Sold By : <span class="p-code" >{{$product->vendor->business_name}}</span></a>
+                            </div>
+
+
                             <div class="product-price">KSh. {{number_format($product->product_price)}}</div>
 
                            <div class="mb-3">
