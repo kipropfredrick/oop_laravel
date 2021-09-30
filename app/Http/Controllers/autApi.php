@@ -966,7 +966,7 @@ $ieml            = $user->email;
 $icst = "1";
 $icrl = "0";
 $icurr = $curr;
-$oid=bin2hex($bytes);
+$oid='K'.rand(10000,99999);
 $iinv=$booking_ref;
 
 
@@ -1006,7 +1006,7 @@ $ivid=env('IpayId');
 // $ivid=env('IpayId');
 $trans_amount=$amount;
 $rate=0.035;
-$bytes = random_bytes(20);
+
 
 $ilive             = "1";
 $icbk              = "https://mosmos.co.ke/capturepayment";
@@ -1022,7 +1022,7 @@ $ieml            = $user->email;
 $icst = "1";
 $icrl = "0";
 $icurr = $curr;
-$oid=bin2hex($bytes);
+$oid='K'.rand(10000,99999);
 $iinv=$booking_ref;
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
