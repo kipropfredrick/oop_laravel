@@ -366,7 +366,7 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/update-city/{id}', 'AdminController@update_city')->name('admin.update_city');
     Route::get('/commissions','AdminController@commissions')->name('commissions');
     Route::get('/fixed-payout','AdminController@fixedPayout')->name('fixed-payout');
-    Route::get('/show-commissions','AdminController@showCommissions')->name('showcommissions');
+    Route::get('/show-commissions/{id}','AdminController@showCommissions')->name('showcommissions');
     
     Route::get('/influencer-commissions','AdminController@influencer_commissions')->name('influencer_commissions');
     Route::get('/influencer-products','AdminController@influencer_products');
