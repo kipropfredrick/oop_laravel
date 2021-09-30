@@ -92,7 +92,7 @@
 
                     <div class="ht mb-3">
 
-                    <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('brand_id',$vendor->id)->count(); ?>
+                    <?php $count = App\Products::where('quantity','>',0)->where('status','=','approved')->where('vendor_id',$c_vendor->id)->count(); ?>
 
                         <div>
                             <div class="filters">
