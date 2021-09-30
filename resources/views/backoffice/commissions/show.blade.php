@@ -74,6 +74,9 @@
 		background: green;
 		color: white;
 	}
+	li.active a{
+		color: white;
+	}
 </style>
 
 @endsection()
