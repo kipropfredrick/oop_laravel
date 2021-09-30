@@ -12,7 +12,7 @@
   </ul>
 
   <div class="tab-content">
-    <div id="mobile" class="tab-pane fade in active">
+    <div id="mobile" class="tab-pane  in active">
       <h3>Mobile</h3>
      <table class="table-striped table">
      	<tr>
