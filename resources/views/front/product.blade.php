@@ -73,7 +73,7 @@
 
 
                             <div>
-                                <a style="color:#F68B1E !important;margin-top:10px;margin-bottom:10px" href="/vendor/{{$product->vendor->slug}}">Sold By : <span class="p-code" >{{$product->vendor->business_name}}</span></a>
+                                <a style="color:#F68B1E !important;margin-top:10px;margin-bottom:10px" href="/vendors/{{$product->vendor->slug}}">Sold By : <span class="p-code" >{{$product->vendor->business_name}}</span></a>
                             </div>
 
 

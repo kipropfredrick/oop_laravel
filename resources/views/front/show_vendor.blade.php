@@ -66,14 +66,14 @@
                          <div class="lmmsb-sec">
                                 
                                 <div class="lmmsbt">
-                                    <h5>Other Vendors</h5>
+                                    <h5>Brands</h5>
                                     <!-- brands listed are only the ones associated with the category selected -->
                                 </div>
 
 
                                 <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
-                                    @foreach(\App\Vendor::all() as $vendor)
-                                        <a style=" overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" href="/vendors/{{$vendor->slug}}">{{$vendor->business_name}}</a>
+                                    @foreach($brands as $brand)
+                                        <a href="/vendors/{{$c_vendor->slug}}?brand={{$brand->slug}}">{{$brand->brand_name}}</a>
                                         <div class="hr"></div>
                                     @endforeach
                                 </div>
@@ -308,14 +308,14 @@
                     <div class="lmmsb-sec">
                                 
                         <div class="lmmsbt">
-                            <h5>Other Vendors</h5>
+                            <h5>Brands</h5>
                             <!-- brands listed are only the ones associated with the category selected -->
                         </div>
 
 
                         <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
-                            @foreach(\App\Vendor::all() as $vendor)
-                                <a style=" overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" href="/vendors/{{$vendor->slug}}">{{$vendor->business_name}}</a>
+                            @foreach($brands as $brand)
+                                <a href="/vendors/{{$c_vendor->slug}}?brand={{$brand->slug}}">{{$brand->brand_name}}</a>
                                 <div class="hr"></div>
                             @endforeach
                         </div>
