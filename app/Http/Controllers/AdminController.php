@@ -1002,9 +1002,16 @@ $products=[];
 
     $user_id = DB::getPdo()->lastInsertId();
 
+    $slug =  str_replace(' ', '-', $request->business_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
     $vendor = new \App\Vendor();
     $vendor->user_id = $user_id;
     $vendor->business_name = $request->business_name;
+    $vendor->slug = $slug;
     $vendor->status = "approved";
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
@@ -1029,6 +1036,26 @@ $products=[];
     $id = DB::getPdo()->lastInsertId();
 \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
     return redirect('/admin/vendors')->with('success','Vendor Saved');
+
+    }
+
+    public function updatevendorslugs(){
+
+        $vendors = \App\Vendor::all();
+
+        foreach($vendors as $vendor){
+            
+            $slug =  str_replace(' ', '-', $vendor->business_name);
+
+            $slug =  str_replace('/','-',$slug);
+
+            $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+            \App\Vendor::where('id',$vendor->id)->update(['slug'=>$slug]);
+
+        }
+
+        return "Success";
 
     }
 
