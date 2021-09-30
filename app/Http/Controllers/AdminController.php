@@ -3390,6 +3390,13 @@ $commissions=$result;
 
     }
 
+    function showCommissions(Request $request,$id){
+$bank=\App\commission_records::whereTransaction_origin('bank')->whereBooking_id($id)->get();
+$mobile=\App\commission_records::whereTransaction_origin('mobile')->whereBooking_id($id)->get();
+
+return view('backoffice.commissions.show',compact('bank','mobile'));
+    }
+
     public function influencer_commissions(){
       $commissions =   \App\InfluencerCommission::with('booking','product','influencer','influencer.user')->get();
       \Log::info('Influncer Commissions => '.print_r($commissions,1));

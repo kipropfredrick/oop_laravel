@@ -255,7 +255,7 @@
 		</div>
 		
 
-@endsection
+@endsection()
 
 
 @section('extra-js')
@@ -277,4 +277,4 @@
 
 
 
-@endsetion
+@endsection()
