@@ -702,6 +702,8 @@ class FrontPageController extends Controller
 
         $vendor = \App\Vendor::where('slug','=',$slug)->first();
 
+        $c_vendor = $vendor;
+
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
 
         $current_b = $brand;
@@ -754,7 +756,7 @@ class FrontPageController extends Controller
                                             ->paginate(20);
                                             
 
-                return view('front.show_vendor',compact('products','current_sub','vendor','current_b','brands','b_categories','sort_by','sort_by','categories','trendingProducts'));
+                return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','brands','b_categories','sort_by','sort_by','categories','trendingProducts'));
             }
 
             $products =   \App\Products::with('category','subcategory','gallery')
@@ -788,7 +790,7 @@ class FrontPageController extends Controller
 
         
         
-        return view('front.show_vendor',compact('products','current_sub','vendor','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
+        return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
         
     }
 

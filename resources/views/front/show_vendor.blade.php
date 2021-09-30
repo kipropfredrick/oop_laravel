@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $vendor->business_name)
+@section('title', $c_vendor->business_name)
 
 @section('content')
 
@@ -14,8 +14,8 @@
 
                 <span class="bc-sep"></span>
 
-                <a href="/vendor/{{$vendor->slug}}">
-                    <span>{{$vendor->business_name}}</span> 
+                <a href="/vendor/{{$c_vendor->slug}}">
+                    <span>{{$c_vendor->business_name}}</span> 
                 </a>
 
         </div>
@@ -87,7 +87,7 @@
                 <div class="lmm-p-listing-sec">
                     <!-- category / brand name / title -->
                     <div class="ht-title">
-                        <h5>{{$vendor->business_name}}</h5>
+                        <h5>{{$c_vendor->business_name}}</h5>
                     </div>
 
                     <div class="ht mb-3">
