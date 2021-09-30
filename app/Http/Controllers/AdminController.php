@@ -1039,6 +1039,26 @@ $products=[];
 
     }
 
+    public function updatevendorslugs(){
+
+        $vendors = \App\Vendor::all();
+
+        foreach($vendors as $vendor){
+            
+            $slug =  str_replace(' ', '-', $vendor->business_name);
+
+            $slug =  str_replace('/','-',$slug);
+
+            $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+            \App\Vendor::where('id',$vendor->id)->update(['slug'=>$slug]);
+
+        }
+
+        return "Success";
+
+    }
+
     public function view_vendor_product($id)
     {
         $product = \App\Products::with('category','subcategory','brand','third_level_category')->where('id','=',$id)->first();

@@ -64,6 +64,7 @@ Route::get('/scheduletasks1','AdminController@scheduletask1');
 Route::get('/scheduletasks2','AdminController@scheduletask2');
 Route::get('/scheduletasks3','AdminController@scheduletask3');
 Route::get('/updateunservicedoverdue','AdminController@updateunservicedoverdue');
+Route::get('/updatevendorslugs','AdminController@updatevendorslugs');
 
 
 
