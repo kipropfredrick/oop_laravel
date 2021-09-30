@@ -51,7 +51,7 @@
                                         <div id="collapse{{$b_category->id}}" style="padding:5px" class="collapse" data-parent="#accordion" >
                                             <ul>
                                                 @foreach($b_category->subcategories as $sub)
-                                                <li><a href="/vendors/{{$vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
+                                                <li><a href="/vendors/{{$c_vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -292,7 +292,7 @@
                             <div id="collapse{{$b_category->id}}" style="padding:5px" class="collapse" data-parent="#accordion" >
                                 <ul>
                                     @foreach($b_category->subcategories as $sub)
-                                    <li><a href="/vendors/{{$vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
+                                    <li><a href="/vendors/{{$c_vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
