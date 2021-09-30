@@ -706,7 +706,7 @@ class FrontPageController extends Controller
 
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
 
-        $brand = \App\Brand::where('slug','!=',$request->brand)->first();
+        $brand = \App\Brand::where('slug','=',$request->brand)->first();
 
         $current_b = $brand;
 
@@ -823,7 +823,7 @@ class FrontPageController extends Controller
         
         $sub_slug = $request->sub;
 
-        $brand = \App\Brand::where('slug','!=',$request->brand)->first();
+        $brand = \App\Brand::where('slug','=',$request->brand)->first();
         
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
         
