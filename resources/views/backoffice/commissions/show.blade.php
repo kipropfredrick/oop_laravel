@@ -25,16 +25,19 @@
      		<th class="thead"> 
      			Amount
      		</th>
-
+</tr>
      		<tbody>
      			@foreach($mobile as $value)
+     			<tr>
 <td>{{$value->created_at}}</td>
 <td>{{$value->booking_id}}</td>
 <td>Ksh. {{number_format($value->amount)}}</td>
+</tr>
      			@endforeach
+
      		</tbody>
 
-     	</tr>
+     	
      </table>
     </div>
     <div id="bank" class="tab-pane fade">
@@ -50,16 +53,17 @@
      		<th class="thead"> 
      			Amount
      		</th>
-
+</tr>
      		<tbody>
      			@foreach($bank as $value)
+     			<tr>
 <td>{{$value->created_at}}</td>
 <td>{{$value->booking_id}}</td>
 <td>Ksh. {{number_format($value->amount)}}</td>
+</tr>
      			@endforeach
      		</tbody>
 
-     	</tr>
      </table>
     </div>
 
