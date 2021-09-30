@@ -14,7 +14,7 @@
 
                 <span class="bc-sep"></span>
 
-                <a href="/vendor/{{$c_vendor->slug}}">
+                <a href="/vendors/{{$c_vendor->slug}}">
                     <span>{{$c_vendor->business_name}}</span> 
                 </a>
 
@@ -51,7 +51,7 @@
                                         <div id="collapse{{$b_category->id}}" style="padding:5px" class="collapse" data-parent="#accordion" >
                                             <ul>
                                                 @foreach($b_category->subcategories as $sub)
-                                                <li><a href="/vendor/{{$vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
+                                                <li><a href="/vendors/{{$vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -73,7 +73,7 @@
 
                                 <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
                                     @foreach(\App\Vendor::all() as $vendor)
-                                        <a style=" overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" href="/vendor/{{$vendor->slug}}">{{$vendor->business_name}}</a>
+                                        <a style=" overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" href="/vendors/{{$vendor->slug}}">{{$vendor->business_name}}</a>
                                         <div class="hr"></div>
                                     @endforeach
                                 </div>
@@ -107,7 +107,7 @@
                                             <label class="col-3 col-form-label">Sort by:</label>
                                             <div class="col-7">
                                             
-                                            <form action="/vendor/{{$vendor->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_d">
+                                            <form action="/vendors/{{$vendor->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_d">
                                                 <select onchange="filter_d(this);" name="sort_by" id="sort_by_d" class="form-control">
                                                     <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                                     <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
@@ -231,7 +231,7 @@
             <div class="hh-ft-sort">
                 <div class="form-group">
                     <div class="">
-                        <form action="/vendor/{{$vendor->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_mob">
+                        <form action="/vendors/{{$vendor->slug}}<?php if(!empty($current_sub)){echo "?sub=".$current_sub->slug;} ?>" id="filter-form_mob">
                             <select onchange="filter_mob(this);" name="sort_by" id="sort_by" class="form-control">
                                 <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                 <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
@@ -292,7 +292,7 @@
                             <div id="collapse{{$b_category->id}}" style="padding:5px" class="collapse" data-parent="#accordion" >
                                 <ul>
                                     @foreach($b_category->subcategories as $sub)
-                                    <li><a href="/vendor/{{$vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
+                                    <li><a href="/vendors/{{$vendor->slug}}?sub=<?php echo $sub->slug; ?>">{{$sub->subcategory_name}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -315,7 +315,7 @@
 
                         <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
                             @foreach(\App\Vendor::all() as $vendor)
-                                <a style=" overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" href="/vendor/{{$vendor->slug}}">{{$vendor->business_name}}</a>
+                                <a style=" overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 1;-webkit-box-orient: vertical;" href="/vendors/{{$vendor->slug}}">{{$vendor->business_name}}</a>
                                 <div class="hr"></div>
                             @endforeach
                         </div>
