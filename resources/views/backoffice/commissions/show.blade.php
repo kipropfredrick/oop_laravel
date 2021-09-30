@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="card p-10">
+<div class="card p-10" style="padding: 30px;">
   <h2>Order Transaction History</h2>
   <ul class="nav nav-tabs">
     <li class="btn btn-default active"><a data-toggle="tab" href="#mobile">Mobile Payments </a></li>
