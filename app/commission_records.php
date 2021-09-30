@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class commission_records extends Model
 {
     //
-       protected $fillable = ['amount','booking_reference','transaction_origin'];
+       protected $fillable = ['amount','booking_reference','transaction_origin','booking_id'];
 }

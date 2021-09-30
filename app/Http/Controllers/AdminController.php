@@ -3331,11 +3331,60 @@ $users=json_decode($users,true);
     public function commissions()
     {
 
-      $commissions =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
+
+      $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
+$result=[];
+      foreach ($commision as $key => $value) {
+          # code...
+        if ($value->vendor!=null) {
+            # code...
+            if ($value->vendor->commssionrate_enabled==1) {
+                # code...
+                array_push($result, $value);
+            }
+        }
+      }
+$commissions=$result;
 
     //   return response()->json($commissions);
 
       return view('backoffice.commissions.index',compact('commissions'));
+
+    }
+    function fixedPayout(Request $request){
+
+        $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
+$result=[];
+      foreach ($commision as $key => $value) {
+          # code...
+        if ($value->vendor!=null) {
+            # code...
+            if ($value->vendor->commssionrate_enabled==1) {
+                # code...
+               
+
+                $countbanktransfers=\App\commission_records::whereBooking_id($value->booking_id)->whereTransaction_origin('bank')->count();
+                  $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking_id)->whereTransaction_origin('mobile')->count();
+                    $totalbanktransfers=$value->vendor->fixed_bank*($countbanktransfers);
+                  $totalmobiletransfers=$value->vendor->fixed_mobile_money*($countmobiletransfers);
+                  $vendor_payout=$value->amount_paid-($totalmobiletransfers+$totalbanktransfers);
+$value->vendor_payout=$vendor_payout;
+$value->countbanktransfers=$countbanktransfers;
+$value->countmobiletransfers=$countbanktransfers;
+$value->totalbanktransfers=$totalbanktransfers;
+$value->totalmobiletransfers=$totalmobiletransfers;
+$value->commission=$totalbanktransfers+$totalmobiletransfers;
+                   array_push($result, $value);
+
+
+            }
+        }
+      }
+$commissions=$result;
+return $commissions;
+    //   return response()->json($commissions);
+
+      return view('backoffice.commissions.fixedpayout',compact('commissions'));
 
     }
 

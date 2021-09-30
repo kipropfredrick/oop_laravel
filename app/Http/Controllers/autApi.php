@@ -739,7 +739,7 @@ if ($obj->balance<$amount) {
         $amount_paid = $booking->amount_paid +$request->amount;
 
         $balance = $booking->total_cost - $amount_paid;
-\App\commission_records::create(Array("amount"=>$amount_paid,"booking_reference"=>$booking_ref,"transaction_origin"=>"wallet"));
+\App\commission_records::create(Array("amount"=>$amount_paid,"booking_reference"=>$booking_ref,"transaction_origin"=>"wallet","booking_id"=>$booking->id));
         if($balance<1){
 
             DB::table('bookings')

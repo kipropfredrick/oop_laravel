@@ -23,7 +23,6 @@ class Commission extends Model
     public function vendor(){
 
         return $this->belongsTo(Vendor::class,'vendor_id');
-
     }
 
     public function agent(){
@@ -31,4 +30,5 @@ class Commission extends Model
         return $this->belongsTo(Agents::class,'agent_id');
 
     }
+    
 }

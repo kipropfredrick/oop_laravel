@@ -398,9 +398,28 @@
 
 @endif
 @if(Sentinel::hasAccess('commission'))
-		<li class="nav-item">
-			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
-		</li>
+
+
+    <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-bookmark"></i>
+              <p>
+             Earning
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+            
+                <li class="nav-item">
+      <a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
+    </li>
+                <li class="nav-item">
+      <a href="/admin/fixed-payout" class="nav-link {{ (request()->is('admin/fixed-payout')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Fixed Payout</p></a>
+    </li>
+              
+              
+            </ul>
+          </li>
     @endif
 
 
