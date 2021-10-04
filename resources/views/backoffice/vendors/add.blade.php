@@ -98,54 +98,42 @@
 				
 				</div>
 
-<div>
-	<label>Commission Type</label>
+<div class="row">
+<div class="md-col-6 col-lg-6 col-sm-12">
+		<label>Commission Type</label>
 		<div class="form-check">
-  <input class="form-check-input" type="radio" id="flexRadioDefault1" onchange="updateWidget(this)" checked="" value="1" name="commissionrate_enabled">
+  <input class="form-check-input" type="radio" id="flexRadioDefault1" checked="" value="1" name="commissionrate_enabled">
   <label class="form-check-label" for="flexRadioDefault1">
     Commission Rate
   </label>
 </div>
 <div class="form-check">
-  <input class="form-check-input" type="radio" name="commissionrate_enabled" id="flexRadioDefault2" value="0" onchange="return updateWidget(this)" >
+  <input class="form-check-input" type="radio" name="commissionrate_enabled" id="flexRadioDefault2" value="0"  >
   <label class="form-check-label" for="flexRadioDefault2" >
     Fixed Commission
   </label>
 </div>
 </div>
+<div class="md-col-6 col-lg-6 col-sm-12">
+		<label>Categories Types</label>
+		<div class="form-check">
+  <input class="form-check-input" type="radio" name="category" id="flexRadioDefault12" value="1"  >
+  <label class="form-check-label" for="flexRadioDefault12" >
+   Specific categories
+  </label>
+</div>
+		<div class="form-check">
+  <input class="form-check-input" type="radio" id="flexRadioDefault11" checked="" value="0" name="category">
+  <label class="form-check-label" for="flexRadioDefault11">
+  General Categories
+  </label>
+</div>
 
-				   <div class="row" id="commissionrate">
+</div>
+</div>
 
-			   <div class="col-md-6">
-
-			   <div class="form-group">
-				<label>Commission rate</label>
-					<input  value="{{ old('commission_rate') }}" tclass="form-control" name="commission_rate" placeholder="3" type="number" class="form-control @if($errors->has('commission_rate')) invalid_field @endif"  step=".01">
-				
-					@error('commission_rate')
-								<div class="invalid-feedback">
-									{{ $message }}
-								</div>
-					@enderror
-				</div>
-			   
-			   </div>
-
-				<div class="col-md-6">
-				<div class="form-group">
-					<label>Commission cap</label>
-						<input  value="{{ old('commission_cap') }}"  class="form-control" name="commission_cap" placeholder="5000" type="number" class="form-control @if($errors->has('commission_cap')) invalid_field @endif" >
-					
-						@error('commission_cap')
-									<div class="invalid-feedback">
-										{{ $message }}
-									</div>
-						@enderror
-				</div>
-				</div>
-			   
-			   </div>
-
+		
+<!-- 
 					   <div class="row" id="fixed">
 
 			   <div class="col-md-6">
@@ -176,7 +164,7 @@
 				</div>
 				</div>
 			   
-			   </div>
+			   </div> -->
 				<div class="row">
 
 				 <div class="col-md-6">

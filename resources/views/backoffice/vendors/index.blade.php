@@ -36,6 +36,7 @@
 								<th class="thead">Location</th>
 								<th class="thead">Status</th>
 								<th class="thead">Date Added</th>
+								<th class="thead">Commissions</th>
 								<th class="thead">Actons</th>
 							</tr>
 						</thead>
@@ -66,6 +67,9 @@
 									</td>
 									<td>
 										{{date('M d'.', '.'Y', strtotime($vendor->created_at))}}
+									</td>
+									<td>
+										<a href="setcommissions/{{$vendor->id}}" title="set commissions"><i class="fa fa-plus"></i></a>
 									</td>
 									<td>
 										@if($vendor->status == 'pending')

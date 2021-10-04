@@ -168,9 +168,9 @@ curl_setopt($ch, CURLOPT_POSTFIELDS,     "TerminalNumber=96956906&TransactionKey
 curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain')); 
 
 $result=curl_exec ($ch);
-
+\Log::info($);
  $decdata = $obj->decrypt((json_decode($result))->Data);
-
+\Log::info($decdata);
   return $decdata;
 \Log::info($decdata);
  $decdata=json_decode($decdata);

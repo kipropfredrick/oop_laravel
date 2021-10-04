@@ -982,6 +982,16 @@ $products=[];
         return view('backoffice.vendors.add');
 
     }
+    public function update_vendor(Request $request,$id){
+  
+        if ($request->type=='g_commissionrate') {
+            # code...
+                $details=Array("commission_rate"=>$request->commission_rate,"commission_cap"=>$request->commission_cap,"fixed_mobile_money"=>$request->fixed_mobile_money,"fixed_bank"=>$request->fixed_bank);
+                \App\Vendor::whereId($id)->update($details);
+
+                return back()->with('success','data updated successfully');
+        }
+    }
 
 
     public function save_vendor(Request $request){
@@ -1018,16 +1028,18 @@ $products=[];
     $vendor->city_id  = $request->input('city_id');
  
     $vendor->commssionrate_enabled= $request->input('commissionrate_enabled');
+    $vendor->category= $request->input('category');
+    
 
-    if ($request->input('commissionrate_enabled')==1) {
-        # code...
-        $vendor->commission_rate  = $request->input('commission_rate');
-    $vendor->commission_cap  = $request->input('commission_cap');
-    }
-    else{
-      $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
-    $vendor->fixed_bank= $request->input('fixed_bank');
-    }
+    // if ($request->input('commissionrate_enabled')==1) {
+    //     # code...
+    //     $vendor->commission_rate  = $request->input('commission_rate');
+    // $vendor->commission_cap  = $request->input('commission_cap');
+    // }
+    // else{
+    //   $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
+    // $vendor->fixed_bank= $request->input('fixed_bank');
+    // }
 
     
     $vendor->country  = $request->input('country');
@@ -4304,6 +4316,13 @@ function bookingpayments(Request $request,$id){
             return DataTables::of($payments)->make(true);
 
         }
+}
+
+function setcommissions(Request $request,$id){
+    $vendor=\App\Vendor::with('user')->whereId($id)->first();
+$subcategories=\App\Products::whereVendor_id($vendor->id)->distinct('subcategory_id')->pluck('subcategory_id')->toArray();
+$subcats=\App\SubCategories::whereIn('id',$subcategories)->get();
+    return view('backoffice.vendors.setcommissions',compact('vendor','subcats'));
 }
 
 }
