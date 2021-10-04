@@ -3,16 +3,16 @@
 @section('content')
 
 
-<div class="card p-10">
-  <h2>Dynamic Tabs</h2>
+<div class="card p-10" style="padding: 30px;">
+  <h2>Order Transaction History</h2>
   <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#mobile">Mobile Payments </a></li>
-    <li><a data-toggle="tab" href="#bank">Bank Payments</a></li>
+    <li class="btn btn-default active"><a data-toggle="tab" href="#mobile">Mobile Payments </a></li>
+    <li class="btn btn-default"><a data-toggle="tab" href="#bank">Bank Payments</a></li>
  
   </ul>
 
   <div class="tab-content">
-    <div id="mobile" class="tab-pane fade in active">
+    <div id="mobile" class="tab-pane  in active">
       <h3>Mobile</h3>
      <table class="table-striped table">
      	<tr>
@@ -69,6 +69,14 @@
 
   </div>
 </div>
-
+<style type="text/css">
+	li.active{
+		background: green;
+		color: white;
+	}
+	li.active a{
+		color: white;
+	}
+</style>
 
 @endsection()

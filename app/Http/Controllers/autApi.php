@@ -947,6 +947,8 @@ $user=\App\User::whereId($customer->user_id)->first();
 
 // $hashkey =  env('IpayKey');
 // $ivid=env('IpayId');
+$bytes = random_bytes(20);
+
 $trans_amount=$amount;
 $rate=0.035;
 
@@ -964,8 +966,10 @@ $ieml            = $user->email;
 $icst = "1";
 $icrl = "0";
 $icurr = $curr;
-$ioid=$booking_ref;
+$ioid=bin2hex($bytes);
 $iinv=$booking_ref;
+
+
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 
@@ -1002,6 +1006,7 @@ $ivid=env('IpayId');
 // $ivid=env('IpayId');
 $trans_amount=$amount;
 $rate=0.035;
+$bytes = random_bytes(20);
 
 $ilive             = "1";
 $icbk              = "https://mosmos.co.ke/capturepayment";
@@ -1017,7 +1022,7 @@ $ieml            = $user->email;
 $icst = "1";
 $icrl = "0";
 $icurr = $curr;
-$ioid=$booking_ref;
+$ioid=bin2hex($bytes);
 $iinv=$booking_ref;
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
@@ -1076,11 +1081,11 @@ if ($request->status=="aei7p7yrx4ae34") {
   # code...
      $travelPattern = "/t/i";
     
-    $travelTrue = preg_match($travelPattern,$request->id);
+    $travelTrue = preg_match($travelPattern,$request->ivm);
 
     if ($travelTrue) {
         # code...
-        $details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+        $details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->ivm,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
         //$bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$log_id,$type='topup'
 
@@ -1088,11 +1093,11 @@ if ($request->status=="aei7p7yrx4ae34") {
 
  $log_id=DB::getPdo()->lastInsertId();
 
- $res=$this->TravelWalletPayments($request->txncd,$request->id,$request->p1,$request->msisdn_idnum,"","","",$log_id,"card");
+ $res=$this->TravelWalletPayments($request->txncd,$request->ivm,$request->p1,$request->msisdn_idnum,"","","",$log_id,"card");
 
  if ($res['success']) {
      # code...
-    return redirect("http://travel.test/cardsuccess/".$request->id);
+    return redirect("http://travel.test/cardsuccess/".$request->ivm);
  }
  else {
     return redirect("/failed");
@@ -1103,20 +1108,20 @@ if ($request->status=="aei7p7yrx4ae34") {
 
 
 
-$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->id,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
+$details=Array('txncd'=>$request->txncd,"uyt"=>$request->uyt,"agt"=>$request->agt,"qwh"=>$request->qwh,"ifd"=>$request->ifd,"poi"=>$request->poi,"oid"=>$request->ivm,"amount"=>$request->p1,"total_amount"=>$request->mc,"channel"=>$request->channel);
 
 
 
     $carddetails=\App\Cardpayments::create($details);
     $request->phone=$request->mc;
    $request->amount=$request->p1;
-    $request->bookingref=$request->id;
+    $request->bookingref=$request->ivm;
 
 
  $msisdn=$request->msisdn_idnum;
         $amount=$request->amount;
-        $booking_ref=$request->id;
-$bill_ref_no=$request->id;
+        $booking_ref=$request->ivm;
+$bill_ref_no=$request->ivm;
  //$message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
 
