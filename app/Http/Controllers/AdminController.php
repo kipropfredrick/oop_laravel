@@ -979,6 +979,7 @@ $products=[];
 
     public function add_vendor(){
 
+
         return view('backoffice.vendors.add');
 
     }
@@ -986,7 +987,7 @@ $products=[];
   
         if ($request->type=='g_commissionrate') {
             # code...
-                $details=Array("commission_rate"=>$request->commission_rate,"commission_cap"=>$request->commission_cap,"fixed_mobile_money"=>$request->fixed_mobile_money,"fixed_bank"=>$request->fixed_bank);
+                $details=Array("commission_rate"=>$request->commission_rate?$request->commission_rate:0,"commission_cap"=>$request->commission_cap?$request->commission_cap:0,"fixed_mobile_money"=>$request->fixed_mobile_money?$request->fixed_mobile_money:0,"fixed_bank"=>$request->fixed_bank?$request->fixed_bank:0);
                 \App\Vendor::whereId($id)->update($details);
 
                 return back()->with('success','data updated successfully');
@@ -4322,6 +4323,21 @@ function setcommissions(Request $request,$id){
     $vendor=\App\Vendor::with('user')->whereId($id)->first();
 $subcategories=\App\Products::whereVendor_id($vendor->id)->distinct('subcategory_id')->pluck('subcategory_id')->toArray();
 $subcats=\App\SubCategories::whereIn('id',$subcategories)->get();
+$commissions=json_decode($vendor->commission_rate_subcategories);
+$ar=Array("data"=>"mimi");
+array_push($commissions, $ar);
+foreach ($subcats as $key => $value) {
+    # code...
+if (array_key_exists($ar,$commissions))
+  {
+//$value->name;
+  }
+else
+  {
+  //echo "Key does not exist!";
+  }
+
+}
     return view('backoffice.vendors.setcommissions',compact('vendor','subcats'));
 }
 

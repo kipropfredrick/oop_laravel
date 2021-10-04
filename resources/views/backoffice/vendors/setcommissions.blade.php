@@ -36,7 +36,9 @@
 </div>
 <form method="POST" action="{{route('admin.vendor.update_vendor',$vendor->id)}}">
     {{csrf_field()}}
-    <input type="text" value="g_commissionrate" name="type" hidden="">
+        <input type="text" value="g_commissionrate" name="type" hidden="">
+      @if($vendor->commssionrate_enabled==1)
+
                <div class="row" id="commissionrate">
 
                <div class="col-md-6">
@@ -68,8 +70,7 @@
                 </div>
                
                </div>
-
-
+@else
 
                        <div class="row" id="fixed">
 
@@ -102,7 +103,7 @@
                 </div>
                
                </div>
-
+@endif
                <button class="btn btn-success">Submit</button>
     
 </form>
@@ -139,7 +140,7 @@
         </select>
     </div>
     <input type="text" value="g_commissionrate" name="type" hidden="">
-            @if($vendor->commssionrate_enabled)
+            @if($vendor->commssionrate_enabled==1)
                <div class="row" id="commissionrate">
 
                <div class="col-md-6">

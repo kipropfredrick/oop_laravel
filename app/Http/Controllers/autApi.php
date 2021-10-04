@@ -1015,7 +1015,7 @@ $p1               = $amount;
 $p2               = "xx";
 $p3               = "xx";
 $p4               = "xx";
-$curr             = "KES"; //or USD
+$curr             = "USD"; //or USD
 $itel     = $msisdn;
 $ieml            = $user->email;
 
