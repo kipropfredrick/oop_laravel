@@ -4,6 +4,14 @@
 
 @section('content')
 
+<?php
+
+$brand_ids = \App\Products::where('vendor_id',$c_vendor->id)->distinct('brand_id')->pluck('brand_id')->toArray();
+
+$brands = \App\Brand::whereIn('id',$brand_ids)->get();
+
+?>
+
 <!-- breadcrumb --> 
 <div class="bc-bg">
     <div class="container">

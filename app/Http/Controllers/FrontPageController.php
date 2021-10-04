@@ -710,8 +710,6 @@ class FrontPageController extends Controller
 
         $current_b = $brand;
 
-        $brands = \App\Brand::where('id','!=',$brand->id)->get();
-
         $cat_ids = DB::table('products')->where('brand_id',$brand->id)->distinct('category_id')->pluck('category_id')->toArray();
 
         $b_categories = \App\Categories::with('subcategories')->whereIn('id',$cat_ids)->get();
@@ -764,7 +762,7 @@ class FrontPageController extends Controller
                                             ->paginate(20);
                                             
 
-                return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','brands','b_categories','sort_by','sort_by','categories','trendingProducts'));
+                return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','b_categories','sort_by','sort_by','categories','trendingProducts'));
             }
 
             $products =   \App\Products::with('category','subcategory','gallery')
@@ -810,7 +808,7 @@ class FrontPageController extends Controller
 
         
         
-        return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
+        return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','b_categories','sort_by','categories','brand','trendingProducts'));
         
     }
 
