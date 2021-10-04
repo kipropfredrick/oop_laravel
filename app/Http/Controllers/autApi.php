@@ -1548,7 +1548,7 @@ break;  }
         }
 
 
-           $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+           $message    ="Payment of {$booking->currency}. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance {$booking->currency}. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1569,7 +1569,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$mosmosbalance,"tran
 }
 else{
 
-      $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+      $message    ="Payment of {$booking->currency}. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$transid}. Balance {$booking->currency}. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
