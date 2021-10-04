@@ -412,6 +412,8 @@ curl_setopt($ch, CURLOPT_HTTPHEADER,     array('Content-Type: text/plain'));
 
 $result=curl_exec ($ch);
 
+\Log::info($result);
+
  $decdata = $obj->decrypt((json_decode($result))->Data);
   return $decdata;
   $decdata=json_decode($decdata);
