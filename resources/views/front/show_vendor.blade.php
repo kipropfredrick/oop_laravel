@@ -10,6 +10,10 @@ $brand_ids = \App\Products::where('vendor_id',$c_vendor->id)->distinct('brand_id
 
 $brands = \App\Brand::whereIn('id',$brand_ids)->get();
 
+$category_ids = \App\Products::where('vendor_id',$c_vendor->id)->distinct('category_id')->pluck('category_id')->toArray();
+
+$b_categories = \App\Categories::whereIn('id',$category_ids)->get();
+
 ?>
 
 <!-- breadcrumb --> 
