@@ -959,7 +959,7 @@ $p1               = $amount;
 $p2               = "xx";
 $p3               = "xx";
 $p4               = "xx";
-$curr             = "KES"; //or USD
+$curr             = "USD"; //or USD
 $itel     = $msisdn;
 $ieml            = $user->email;
 
@@ -1489,7 +1489,7 @@ if ($obj->balance<$transaction_amount) {
                             'customer_id'=>$customer->id,
                             'agent_id'=>$agent->id,
                             'booking_id'=>$booking->id,
-                            'transaction_type'=>"Pay Bill",
+                            'transaction_type'=>"Card",
                             'amount'=>$transaction_amount,
                             'admin_commission'=>$admin_commission,
                             'balance'=>$payment_balance,
