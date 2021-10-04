@@ -1097,7 +1097,7 @@ if ($request->status=="aei7p7yrx4ae34") {
 
  if ($res['success']) {
      # code...
-    return redirect("http://travel.test/cardsuccess/".$request->ivm);
+    return redirect("https://travelmosmos.co.ke/cardsuccess/".$request->ivm);
  }
  else {
     return redirect("/failed");
