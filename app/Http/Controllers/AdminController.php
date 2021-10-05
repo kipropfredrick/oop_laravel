@@ -3539,6 +3539,8 @@ $value->commission_rate=$comm['commission_rate'];
                   $totalmobiletransfers=$value->vendor->fixed_mobile_money*($countmobiletransfers);
                   $vendor_payout=$value->booking->item_cost-($totalmobiletransfers+$totalbanktransfers);
 $value->vendor_payout=$vendor_payout;
+$value->fixed_mobile_money=$value->vendor->fixed_mobile_money;
+$value->fixed_bank=$value->vendor->fixed_bank;
 $value->countbanktransfers=$countbanktransfers;
 $value->countmobiletransfers=$countmobiletransfers;
 $value->totalbanktransfers=$totalbanktransfers;
@@ -3559,13 +3561,15 @@ foreach ($array as $key1 => $comm) {
         # code...
 
            $totalbanktransfers=intval($comm['fixed_bank'])*($countbanktransfers);
-                  $totalmobiletransfers=intval($comm['ficed_mobile_money'])*($countmobiletransfers);
+                  $totalmobiletransfers=intval($comm['fixed_mobile_money'])*($countmobiletransfers);
                   $vendor_payout=$value->booking->item_cost-($totalmobiletransfers+$totalbanktransfers);
 $value->vendor_payout=$vendor_payout;
 $value->countbanktransfers=$countbanktransfers;
 $value->countmobiletransfers=$countmobiletransfers;
 $value->totalbanktransfers=$totalbanktransfers;
 $value->totalmobiletransfers=$totalmobiletransfers;
+$value->fixed_mobile_money=$comm['fixed_mobile_money'];
+$value->fixed_bank=$comm['fixed_bank'];
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
 
    
@@ -3582,6 +3586,8 @@ $value->countbanktransfers=$countbanktransfers;
 $value->countmobiletransfers=$countmobiletransfers;
 $value->totalbanktransfers=0;
 $value->totalmobiletransfers=0;
+$value->fixed_mobile_money=0;
+$value->fixed_bank=0;
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
 
 }
