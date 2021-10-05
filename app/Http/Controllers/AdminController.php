@@ -3548,6 +3548,8 @@ $value->totalmobiletransfers=$totalmobiletransfers;
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
                    array_push($result, $value);
                 }else{
+                   $countbanktransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('bank')->count();
+                  $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('mobile')->count();
                      $commission_rate_subcategories=$value->vendor->fixed_cost_subcategories;
 //return $commission_rate_subcategories;
                  $array=json_decode($commission_rate_subcategories,true);
