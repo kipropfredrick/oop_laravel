@@ -4345,6 +4345,7 @@ for ($i=0; $i <$days ; $i++) {
 
 
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->sum('amount');
+ $newbookings = \App\Bookings::select(DB::raw('Date(created_at) as date_paid','amount_paid'))->whereDate('created_at',"=",$currentday)->where("amount_paid",">",0)->count();
 
   $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime','topup'])->sum('amount');
 
@@ -4354,7 +4355,7 @@ for ($i=0; $i <$days ; $i++) {
 
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->whereIn('id',$validmpesa)->distinct('customer_id')->count();
 
-$array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"unique"=>$uniquecustomers);
+$array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"unique"=>$uniquecustomers,"newbookings"=>$newbookings);
  array_push($payments, $array);
 }
 
