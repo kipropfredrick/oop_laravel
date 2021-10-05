@@ -3537,7 +3537,7 @@ $value->commission_rate=$comm['commission_rate'];
                   $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('mobile')->count();
                     $totalbanktransfers=$value->vendor->fixed_bank*($countbanktransfers);
                   $totalmobiletransfers=$value->vendor->fixed_mobile_money*($countmobiletransfers);
-                  $vendor_payout=$value->booking->amount_paid-($totalmobiletransfers+$totalbanktransfers);
+                  $vendor_payout=$value->booking->item_cost-($totalmobiletransfers+$totalbanktransfers);
 $value->vendor_payout=$vendor_payout;
 $value->countbanktransfers=$countbanktransfers;
 $value->countmobiletransfers=$countmobiletransfers;
@@ -3560,7 +3560,7 @@ foreach ($array as $key1 => $comm) {
 
            $totalbanktransfers=intval($comm['fixed_bank'])*($countbanktransfers);
                   $totalmobiletransfers=intval($comm['ficed_mobile_money'])*($countmobiletransfers);
-                  $vendor_payout=$value->booking->amount_paid-($totalmobiletransfers+$totalbanktransfers);
+                  $vendor_payout=$value->booking->item_cost-($totalmobiletransfers+$totalbanktransfers);
 $value->vendor_payout=$vendor_payout;
 $value->countbanktransfers=$countbanktransfers;
 $value->countmobiletransfers=$countmobiletransfers;
