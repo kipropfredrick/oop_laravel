@@ -2708,10 +2708,40 @@ return Back()->with("success","Transaction success");
                 if($vendor == null){
 
                    }else {
+if ($vendor->category=="1") {
+    # code...
+        $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+                 $checked=false;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+      $commission_rate=$value['commission_rate'];
+                    $commision_cap=$value['commission_cap'];
+$checked=true;
+
+    }
+
+}
+
+if (!$checked) {
+    $commission_rate=0;
+    $commision_cap=0;
+}
+
+}
+else{
 
                     $commission_rate=$vendor->commission_rate;
                     $commision_cap=$vendor->commission_cap;
-                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                   
+}
+ $admin_commission=floatval($product->product_price)*($commission_rate/100);
                     if ($admin_commission>=$commision_cap) {
                     $admin_commission=$commision_cap;
                     # code...
