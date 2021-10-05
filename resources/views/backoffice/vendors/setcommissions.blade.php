@@ -132,15 +132,16 @@
 
     {{csrf_field()}}
     <div >
-        <select class="form-control">
-            <option>Select Sucategory</option>
+        <select class="form-control" name="subcategory" required="">
+            <option disabled >Select Sucategory</option>
             @foreach($subcats as $value)
  <option value="{{$value->id}}">{{$value->subcategory_name}}</option>
             @endforeach
         </select>
     </div>
-    <input type="text" value="g_commissionrate" name="type" hidden="">
+  
             @if($vendor->commssionrate_enabled==1)
+              <input type="text" value="g_sub_rate" name="type" hidden="">
                <div class="row" id="commissionrate">
 
                <div class="col-md-6">
@@ -175,7 +176,7 @@
                @else
 
 
-
+ <input type="text" value="g_sub_fixed" name="type" hidden="">
                        <div class="row" id="fixed">
 
                <div class="col-md-6">
@@ -211,9 +212,63 @@
 
                <button class="btn btn-success">Submit</button>
     
-</form>
+</form>  @if($vendor->commssionrate_enabled==1)
+<div >
+    <table class="table table-striped">
+        <th>Subcategory Name</th>
+        <th>Commission rate</th>
+        <th>Commission cap</th>
+
+        <tbody>
+            @foreach($subcats as $value)
+<tr>
+    <td>
+    {{$value->subcategory_name}}
+    </td>
+        <td>
+        {{$value->commission_rate}}
+    </td>
+    <td>
+        {{$value->commission_cap}}
+    </td>
 
 
+</tr>
+            @endforeach
+
+        </tbody>
+    </table>
+</div>
+@else
+<div >
+    <table class="table table-striped">
+        <th>Subcategory Name</th>
+
+        <th>Fixed Mobile Money</th>
+                <th>Fixed Bank</th>
+
+        <tbody>
+            @foreach($subcats as $value)
+<tr>
+    <td>
+    {{$value->subcategory_name}}
+    </td>
+        
+    <td>
+        {{$value->fixed_mobile_money}}
+    </td>
+    <td>
+        {{$value->fixed_bank}}
+    </td>
+
+
+</tr>
+            @endforeach
+
+        </tbody>
+    </table>
+</div>
+@endif
 @endif   
 
 </div>

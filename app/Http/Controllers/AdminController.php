@@ -992,6 +992,80 @@ $products=[];
 
                 return back()->with('success','data updated successfully');
         }
+
+
+        if ($request->type=='g_sub_rate') {
+              $vendor=\App\Vendor::whereId($id)->first();
+        
+           
+            # code...
+                $commission_rate_subcategories=$vendor->commission_rate_subcategories;
+//return $commission_rate_subcategories;
+                 $array=json_decode($commission_rate_subcategories,true);
+        
+                 $i=0;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+        unset($array[$key]);
+
+
+    }
+
+}
+//return $array;
+
+    
+            $details=Array("commission_rate"=>$request->commission_rate,"commission_cap"=>$request->commission_cap,"fixed_bank"=>0,"fixed_mobile_money"=>0,"id"=>$request->subcategory);
+       
+            array_push($array, $details);
+
+ 
+                      $en_commission_rate_subcategories=json_encode($array);
+                      // return $en_commission_rate_subcategories;
+            \App\Vendor::whereId($id)->update(Array("commission_rate_subcategories"=>$en_commission_rate_subcategories));
+          return back()->with('success','data updated successfully');
+        }
+
+
+        if ($request->type=='g_sub_fixed') {
+              $vendor=\App\Vendor::whereId($id)->first();
+        
+          
+            # code...
+                $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+        unset($array[$key]);
+
+
+    }
+
+}
+
+
+    
+            $details=Array("commission_rate"=>0,"commission_cap"=>0,"fixed_bank"=>$request->fixed_bank,"fixed_mobile_money"=>$request->fixed_mobile_money,"id"=>$request->subcategory);
+       
+            array_push($array, $details);
+//return $array;
+ 
+                      $en_fixed_cost_subcategories=json_encode($array);
+                      // return $en_commission_rate_subcategories;
+            \App\Vendor::whereId($id)->update(Array("fixed_cost_subcategories"=>$en_fixed_cost_subcategories));
+          return back()->with('success','data updated successfully');
+        }
+
+
     }
 
 
@@ -3373,18 +3447,66 @@ $users=json_decode($users,true);
 
 
       $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
+ 
 $result=[];
+
       foreach ($commision as $key => $value) {
           # code...
+
         if ($value->vendor!=null) {
             # code...
             if ($value->vendor->commssionrate_enabled==1) {
-                # code...
-                array_push($result, $value);
+                # code...  return $value;
+
+                if ($value->vendor->category==0) {
+                    # code...
+$value->commission_rate=$comm['commission_rate'];
+        $value->commission_cap=$comm['commission_cap'];
+
+                            array_push($result, $value);
+                }else{
+                     $commission_rate_subcategories=$value->vendor->commission_rate_subcategories;
+//return $commission_rate_subcategories;
+                 $array=json_decode($commission_rate_subcategories,true);
+
+                 $i=0;
+                 $valchanged=false;
+foreach ($array as $key1 => $comm) {
+    # code...
+
+    if ($comm['id']==$value->product->subcategory_id) {
+        # code...
+
+        $value->commission_rate=$comm['commission_rate'];
+        $value->commission_cap=$comm['commission_cap'];
+
+   
+
+    }
+ 
+
+}
+
+if (!$valchanged) {
+    # code...
+    $value->commission_rate=0;
+        $value->commission_cap=0;
+
+}
+array_push($result, $value);
+
+
+
+                }
+
+
+
+        
             }
         }
       }
 $commissions=$result;
+
 
     //   return response()->json($commissions);
 
@@ -3402,8 +3524,12 @@ $result=[];
             # code...
 
             if ($value->vendor->commssionrate_enabled==0) {
-                # code...
-               
+                # code...      
+
+      if ($value->vendor->category==0) {
+                    # code...
+$value->commission_rate=$comm['commission_rate'];
+        $value->commission_cap=$comm['commission_cap'];
 
                 $countbanktransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('bank')->count();
                   $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('mobile')->count();
@@ -3417,6 +3543,56 @@ $value->totalbanktransfers=$totalbanktransfers;
 $value->totalmobiletransfers=$totalmobiletransfers;
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
                    array_push($result, $value);
+                }else{
+                     $commission_rate_subcategories=$value->vendor->fixed_cost_subcategories;
+//return $commission_rate_subcategories;
+                 $array=json_decode($commission_rate_subcategories,true);
+    
+                 $i=0;
+                 $valchanged=false;
+foreach ($array as $key1 => $comm) {
+    # code...
+
+    if ($comm['id']==$value->product->subcategory_id) {
+        # code...
+
+           $totalbanktransfers=intval($comm['fixed_bank'])*($countbanktransfers);
+                  $totalmobiletransfers=intval($comm['ficed_mobile_money'])*($countmobiletransfers);
+                  $vendor_payout=$value->booking->amount_paid-($totalmobiletransfers+$totalbanktransfers);
+$value->vendor_payout=$vendor_payout;
+$value->countbanktransfers=$countbanktransfers;
+$value->countmobiletransfers=$countmobiletransfers;
+$value->totalbanktransfers=$totalbanktransfers;
+$value->totalmobiletransfers=$totalmobiletransfers;
+$value->commission=$totalbanktransfers+$totalmobiletransfers;
+
+   
+
+    }
+ 
+
+}
+
+if (!$valchanged) {
+    # code...
+  $value->vendor_payout=$value->booking->amount_paid;
+$value->countbanktransfers=$countbanktransfers;
+$value->countmobiletransfers=$countmobiletransfers;
+$value->totalbanktransfers=0;
+$value->totalmobiletransfers=0;
+$value->commission=$totalbanktransfers+$totalmobiletransfers;
+
+}
+
+
+array_push($result, $value);
+                }
+
+
+
+
+
+
 
 
             }
@@ -4324,20 +4500,71 @@ function setcommissions(Request $request,$id){
 $subcategories=\App\Products::whereVendor_id($vendor->id)->distinct('subcategory_id')->pluck('subcategory_id')->toArray();
 $subcats=\App\SubCategories::whereIn('id',$subcategories)->get();
 $commissions=json_decode($vendor->commission_rate_subcategories);
-$ar=Array("data"=>"mimi");
-array_push($commissions, $ar);
+
+
 foreach ($subcats as $key => $value) {
+ 
+$haskey=false;
+foreach ($commissions as $key1 => $value1) {
+    if ($value1->id==$value->id) {
+        # code...
+
+        $value->commission_rate=$value1->commission_rate;
+$value->commission_cap=$value1->commission_cap;
+ $value->fixed_bank=$value1->fixed_bank;
+$value->fixed_mobile_money=$value1->fixed_mobile_money;
+
+$haskey=true;
+break;
+    }
     # code...
-if (array_key_exists($ar,$commissions))
-  {
-//$value->name;
-  }
-else
-  {
-  //echo "Key does not exist!";
-  }
+}
+if (!$haskey) {
+    # code...
+        $value->commission_rate=0;
+    $value->commission_cap=0;
+     $value->fixed_bank=0;
+$value->fixed_mobile_money=0;
+}
+
 
 }
+
+$fixedcommissions=json_decode($vendor->fixed_cost_subcategories);
+
+
+foreach ($subcats as $key => $value) {
+ 
+$haskey=false;
+foreach ($fixedcommissions as $key1 => $value1) {
+    if ($value1->id==$value->id) {
+        # code...
+
+//         $value->commission_rate=$value1->commission_rate;
+// $value->commission_cap=$value1->commission_cap;
+ $value->fixed_bank=$value1->fixed_bank;
+$value->fixed_mobile_money=$value1->fixed_mobile_money;
+
+$haskey=true;
+break;
+    }
+    # code...
+}
+if (!$haskey) {
+    # code...
+    //     $value->commission_rate=0;
+    // $value->commission_cap=0;
+     $value->fixed_bank=0;
+$value->fixed_mobile_money=0;
+}
+
+
+}
+
+
+
+
+
     return view('backoffice.vendors.setcommissions',compact('vendor','subcats'));
 }
 
