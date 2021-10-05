@@ -1104,6 +1104,8 @@ foreach ($array as $key => $value) {
  
     $vendor->commssionrate_enabled= $request->input('commissionrate_enabled');
     $vendor->category= $request->input('category');
+    $vendor->commission_rate_subcategories='[]';
+    $vendor->fixed_cost_subcategories='[]';
     
 
     // if ($request->input('commissionrate_enabled')==1) {
