@@ -3574,7 +3574,7 @@ $value->fixed_mobile_money=$comm['fixed_mobile_money'];
 $value->fixed_bank=$comm['fixed_bank'];
 $value->commission=$totalbanktransfers+$totalmobiletransfers;
 
-   
+   $valchanged=true;
 
     }
  
