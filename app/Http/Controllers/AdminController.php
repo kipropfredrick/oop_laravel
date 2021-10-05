@@ -2108,9 +2108,11 @@ $myrole="";
 
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
 
+
         if($newProduct == null){
             return back()->with('error','Sorry Product Code does not exist.');
         }
+           $vendor_code=\App\Vendor::whereId($newProduct->vendor_id)->first()->vendor_code;
 
             if($newProduct->weight != 0){
                 $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
@@ -2143,7 +2145,8 @@ $myrole="";
                         "balance"=>$balance,
                         "shipping_cost"=>$shipping_cost,
                         "item_cost"=>$newProduct->product_price,
-                        "total_cost"=>$total_cost
+                        "total_cost"=>$total_cost,
+                        "vendor_code"=>$vendor_code
                         ]);
        }
        else{
@@ -2153,7 +2156,8 @@ $myrole="";
                         "shipping_cost"=>$shipping_cost,
                         "item_cost"=>$newProduct->product_price,
                         'status'=>"complete",
-                        "total_cost"=>$total_cost
+                        "total_cost"=>$total_cost,
+                        "vendor_code"=>$vendor_code
                         ]);
 
 $objuser=\App\User::whereId($customer->user_id);
