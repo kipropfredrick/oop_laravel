@@ -55,8 +55,8 @@
 									<td>KES {{number_format($commision->booking->total_cost)}}</td>
 									<td>{{$commision->countmobiletransfers}}</td>
 									<td>{{$commision->countbanktransfers}}</td>
-									<td>{{$commision->vendor->fixed_mobile_money}}</td>
-									<td>{{$commision->vendor->fixed_bank}}</td>
+									<td>{{$commision->fixed_mobile_money}}</td>
+									<td>{{$commision->fixed_bank}}</td>
 										<td>{{$commision->totalmobiletransfers}}</td>
 									<td>{{$commision->totalbanktransfers}}</td>
 									
