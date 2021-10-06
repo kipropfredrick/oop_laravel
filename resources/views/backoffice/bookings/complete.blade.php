@@ -237,7 +237,7 @@ ${date}
             	}
             },
             {
-		  data: "payments_count",name:'bookings.payments_count',
+		  data: "payments_count",name:'due_date',
 		  "width": "400px",
 		  render: (data) => numberFormat(data)
 		}
