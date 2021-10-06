@@ -62,6 +62,7 @@
 								@if(auth()->user()->role=="agent")
 								<th class="thead">Action</th>
 								@endif
+								 <th style="width: 400px;">View</th>
 
 							
 							</tr>
@@ -277,6 +278,17 @@ ${date}
 								 `;
 
             	}
+            },
+            {
+        data:"id","width": "400px","render": function(data, type, full, meta){
+       
+return `<div><a class="btn btn-outline-success mt-1" href="/admin/view-booking/${data}"><i class="fa fa-eye"> </i></a></div>
+
+                                 `;
+                
+
+
+                }
             },
 
 
