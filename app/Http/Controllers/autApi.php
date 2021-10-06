@@ -405,6 +405,7 @@ $booking->status = "active";
         $booking->shipping_cost = $shipping_cost;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
+        $booking->referal_code=$request->referal_code;
         $booking->total_cost =  $total_cost-100;
 
         $booking->save();
@@ -515,6 +516,7 @@ break;
         $booking->due_date = $due_date;
         $booking->discount=100;
         $booking->status = "pending";
+        $booking->referal_code=$request->referal_code;
         $booking->total_cost = intval($total_cost)-100;
         $booking->save();
 
