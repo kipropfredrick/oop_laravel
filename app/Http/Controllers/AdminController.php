@@ -4349,7 +4349,7 @@ for ($i=0; $i <$days ; $i++) {
 
 
  $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->sum('amount');
- $newbookings = \App\Bookings::select(DB::raw('Date(created_at) as date_paid','amount_paid'))->whereDate('created_at',"=",$currentday)->where("amount_paid",">",0)->count();
+
 
   $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime','topup'])->sum('amount');
 
@@ -4359,7 +4359,7 @@ for ($i=0; $i <$days ; $i++) {
 
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->whereIn('id',$validmpesa)->distinct('customer_id')->count();
 
-$array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"unique"=>$uniquecustomers,"newbookings"=>$newbookings);
+$array=Array("date"=>$currentday,"total"=>$daypayment+$dayairtime+$dayutility,"unique"=>$uniquecustomers);
  array_push($payments, $array);
 }
 
@@ -4400,6 +4400,7 @@ for ($i=0; $i <$days ; $i++) {
 
 
  $daypayment=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$currentday)->where("payment_logs.status","=","valid")->sum('TransAmount');
+  $newbookings = \App\Bookings::select(DB::raw('Date(created_at) as date_paid','amount_paid'))->whereDate('created_at',"=",$currentday)->where("amount_paid",">",0)->count();
 
   // $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->distinct('customer_id')->count();
 
@@ -4409,7 +4410,7 @@ for ($i=0; $i <$days ; $i++) {
 
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->whereIn('id',$validmpesa)->distinct('customer_id')->count();
 
-$array=Array("date"=>$currentday,"total"=>$daypayment,"unique"=>$uniquecustomers);
+$array=Array("date"=>$currentday,"total"=>$daypayment,"unique"=>$uniquecustomers,"newbookings"=>$newbookings);
  array_push($payments, $array);
 }
 
@@ -4418,7 +4419,7 @@ $payments=array_reverse($payments, true);
 
 
 
-    return view('backoffice.aggregate.all',compact('payments','year','month'));
+    return view('backoffice.aggregate.bookings',compact('payments','year','month'));
 
 }
 

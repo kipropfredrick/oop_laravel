@@ -123,7 +123,7 @@
 								<th class="thead">Date</th>
 								<th class="thead">Total Amount</th>
 								<th class="thead">Unique Accounts</th>
-									<th class="thead">New Bookings</th>
+								
 								
 							</tr>
 						</thead>
@@ -144,9 +144,7 @@
 									<td>
 											{{$payment['unique']}}
 									</td>
-									<td>
-											{{$payment['newbookings']}}
-									</td>
+									
 
 
 								
