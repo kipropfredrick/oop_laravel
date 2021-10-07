@@ -1872,9 +1872,9 @@ Log::info("checkpoint2");
             // Send Invoice
 
             $payments = DB::connection('mysql2')->table('payments')
-                            // ->join('payment_logs','payments.payment_log_id','payment_logs.id')
+                            ->leftJoin('payment_logs','payments.payment_log_id','payment_logs.id','')
                             // ->where('booking_id',$booking->id)
-                            // ->select('payments.*','paymentSend','Invoice_logs.*')
+                            ->select('payments.*','payment_logs.*')
                             ->orderBy('payments.id','DESC')
                             ->get();
 
@@ -1894,6 +1894,7 @@ Log::info("checkpoint2");
                 'booking'=>$booking,
                 'latestPayment'=>$latestPayment
             ];
+            Log::info(json_encode($details));
   
 
             Mail::to($user_customer->email)->send(new SendTravelPaymentEmail($details));
