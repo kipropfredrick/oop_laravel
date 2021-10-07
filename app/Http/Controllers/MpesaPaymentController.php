@@ -1083,6 +1083,7 @@ SendSMSController::sendMessage($recipients,$message,$type="payment_notification"
        return $message;
     }
        $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+        $obj = new pushNotification();
     $obj->exceuteSendNotification($token,"You have received KSh.200 from us. Thanks for your order","Congratulations! ",$data);
 
                 }
