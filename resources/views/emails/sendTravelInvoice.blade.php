@@ -112,17 +112,14 @@
             <div class="card" style="padding:10px;">
             <p>Hello, {{ucfirst($details['customer_name'])}}.</p>
 
-            <p>Your payment of <strong>KSh. {{number_format($details['latestPayment']->transaction_amount,2)}}</strong> for <strong>{{$details['product_name']}}</strong> has been received. The balance remaining is <strong>Ksh. {{$details['balance']}}</strong></p>
+            <p>Your payment of <strong>KSh. {{number_format($details['latestPayment']->amount,2)}}</strong> for <strong>{{$details['product_name']}}</strong> has been received. The balance remaining is <strong>Ksh. {{$details['balance']}}</strong></p>
 
             <p>Booking Code: <strong>{{$details['booking_reference']}}</strong><br>
-                M-PESA Reference: <strong>{{$details['latestPayment']->mpesapayment->transac_code}}</strong><br>
-                Payment Date: <strong>{{date('M d'.', '.'Y', strtotime($details['latestPayment']->mpesapayment->date_paid))}}</strong></p>
-             <p>APP NOW AVAILABLE</p>
-            <a href="http://bit.ly/MosMosApp" target="_blank">
-                Download our app to easily track your payments - http://bit.ly/MosMosApp.
-            </a>
-
-            <p>Find Invoice attached.</p>
+                M-PESA Reference: <strong>{{$details['transcode']}}</strong><br>
+                Payment Date: <strong>{{date('M d'.', '.'Y', strtotime($details['date']))}}</strong></p>
+          <p>@if(isset($details['url']))View your invoice and pay conveniently with your card or bank here: {{$details['url']}} @endif</p>
+          
+            <p>Also, find a downloadable invoice attached.</p>
 
                 </div>
 

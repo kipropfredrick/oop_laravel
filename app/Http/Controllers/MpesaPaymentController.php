@@ -354,7 +354,7 @@ else{
 
                 $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
 Log::info("checkpoint0");
-                $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id);
+                $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id,$transaction_id);
 
                 return $message;
 
@@ -1662,7 +1662,7 @@ else{
         return response()->json($out);
     }
 
-    public static function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
+    public static function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id,$TransID='none'){
 Log::info("checkpoint1");
        $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
        $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
@@ -1892,7 +1892,10 @@ Log::info("checkpoint2");
                 'amount_paid'=>number_format($booking->amount_paid),
                 'balance'=>$balance,
                 'booking'=>$booking,
-                'latestPayment'=>$latestPayment
+                'latestPayment'=>$latestPayment,
+                'date'=>Now(),
+                'transcode'=>$TransID,
+                    "url" => "https://travelmosmos.co.ke/payments/".encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
             ];
             Log::info(json_encode($details));
   
@@ -1927,6 +1930,16 @@ Log::info($balance.".....".$bill_ref_no."...".json_encode($data));
        }
 
     }
+        /**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
+
 
     function CustomTopUpAccount($msisdn,$transaction_amount,$log_id){
         $customer=\App\Customers::wherePhone($msisdn)->first();
