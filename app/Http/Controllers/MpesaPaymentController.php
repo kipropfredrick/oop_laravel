@@ -353,7 +353,7 @@ else{
                 \DB::connection('mysql2')->table('payment_logs')->insert( $paymentLog);
 
                 $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
-
+Log::info("checkpoint0");
                 $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id);
 
                 return $message;
@@ -1066,9 +1066,34 @@ else{
                 
             }else{
 
+                $status= DB::table('bookings')
+                ->where('booking_reference','=',$bill_ref_no)->first()->status;
+                if ($status=='pending') {
+                    # code...
+                    $newbalance=$balance-200;
+    $recipients = $booking->customer->phone;
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
-                ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
+                ->update(['balance'=>$balance-200,'amount_paid'=>$amount_paid,'status'=>'active',"discount"=>200,"total_cost"=>($booking->total_cost)-200]);
+                $message="Congratulations. You have received a KSh.200 discount on your Lipa Mos Mos order. Your new balance is KSh.{$newbalance}.";
+SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+  $token=\App\User::whereId($booking->customer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+       return $message;
+    }
+       $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    $obj->exceuteSendNotification($token,"You have received KSh.200 from us. Thanks for your order","Congratulations! ",$data);
+
+                }
+                else{
+
+
+                DB::table('bookings')
+                ->where('booking_reference','=',$bill_ref_no)
+                ->update(['balance'=>$balance,'amount_paid'=>$amount_paid]);
+                }
+
             }
             
 
@@ -1637,7 +1662,7 @@ else{
     }
 
     public static function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
-
+Log::info("checkpoint1");
        $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
        $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
 
@@ -1695,7 +1720,7 @@ else{
 
            
        }
-
+Log::info("checkpoint2");
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
        if($booking == null){
@@ -1812,6 +1837,7 @@ else{
             \DB::connection('mysql2')->table('system_commissions')->insert($commission);
 
            }
+           Log::info("checkpoint3");
 
             $payment_data = [
                             'payment_log_id'=>$log_id,
@@ -1873,7 +1899,7 @@ else{
 
 
             // Send Invoice End
-
+Log::info("checkpoint4");
 
             if($balance<1){
 

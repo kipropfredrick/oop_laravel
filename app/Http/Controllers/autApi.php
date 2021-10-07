@@ -365,7 +365,7 @@ else{
     else{
 
          \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
-        $booking->balance =   $total_cost-(intval($balance))-100;
+        $booking->balance =   $total_cost-(intval($balance));
 $booking->amount_paid = $balance;
 $booking->status = "active";
  $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance))-100);
@@ -382,7 +382,7 @@ $booking->status = "active";
         $booking->booking_reference = $booking_reference;
         $booking->platform="mobile";
         $booking->quantity  = '1';
-        $booking->discount  = 100;
+        $booking->discount  = 0;
     if ($request->setreminder!= null) {
         $booking->setdate= $request->setdate;
     $booking->setreminder= $request->setreminder;
@@ -406,7 +406,7 @@ $booking->status = "active";
         $booking->county_id = $request->county_id;
         $booking->exact_location = $request->exact_location;
         $booking->referal_code=$request->referal_code;
-        $booking->total_cost =  $total_cost-100;
+        $booking->total_cost =  $total_cost;
 
         $booking->save();
 
@@ -452,8 +452,8 @@ break;
     $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
     $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
-    $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
-    $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
+    // $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    // $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
 
       return $message;
 
@@ -507,17 +507,17 @@ break;
       }
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
-        $booking->balance = intval($total_cost)-100;
+        $booking->balance = intval($total_cost);
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
         $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
         $booking->due_date = $due_date;
-        $booking->discount=100;
+        $booking->discount=0;
         $booking->status = "pending";
         $booking->referal_code=$request->referal_code;
-        $booking->total_cost = intval($total_cost)-100;
+        $booking->total_cost = intval($total_cost);
         $booking->save();
 
         $booking_id = DB::getPdo()->lastInsertId();
