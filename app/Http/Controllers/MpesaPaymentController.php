@@ -1871,14 +1871,14 @@ Log::info("checkpoint2");
 
             // Send Invoice
 
-            $payments = DB::connection('mysql2')->table('payments')
-                            ->join('payment_logs','payments.payment_log_id','payment_logs.id')
-                            ->where('booking_id',$booking->id)
-                            ->select('payments.*','paymentSend Invoice_logs.*')
-                            ->orderBy('payments.id','DESC')
-                            ->get();
+            // $payments = DB::connection('mysql2')->table('payments')
+            //                 ->join('payment_logs','payments.payment_log_id','payment_logs.id')
+            //                 ->where('booking_id',$booking->id)
+            //                 ->select('payments.*','paymentSend Invoice_logs.*')
+            //                 ->orderBy('payments.id','DESC')
+            //                 ->get();
 
-            $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
+            // $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
 
 
             $details  = [
