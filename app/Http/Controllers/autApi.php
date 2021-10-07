@@ -1066,7 +1066,7 @@ $iinv=$booking_ref;
 if($booking->currency=="Ksh"){
 $icurr="KES";
 }else{
-    $icurr=$booking->currency;
+    $icurr="USD";
 }
         }
         else{
