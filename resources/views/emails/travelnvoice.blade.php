@@ -100,7 +100,7 @@
 <body>
 
 <div class="email-header">
-    <img style="height:50px;width:100px;object-fit:contain;" src="https://travelmosmos.co.ke/storage/images/{{$details['agent']['company_logo']}}" alt="Travel Mos Mos">
+    <img style="height:50px;width:100px;object-fit:contain;" src="https://travelmosmos.co.ke/storage/images/{{$details['agent']->company_logo}}" alt="Travel Mos Mos">
 </div>
 
 <div class="container mt-5 mb-5">
