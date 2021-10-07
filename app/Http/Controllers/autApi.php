@@ -1059,7 +1059,7 @@ $ioid=bin2hex($bytes);
 $iinv=$booking_ref;
   $travelPattern = "/t/i";
     
-    $travelTrue = preg_match($travelPattern,$request->ivm);
+    $travelTrue = preg_match($travelPattern,$booking_ref);
 
     if ($travelTrue) {
  $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$booking_ref)->first();
@@ -1070,7 +1070,7 @@ $icurr="KES";
 }
         }
         else{
-
+$icurr="KES";
 
         }
       //  $icurr = $curr;
