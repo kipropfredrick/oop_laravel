@@ -13,7 +13,6 @@ use \App\Mail\SendTravelPaymentEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
-
 use App\Http\Controllers\SendSMSController;
 use App\Http\Controllers\pushNotification;
 
@@ -1902,6 +1901,7 @@ Log::info("checkpoint2");
 
             // Send Invoice End
 Log::info("checkpoint4");
+Log::info($balance.".....".$bill_ref_no."...".json_encode($data));
 
             if($balance<1){
 
