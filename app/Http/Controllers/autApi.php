@@ -1064,7 +1064,7 @@ $iinv=$booking_ref;
     if ($travelTrue) {
  $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$booking_ref)->first();
 if($booking->currency=="Ksh"){
-
+$curr="KES";
 }else{
     $curr=$booking->currency;
 }
