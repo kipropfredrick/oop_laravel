@@ -1871,32 +1871,32 @@ Log::info("checkpoint2");
 
             // Send Invoice
 
-            // $payments = DB::connection('mysql2')->table('payments')
-            //                 ->join('payment_logs','payments.payment_log_id','payment_logs.id')
-            //                 ->where('booking_id',$booking->id)
-            //                 ->select('payments.*','paymentSend Invoice_logs.*')
-            //                 ->orderBy('payments.id','DESC')
-            //                 ->get();
+            $payments = DB::connection('mysql2')->table('payments')
+                            ->join('payment_logs','payments.payment_log_id','payment_logs.id')
+                            ->where('booking_id',$booking->id)
+                            ->select('payments.*','paymentSend Invoice_logs.*')
+                            ->orderBy('payments.id','DESC')
+                            ->get();
 
-            // $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
+            $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
 
 
-            // $details  = [
-            //     'customer'=>$user_customer,
-            //     'customer_name'=>$user_customer->name,
-            //     'agent'=>$agent,
-            //     'payments'=>$payments,
-            //     'product_name'=>$booking->package_name,
-            //     'booking_reference'=>$booking->booking_reference,
-            //     'total_cost'=>number_format($booking->total_cost,2),
-            //     'amount_paid'=>number_format($booking->amount_paid),
-            //     'balance'=>$balance,
-            //     'booking'=>$booking,
-            //     'latestPayment'=>$latestPayment
-            // ];
+            $details  = [
+                'customer'=>$user_customer,
+                'customer_name'=>$user_customer->name,
+                'agent'=>$agent,
+                'payments'=>$payments,
+                'product_name'=>$booking->package_name,
+                'booking_reference'=>$booking->booking_reference,
+                'total_cost'=>number_format($booking->total_cost,2),
+                'amount_paid'=>number_format($booking->amount_paid),
+                'balance'=>$balance,
+                'booking'=>$booking,
+                'latestPayment'=>$latestPayment
+            ];
   
 
-            // Mail::to($user_customer->email)->send(new SendTravelPaymentEmail($details));
+            Mail::to($user_customer->email)->send(new SendTravelPaymentEmail($details));
 
 
             // Send Invoice End
