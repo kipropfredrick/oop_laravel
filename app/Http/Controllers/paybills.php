@@ -55,7 +55,7 @@ $result=curl_exec ($ch);
 
 
  $decdata = $obj->decrypt((json_decode($result))->Data);
-
+\Log::info(json_encode($decdata));
  return $decdata;
 \Log::info($array['MeterNumber']);
 \Log::info(json_encode($decdata));
