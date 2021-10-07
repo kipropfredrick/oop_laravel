@@ -1880,6 +1880,20 @@ Log::info("checkpoint2");
 
             $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
 
+        $ch = curl_init();
+
+        // set url
+        curl_setopt($ch, CURLOPT_URL, 'https://travelmosmos.co.ke/invoiceurl?booking_reference='.$booking->booking_reference);
+
+        //return the transfer as a string
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        // $output contains the output string
+        $output = curl_exec($ch);
+
+        // close curl resource to free up system resources
+        curl_close($ch); 
+
 
             $details  = [
                 'customer'=>$user_customer,
@@ -1895,7 +1909,7 @@ Log::info("checkpoint2");
                 'latestPayment'=>$latestPayment,
                 'date'=>Now(),
                 'transcode'=>$TransID,
-                    "url" => "https://travelmosmos.co.ke/payments/".encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+                    "url" => "https://travelmosmos.co.ke/payments/".$output."/invoice"
             ];
             Log::info(json_encode($details));
   
