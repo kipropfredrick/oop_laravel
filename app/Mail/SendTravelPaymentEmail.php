@@ -11,6 +11,12 @@ use PDF;
 class SendTravelPaymentEmail extends Mailable
 {
     use Queueable, SerializesModels;
+     /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public $details;
 
     /**
      * Create a new message instance.
