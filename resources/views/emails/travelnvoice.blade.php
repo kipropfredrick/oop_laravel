@@ -132,9 +132,9 @@
                                  @foreach($payments as $payment)
                                     <tr>
                                         <td scope="row"><strong>{{$index = $index+1}}.</strong></td>
-                                        <td>{{date('M d'.', '.'Y', strtotime($payment['created_at']))}}</td>
-                                        <td>{{$payment['TransID']}}</td>
-                                        <td>{{number_format($payment['TransAmount'],2)}}</td>
+                                        <td>{{date('M d'.', '.'Y', strtotime($payment->created_at))}}</td>
+                                        <td>{{$payment->TransID}}</td>
+                                        <td>{{number_format($payment->TransAmount,2)}}</td>
                                     </tr>
                                 @endforeach
                                
