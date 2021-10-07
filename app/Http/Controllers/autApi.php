@@ -1048,13 +1048,13 @@ $p1               = $amount;
 $p2               = "xx";
 $p3               = "xx";
 $p4               = "xx";
-$curr             = "KSh"; //or USD
+$curr             = "KES"; //or USD
 $itel     = $msisdn;
 $ieml            = $user->email;
 
 $icst = "1";
 $icrl = "0";
-$icurr = $curr;
+
 $ioid=bin2hex($bytes);
 $iinv=$booking_ref;
   $travelPattern = "/t/i";
@@ -1073,6 +1073,7 @@ $curr="KES";
 
 
         }
+        $icurr = $curr;
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 
