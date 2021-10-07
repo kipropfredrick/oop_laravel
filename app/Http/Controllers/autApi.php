@@ -1064,16 +1064,16 @@ $iinv=$booking_ref;
     if ($travelTrue) {
  $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$booking_ref)->first();
 if($booking->currency=="Ksh"){
-$curr="KES";
+$icurr="KES";
 }else{
-    $curr=$booking->currency;
+    $icurr=$booking->currency;
 }
         }
         else{
 
 
         }
-        $icurr = $curr;
+      //  $icurr = $curr;
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 
