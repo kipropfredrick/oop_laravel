@@ -1048,7 +1048,7 @@ $p1               = $amount;
 $p2               = "xx";
 $p3               = "xx";
 $p4               = "xx";
-$curr             = "USD"; //or USD
+$curr             = "KSh"; //or USD
 $itel     = $msisdn;
 $ieml            = $user->email;
 
@@ -1057,6 +1057,22 @@ $icrl = "0";
 $icurr = $curr;
 $ioid=bin2hex($bytes);
 $iinv=$booking_ref;
+  $travelPattern = "/t/i";
+    
+    $travelTrue = preg_match($travelPattern,$request->ivm);
+
+    if ($travelTrue) {
+ $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$booking_ref)->first();
+if($booking->currency=="Ksh"){
+
+}else{
+    $curr=$booking->currency;
+}
+        }
+        else{
+
+
+        }
 
 $data_string = $ilive.$ioid .$iinv.$iamount.$itel.$ieml.$ivid.$icurr.$p1.$p2.$p3.$p4.$icbk.$icst.$icrl;
 
