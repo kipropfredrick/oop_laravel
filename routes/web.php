@@ -284,8 +284,50 @@ Route::prefix('vendor')->group(function () {
         Route::get('/revoked-bookings','VendorController@revoked_bookings');
         Route::get('/product-edit/{id}', 'VendorController@product_edit');
     Route::get('/product-delete/{id}', 'VendorController@product_delete');
+       Route::get('/branchvendors', 'VendorController@vendors')->name('branchvendor.vendors');
+ Route::get('/add-vendor', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
+    Route::post('/vendor-save', 'VendorController@save_vendor')->name('vendor.branchvendor.save');
+
     });
 });
+
+
+Route::prefix('branch')->group(function () {
+    Route::group(['middleware' => ['auth']], function (){
+        Route::get('/view-booking/{id}','BranchVendorController@bookingdetails')->name('vendor.bookingdetails');
+
+  Route::post('/view-booking/{id}/payments','BranchVendorController@bookingpayments')->name('vendor.bookingpayments');
+        
+          Route::any('/payments', 'BranchVendorController@payments');
+        Route::get('/vendor-booking', 'BranchVendorController@manualBooking');
+        Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');
+        Route::get('/image-delete/{id}', 'BranchVendorController@image_delete');
+        Route::get('/create-bookings','BranchVendorController@create_bookings');
+          Route::post('/make-booking','BranchVendorController@make_booking');
+        
+        
+        Route::get('/active-bookings','BranchVendorController@active_bookings');
+        Route::get('/rejected-products','BranchVendorController@rejected_products');
+        Route::get('/overdue-bookings','BranchVendorController@overdue_bookings');
+        Route::get('/profile','BranchVendorController@profile');
+        Route::post('/update-profile', 'BranchVendorController@update_profile');
+        Route::get('/revoked-bookings','BranchVendorController@revoked_bookings');
+        Route::get('/delivered-bookings','BranchVendorController@delivered_bookings');
+        Route::get('/transfer-order','BranchVendorController@transfer_order');
+        Route::post('/transfer-order/{id}','BranchVendorController@transfer_orderID');
+        Route::get('/unserviced-bookings','BranchVendorController@unserviced_bookings');
+        Route::get('/pending-bookings','BranchVendorController@pending_bookings');
+       
+        Route::get('/complete-bookings','BranchVendorController@complete_bookings');
+        Route::get('/active-bookings','BranchVendorController@active_bookings');
+        Route::get('/revoked-bookings','BranchVendorController@revoked_bookings');
+
+    
+
+    });
+});
+
+
 
 Route::prefix('admin')->group(function () {
 Route::group(['middleware' => ['auth','admin']], function (){
@@ -506,6 +548,7 @@ Route::post('/user/permission/{id}/update','UserController@updatePermission')->n
         Route::get('/rejected-products','AdminController@vendor_rejected_products');
         Route::get('/product-reject/{id}','AdminController@reject_vendor_product');
         Route::get('/product-view/{id}','AdminController@view_vendor_product');
+
       });
       Route::prefix('influencer')->group(function () {
         Route::get('/delete-account/{id}','AdminController@influencer_delete_account');

@@ -112,7 +112,14 @@ break;
 
     function addProduct($request){
 
-    	 $vendor = Vendor::whereVendor_code($request->vendor_code)->first();
+    	 $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
+         $vendor=Vendor::whereMain_vendor_code($main_vendor_code)->first();
+         if ($vendor==null) {
+             # code...
+            $vendor = Vendor::whereVendor_code($request->vendor_code)->first();
+         }
+
+
 
         //$data = $request->except('_token','image_path');
 $data=Array();
@@ -168,7 +175,22 @@ $data=Array();
 
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
-        $vendor_code = $request->vendor_code;
+    
+
+ $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
+ $isbranch=false;
+         $vendor=Vendor::whereVendor_code($main_vendor_code)->first();
+         if ($vendor==null) {
+             # code...
+           // $vendor = Vendor::whereVendor_code($request->vendor_code)->first();
+                $vendor_code = $request->vendor_code;
+         }
+         else{
+            $isbranch=true;
+            $vendor_code=$vendor->vendor_code;
+            $branch_vendor_code= $request->vendor_code;
+         }
+
 
         $categories = \App\Categories::all();
         
@@ -299,8 +321,15 @@ $data=Array();
         $booking->date_started  = now();
         $booking->due_date = $due_date;
        $booking->platform=$source;
-       
-        $booking->vendor_code = $vendor_code;
+       if ($isbranch) {
+           # code...
+              $booking->vendor_code = $vendor_code;
+                    $booking->branch_vendor_code = $branch_vendor_code;
+       }
+       else{
+              $booking->vendor_code = $vendor_code;
+       }
+  
         $booking->location_type = "Exact Location";
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
@@ -331,12 +360,15 @@ $data=Array();
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
-        \       $details = [
+              $details = [
         'email' => $request->email,
         'name'=>$request->name,
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
         'password'=>$request->input('phone'),
+        'productname'=>$request->product_name,
+        'total_cost'=>$total_cost,
+
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
@@ -380,7 +412,14 @@ $data=Array();
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
-        $booking->vendor_code = $vendor_code;
+       if ($isbranch) {
+           # code...
+              $booking->vendor_code = $vendor_code;
+                    $booking->branch_vendor_code = $branch_vendor_code;
+       }
+       else{
+              $booking->vendor_code = $vendor_code;
+       }
         $booking->date_started  = now();
         $booking->due_date = $due_date;
         $booking->status = "pending";
@@ -409,6 +448,8 @@ $data=Array();
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
         'password'=>$request->input('phone'),
+        'productname'=>$request->product_name,
+        'total_cost'=>$total_cost,
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
@@ -454,7 +495,14 @@ $data=Array();
         $booking->booking_reference =$booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
-        $booking->vendor_code = $vendor_code;
+      if ($isbranch) {
+           # code...
+              $booking->vendor_code = $vendor_code;
+                    $booking->branch_vendor_code = $branch_vendor_code;
+       }
+       else{
+              $booking->vendor_code = $vendor_code;
+       }
         $booking->item_cost = $product->product_price;
         $booking->balance = $total_cost;
         $booking->shipping_cost = $shipping_cost;
@@ -477,9 +525,11 @@ $data=Array();
        $details = [
         'email' => $request->email,
         'name'=>$request->name,
+        'productname'=>$request->product_name,
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
         'password'=>$request->input('phone'),
+        'total_cost'=>$total_cost,
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 

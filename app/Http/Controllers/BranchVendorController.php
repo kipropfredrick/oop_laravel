@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Vendor;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
@@ -20,73 +19,11 @@ use Exception;
 use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendRegistrationEmail;
 use DataTables;
+use App\Vendor;
 
-
-class VendorController extends Controller
+class BranchVendorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function pending_products(){
 
-     $vendor = Vendor::where('user_id','=',Auth::id())->first();
-
-     $products = \App\Products::with('category')->where('status','=','pending')->where('vendor_id','=',$vendor->id)->orderBy('id', 'DESC')->get();
-
-     $status = "Pending";
-
-     return view('backoffice.products.index',compact('products','status'));
-    }
-
-    public function approved_products(){
-
-        $vendor = Vendor::where('user_id','=',Auth::id())->first();
-
-        
-        $products = \App\Products::with('category')->where('status','=','approved')->where('vendor_id','=',$vendor->id)->orderBy('id', 'DESC')->get();
-        
-        $status = "Approved";
-        
-        return view('backoffice.products.index',compact('products','status'));
-        }
-
-
-        public function rejected_products(){
-
-            $vendor = Vendor::where('user_id','=',Auth::id())->first();
-            
-            $products = \App\Products::with('category')->where('status','=','rejected')->where('vendor_id','=',$vendor->id)->orderBy('id', 'DESC')->get();
-            
-            $status = "Pejected";
-            
-            return view('backoffice.products.index',compact('products','status'));
-            }
-        
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function assigned_products(){
-
-        $vendor = Vendor::where('user_id','=',Auth::id())->first();
-   
-        $products = \App\Products::with('vendor')->where('vendor_id','=',$vendor->id)->orderBy('id', 'DESC')->get();
-   
-        return view('backoffice.vendors.assigned',compact('products'));
-   
-       }
-   
-       public function view_product($id){
-   
-        $product = \App\Products::with('category','subcategory')->find($id);
-   
-        return view('backoffice.vendors.viewproduct',compact('product'));
-   
-       }
        /**
         * Show the form for creating a new resource.
         *
@@ -96,7 +33,7 @@ class VendorController extends Controller
    
            $vendor = Vendor::where('user_id','=',Auth::id())->first();
            
-           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->where('vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->where('branch_vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
    
            foreach($bookings as $booking){
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -111,7 +48,7 @@ class VendorController extends Controller
    
         $vendor = Vendor::where('user_id','=',Auth::id())->first();
         
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','pending')->where('vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','pending')->where('branch_vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
      
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -125,7 +62,7 @@ class VendorController extends Controller
 
         $vendor = Vendor::where('user_id','=',Auth::id())->first();
 
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('branch_vendor_code',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -242,90 +179,7 @@ $objuser->update(['balance'=>$totalbal]);
 
 
     }
-       public function product_edit($id)
-        {
-            $product = \App\Products::with('category','gallery')->find($id);
-            
-            if($product->weight != 0){
-                $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $product->weight);
-            }else{
-                $weight_array = (['0','g']);
-            }
-    
-            $product['weight'] = $weight_array;
-
-            $categories = DB::table('categories')->get();
-
-            $subcategories = DB::table('sub_categories')->get();
-
-            return view('backoffice.products.edit',compact('product','categories','subcategories'));
-            
-        }
-
-        public function update_product(Request $request,$id){
-
-            $data = $request->except('_token','image_paths','product_image');
-
-            $weight = $data['weight'].$data['unit'];
-
-            $data['weight'] = $weight;
-
-            unset($data['unit']);
-    
-            $product_image = $request->file('product_image');
-    
-            $image_path = $request->file('image_paths');
-    
-            $time = now();
-
-            $time = str_replace(":", "-", $time);
-
-            $time = str_replace(" ", "-", $time);
-
-    
-            if($image_path == null){
-    
-            }else{
-                $fileNameToStore = Image::make($image_path);
-                $originalPath = 'storage/gallery/images/';
-                $fileNameToStore->save($originalPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
-                $thumbnailPath = 'storage/gallery/thumbnail/';
-                $fileNameToStore->resize(250, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                });
-                $fileNameToStore = $fileNameToStore->save($thumbnailPath. str_replace(' ', '-',$time.$image_path->getClientOriginalName()));
-    
-                $image = str_replace(' ', '-',$time.$image_path->getClientOriginalName());
-    
-                DB::table('galleries')->insert( [
-                    'product_id' => $id,
-                    'image_path' => $image
-                ]);
-            }
-    
-            if($product_image == null){
-    
-            }else{
-                $fileNameToStore = Image::make($product_image);
-                $originalPath = 'storage/images/';
-                $fileNameToStore->save($originalPath.$time.$product_image->getClientOriginalName());
-                $thumbnailPath = 'storage/thumbnail/';
-                $fileNameToStore->resize(250, null, function ($constraint) {
-                                    $constraint->aspectRatio();
-                                });
-                $fileNameToStore = $fileNameToStore->save($thumbnailPath.$time.$product_image->getClientOriginalName());
-    
-                $image = $time.$product_image->getClientOriginalName();
-    
-                $data['product_image'] = $image;
-            }
-    
-    
-            DB::table('products')->where('id','=',$id)->update($data);
-    
-            return redirect('/vendor/approved-products')->with('success','Product updated.');
-        }
-        
+       
         public function image_delete($id){
 
             $image = \App\Gallery::where('id','=',$id)->first();
@@ -335,31 +189,7 @@ $objuser->update(['balance'=>$totalbal]);
     
         }
 
-        public function product_delete($id){
-
-            $product = \App\Products::find($id);
     
-            $image_path = public_path().'/storage/images/'.$product->product_image;
-    
-              
-            unlink($image_path);
-    
-            $galleries = \App\Gallery::where('product_id','=',$product->id)->get();
-    
-            foreach($galleries as $gallery){
-    
-                $image_path = public_path().'/storage/gallery/images/'.$gallery->image_path;
-                
-                unlink($image_path);
-    
-            }
-      
-            $product->delete();
-            
-            return back()->with('success','Product Deleted');
-    
-        }
-   
        /**
         * Store a newly created resource in storage.
         *
@@ -572,27 +402,7 @@ $objuser->update(['balance'=>$totalbal]);
         return view('backoffice.bookings.newbooking',compact('categories'));
        }
 
-       function getproducts(Request $request){
-$level= $request->level;
-$id=$request->id;
-if ($level==1) {
-    # code...
-    return \App\SubCategories::whereCategory_id($id)->get();
-}
-if ($level==2) {
-    # code...
-    return \App\ThirdLevelCategory::whereSubcategory_id($id)->get();
-}
-if ($level==3) {
-    # code...
-    return \App\Products::whereThirdLevelCategory_id($id)->whereVendor_id($request->vendor)->get();
-}
-if ($level==4) {
-    # code...
-    return \App\Products::whereId($id)->first();
-}
-
-       }
+ 
 
        function make_booking(Request $request){
           $county_id = $request->county_id;
@@ -928,17 +738,7 @@ return Back()->with("success",$stkMessage);
 
     }
 
-    function keySettings(Request $request){
-        $string=Vendor::whereUser_id(Auth()->user()->id)->first()->vendor_code;
-
- $encrypted = encrypt($string, "mosmos#$#@!89&^");
-
-
-
-
-return view('backoffice.vendors.keysettings',compact('encrypted'));
-    }
-
+   
 
 /**
  * Returns an encrypted & utf8-encoded
@@ -991,7 +791,8 @@ if ($request->validmpesa!=null) {
 
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereHas('product', function($q){
-            $vendor=\App\Vendor::whereUser_id(Auth()->user()->id)->first()->id;
+            $branch_vendor_code=\App\Vendor::whereUser_id(Auth()->user()->id)->first()->main_vendor_code;
+            $vendor=\App\Vendor::whereMain_vendor_code($branch_vendor_code)->first()->id;
     $q->where('vendor_id', '=', $vendor);
 })->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
        
@@ -1009,67 +810,4 @@ if ($request->validmpesa!=null) {
 
         return view('backoffice.vendors.payments.index',compact('payments','validmpesa'));
 }
- public function add_vendor(){
-
-
-        return view('backoffice.branchvendors.add');
-
-    }
-        public function vendors(){
-            $main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->vendor_code;
-
-        $vendors =  \App\Vendor::with('user')->whereMain_vendor_code($main_vendor_code)->orderBy('id', 'DESC')->get();
-
-        return view('backoffice.vendors.index',compact('vendors'));
-    }
-
-       public function save_vendor(Request $request){
-$main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->vendor_code;
-    if(\App\User::where('email',$request->email)->exists()){
-        return back()->with('error','Email Exists');
-    }elseif(\App\Vendor::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
-        return back()->with('error','Phone Exists');
-    }
-
-    $user = new \App\User();
-    $user->email = $request->input('email');
-    $user->name = $request->input('name');
-    $user->role ='branch_vendor';
-    $user->email_verified_at = now();
-    $user->password = Hash::make($request->input('password'));
-    $user->save();
-
-    $user_id = DB::getPdo()->lastInsertId();
-
-    $slug =  str_replace(' ', '-', $request->business_name);
-
-    $slug =  str_replace('/','-',$slug);
-
-    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
-
-    $vendor = new \App\Vendor();
-    $vendor->user_id = $user_id;
-    $vendor->business_name = $request->business_name;
-    $vendor->slug = $slug;
-    $vendor->status = "approved";
-    $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
-    $vendor->location  = $request->input('location');
-    $vendor->city_id  = $request->input('city_id');
- $vendor->main_vendor_code=$main_vendor_code;
-   
-    $vendor->commission_rate_subcategories='[]';
-    $vendor->fixed_cost_subcategories='[]';
-    
-
-    
-    $vendor->country  = $request->input('country');
-
-    $vendor->save();
-    $id = DB::getPdo()->lastInsertId();
-\App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
-    return redirect('/vendor/vendors')->with('success','Vendor Saved');
-
-    }
-
-
 }
