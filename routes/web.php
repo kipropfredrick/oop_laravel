@@ -287,6 +287,28 @@ Route::prefix('vendor')->group(function () {
        Route::get('/branchvendors', 'VendorController@vendors')->name('branchvendor.vendors');
  Route::get('/add-vendor', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
     Route::post('/vendor-save', 'VendorController@save_vendor')->name('vendor.branchvendor.save');
+    Route::get('/view-vendor/{id}', 'VendorController@view_vendor')->name('vendor.branchvendor.view');
+
+
+
+
+ Route::prefix('branch')->group(function () {
+
+
+        Route::get('/delete-account/{id}','VendorController@vendor_delete_account');
+        Route::get('/products-report/{id}','ReportGenerator@vendor_products_report');
+        Route::get('/active-bookings-report/{id}','ReportGenerator@vendor_active_bookings_report');
+        Route::get('/pending-bookings-report/{id}','ReportGenerator@vendor_pending_bookings_report');
+        Route::get('/rejected-bookings-report/{id}','ReportGenerator@vendor_rejected_bookings_report');
+        Route::get('/unserviced-bookings-report/{id}','ReportGenerator@vendor_unserviced_bookings_report');
+        Route::get('/complete-bookings-report/{id}','ReportGenerator@vendor_complete_bookings_report');
+        Route::get('/overdue-bookings-report/{id}','ReportGenerator@vendor_overdue_bookings_report');
+        Route::get('/delivered-bookings-report/{id}','ReportGenerator@vendor_delivered_bookings_report');
+        Route::get('/rejected-products','AdminController@vendor_rejected_products');
+       
+
+      });
+
 
     });
 });

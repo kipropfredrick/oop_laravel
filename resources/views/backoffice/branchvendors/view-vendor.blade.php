@@ -31,14 +31,14 @@ div.scrollmenu a:hover {
 		</div>
 
 		<div class="scrollmenu">
-			<a target="_blank" href="/admin/vendor/products-report/{{$vendor->id}}">Products</a>
-			<a target="_blank" href="/admin/vendor/active-bookings-report/{{$vendor->id}}">Active Bookings</a>
-			<a target="_blank" href="/admin/vendor/complete-bookings-report/{{$vendor->id}}">Complete Bookings</a>
-			<a target="_blank" href="/admin/vendor/pending-bookings-report/{{$vendor->id}}">Pending Bookings</a>
-			<a target="_blank" href="/admin/vendor/unserviced-bookings-report/{{$vendor->id}}">Unserviced Bookings</a>
-			<a target="_blank" href="/admin/vendor/overdue-bookings-report/{{$vendor->id}}">Overdue Bookings</a>
-			<a target="_blank" href="/admin/vendor/delivered-bookings-report/{{$vendor->id}}">Delivered Bookings</a>
-			<a target="_blank" href="/admin/vendor/confirmed-deliveries-report/{{$vendor->id}}">Confirmed Deliveries</a>
+		<!-- 	<a target="_blank" href="/vendor/branch/products-report/{{$vendor->id}}?type=branch">Products</a>
+			<a target="_blank" href="/vendor/branch/active-bookings-report/{{$vendor->id}}?type=branch">Active Bookings</a>
+			<a target="_blank" href="/vendor/branch/complete-bookings-report/{{$vendor->id}}?type=branch">Complete Bookings</a>
+			<a target="_blank" href="/vendor/branch/pending-bookings-report/{{$vendor->id}}?type=branch">Pending Bookings</a>
+			<a target="_blank" href="/vendor/branch/unserviced-bookings-report/{{$vendor->id}}?type=branch">Unserviced Bookings</a>
+			<a target="_blank" href="/vendor/branch/overdue-bookings-report/{{$vendor->id}}?type=branch">Overdue Bookings</a>
+			<a target="_blank" href="/vendor/branch/delivered-bookings-report/{{$vendor->id}}?type=branch">Delivered Bookings</a>
+			<a target="_blank" href="/vendor/branch/confirmed-deliveries-report/{{$vendor->id}}?type=branch">Confirmed Deliveries</a> -->
 		</div>
 		
 		<div class="container" style="margin-top:20px">

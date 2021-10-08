@@ -20,7 +20,7 @@
 
 		<div class="card">
               <div class="card-header">
-                <h3 class="card-title">Add Vendor</h3>
+                <h3 class="card-title">Add Branch</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -29,44 +29,13 @@
 
 			@csrf
 
-			   <div class="row">
-
-			   <div class="col-md-6">
-
-			   <div class="form-group">
-				<label>Full Name</label>
-					<input value="{{ old('name') }}" tclass="form-control" name="name" placeholder="Enter full name" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
-				
-					@error('name')
-								<div class="invalid-feedback">
-									{{ $message }}
-								</div>
-					@enderror
-				</div>
-			   
-			   </div>
-
-				<div class="col-md-6">
-				<div class="form-group">
-					<label>Phone</label>
-						<input value="{{ old('phone') }}" minLegth="10" maxLegth="10" tclass="form-control" name="phone" placeholder="07XXXXXXXX" type="number" class="form-control @if($errors->has('name')) invalid_field @endif" required>
-					
-						@error('phone')
-									<div class="invalid-feedback">
-										{{ $message }}
-									</div>
-						@enderror
-				</div>
-				</div>
-			   
-			   </div>
 
 				<div class="row">
 				
 				<div class="col-md-6">
 				
 				<div class="form-group">
-					<label>Business Name</label>
+					<label>Branch Name</label>
 						<input value="{{ old('business_name') }}"  class="form-control" name="business_name" placeholder="Business Name"  class="form-control @if($errors->has('name')) invalid_field @endif" required>
 					
 						@error('business_name')
@@ -97,6 +66,72 @@
 				</div>
 				
 				</div>
+				<div class="row">
+
+				 <div class="col-md-6">
+				 <div class="form-group">
+					<label>City</label>
+						<input required class="form-control" name="city_id" placeholder="Enter city name" type="text" class="form-control @if($errors->has('city_id')) invalid_field @endif">
+						<!-- 	@foreach (App\City::all() as $city)
+								<option value="{{$city->id}}">{{$city->city_name}}</option>
+							@endforeach -->
+							
+						@error('city_id')
+									<div class="invalid-feedback">
+										{{ $message }}
+									</div>
+						@enderror
+					</div>
+				 </div>
+
+				<div class="col-md-6">
+				<div class="form-group">
+					<label>Location</label>
+						<input value="{{ old('location') }}" tclass="form-control" name="location" placeholder="Enter Location" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
+					
+						@error('location')
+									<div class="invalid-feedback">
+										{{ $message }}
+									</div>
+						@enderror
+				</div>
+				</div>
+
+				</div>
+
+
+
+			   <div class="row">
+
+			   <div class="col-md-6">
+
+			   <div class="form-group">
+				<label>Branch Admin Full Name</label>
+					<input value="{{ old('name') }}" tclass="form-control" name="name" placeholder="Enter full name" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
+				
+					@error('name')
+								<div class="invalid-feedback">
+									{{ $message }}
+								</div>
+					@enderror
+				</div>
+			   
+			   </div>
+
+				<div class="col-md-6">
+				<div class="form-group">
+					<label>Phone</label>
+						<input value="{{ old('phone') }}" minLegth="10" maxLegth="10" tclass="form-control" name="phone" placeholder="07XXXXXXXX" type="number" class="form-control @if($errors->has('name')) invalid_field @endif" required>
+					
+						@error('phone')
+									<div class="invalid-feedback">
+										{{ $message }}
+									</div>
+						@enderror
+				</div>
+				</div>
+			   
+			   </div>
 
 
 		
@@ -134,22 +169,7 @@
 			   </div> -->
 				<div class="row">
 
-				 <div class="col-md-6">
-				 <div class="form-group">
-					<label>City</label>
-						<select required class="form-control" name="city_id" placeholder="Enter name" type="text" class="form-control @if($errors->has('city_id')) invalid_field @endif">
-							@foreach (App\City::all() as $city)
-								<option value="{{$city->id}}">{{$city->city_name}}</option>
-							@endforeach
-							</select>
-						@error('city_id')
-									<div class="invalid-feedback">
-										{{ $message }}
-									</div>
-						@enderror
-					</div>
-				 </div>
-
+				
 				 <div class="col-md-6">
 				
 				<div class="form-group">
@@ -164,25 +184,7 @@
 				</div>
 				
 				</div>
-
-				</div>
-
-				<div class="row">
-
-				<div class="col-md-6">
-				<div class="form-group">
-					<label>Location</label>
-						<input value="{{ old('location') }}" tclass="form-control" name="location" placeholder="Enter Location" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
-					
-						@error('location')
-									<div class="invalid-feedback">
-										{{ $message }}
-									</div>
-						@enderror
-				</div>
-				</div>
-
-				<div class="col-md-6">
+					<div class="col-md-6">
 				<div class="form-group">
 					<label>Password</label>
 						<input value="{{ old('password') }}" tclass="form-control" name="password" placeholder="Enter password" type="password" class="form-control @if($errors->has('name')) invalid_field @endif" required>
@@ -194,8 +196,9 @@
 						@enderror
 				</div>
 				</div>
-				
+
 				</div>
+
 
 				<button class="btn btn-primary" type="submit">Save</button>
 

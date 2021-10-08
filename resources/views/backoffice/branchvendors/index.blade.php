@@ -36,7 +36,7 @@
 								<th class="thead">Location</th>
 								<th class="thead">Status</th>
 								<th class="thead">Date Added</th>
-								<th class="thead">Commissions</th>
+						
 								<th class="thead">Actons</th>
 							</tr>
 						</thead>
@@ -68,16 +68,14 @@
 									<td>
 										{{date('M d'.', '.'Y', strtotime($vendor->created_at))}}
 									</td>
-									<td>
-										<a href="setcommissions/{{$vendor->id}}" title="set commissions"><i class="fa fa-plus"></i></a>
-									</td>
+								
 									<td>
 										@if($vendor->status == 'pending')
-											<a class="btn btn-outline-primary" href="/admin/approve-vendor/{{$vendor->id}}">Approve</a>
+											<a class="btn btn-outline-primary" href="/vendor/approve-vendor/{{$vendor->id}}">Approve</a>
 										@else
 										@endif
-										<a class="btn btn-outline-success" href="/admin/view-vendor/{{$vendor->id}}">View</a>
-										<a class="btn btn-outline-danger" onclick="return confirm('Are you sure to delete this vendor?') ? true : false" href="/admin/vendor/delete-account/{{$vendor->id}}">Delete</a>
+										<a class="btn btn-outline-success" href="/vendor/view-vendor/{{$vendor->id}}">View</a>
+										<a class="btn btn-outline-danger" onclick="return confirm('Are you sure to delete this vendor?') ? true : false" href="/vendor/delete-account/{{$vendor->id}}">Delete</a>
 									</td>
                                 </tr>
                             @endforeach

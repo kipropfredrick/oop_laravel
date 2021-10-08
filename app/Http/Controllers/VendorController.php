@@ -1009,6 +1009,15 @@ if ($request->validmpesa!=null) {
 
         return view('backoffice.vendors.payments.index',compact('payments','validmpesa'));
 }
+  public function view_vendor($id){
+         $vendor = \App\Vendor::with('user','city')->where('id','=',$id)->first();
+
+         $products = \App\Products::where('vendor_id','=',$vendor->id)->get();
+
+         return view('backoffice.branchvendors.view-vendor',compact('vendor','products'));
+
+     }
+
  public function add_vendor(){
 
 
@@ -1020,7 +1029,7 @@ if ($request->validmpesa!=null) {
 
         $vendors =  \App\Vendor::with('user')->whereMain_vendor_code($main_vendor_code)->orderBy('id', 'DESC')->get();
 
-        return view('backoffice.vendors.index',compact('vendors'));
+        return view('backoffice.branchvendors.index',compact('vendors'));
     }
 
        public function save_vendor(Request $request){
