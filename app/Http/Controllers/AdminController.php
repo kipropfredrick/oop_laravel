@@ -4543,7 +4543,7 @@ function bookingpayments(Request $request,$id){
 
 function setcommissions(Request $request,$id){
     $vendor=\App\Vendor::with('user')->whereId($id)->first();
-$subcategories=\App\Products::whereVendor_id($vendor->id)->distinct('subcategory_id')->pluck('subcategory_id')->toArray();
+$subcategories=\App\Products::distinct('subcategory_id')->pluck('subcategory_id')->toArray();
 $subcats=\App\SubCategories::whereIn('id',$subcategories)->get();
 $commissions=json_decode($vendor->commission_rate_subcategories);
 
