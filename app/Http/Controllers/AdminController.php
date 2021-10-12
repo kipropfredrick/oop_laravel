@@ -673,6 +673,7 @@ $products=[];
     function fetch_sub_categories(Request $request)
     {
         $category_id = $request->get('category_id');
+         $vendor=\App\Vendor::with('user')->whereUser_id($request->user_id)->first();
 
         $first = [
                 "id"=>'0',
@@ -690,8 +691,33 @@ $products=[];
         $subcategories = DB::table('sub_categories')
                         ->where('category_id', $category_id)
                         ->get();
+$commissions=json_decode($vendor->commission_rate_subcategories);
         foreach($subcategories as $subcategory){
-            array_push($arr,$subcategory);
+   
+if ($vendor->commssionrate_enabled==1) {
+    # code...
+    foreach ($subcategories as $key => $value) {
+ 
+$haskey=false;
+foreach ($commissions as $key1 => $value1) {
+    if ($value1->id==$value->id) {
+        # code...
+ array_push($arr,$subcategory);
+
+break;
+    }
+    # code...
+}
+
+
+}
+}
+else{
+     array_push($arr,$subcategory);
+}
+
+
+            // array_push($arr,$subcategory);
         }
 
         $subcategories = $arr;
@@ -4543,8 +4569,9 @@ function bookingpayments(Request $request,$id){
 
 function setcommissions(Request $request,$id){
     $vendor=\App\Vendor::with('user')->whereId($id)->first();
-$subcategories=\App\Products::distinct('subcategory_id')->pluck('subcategory_id')->toArray();
-$subcats=\App\SubCategories::whereIn('id',$subcategories)->get();
+//$subcategories=\App\Products::distinct('subcategory_id')->pluck('subcategory_id')->toArray();
+    $categories=\App\Categories::get();
+$subcats=\App\SubCategories::get();
 $commissions=json_decode($vendor->commission_rate_subcategories);
 
 
@@ -4611,7 +4638,7 @@ $value->fixed_mobile_money=0;
 
 
 
-    return view('backoffice.vendors.setcommissions',compact('vendor','subcats'));
+    return view('backoffice.vendors.setcommissions',compact('vendor','subcats','categories'));
 }
 
 }
