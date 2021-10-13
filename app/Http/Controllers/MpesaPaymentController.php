@@ -1071,7 +1071,7 @@ else{
                 if ($status=='pending') {
                     # code...
                     $newbalance=$balance-200;
-                    $total_cost=($booking->total_cost)-200
+                    $total_cost=($booking->total_cost)-200;
     $recipients = $booking->customer->phone;
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
