@@ -369,7 +369,8 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/update-brand/{brand}', 'AdminController@update_brand')->name('admin.update_brand');
     Route::get('/view-category/{id}', 'AdminController@view_category')->name('admin.category.view');
     Route::get('/view-subcategory/{id}', 'AdminController@view_subcategory')->name('admin.subcategory.view');
-    Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
+    Route::get('/edit-vendor/{id}', 'AdminController@edit_vendor')->name('admin.vendor.edit');
+      Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
       Route::get('/setcommissions/{id}', 'AdminController@setcommissions')->name('setcommissions');
     Route::get('/view-influencer/{id}', 'AdminController@view_influencer')->name('admin.influencer.view');
     Route::get('/view-agent/{id}', 'AdminController@view_agent')->name('admin.agent.view');
@@ -440,7 +441,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
 
     Route::get('/add-vendor', 'AdminController@add_vendor')->name('admin.vendor.add');
     Route::post('/vendor-save', 'AdminController@save_vendor')->name('admin.vendor.save');
-    Route::post('/update_vendor/{id}', 'AdminController@update_vendor')->name('admin.vendor.update_vendor');
+    Route::post('/vendor-update/{id}', 'AdminController@update_vendor')->name('admin.vendor.update');
+    
+    Route::post('/update_vendor/{id}', 'AdminController@update_vendors')->name('admin.vendor.update_vendor');
     Route::get('/banners', 'AdminController@banners')->name('admin.banners');
     Route::get('/add_banner','AdminController@add_banner')->name('admin.adder-banner');
     Route::post('/banner_save','AdminController@save_banner')->name('admin.save-banner');

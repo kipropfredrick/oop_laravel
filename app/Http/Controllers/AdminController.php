@@ -31,7 +31,7 @@ use App\Customers;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\paybills;
 use App\Http\Controllers\AES;
-
+use App\Vendor;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 
@@ -411,6 +411,14 @@ $products=[];
          $products = \App\Products::where('vendor_id','=',$vendor->id)->get();
 
          return view('backoffice.vendors.view-vendor',compact('vendor','products'));
+
+     }
+
+       public function edit_vendor($id){
+         $vendor = \App\Vendor::with('user.customer','city')->where('id','=',$id)->first();
+
+
+         return view('backoffice.vendors.edit-vendor',compact('vendor'));
 
      }
 
@@ -1150,6 +1158,13 @@ foreach ($array as $key => $value) {
     $vendor->business_name = $request->business_name;
     $vendor->slug = $slug;
     $vendor->status = "approved";
+    if (isset($request->add_product)) {
+        # code...
+        $vendor->add_product=1;
+    }
+    else{
+        $vendor->add_product=0;
+    }
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
@@ -1177,6 +1192,75 @@ foreach ($array as $key => $value) {
     $id = DB::getPdo()->lastInsertId();
 \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
     return redirect('/admin/vendors')->with('success','Vendor Saved');
+
+    }
+
+       public function update_vendors(Request $request, $id){
+
+    // if(\App\User::where('email',$request->email)->exists()){
+    //     return back()->with('error','Email Exists');
+    // }elseif(\App\Vendor::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+    //     return back()->with('error','Phone Exists');
+    // }
+
+    $user_details=Array("email"=> $request->input('email'),"name"=> $request->input('name') );
+    // $user->email = $request->input('email');
+    // $user->name = $request->input('name');
+    // $user->role ='vendor';
+    // $user->email_verified_at = now();
+    // $user->password = Hash::make($request->input('password'));
+
+        $vendor=Vendor::whereId($id);
+       $user=User::whereId($vendor->first()->user_id)->update($user_details);
+
+
+   
+
+    $slug =  str_replace(' ', '-', $request->business_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+    $vendor_details=Array("business_name"=>$request->business_name,"slug"=>$slug);
+   // $vendor->user_id = $user_id;
+    // $vendor->business_name = $request->business_name;
+    // $vendor->slug = $slug;
+    //$vendor->status = "approved";
+    if (isset($request->add_product)) {
+        # code...
+        $vendor_details['add_product']=1;
+    }
+    else{
+        $vendor_details['add_product']=0;
+    }
+    $vendor_details['phone']  = $request->input('phone');
+    $vendor_details['location']  = $request->input('location');
+    $vendor_details['city_id']  = $request->input('city_id');
+ 
+    $vendor_details['commssionrate_enabled']= $request->input('commissionrate_enabled');
+    $vendor_details['category']= $request->input('category');
+    // $vendor->commission_rate_subcategories='[]';
+    // $vendor->fixed_cost_subcategories='[]';
+    
+
+    // if ($request->input('commissionrate_enabled')==1) {
+    //     # code...
+    //     $vendor->commission_rate  = $request->input('commission_rate');
+    // $vendor->commission_cap  = $request->input('commission_cap');
+    // }
+    // else{
+    //   $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
+    // $vendor->fixed_bank= $request->input('fixed_bank');
+    // }
+
+    
+    $vendor_details['country']  = $request->input('country');
+
+    $vendor->update($vendor_details);
+  //  $id = DB::getPdo()->lastInsertId();
+// \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
+    return redirect('/admin/vendors')->with('success','Vendor Updated');
 
     }
 

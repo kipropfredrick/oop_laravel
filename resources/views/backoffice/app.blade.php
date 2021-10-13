@@ -687,7 +687,16 @@
           </li>
 
          @elseif(auth()->user()->role =='vendor')
+
+         <?php 
+
+$vendor=\App\Vendor::whereUser_id(auth()->user()->id)->first();
+
+
+         ?>
+         @if($vendor->add_product==1)
  <li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Add Product</span></a></li>
+ @endif
 
           <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Product Booking</span></a></li>
 
@@ -700,7 +709,7 @@
         <li class="nav-item"><a href="/vendor/approved-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Approved Products</span></a></li>
 				<li class="nav-item"><a href="/vendor/pending-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Products</span></a></li>
 				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Inactive Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Add Product</span></a></li>
+			<!-- 	<li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Add Product</span></a></li> -->
 			</ul>
 		</li>
 		<li class="nav-item">
