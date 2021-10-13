@@ -174,8 +174,8 @@ $customer=Customers::wherePhone($username)->first();
 $phone=$customer->phone;
         $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->sum('total_cost');
         $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->count();
-        $activeBookingAmount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->sum('total_cost');
-        $activeBookingsCount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->count();
+        $activeBookingAmount = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->sum('total_cost');
+        $activeBookingsCount = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->count();
 
         $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->sum('total_cost');
         $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->count();
