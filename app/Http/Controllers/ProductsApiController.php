@@ -248,14 +248,14 @@ $bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', 
 if ($bok!=null) {
   # code...
 
-  $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
-         $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
+  $completionDate = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setdate;
+         $createdat = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->created_at;
 
   $amountPaids=$bok->amount_paid;
-  $hastarget=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $bookingreference=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->booking_reference;
-  $setreminder=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $setdate=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+  $hastarget=intval(\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setreminder);
+  $bookingreference=\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->booking_reference;
+  $setreminder=intval(\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setreminder);
+  $setdate=\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setdate;
 
 $bookingbalances=intval($bok->balance);
 $totalBookingAmounts=$bok->total_cost;
