@@ -1020,8 +1020,7 @@ if ($request->validmpesa!=null) {
     $q->where('vendor_id', '=', $vendor);
 })->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
        
-            
-view_branch
+
             return DataTables::of($payments)->make(true);
 
         }
