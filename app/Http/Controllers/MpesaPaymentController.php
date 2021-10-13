@@ -1068,20 +1068,22 @@ else{
 
                 $status= DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)->first()->status;
+
                 if ($status=='pending') {
                     # code...
+                    $current_date_time = Carbon::now()->toDateTimeString();
                     $newbalance=$balance-200;
                     $total_cost=($booking->total_cost)-200;
     $recipients = $booking->customer->phone;
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
-                ->update(['balance'=>$newbalance,'amount_paid'=>$amount_paid,'status'=>'active',"discount"=>200,"total_cost"=>$total_cost]);
+                ->update(['balance'=>$newbalance,'amount_paid'=>$amount_paid,'status'=>'active',"discount"=>200,"total_cost"=>$total_cost,"activated_at"=>$current_date_time]);
                 $message="Congratulations. You have received a KSh.200 discount on your Lipa Mos Mos order. Your new balance is KSh.{$newbalance}.";
 SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
   $token=\App\User::whereId($booking->customer->user_id)->first()->token;
     if ($token==null) {
         # code...
-       return $message;
+       //return $message;
     }
        $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
         $obj = new pushNotification();
