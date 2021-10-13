@@ -49,6 +49,7 @@
                                 <th class="thead">Balance</th>
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
+                                <th class="thead">Activation Date</th>
                                 <th class="thead">Progress</th>
                                 <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
@@ -223,6 +224,18 @@ ${date}
 								 `;
 
             	}
+            }
+              ,{
+        data:"activated_at","render": function(data, type, full, meta){
+                    var agent=full;
+                    var strdate = new Date(data);
+var date = moment(strdate).format('DD.MM.YYYY');
+ //07.02.2017
+return `
+${date}
+                                 `;
+
+                }
             }
 
                 ,{

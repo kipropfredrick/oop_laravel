@@ -697,9 +697,9 @@ $vendor=\App\Vendor::whereUser_id(auth()->user()->id)->first();
          @if($vendor->add_product==1)
  <li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Add Product</span></a></li>
  @endif
-
+        @if($vendor->add_product==1)
           <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Product Booking</span></a></li>
-
+@endif
                  <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Direct Booking
 </span></a></li>
 		 <li class="nav-item">
