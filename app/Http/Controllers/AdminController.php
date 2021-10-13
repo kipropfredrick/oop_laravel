@@ -662,6 +662,30 @@ $products=[];
     public function add_product()
     {
         $categories = DB::table('categories')->orderBy('id', 'DESC')->get();
+// $arr=[];
+//         $commissions=json_decode($vendor->commission_rate_subcategories);
+// foreach ($categories as $key => $category) {
+//     # code...
+
+// foreach ($commissions as $key1 => $value1) {
+//   $cat=\App\Models\SubCategories::whereSub_category_id($value1->id)->first();
+//   if ($cat!=null) {
+//       # code...
+//     $category_id=$cat->category_id;
+
+//     if ($category->id==$category_id) {
+//         # code...
+// array_push($arr, $category);
+//     }
+
+//   }
+
+
+// }
+// }
+// $categories=$arr;
+  
+// return 0;
 
         $subcategories = DB::table('sub_categories')->orderBy('id', 'DESC')->get();
 
@@ -672,9 +696,10 @@ $products=[];
 
     function fetch_sub_categories(Request $request)
     {
+
         $category_id = $request->get('category_id');
          $vendor=\App\Vendor::with('user')->whereUser_id($request->user_id)->first();
-
+    Log::info($vendor->commssionrate_enabled);
         $first = [
                 "id"=>'0',
                 "category_id"=>'',
@@ -696,12 +721,13 @@ $commissions=json_decode($vendor->commission_rate_subcategories);
    
 if ($vendor->commssionrate_enabled==1) {
     # code...
-    foreach ($subcategories as $key => $value) {
+    
  
 $haskey=false;
 foreach ($commissions as $key1 => $value1) {
-    if ($value1->id==$value->id) {
+    if ($value1->id==$subcategory->id) {
         # code...
+        Log::info("enabled yes");
  array_push($arr,$subcategory);
 
 break;
@@ -710,7 +736,7 @@ break;
 }
 
 
-}
+
 }
 else{
      array_push($arr,$subcategory);

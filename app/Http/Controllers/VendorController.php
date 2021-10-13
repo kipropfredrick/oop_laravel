@@ -397,6 +397,31 @@ $objuser->update(['balance'=>$totalbal]);
      $vendor = Vendor::where('user_id','=',Auth::id())->first();
 
      $categories = DB::table('categories')->get();
+       $categories = DB::table('categories')->orderBy('id', 'DESC')->get();
+$arr=[];
+        $commissions=json_decode($vendor->commission_rate_subcategories);
+foreach ($categories as $key => $category) {
+    # code...
+
+foreach ($commissions as $key1 => $value1) {
+  $cat=\App\SubCategories::whereId($value1->id)->first();
+  if ($cat!=null) {
+      # code...
+    $category_id=$cat->category_id;
+
+    if ($category->id==$category_id) {
+        # code...
+array_push($arr, $category);
+    }
+
+  }
+
+
+}
+}
+$categories=$arr;
+  
+
 
      $subcategories = DB::table('sub_categories')->get();
 
