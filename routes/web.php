@@ -284,8 +284,9 @@ Route::prefix('vendor')->group(function () {
         Route::get('/revoked-bookings','VendorController@revoked_bookings');
         Route::get('/product-edit/{id}', 'VendorController@product_edit');
     Route::get('/product-delete/{id}', 'VendorController@product_delete');
-       Route::get('/branchvendors', 'VendorController@vendors')->name('branchvendor.vendors');
- Route::get('/add-vendor', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
+       Route::get('/branches', 'VendorController@branches')->name('branchvendor.branches');
+ Route::get('/add-branch', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
+  Route::get('/view-branch/{id}', 'VendorController@view_branch')->name('vendor.branchvendor.view');
     Route::post('/vendor-save', 'VendorController@save_vendor')->name('vendor.branchvendor.save');
     Route::get('/view-vendor/{id}', 'VendorController@view_vendor')->name('vendor.branchvendor.view');
 
@@ -319,7 +320,12 @@ Route::prefix('branch')->group(function () {
         Route::get('/view-booking/{id}','BranchVendorController@bookingdetails')->name('vendor.bookingdetails');
 
   Route::post('/view-booking/{id}/payments','BranchVendorController@bookingpayments')->name('vendor.bookingpayments');
+     Route::get('/branch-booking', 'BranchVendorController@manualBooking');
         
+          Route::any('/branchusers', 'BranchVendorController@branchusers');
+        Route::any('/adduser', 'BranchVendorController@adduser');
+    Route::any('/user-save', 'BranchVendorController@usersave');
+          
           Route::any('/payments', 'BranchVendorController@payments');
         Route::get('/vendor-booking', 'BranchVendorController@manualBooking');
         Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');

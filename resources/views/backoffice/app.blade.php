@@ -741,13 +741,13 @@ $vendor=\App\Vendor::whereUser_id(auth()->user()->id)->first();
       </a>
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="/vendor/branchvendors" class="nav-link">
+          <a href="/vendor/branches" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>All Branches</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/vendor/add-vendor" class="nav-link">
+          <a href="/vendor/add-branch" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Add Branch</p>
           </a>
@@ -759,11 +759,11 @@ $vendor=\App\Vendor::whereUser_id(auth()->user()->id)->first();
         @elseif(auth()->user()->role =='branch_vendor')
 
 
-                 <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Direct Booking
+                 <li class="nav-item"><a href="/branch/branch-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Direct Booking
 </span></a></li>
 
     <li class="nav-item">
-      <a href="#" class="nav-link">&nbsp   <i class="fa fa-bookmark"></i> <span>Bookings</span><i class="right fas fa-angle-left"></i></a>
+      <a href="#" class="nav-link">&nbsp   <i class="fa fa-bookmark"></i>&nbsp &nbsp <span>Bookings</span><i class="right fas fa-angle-left"></i></a>
 
       <ul class="nav nav-treeview" data-submenu-title="Bookings">
   <!--       <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li> -->
@@ -781,7 +781,31 @@ $vendor=\App\Vendor::whereUser_id(auth()->user()->id)->first();
       </ul>
     </li>
   <li class="nav-item"><a href="/branch/payments" class="nav-link"><i class="fas fa-wallet nav-icon"></i> <span>Payments</span></a></li>
-    
+  @if(auth()->user()->branch_user->role=='admin')
+  <li class="nav-item">
+      <a href="#" class="nav-link">&nbsp  
+        <i class="fas fa-store"></i>
+        <p> &nbsp
+        Users
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="/branch/branchusers" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>All Users</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/branch/adduser" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Add User</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    @endif
 
 
 

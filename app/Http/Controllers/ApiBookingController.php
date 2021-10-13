@@ -112,12 +112,13 @@ break;
 
     function addProduct($request){
 
-    	 $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
-         $vendor=Vendor::whereMain_vendor_code($main_vendor_code)->first();
-         if ($vendor==null) {
+    	 // $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
+      //    $vendor=Vendor::whereMain_vendor_code($main_vendor_code)->first();
+      //    if ($vendor==null) {
+      //      }
              # code...
             $vendor = Vendor::whereVendor_code($request->vendor_code)->first();
-         }
+        
 
 
 
@@ -175,21 +176,21 @@ $data=Array();
 
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
-    
+        $vendor_code = $request->vendor_code;
 
- $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
- $isbranch=false;
-         $vendor=Vendor::whereVendor_code($main_vendor_code)->first();
-         if ($vendor==null) {
-             # code...
-           // $vendor = Vendor::whereVendor_code($request->vendor_code)->first();
-                $vendor_code = $request->vendor_code;
-         }
-         else{
-            $isbranch=true;
-            $vendor_code=$vendor->vendor_code;
-            $branch_vendor_code= $request->vendor_code;
-         }
+ // $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
+ // $isbranch=false;
+ //         $vendor=Vendor::whereVendor_code($main_vendor_code)->first();
+ //         if ($vendor==null) {
+ //             # code...
+ //           // $vendor = Vendor::whereVendor_code($request->vendor_code)->first();
+ //                $vendor_code = $request->vendor_code;
+ //         }
+ //         else{
+ //            $isbranch=true;
+ //            $vendor_code=$vendor->vendor_code;
+ //            $branch_vendor_code= $request->vendor_code;
+ //         }
 
 
         $categories = \App\Categories::all();
@@ -321,10 +322,10 @@ $data=Array();
         $booking->date_started  = now();
         $booking->due_date = $due_date;
        $booking->platform=$source;
-       if ($isbranch) {
+       if (isset($request->branch_id)) {
            # code...
               $booking->vendor_code = $vendor_code;
-                    $booking->branch_vendor_code = $branch_vendor_code;
+                    $booking->branch_id = $request->branch_id;
        }
        else{
               $booking->vendor_code = $vendor_code;
@@ -412,10 +413,10 @@ $data=Array();
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
         $booking->payment_mode  = 'Mpesa';
-       if ($isbranch) {
+        if (isset($request->branch_id)) {
            # code...
               $booking->vendor_code = $vendor_code;
-                    $booking->branch_vendor_code = $branch_vendor_code;
+                    $booking->branch_id = $request->branch_id;
        }
        else{
               $booking->vendor_code = $vendor_code;
@@ -495,10 +496,10 @@ $data=Array();
         $booking->booking_reference =$booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
-      if ($isbranch) {
+       if (isset($request->branch_id)) {
            # code...
               $booking->vendor_code = $vendor_code;
-                    $booking->branch_vendor_code = $branch_vendor_code;
+                    $booking->branch_id = $request->branch_id;
        }
        else{
               $booking->vendor_code = $vendor_code;

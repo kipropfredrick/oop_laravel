@@ -1021,7 +1021,7 @@ if ($request->validmpesa!=null) {
 })->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
        
             
-
+view_branch
             return DataTables::of($payments)->make(true);
 
         }
@@ -1057,11 +1057,22 @@ if ($request->validmpesa!=null) {
         return view('backoffice.branchvendors.index',compact('vendors'));
     }
 
+    public function branches(Request $request){
+       $vendor_id= \App\Vendor::whereUser_id(Auth::user()->id)->first()->id;
+       $branches=\App\Branch::whereVendor_id($vendor_id)->orderBy('id', 'DESC')->get();
+
+          return view('backoffice.branchvendors.index',compact('branches'));
+    }
+    function view_branch(Request $request,$id){
+$branch_users=\App\BranchUser::with('user')->whereBranch_id($id)->get();
+  return view('backoffice.branchvendors.branch_users',compact('branch_users'));
+    }
+
        public function save_vendor(Request $request){
-$main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->vendor_code;
+$main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->id;
     if(\App\User::where('email',$request->email)->exists()){
         return back()->with('error','Email Exists');
-    }elseif(\App\Vendor::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+    }elseif(\App\BranchUser::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
         return back()->with('error','Phone Exists');
     }
 
@@ -1075,33 +1086,32 @@ $main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->vendor_
 
     $user_id = DB::getPdo()->lastInsertId();
 
-    $slug =  str_replace(' ', '-', $request->business_name);
+    $slug =  str_replace(' ', '-', $request->branch_name);
 
     $slug =  str_replace('/','-',$slug);
 
     $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
 
-    $vendor = new \App\Vendor();
-    $vendor->user_id = $user_id;
-    $vendor->business_name = $request->business_name;
-    $vendor->slug = $slug;
-    $vendor->status = "approved";
-    $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
-    $vendor->location  = $request->input('location');
-    $vendor->city_id  = $request->input('city_id');
- $vendor->main_vendor_code=$main_vendor_code;
-   
-    $vendor->commission_rate_subcategories='[]';
-    $vendor->fixed_cost_subcategories='[]';
-    
+    $branch = new \App\Branch();
+    $branch->name=$request->branch_name;
+    $branch->slug=$slug;
+    $branch->vendor_id=$main_vendor_code;
+    $branch->save();
+$branch_id = DB::getPdo()->lastInsertId();
 
-    
-    $vendor->country  = $request->input('country');
 
-    $vendor->save();
-    $id = DB::getPdo()->lastInsertId();
-\App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
-    return redirect('/vendor/vendors')->with('success','Vendor Saved');
+ $branch_user = new \App\BranchUser();
+ $branch_user->user_id = $user_id;
+    $branch_user->branch_id = $branch_id;
+    $branch_user->status = "approved";
+    $branch_user->phone  = '254'.ltrim($request->input('phone'), '0');
+    $branch_user->location  = $request->input('location');
+    $branch_user->city  = $request->input('city');
+    $branch_user->country  = $request->input('country');
+
+    $branch_user->save();
+
+return Back()->with('success','branch created');
 
     }
 

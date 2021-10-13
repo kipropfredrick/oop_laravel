@@ -202,6 +202,7 @@ else{
                 $payment->customer_id = $booking->customer_id; 
                 $payment->product_id  = $booking->product_id;
                 $payment->transaction_amount = $transaction_amount;
+                $payment->branch_id=$booking->branch_id;
                 $payment->booking_status = 'active';
                 $payment->date_paid = $time;
                 $payment->save();
@@ -897,6 +898,7 @@ else{
             $payment->product_id  = $booking->product_id;
             $payment->transaction_amount = $transaction_amount;
             $payment->booking_status = 'active';
+              $payment->branch_id=$booking->branch_id;
             $payment->date_paid = now();
             $payment->save();
 
@@ -1392,6 +1394,7 @@ else{
                 $payment->product_id  = $booking->product_id;
                 $payment->transaction_amount = $transaction_amount;
                 $payment->booking_status = 'active';
+                  $payment->branch_id=$booking->branch_id;
                 $payment->date_paid = $time;
                 $payment->save();
 
