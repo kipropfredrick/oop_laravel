@@ -441,9 +441,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
 
     Route::get('/add-vendor', 'AdminController@add_vendor')->name('admin.vendor.add');
     Route::post('/vendor-save', 'AdminController@save_vendor')->name('admin.vendor.save');
-    Route::post('/vendor-update/{id}', 'AdminController@update_vendor')->name('admin.vendor.update');
+    Route::post('/vendor-update/{id}', 'AdminController@update_vendor')->name('admin.vendor.update_vendor');
     
-    Route::post('/update_vendor/{id}', 'AdminController@update_vendors')->name('admin.vendor.update_vendor');
+    Route::post('/update_vendor/{id}', 'AdminController@update_vendors')->name('admin.vendor.update');
     Route::get('/banners', 'AdminController@banners')->name('admin.banners');
     Route::get('/add_banner','AdminController@add_banner')->name('admin.adder-banner');
     Route::post('/banner_save','AdminController@save_banner')->name('admin.save-banner');
