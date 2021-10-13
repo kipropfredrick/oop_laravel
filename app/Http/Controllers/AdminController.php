@@ -4704,10 +4704,12 @@ break;
 }
 if (!$haskey) {
     # code...
+
         $value->commission_rate=0;
     $value->commission_cap=0;
      $value->fixed_bank=0;
 $value->fixed_mobile_money=0;
+unset($subcats[$key]);
 }
 
 
