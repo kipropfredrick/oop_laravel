@@ -347,7 +347,7 @@ $balance=0;
 $booking = new \App\Bookings();
  $recipients = $valid_phone;
 if (intval($balance)==0) {
-   $booking->balance =   $total_cost-100;
+   $booking->balance =   $total_cost;
 $booking->amount_paid = "0";
 $booking->status = "pending";
 }
@@ -368,7 +368,7 @@ else{
         $booking->balance =   $total_cost-(intval($balance));
 $booking->amount_paid = $balance;
 $booking->status = "active";
- $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance))-100);
+ $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
     }
 
 
