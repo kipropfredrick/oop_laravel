@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         @if(auth()->user()->role == "admin")
-          @if(Sentinel::hasAccess('dashboard'))
+        @if(Sentinel::hasAccess('dashboard'))
 
         <?php 
 
@@ -23,7 +23,7 @@
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->count();
 
-$customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->pluck('customer_id')->toArray();
+        $customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->pluck('customer_id')->toArray();
         $customersCount = \App\Customers::whereIn("id",$customers)->count();
         $vendorsCount = \App\Vendor::count();
                 

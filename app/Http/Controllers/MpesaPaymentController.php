@@ -345,7 +345,7 @@ else{
 
                     $paymentLog['TransactionType'] = "SMS Credit Topup";
       
-                  }
+                }
 
                 $paymentLog['created_at'] = now();
                 $paymentLog['updated_at'] = now();
@@ -353,22 +353,22 @@ else{
                 \DB::connection('mysql2')->table('payment_logs')->insert( $paymentLog);
 
                 $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
-Log::info("checkpoint0");
+                Log::info("checkpoint0");
                 $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id,$transaction_id);
 
                 return $message;
 
             }
                $mosmosaccountpattern="/MID/i";
-  $mosmosTrue = preg_match($mosmosaccountpattern,$bill_ref_no);
+               $mosmosTrue = preg_match($mosmosaccountpattern,$bill_ref_no);
 
-            if($mosmosTrue ==1){
-$user=\App\User::whereMosmosid($bill_ref_no);
-$obj=$user->first();
-if($obj!=null){
-    $balance=$obj->balance;
-$balance=$balance+$transaction_amount;
-$user->update(["balance"=>$balance]);
+    if($mosmosTrue ==1){
+        $user=\App\User::whereMosmosid($bill_ref_no);
+        $obj=$user->first();
+        if($obj!=null){
+            $balance=$obj->balance;
+        $balance=$balance+$transaction_amount;
+        $user->update(["balance"=>$balance]);
 
         for($i=0;$i<1000000;$i++){
             $transid = 'TT'.rand(10000,99999)."M";
@@ -1663,8 +1663,9 @@ else{
     }
 
     public static function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id,$TransID='none'){
-Log::info("checkpoint1");
+       Log::info("checkpoint1");
        $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
+
        $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
 
        if(!empty($sms_credit_payment)){
@@ -1686,7 +1687,7 @@ Log::info("checkpoint1");
             $n_sms_credits = $c_sms_credits+$transaction_amount;
 
             \DB::connection('mysql2')->table('travel_agents')
-                                     ->where('slug',$bill_ref_no)
+                                     ->where('code',$bill_ref_no)
                                      ->update([
                                           'sms_credits'=>$n_sms_credits, 
                                           'created_at'=>now(),
