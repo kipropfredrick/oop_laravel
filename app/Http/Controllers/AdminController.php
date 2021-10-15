@@ -31,7 +31,7 @@ use App\Customers;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\paybills;
 use App\Http\Controllers\AES;
-
+use App\Vendor;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 
@@ -414,6 +414,14 @@ $products=[];
 
      }
 
+       public function edit_vendor($id){
+         $vendor = \App\Vendor::with('user.customer','city')->where('id','=',$id)->first();
+
+
+         return view('backoffice.vendors.edit-vendor',compact('vendor'));
+
+     }
+
      public function view_influencer($id){
         $influencer = \App\Influencer::with('user','commission_totals')->where('id','=',$id)->first();
 
@@ -662,6 +670,30 @@ $products=[];
     public function add_product()
     {
         $categories = DB::table('categories')->orderBy('id', 'DESC')->get();
+// $arr=[];
+//         $commissions=json_decode($vendor->commission_rate_subcategories);
+// foreach ($categories as $key => $category) {
+//     # code...
+
+// foreach ($commissions as $key1 => $value1) {
+//   $cat=\App\Models\SubCategories::whereSub_category_id($value1->id)->first();
+//   if ($cat!=null) {
+//       # code...
+//     $category_id=$cat->category_id;
+
+//     if ($category->id==$category_id) {
+//         # code...
+// array_push($arr, $category);
+//     }
+
+//   }
+
+
+// }
+// }
+// $categories=$arr;
+  
+// return 0;
 
         $subcategories = DB::table('sub_categories')->orderBy('id', 'DESC')->get();
 
@@ -672,8 +704,10 @@ $products=[];
 
     function fetch_sub_categories(Request $request)
     {
-        $category_id = $request->get('category_id');
 
+        $category_id = $request->get('category_id');
+         $vendor=\App\Vendor::with('user')->whereUser_id($request->user_id)->first();
+    Log::info($vendor->commssionrate_enabled);
         $first = [
                 "id"=>'0',
                 "category_id"=>'',
@@ -690,8 +724,34 @@ $products=[];
         $subcategories = DB::table('sub_categories')
                         ->where('category_id', $category_id)
                         ->get();
+$commissions=json_decode($vendor->commission_rate_subcategories);
         foreach($subcategories as $subcategory){
-            array_push($arr,$subcategory);
+   
+if ($vendor->commssionrate_enabled==1) {
+    # code...
+    
+ 
+$haskey=false;
+foreach ($commissions as $key1 => $value1) {
+    if ($value1->id==$subcategory->id) {
+        # code...
+        Log::info("enabled yes");
+ array_push($arr,$subcategory);
+
+break;
+    }
+    # code...
+}
+
+
+
+}
+else{
+     array_push($arr,$subcategory);
+}
+
+
+            // array_push($arr,$subcategory);
         }
 
         $subcategories = $arr;
@@ -1098,6 +1158,13 @@ foreach ($array as $key => $value) {
     $vendor->business_name = $request->business_name;
     $vendor->slug = $slug;
     $vendor->status = "approved";
+    if (isset($request->add_product)) {
+        # code...
+        $vendor->add_product=1;
+    }
+    else{
+        $vendor->add_product=0;
+    }
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
@@ -1125,6 +1192,75 @@ foreach ($array as $key => $value) {
     $id = DB::getPdo()->lastInsertId();
 \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
     return redirect('/admin/vendors')->with('success','Vendor Saved');
+
+    }
+
+       public function update_vendors(Request $request, $id){
+
+    // if(\App\User::where('email',$request->email)->exists()){
+    //     return back()->with('error','Email Exists');
+    // }elseif(\App\Vendor::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+    //     return back()->with('error','Phone Exists');
+    // }
+
+    $user_details=Array("email"=> $request->input('email'),"name"=> $request->input('name') );
+    // $user->email = $request->input('email');
+    // $user->name = $request->input('name');
+    // $user->role ='vendor';
+    // $user->email_verified_at = now();
+    // $user->password = Hash::make($request->input('password'));
+
+        $vendor=Vendor::whereId($id);
+       $user=User::whereId($vendor->first()->user_id)->update($user_details);
+
+
+   
+
+    $slug =  str_replace(' ', '-', $request->business_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+    $vendor_details=Array("business_name"=>$request->business_name,"slug"=>$slug);
+   // $vendor->user_id = $user_id;
+    // $vendor->business_name = $request->business_name;
+    // $vendor->slug = $slug;
+    //$vendor->status = "approved";
+    if (isset($request->add_product)) {
+        # code...
+        $vendor_details['add_product']=1;
+    }
+    else{
+        $vendor_details['add_product']=0;
+    }
+    $vendor_details['phone']  = $request->input('phone');
+    $vendor_details['location']  = $request->input('location');
+    $vendor_details['city_id']  = $request->input('city_id');
+ 
+    $vendor_details['commssionrate_enabled']= $request->input('commissionrate_enabled');
+    $vendor_details['category']= $request->input('category');
+    // $vendor->commission_rate_subcategories='[]';
+    // $vendor->fixed_cost_subcategories='[]';
+    
+
+    // if ($request->input('commissionrate_enabled')==1) {
+    //     # code...
+    //     $vendor->commission_rate  = $request->input('commission_rate');
+    // $vendor->commission_cap  = $request->input('commission_cap');
+    // }
+    // else{
+    //   $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
+    // $vendor->fixed_bank= $request->input('fixed_bank');
+    // }
+
+    
+    $vendor_details['country']  = $request->input('country');
+
+    $vendor->update($vendor_details);
+  //  $id = DB::getPdo()->lastInsertId();
+// \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
+    return redirect('/admin/vendors')->with('success','Vendor Updated');
 
     }
 
@@ -4543,8 +4679,9 @@ function bookingpayments(Request $request,$id){
 
 function setcommissions(Request $request,$id){
     $vendor=\App\Vendor::with('user')->whereId($id)->first();
-$subcategories=\App\Products::whereVendor_id($vendor->id)->distinct('subcategory_id')->pluck('subcategory_id')->toArray();
-$subcats=\App\SubCategories::whereIn('id',$subcategories)->get();
+//$subcategories=\App\Products::distinct('subcategory_id')->pluck('subcategory_id')->toArray();
+    $categories=\App\Categories::get();
+$subcats=\App\SubCategories::get();
 $commissions=json_decode($vendor->commission_rate_subcategories);
 
 
@@ -4567,10 +4704,12 @@ break;
 }
 if (!$haskey) {
     # code...
+
         $value->commission_rate=0;
     $value->commission_cap=0;
      $value->fixed_bank=0;
 $value->fixed_mobile_money=0;
+unset($subcats[$key]);
 }
 
 
@@ -4611,7 +4750,7 @@ $value->fixed_mobile_money=0;
 
 
 
-    return view('backoffice.vendors.setcommissions',compact('vendor','subcats'));
+    return view('backoffice.vendors.setcommissions',compact('vendor','subcats','categories'));
 }
 
 }

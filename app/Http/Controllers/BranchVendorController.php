@@ -20,6 +20,7 @@ use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendRegistrationEmail;
 use DataTables;
 use App\Vendor;
+use App\BranchUser;
 
 class BranchVendorController extends Controller
 {
@@ -30,10 +31,9 @@ class BranchVendorController extends Controller
         * @return \Illuminate\Http\Response
         */
        public function complete_bookings(){
-   
-           $vendor = Vendor::where('user_id','=',Auth::id())->first();
-           
-           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->where('branch_vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+    $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
+        
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','complete')->where('branch_id','=',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
    
            foreach($bookings as $booking){
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -46,9 +46,9 @@ class BranchVendorController extends Controller
 
        public function pending_bookings(){
    
-        $vendor = Vendor::where('user_id','=',Auth::id())->first();
+        $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
         
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','pending')->where('branch_vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','pending')->where('branch_id','=',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
      
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -60,9 +60,9 @@ class BranchVendorController extends Controller
 
      public function transfer_order(){
 
-        $vendor = Vendor::where('user_id','=',Auth::id())->first();
+        $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
 
-        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('branch_vendor_code',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('branch_id',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -197,10 +197,10 @@ $objuser->update(['balance'=>$totalbal]);
         * @return \Illuminate\Http\Response
         */
        public function overdue_bookings(){
-           
-           $vendor = Vendor::where('user_id','=',Auth::id())->first();
-           
-           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->where('vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+      
+         $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
+        
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->where('branch_id','=',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
    
            foreach($bookings as $booking){
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -331,10 +331,9 @@ $objuser->update(['balance'=>$totalbal]);
     }
    
        public function revoked_bookings(){
-           
-           $vendor = Vendor::where('user_id','=',Auth::id())->first();
-           
-           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','revoked')->where('vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+         $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
+        
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','revoked')->where('branch_id','=',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
    
            foreach($bookings as $booking){
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -345,9 +344,10 @@ $objuser->update(['balance'=>$totalbal]);
    
        public function unserviced_bookings(){
 
-           $vendor = Vendor::where('user_id','=',Auth::id())->first();
-           
-           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->where('vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+    $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
+        
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->where('branch_id','=',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
+
    
            foreach($bookings as $booking){
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -358,11 +358,12 @@ $objuser->update(['balance'=>$totalbal]);
    
        public function active_bookings(){
    
-           $vendor = Vendor::where('user_id','=',Auth::id())->first();
+            $branch_user = BranchUser::where('user_id','=',Auth::id())->first();
+        
+        $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where('branch_id','=',$branch_user->branch_id)->orderBy('id', 'DESC')->get();
 
-           Log::info('VENDOR CODE : '.$vendor->vendor_code);
-   
-           $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','active')->where('vendor_code','=',$vendor->vendor_code)->orderBy('id', 'DESC')->get();
+          
+ 
    
            foreach($bookings as $booking){
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -752,7 +753,7 @@ function encrypt($pure_string, $encryption_key) {
 
 function manualBooking(Request $request){
     $product_quantity=1;
-    return view('backoffice.vendors.manualBooking',compact('product_quantity'));
+    return view('backoffice.branchvendors.manualBooking',compact('product_quantity'));
 }
 
 function bookingdetails(Request $request,$id){
@@ -779,6 +780,7 @@ function bookingpayments(Request $request,$id){
 
 function payments(Request $request){
     // $payments =  DB::table('payments')->get();
+  $branch_id=Auth::user()->branch_user->branch_id;
         $payments=[];
         $validpaymentreferences=[];
         $validmpesa=[];
@@ -790,11 +792,7 @@ if ($request->validmpesa!=null) {
              if($request->ajax()){ 
 
 
-        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereHas('product', function($q){
-            $branch_vendor_code=\App\Vendor::whereUser_id(Auth()->user()->id)->first()->main_vendor_code;
-            $vendor=\App\Vendor::whereMain_vendor_code($branch_vendor_code)->first()->id;
-    $q->where('vendor_id', '=', $vendor);
-})->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereBranch_id($branch_id)->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
        
             
 
@@ -809,5 +807,60 @@ if ($request->validmpesa!=null) {
 
 
         return view('backoffice.vendors.payments.index',compact('payments','validmpesa'));
+}
+function branchusers(Request $request){
+  $id=Auth::user()->branch_user->branch_id;
+  $branch_users=\App\BranchUser::with('user')->whereBranch_id($id)->get();
+  return view('backoffice.branchvendors.branch_users',compact('branch_users'));
+}
+
+function adduser(Request $request){
+  return view('backoffice.branchvendors.add_user');
+}
+function usersave(Request $request){
+ //$main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->id;
+    if(\App\User::where('email',$request->email)->exists()){
+        return back()->with('error','Email Exists');
+    }elseif(\App\BranchUser::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+        return back()->with('error','Phone Exists');
+    }
+
+    $user = new \App\User();
+    $user->email = $request->input('email');
+    $user->name = $request->input('name');
+    $user->role ='branch_vendor';
+    $user->email_verified_at = now();
+    $user->password = Hash::make($request->input('password'));
+    $user->save();
+
+    $user_id = DB::getPdo()->lastInsertId();
+
+    // $slug =  str_replace(' ', '-', $request->branch_name);
+
+    // $slug =  str_replace('/','-',$slug);
+
+    // $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+    // $branch = new \App\Branch();
+    // $branch->name=$request->branch_name;
+    // $branch->slug=$slug;
+    // $branch->vendor_id=$main_vendor_code;
+    // $branch->save();
+$branch = Auth::user()->branch_user;
+$branch_id=$branch->branch_id;
+
+ $branch_user = new \App\BranchUser();
+ $branch_user->user_id = $user_id;
+    $branch_user->branch_id = $branch_id;
+    $branch_user->status = "approved";
+    $branch_user->phone  = '254'.ltrim($request->input('phone'), '0');
+    $branch_user->location  = $branch->location;
+    $branch_user->city  = $branch->city;
+    $branch_user->role='user';
+    $branch_user->country  = $branch->country;
+
+    $branch_user->save();
+
+  return Back()->with("success","user created");
 }
 }

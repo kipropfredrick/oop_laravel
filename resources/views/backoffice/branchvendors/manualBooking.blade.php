@@ -31,14 +31,18 @@
                                 <input name="status" value="pending" type="hidden">
                                
                                 <?php 
+                                $branch_id=Auth()->user()->branch_user->branch_id;
+                                $vendor_id=\App\Branch::whereId($branch_id)->first()->vendor_id;
+
                                 
-                                $vendor = \App\Vendor::whereUser_id(Auth()->user()->id)->first();
+                                $vendor = \App\Vendor::whereId($vendor_id)->first();
 
                                 if($vendor!=null){
                                     $vendor_code = $vendor->vendor_code;
                                 }
                                 ?>
                                 <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" type="hidden">
+                                <input type="text" value="{{$branch_id}}" name="branch_id" hidden="">
                                 <h4>Personal Details</h4>
       <div class="form-row">
                                     <div class="form-group col-md-6">

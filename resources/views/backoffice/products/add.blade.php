@@ -417,7 +417,7 @@ new Vue({
                 url: '/api/get-categories',
                 type: 'POST',
 
-                data: {category_id:category_id},
+                data: {category_id:category_id,user_id:'{{Auth()->user()->id}}'},
 
                 success: function (data) { 
                     var length = data.length;

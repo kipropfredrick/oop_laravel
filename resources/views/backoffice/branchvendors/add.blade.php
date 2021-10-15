@@ -36,7 +36,7 @@
 				
 				<div class="form-group">
 					<label>Branch Name</label>
-						<input value="{{ old('business_name') }}"  class="form-control" name="business_name" placeholder="Business Name"  class="form-control @if($errors->has('name')) invalid_field @endif" required>
+						<input value="{{ old('business_name') }}"  class="form-control" name="branch_name" placeholder="Branch Name"  class="form-control @if($errors->has('name')) invalid_field @endif" required>
 					
 						@error('business_name')
 									<div class="invalid-feedback">
@@ -173,8 +173,8 @@
 				 <div class="col-md-6">
 				
 				<div class="form-group">
-				<label>Email</label>
-					<input value="{{ old('email') }}" tclass="form-control" name="email" placeholder="Enter full name" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
+				<label>Branch admin Email</label>
+					<input value="{{ old('email') }}" tclass="form-control" name="email" placeholder="Enter email" type="text" class="form-control @if($errors->has('name')) invalid_field @endif" required>
 				
 					@error('email')
 								<div class="invalid-feedback">

@@ -284,8 +284,9 @@ Route::prefix('vendor')->group(function () {
         Route::get('/revoked-bookings','VendorController@revoked_bookings');
         Route::get('/product-edit/{id}', 'VendorController@product_edit');
     Route::get('/product-delete/{id}', 'VendorController@product_delete');
-       Route::get('/branchvendors', 'VendorController@vendors')->name('branchvendor.vendors');
- Route::get('/add-vendor', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
+       Route::get('/branches', 'VendorController@branches')->name('branchvendor.branches');
+ Route::get('/add-branch', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
+  Route::get('/view-branch/{id}', 'VendorController@view_branch')->name('vendor.branchvendor.view');
     Route::post('/vendor-save', 'VendorController@save_vendor')->name('vendor.branchvendor.save');
     Route::get('/view-vendor/{id}', 'VendorController@view_vendor')->name('vendor.branchvendor.view');
 
@@ -319,7 +320,12 @@ Route::prefix('branch')->group(function () {
         Route::get('/view-booking/{id}','BranchVendorController@bookingdetails')->name('vendor.bookingdetails');
 
   Route::post('/view-booking/{id}/payments','BranchVendorController@bookingpayments')->name('vendor.bookingpayments');
+     Route::get('/branch-booking', 'BranchVendorController@manualBooking');
         
+          Route::any('/branchusers', 'BranchVendorController@branchusers');
+        Route::any('/adduser', 'BranchVendorController@adduser');
+    Route::any('/user-save', 'BranchVendorController@usersave');
+          
           Route::any('/payments', 'BranchVendorController@payments');
         Route::get('/vendor-booking', 'BranchVendorController@manualBooking');
         Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');
@@ -369,7 +375,8 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/update-brand/{brand}', 'AdminController@update_brand')->name('admin.update_brand');
     Route::get('/view-category/{id}', 'AdminController@view_category')->name('admin.category.view');
     Route::get('/view-subcategory/{id}', 'AdminController@view_subcategory')->name('admin.subcategory.view');
-    Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
+    Route::get('/edit-vendor/{id}', 'AdminController@edit_vendor')->name('admin.vendor.edit');
+      Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
       Route::get('/setcommissions/{id}', 'AdminController@setcommissions')->name('setcommissions');
     Route::get('/view-influencer/{id}', 'AdminController@view_influencer')->name('admin.influencer.view');
     Route::get('/view-agent/{id}', 'AdminController@view_agent')->name('admin.agent.view');
@@ -440,7 +447,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
 
     Route::get('/add-vendor', 'AdminController@add_vendor')->name('admin.vendor.add');
     Route::post('/vendor-save', 'AdminController@save_vendor')->name('admin.vendor.save');
-    Route::post('/update_vendor/{id}', 'AdminController@update_vendor')->name('admin.vendor.update_vendor');
+    Route::post('/vendor-update/{id}', 'AdminController@update_vendor')->name('admin.vendor.update_vendor');
+    
+    Route::post('/update_vendor/{id}', 'AdminController@update_vendors')->name('admin.vendor.update');
     Route::get('/banners', 'AdminController@banners')->name('admin.banners');
     Route::get('/add_banner','AdminController@add_banner')->name('admin.adder-banner');
     Route::post('/banner_save','AdminController@save_banner')->name('admin.save-banner');

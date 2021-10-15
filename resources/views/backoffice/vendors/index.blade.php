@@ -76,7 +76,7 @@
 											<a class="btn btn-outline-primary" href="/admin/approve-vendor/{{$vendor->id}}">Approve</a>
 										@else
 										@endif
-										<a class="btn btn-outline-success" href="/admin/view-vendor/{{$vendor->id}}">View</a>
+										<a class="btn btn-outline-success" href="/admin/edit-vendor/{{$vendor->id}}">Edit</a>
 										<a class="btn btn-outline-danger" onclick="return confirm('Are you sure to delete this vendor?') ? true : false" href="/admin/vendor/delete-account/{{$vendor->id}}">Delete</a>
 									</td>
                                 </tr>
