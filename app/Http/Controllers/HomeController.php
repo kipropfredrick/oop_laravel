@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Hash;
+use Sentinel;
 
 class HomeController extends Controller
 {
@@ -48,6 +49,8 @@ class HomeController extends Controller
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
 
         $customersCount = \App\Customers::count();
+
+        Sentinel::removeCheckpoint('activation');
         
         return view('backoffice.index',compact('totalBookingAmount','activeBookingAmount','pendingBookingAmount','overdueBookingAmount','completeBookingAmount','customersCount'));
     }
