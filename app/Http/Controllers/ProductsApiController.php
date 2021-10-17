@@ -406,7 +406,13 @@ return $allPayments;
         $username=$request->input("username");
         $status=$request->input("status");
         $customer = Customers::wherePhone($username)->first();
-        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
+        if ($status=='active') {
+            $bookings = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','overdue','unserviced'])->latest()->get();
+            # code...
+        }
+        else{
+            $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
+        }
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;
