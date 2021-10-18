@@ -4307,8 +4307,8 @@ if (intval($hours)>24) {
   
  $obj = new pushNotification();
     $data=Array("name"=>"discount", "value"=>"Get discount");
-   $title="Claim your KSh.100 gift 🤑🎁";
-$messages="Order today with the app and get KSh.100 welcome discount on your first order.";
+   $title="Claim your KSh.1000 gift 🤑🎁";
+$messages="Order today with the app and get up to KSh.1,000 welcome discount on your first order.";
     $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
 return 0;
   // $data=Array("name"=>"home","value"=>"home");
