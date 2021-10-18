@@ -1549,7 +1549,7 @@ break;
         $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
         
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
-
+        $booking_reference = $this->get_booking_reference();
         if($existingUser!=null)
         {
 
@@ -1566,7 +1566,7 @@ break;
 
         \Auth::login($user);
 
-        $booking_reference = $this->get_booking_reference();
+
 
         $booking_date = now();
 
