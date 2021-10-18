@@ -275,7 +275,8 @@ if ($decdata==null) {
 
  if (($decdata->ResponseCode)=="000") {
     //return $array['TransID'];
-
+  $credentials=Array("status"=>'valid');
+  \App\topups::whereTransid($transid)->update($credentials);
 
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
@@ -286,6 +287,8 @@ if ($decdata==null) {
 }
 else{
   //update acccount balances 
+ $credentials=Array("status"=>'reversed');
+  \App\topups::whereTransid($transid)->update($credentials);
 $main=DB::table('users')->whereId($customers->user_id);
 $balance=$main->first()->balance;
   $main->update(["balance"=>intval($balance)+$amount]);
@@ -302,7 +305,7 @@ break;  }
           
         }
 
- $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"topup");
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"topup","status"=>"reversed");
 \App\topups::create($credentials);
 
 
