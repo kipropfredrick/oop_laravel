@@ -1617,7 +1617,8 @@ DB::table('bookings')->whereId($customerbookings->id)->update(["balance"=>$newba
 
 }
 else{
-$balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance) +intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+    $rbalance=intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid) * 0.7;
+$balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance) +intval($rbalance);
      DB::table("users")->whereId($customers->user_id)->update(["balance"=>$balance]);
 }
 
