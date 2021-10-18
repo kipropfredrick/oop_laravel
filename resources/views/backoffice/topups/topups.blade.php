@@ -35,6 +35,7 @@
                                 <th class="thead">Transaction Id</th>
                           
 								<th class="thead">amount</th>
+								<th class="thead">Status</th>
 								
 								<th class="thead">balance</th>
 								
@@ -52,6 +53,7 @@
 									<td>{{$topup->customer->phone}}</td>
 									<td>{{$topup->transid}}</td>
 									<td>KSh {{number_format(intval($topup->amount))}}</td>
+									<td>{{$topup->status}}</td>
 								<td>KSh {{number_format(intval($topup->balance))}}</td>
 									
 									<td>{{date('M d'.', '.'Y : H:m:i', strtotime($topup->created_at))}}</td>
