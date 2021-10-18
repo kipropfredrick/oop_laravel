@@ -546,7 +546,7 @@ if ($customer!=null) {
     # code...
 }
 if (($decdata->ResponseCode)=="000")  {
- $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime");
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime","status"=>"valid");
  \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 \App\topups::create($credentials);
   $obj = new pushNotification();
@@ -581,7 +581,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn,"status"=>"valid");
 \App\topups::create($credentials);
 
   $obj = new pushNotification();

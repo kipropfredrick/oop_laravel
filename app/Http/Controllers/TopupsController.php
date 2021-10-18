@@ -305,7 +305,7 @@ break;  }
           
         }
 
- $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"topup","status"=>"reversed");
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"topup","status"=>"valid");
 \App\topups::create($credentials);
 
 
