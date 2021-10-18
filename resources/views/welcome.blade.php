@@ -26,7 +26,7 @@
 <div class="bg-gray">
     @include('front.explore')
     <!-- products carousel -->
-    {{-- <div class="container">
+    <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
                 <h5>&#128293;  Today's Hot Deals</i></h5>
@@ -131,7 +131,7 @@
     <!-- end products carousel -->
 </div>
 <!-- end -->
-
+{{--
 <div class="bg-white">
     <!-- categories -->
     <div class="container">
@@ -163,7 +163,7 @@
     </div>
     <!-- end categories -->
 
-</div>
+</div> --}}
 
 <div class="bg-gray">
 
@@ -174,7 +174,7 @@
                 <h5>&#x1f60d; The brands you love</h5>
             </div>
 
-            <//?//php $brands = \App\Brand::all(); ?>
+            <?php $brands = \App\Brand::all(); ?>
 
             <div id="brands-carousel">
                 <div class="slick">
@@ -195,7 +195,7 @@
 
         </div>
     </div>
-    <!-- end brands --> --}}
+    <!-- end brands -->
 
 </div>
 @endsection
