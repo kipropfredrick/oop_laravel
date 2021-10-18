@@ -663,7 +663,7 @@ break;  }
           
         }
 
- $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"token"=>$token,"type"=>"Bills(".$biller_name.")");
+ $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"token"=>$token,"type"=>"Bills(".$biller_name.")","status"=>"valid");
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
