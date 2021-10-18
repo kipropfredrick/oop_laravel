@@ -271,27 +271,30 @@ $cdate = Carbon::parse($completionDate);
 $createddate = Carbon::parse($createdat);
 
 $days=intval(($cdate->diffInDays($createddate)));
-
+$dayspassed=intval(($createddate->diffInDays($now)));
 if($days>0){
     if ($setreminder==1) {
         # code...
             $dailytarget=intval($totalBookingAmounts/$days);
+            $amountsbepaid=intval($dayspassed*$dailytarget);
             $targettype="Daily target";
     }
     else if ($setreminder==2) {
         # code...
             $dailytarget=intval($totalBookingAmounts/$days) * 7;
+            $amountsbepaid=intval($dayspassed*($dailytarget)/7);
              $targettype="Weekly target";
     }
     else if ($setreminder==3) {
         # code...
           $dailytarget=intval($totalBookingAmounts/$days) * 30;
+          $amountsbepaid=intval($dayspassed*($dailytarget)/30);
            $targettype="Monthly target";
     }
 
 }
-$dayspassed=intval(($createddate->diffInDays($now)));
-$amountsbepaid=intval($dayspassed*$dailytarget);
+
+
 $paymentbalance=$amountsbepaid-$amountPaids;
 if ($paymentbalance<0) {
   # code...
