@@ -263,7 +263,7 @@ $data=Array();
         if($booking!=null){
          	return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
         }
-        return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
+        
 
        // \Auth::login($user);
 
@@ -350,7 +350,7 @@ $data=Array();
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
        // $booking->booking_reference = $this->get_booking_reference();
-
+return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
         $booking->save();
         
         
