@@ -14,6 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
        '/USSD-Q7NMAqYVcdCNmVgE','/ussd-Q7NMAqcdCNmVgE', '/c2b/validate-UjQerTLb4EM78rHBSmYgCG',
        '/c2b/confirm-7CavgY5gFFwzktQH6XjcS2','/stkPush','/simulate_payment','/test-accesstoken',
-       '/USSD-test-Q7NMAqY34','/admin/check-booking-exists'
+       '/USSD-test-Q7NMAqY34','/admin/check-booking-exists','/TravelCardTransaction','simulatetransaction'
     ];
 }

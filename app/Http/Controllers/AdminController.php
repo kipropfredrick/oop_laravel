@@ -31,7 +31,7 @@ use App\Customers;
 use App\Http\Controllers\autApi;
 use App\Http\Controllers\paybills;
 use App\Http\Controllers\AES;
-
+use App\Vendor;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 
@@ -184,9 +184,9 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
  $daypayment=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$lastWeek)->where("payment_logs.status","=","valid")->sum('TransAmount');
 
- $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->sum('amount');
+ $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->whereStatus('valid')->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','airtime'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->sum('amount');
 
   // $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$lastWeek)->distinct('customer_id')->count();
 
@@ -199,8 +199,8 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereIn('id',$validmpesa)->distinct('customer_id')->count(); 
 
 
-  $uc=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->distinct('sender')->count();
-  $ub=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereNotIn("type",['topup','airtime'])->distinct('sender')->count();
+  $uc=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->whereStatus('valid')->distinct('sender')->count();
+  $ub=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->distinct('sender')->count();
 
 
 
@@ -411,6 +411,14 @@ $products=[];
          $products = \App\Products::where('vendor_id','=',$vendor->id)->get();
 
          return view('backoffice.vendors.view-vendor',compact('vendor','products'));
+
+     }
+
+       public function edit_vendor($id){
+         $vendor = \App\Vendor::with('user.customer','city')->where('id','=',$id)->first();
+
+
+         return view('backoffice.vendors.edit-vendor',compact('vendor'));
 
      }
 
@@ -662,6 +670,30 @@ $products=[];
     public function add_product()
     {
         $categories = DB::table('categories')->orderBy('id', 'DESC')->get();
+// $arr=[];
+//         $commissions=json_decode($vendor->commission_rate_subcategories);
+// foreach ($categories as $key => $category) {
+//     # code...
+
+// foreach ($commissions as $key1 => $value1) {
+//   $cat=\App\Models\SubCategories::whereSub_category_id($value1->id)->first();
+//   if ($cat!=null) {
+//       # code...
+//     $category_id=$cat->category_id;
+
+//     if ($category->id==$category_id) {
+//         # code...
+// array_push($arr, $category);
+//     }
+
+//   }
+
+
+// }
+// }
+// $categories=$arr;
+  
+// return 0;
 
         $subcategories = DB::table('sub_categories')->orderBy('id', 'DESC')->get();
 
@@ -672,8 +704,10 @@ $products=[];
 
     function fetch_sub_categories(Request $request)
     {
-        $category_id = $request->get('category_id');
 
+        $category_id = $request->get('category_id');
+         $vendor=\App\Vendor::with('user')->whereUser_id($request->user_id)->first();
+    Log::info($vendor->commssionrate_enabled);
         $first = [
                 "id"=>'0',
                 "category_id"=>'',
@@ -690,8 +724,34 @@ $products=[];
         $subcategories = DB::table('sub_categories')
                         ->where('category_id', $category_id)
                         ->get();
+$commissions=json_decode($vendor->commission_rate_subcategories);
         foreach($subcategories as $subcategory){
-            array_push($arr,$subcategory);
+   
+if ($vendor->commssionrate_enabled==1) {
+    # code...
+    
+ 
+$haskey=false;
+foreach ($commissions as $key1 => $value1) {
+    if ($value1->id==$subcategory->id) {
+        # code...
+        Log::info("enabled yes");
+ array_push($arr,$subcategory);
+
+break;
+    }
+    # code...
+}
+
+
+
+}
+else{
+     array_push($arr,$subcategory);
+}
+
+
+            // array_push($arr,$subcategory);
         }
 
         $subcategories = $arr;
@@ -979,7 +1039,92 @@ $products=[];
 
     public function add_vendor(){
 
+
         return view('backoffice.vendors.add');
+
+    }
+    public function update_vendor(Request $request,$id){
+  
+        if ($request->type=='g_commissionrate') {
+            # code...
+                $details=Array("commission_rate"=>$request->commission_rate?$request->commission_rate:0,"commission_cap"=>$request->commission_cap?$request->commission_cap:0,"fixed_mobile_money"=>$request->fixed_mobile_money?$request->fixed_mobile_money:0,"fixed_bank"=>$request->fixed_bank?$request->fixed_bank:0);
+                \App\Vendor::whereId($id)->update($details);
+
+                return back()->with('success','data updated successfully');
+        }
+
+
+        if ($request->type=='g_sub_rate') {
+              $vendor=\App\Vendor::whereId($id)->first();
+        
+           
+            # code...
+                $commission_rate_subcategories=$vendor->commission_rate_subcategories;
+//return $commission_rate_subcategories;
+                 $array=json_decode($commission_rate_subcategories,true);
+        
+                 $i=0;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+        unset($array[$key]);
+
+
+    }
+
+}
+//return $array;
+
+    
+            $details=Array("commission_rate"=>$request->commission_rate,"commission_cap"=>$request->commission_cap,"fixed_bank"=>0,"fixed_mobile_money"=>0,"id"=>$request->subcategory);
+       
+            array_push($array, $details);
+
+ 
+                      $en_commission_rate_subcategories=json_encode($array);
+                      // return $en_commission_rate_subcategories;
+            \App\Vendor::whereId($id)->update(Array("commission_rate_subcategories"=>$en_commission_rate_subcategories));
+          return back()->with('success','data updated successfully');
+        }
+
+
+        if ($request->type=='g_sub_fixed') {
+              $vendor=\App\Vendor::whereId($id)->first();
+        
+          
+            # code...
+                $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+        unset($array[$key]);
+
+
+    }
+
+}
+
+
+    
+            $details=Array("commission_rate"=>0,"commission_cap"=>0,"fixed_bank"=>$request->fixed_bank,"fixed_mobile_money"=>$request->fixed_mobile_money,"id"=>$request->subcategory);
+       
+            array_push($array, $details);
+//return $array;
+ 
+                      $en_fixed_cost_subcategories=json_encode($array);
+                      // return $en_commission_rate_subcategories;
+            \App\Vendor::whereId($id)->update(Array("fixed_cost_subcategories"=>$en_fixed_cost_subcategories));
+          return back()->with('success','data updated successfully');
+        }
+
 
     }
 
@@ -1002,19 +1147,140 @@ $products=[];
 
     $user_id = DB::getPdo()->lastInsertId();
 
+    $slug =  str_replace(' ', '-', $request->business_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
     $vendor = new \App\Vendor();
     $vendor->user_id = $user_id;
     $vendor->business_name = $request->business_name;
+    $vendor->slug = $slug;
     $vendor->status = "approved";
+    if (isset($request->add_product)) {
+        # code...
+        $vendor->add_product=1;
+    }
+    else{
+        $vendor->add_product=0;
+    }
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
+ 
+    $vendor->commssionrate_enabled= $request->input('commissionrate_enabled');
+    $vendor->category= $request->input('category');
+    $vendor->commission_rate_subcategories='[]';
+    $vendor->fixed_cost_subcategories='[]';
+    
+
+    // if ($request->input('commissionrate_enabled')==1) {
+    //     # code...
+    //     $vendor->commission_rate  = $request->input('commission_rate');
+    // $vendor->commission_cap  = $request->input('commission_cap');
+    // }
+    // else{
+    //   $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
+    // $vendor->fixed_bank= $request->input('fixed_bank');
+    // }
+
+    
     $vendor->country  = $request->input('country');
 
     $vendor->save();
     $id = DB::getPdo()->lastInsertId();
 \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
     return redirect('/admin/vendors')->with('success','Vendor Saved');
+
+    }
+
+       public function update_vendors(Request $request, $id){
+
+    // if(\App\User::where('email',$request->email)->exists()){
+    //     return back()->with('error','Email Exists');
+    // }elseif(\App\Vendor::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+    //     return back()->with('error','Phone Exists');
+    // }
+
+    $user_details=Array("email"=> $request->input('email'),"name"=> $request->input('name') );
+    // $user->email = $request->input('email');
+    // $user->name = $request->input('name');
+    // $user->role ='vendor';
+    // $user->email_verified_at = now();
+    // $user->password = Hash::make($request->input('password'));
+
+        $vendor=Vendor::whereId($id);
+       $user=User::whereId($vendor->first()->user_id)->update($user_details);
+
+
+   
+
+    $slug =  str_replace(' ', '-', $request->business_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+    $vendor_details=Array("business_name"=>$request->business_name,"slug"=>$slug);
+   // $vendor->user_id = $user_id;
+    // $vendor->business_name = $request->business_name;
+    // $vendor->slug = $slug;
+    //$vendor->status = "approved";
+    if (isset($request->add_product)) {
+        # code...
+        $vendor_details['add_product']=1;
+    }
+    else{
+        $vendor_details['add_product']=0;
+    }
+    $vendor_details['phone']  = $request->input('phone');
+    $vendor_details['location']  = $request->input('location');
+    $vendor_details['city_id']  = $request->input('city_id');
+ 
+    $vendor_details['commssionrate_enabled']= $request->input('commissionrate_enabled');
+    $vendor_details['category']= $request->input('category');
+    // $vendor->commission_rate_subcategories='[]';
+    // $vendor->fixed_cost_subcategories='[]';
+    
+
+    // if ($request->input('commissionrate_enabled')==1) {
+    //     # code...
+    //     $vendor->commission_rate  = $request->input('commission_rate');
+    // $vendor->commission_cap  = $request->input('commission_cap');
+    // }
+    // else{
+    //   $vendor->fixed_mobile_money= $request->input('fixed_mobile_money');
+    // $vendor->fixed_bank= $request->input('fixed_bank');
+    // }
+
+    
+    $vendor_details['country']  = $request->input('country');
+
+    $vendor->update($vendor_details);
+  //  $id = DB::getPdo()->lastInsertId();
+// \App\Vendor::where("user_id",$user_id)->where("phone",'254'.ltrim($request->input('phone'), '0'))->update(["vendor_code"=>"VD".$id]);
+    return redirect('/admin/vendors')->with('success','Vendor Updated');
+
+    }
+
+    public function updatevendorslugs(){
+
+        $vendors = \App\Vendor::all();
+
+        foreach($vendors as $vendor){
+            
+            $slug =  str_replace(' ', '-', $vendor->business_name);
+
+            $slug =  str_replace('/','-',$slug);
+
+            $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+            \App\Vendor::where('id',$vendor->id)->update(['slug'=>$slug]);
+
+        }
+
+        return "Success";
 
     }
 
@@ -1351,7 +1617,8 @@ DB::table('bookings')->whereId($customerbookings->id)->update(["balance"=>$newba
 
 }
 else{
-$balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance) +intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid);
+    $rbalance=intval(DB::table('bookings')->where('id','=',$id)->first()->amount_paid) * 0.7;
+$balance=intval(DB::table("users")->whereId($customers->user_id)->first()->balance) +intval($rbalance);
      DB::table("users")->whereId($customers->user_id)->update(["balance"=>$balance]);
 }
 
@@ -1457,7 +1724,7 @@ $message = "Congratulations, You have completed Payment for ".$product->product_
  // return $bookings;
                 if($request->ajax()){
 
-              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->where('bookings.status','=','complete')->orderBy('bookings.updated_at', 'DESC');
+              $bookings = \App\Bookings::with('customer','customer.user','product:id,product_name,product_code','county','location','zone','dropoff','vendor.user')->withCount('payments')->where('bookings.status','=','complete')->orderBy('bookings.updated_at', 'DESC');
 
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
@@ -1978,9 +2245,11 @@ $myrole="";
 
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
 
+
         if($newProduct == null){
             return back()->with('error','Sorry Product Code does not exist.');
         }
+           $vendor_code=\App\Vendor::whereId($newProduct->vendor_id)->first()->vendor_code;
 
             if($newProduct->weight != 0){
                 $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
@@ -2013,7 +2282,8 @@ $myrole="";
                         "balance"=>$balance,
                         "shipping_cost"=>$shipping_cost,
                         "item_cost"=>$newProduct->product_price,
-                        "total_cost"=>$total_cost
+                        "total_cost"=>$total_cost,
+                        "vendor_code"=>$vendor_code
                         ]);
        }
        else{
@@ -2023,7 +2293,8 @@ $myrole="";
                         "shipping_cost"=>$shipping_cost,
                         "item_cost"=>$newProduct->product_price,
                         'status'=>"complete",
-                        "total_cost"=>$total_cost
+                        "total_cost"=>$total_cost,
+                        "vendor_code"=>$vendor_code
                         ]);
 
 $objuser=\App\User::whereId($customer->user_id);
@@ -2065,7 +2336,7 @@ if ($result==null) {
     return Back()->with("error","Transaction verification failed");
 }
 
-if ($result->status!="unverified") {
+if ($result->status!="unverified" ) {
     # code...
     return Back()->with("error","Transaction already verified");
 }
@@ -2424,9 +2695,443 @@ return Back()->with("success","Transaction success");
        return $result;
     }
 
+
+     function recordCreditedbillpayment(Request $request,$id){
+
+$result=\App\BillpaymentLogs::where('id',$id)->first();
+
+$userid=\App\Customers::wherePhone($result->MSISDN)->first()->user_id;
+$balance=\App\User::whereId($userid)->first()->balance;
+$userobj=\App\User::whereId($userid);
+$remainingbalance=$balance-$request->amount_paid;
+if ($request->amount>$balance) {
+       return Back()->with("error","You have insufficient funds to complete transaction");
+    # code...
+}
+$mpesa=new MpesaPaymentController();
+
+if ($result==null) {
+    # code...
+    return Back()->with("error","Transaction verification failed");
+}
+
+if ($result->status!="credited" ) {
+    # code...
+    return Back()->with("error","Transaction not in credited status");
+}
+$bill_ref_no=$request->reference;
+$transaction_amount=$request->amount;
+$msisdn=$result->MSISDN;
+$transaction_id=$result->TransID;
+
+$ismobiletopup="/254/i";
+$mob='/^(0)\d{9}$/';
+$mob1='/^(\+254)\d{9}$/';
+$saf="/SAF/i";
+$tel="/TEL/i";
+$air="/AIR/i";
+
+$ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
+      if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
+
+ 
+            $log_id =$result->id;
+
+
+        $productcode="";
+        $recipient="";
+
+  # code...i
+        if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($mob1,$bill_ref_no)) {
+            # code...
+
+
+  list($msisdn, $network) = $this->get_msisdn_network($bill_ref_no);
+
+        if (!$msisdn){
+             Log::info("Invalid Phone Number");
+
+                return Back()->with("error","Invalid phone number");
+        }else{
+            $mobilerec = "0".substr($msisdn, 3);
+            
+            $valid_phone=$msisdn;
+         
+        }
+
+
+
+
+// $obz=new TopupsController();
+// $response= json_decode($obz->phonelookup(substr($recipient,1, 3)));
+
+if ($msisdn) {
+  # code...
+  $operator=$network;
+
+    if ($operator=="safaricom") {
+    # code...
+    $productcode="SF01";
+    Log::info("safaricom");
+
+  }
+  else if ($operator=="airtel") {
+    $productcode="AP01";
+      Log::info("airtel");
+
+  }
+  else if ($operator=="telkom") {
+    # code...
+      Log::info("telkom");
+    $productcode="OP01";
+  }
+}
+else{
+ Log::info("no telco");
+   return Back()->with("error","Mobile Operator Not Supported");
+
+
+}
+
+
+
+
+
+        }
+        else{
+              if (preg_match($saf,$bill_ref_no)) {
+    # code...
+    $productcode="SF01";
+
+  }
+  else if ( preg_match($air,$bill_ref_no)) {
+    $productcode="AP01";
+
+  }
+  else if ( preg_match($tel,$bill_ref_no)) {
+    # code...
+    $productcode="OP01";
+  }
+   Log::info("product code".$productcode);
+        }
+
+
+
+$paybillobj = new paybills();
+$array=Array("PhoneNumber"=>$mpesa->getphone($bill_ref_no),"Amount"=>$transaction_amount*100,"ProductCode"=>$productcode);
+
+$res=$paybillobj->AirtimeTopUp($array);
+
+  Log::info($res);
+ $decdata=json_decode($res);
+  Log::info("product code".$productcode);
+
+if ($decdata==null) {
+  # code...
+     Log::info("returned null");
+    //log the transaction into the database
+
+  return Back()->with('error',"An error occured processing your request.");
+
+}
+ Log::info("passsed");
+
+$userid=$msisdn;
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+if (($decdata->ResponseCode)=="000")  {
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime");
+  $userobj->update(["balance"=>$remainingbalance]);
+ \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+\App\topups::create($credentials);
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification(\App\User::whereId($userid)->first()->token,"Thank you for topping up KSh. ".$transaction_amount." airtime with us.","Transaction successful. ",$data);
+  return Back()->with('success',"Airtime top-up successs.");
+
+
+}
+else{
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer!=null) {
+
+    $user=\App\User::whereId($customer->user_id)->first();
+    $userid=$user->id;
+    # code...
+}
+
+$user=\App\User::whereId($userid);
+$obj=$user->first();
+if($obj!=null){
+    $balance=$obj->balance;
+$balance=$balance+$transaction_amount;
+// $user->update(["balance"=>$balance]);
+ // \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"credited"]);
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TT'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+// $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
+// \App\topups::create($credentials);
+
+  $obj = new pushNotification();
+    $data=Array("name"=>"home","value"=>"home");
+    $obj->exceuteSendNotification($user->first()->token,"Your airtime purchase request was not successful. The amount has been credited back to your Lipa Mos Mos wallet.","Airtime purchase failed",$data);
+
+}
+
+   return Back()->with('error',"Airtime topu was not successful. Amount has been credited to mosmos account.");
+    
+}
+
+
+            }    
+
+$pp="/PP/i";
+$ps="/PS/i";
+$zu="/ZU/i";
+$st="/ST/i";
+$go="/GO/i";
+$ds="/DS/i";
+$nw="/NW/i";
+if (preg_match($pp,$bill_ref_no) || preg_match($ps,$bill_ref_no) || preg_match($zu,$bill_ref_no) ||
+ preg_match($st,$bill_ref_no) || preg_match($go,$bill_ref_no) || preg_match($ds,$bill_ref_no) || preg_match($nw,$bill_ref_no)) {
+
+  // $existingLog = \App\BillpaymentLogs::where('TransID',$transaction_id)->first();
+
+  //           if($existingLog!=null){
+
+  //               return "Duplicate Transaction";
+
+  //           }
+
+  //           \App\BillpaymentLogs::insert($paymentLog);
+
+            $log_id = $result->id;
+
+
+
+
+    $paybillobj = new paybills();
+
+$objtopup=new TopupsController();
+
+
+
+$biller_name="";
+$account=substr($bill_ref_no, 2);
+$otherbills=false;
+
+    if (preg_match($pp,$bill_ref_no) ) {
+        # code...
+        $biller_name="kplc_prepaid";
+    }
+    else if (preg_match($ps,$bill_ref_no) ) {
+        # code...
+        $biller_name="kplc_postpaid";
+    }
+      else if (preg_match($zu,$bill_ref_no) ) {
+        # code...
+        $otherbills=true;
+        $biller_name="ZUKU";
+    }
+      else if (preg_match($st,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="STARTIMES";
+    }
+      else if (preg_match($go,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="GOTV";
+    }
+      else if (preg_match($ds,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="DSTV";
+    }
+      else if (preg_match($nw,$bill_ref_no) ) {
+        # code...
+         $otherbills=true;
+        $biller_name="NWATER";
+    }
+    else{
+        return 0;
+    }
+
+
+    //kplc
+if ($biller_name=="kplc_prepaid") {
+  # code...
+  $array=Array("PhoneNumber"=>"0".substr($msisdn, 3),"CustomerName"=>"customer","MeterNumber"=>substr($bill_ref_no,2),"Amount"=>$transaction_amount*100);
+$res=$paybillobj->kplcprepaid($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+    Log::info("returned null");
+    return Back()->with('error',"An error occured processing your request.");
+  // return Array("data"=>Array("response"=>""),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+      $userobj->update(["balance"=>$remainingbalance]);
+        Log::info("returned ok");
+         \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+$ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
+   $token=json_decode(json_decode($decdata->VoucherDetails,true)[0])->Token;
+   return Back()->with('success',"Transaction success: tokenno: ".$token);
+// return Array("data"=>Array("response"=>"Transaction success: tokenno: ".$token),"error"=>false);
+  # code...
+}
+else{
+        Log::info("returned error");
+     // $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
+       return Back()->with('error',"An error occured processing your request.Amount credited to mosmos account.");
+    // return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+
+
+}
+else if ($biller_name=="kplc_postpaid") {
+  # code...
+  $array=Array("MobileNumber"=>"0".substr($msisdn, 3),"CustomerName"=>"customer","CustAccNum"=>substr($bill_ref_no, 2),"Amount"=>$transaction_amount*100);
+$res=$paybillobj->kplcpostpaid($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+      return Back()->with('success',"An error occured processing your request.");
+  // return Array("data"=>Array("response"=>""),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+      $userobj->update(["balance"=>$remainingbalance]);
+     \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+$ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
+  return Back()->with('success',"Transaction success");
+// return Array("data"=>Array("response"=>"Post Paid success"),"error"=>false);
+  # code...
+}
+else{
+      //$mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
+      return Back()->with('error',"An error occured processing your request.Amount credited to mosmos account.");
+    // return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+}
+
+
+
+}
+else{
+
+    $array=Array("paymentType"=>$biller_name,"PhoneNumber"=>"0".substr($msisdn, 3),"AccountNumber"=>substr($bill_ref_no, 2),"AccountName"=>"customer","Amount"=>$transaction_amount*100);
+  // $array=Array("MobileNumber"=>"0".substr($phone, 3),"CustomerName"=>"customer","CustAccNum"=>$account,"Amount"=>$amount*100);
+$res=$paybillobj->otherpayments($array);
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+    return Back()->with('error',"An error occured processing your request.");
+  // return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+      $userobj->update(["balance"=>$remainingbalance]);
+     \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
+$ret=$mpesa->paymentSuccess($msisdn,$transaction_amount,$transaction_id,$biller_name);
+  return Back()->with('success',"Transaction success");
+//return Array("data"=>Array("response"=>"Payment Successs"),"error"=>false);
+  # code...
+}
+else{
+
+   // $mpesa->CustomTopUpAccount($msisdn,$transaction_amount,$log_id);
+    return Back()->with('error',"An error occured processing your request.Amount credited to mosmos account.");
+    // return Array("data"=>Array("response"=>"An error occured processing your request.".$decdata->ResponseDescription),"error"=>true);
+}
+
+}
+
+
+return Back()->with("success","Transaction success");
+
+
+       } 
+
+       return $result;
+    }
+
     public function record_payment(Request $request,$id){
 
+        $type = $request->type;
+
         $bill_ref_no = $request->booking_reference;
+
+        if($type == "travel"){
+
+            $log = \App\PaymentLog::where('id',$id)->first();
+
+            $booking = \DB::connection('mysql2')->table('bookings')->where('booking_reference',$bill_ref_no)->first();
+            $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
+            $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
+
+            if($booking == null && $sms_credit_payment == null && $invoice_payment == null){
+
+                return back()->with('error', 'Booking/Bill With that Ref does not exist!');
+
+            }else{
+
+            \App\PaymentLog::where('id',$id)->update(['status'=>'verified']);
+                
+            \DB::connection('mysql2')->table('payment_logs')->insert([
+                                                'TransactionType' => $log->TransactionType,
+                                                'TransID'=>$log->TransID,
+                                                'TransTime'=>$log->TransTime,
+                                                'TransAmount'=>$log->TransAmount	,
+                                                'BusinessShortCode'=>$log->BusinessShortCode,
+                                                'BillRefNumber'=>$log->BillRefNumber,
+                                                'InvoiceNumber'=>$log->InvoiceNumber,
+                                                'OrgAccountBalance'=>$log->OrgAccountBalance,
+                                                'ThirdPartyTransID'=>$log->ThirdPartyTransID,
+                                                'MSISDN'=>$log->MSISDN,
+                                                'FirstName'=>$log->FirstName,
+                                                'MiddleName'=>$log->MiddleName,
+                                                'LastName'=>$log->LastName,
+                                                'status'=>'valid',
+                                                'date_recorded'=>$log->date_recorded,
+                                                'comment'=>$log->comment,
+                                                'created_at'=>now(),
+                                                'updated_at'=>now(),
+                                            ]);
+            
+            $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
+
+            $customer = \DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
+
+            $message =  MpesaPaymentController::validateTravelPayments($bill_ref_no,$transaction_amount = $log->TransAmount,$msisdn = $customer->phone,$first_name = $log->FirstName,$middle_name = $log->MiddleName,$last_name = $log->LastName,$code = $log->TransID,$log_id);
+
+            return back()->with('success', 'Payment Updated! ');
+
+            }
+
+        }
 
         $date_paid = Carbon::today()->toDateString();
 
@@ -2527,8 +3232,48 @@ return Back()->with("success","Transaction success");
                 if($vendor == null){
 
                    }else {
-                    $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                    $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+if ($vendor->category=="1") {
+    # code...
+        $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+                 $checked=false;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+      $commission_rate=$value['commission_rate'];
+                    $commision_cap=$value['commission_cap'];
+$checked=true;
+
+    }
+
+}
+
+if (!$checked) {
+    $commission_rate=0;
+    $commision_cap=0;
+}
+
+}
+else{
+
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                   
+}
+ $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
 
                     $recipients = $vendor->phone;
 
@@ -3071,6 +3816,7 @@ $users=json_decode($users,true);
 
     public function vendors(){
         $vendors =  \App\Vendor::with('user')->orderBy('id', 'DESC')->get();
+
         return view('backoffice.vendors.index',compact('vendors'));
     }
 
@@ -3255,12 +4001,180 @@ $users=json_decode($users,true);
     public function commissions()
     {
 
-      $commissions =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->get();
+
+      $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
+ 
+$result=[];
+
+      foreach ($commision as $key => $value) {
+          # code...
+
+        if ($value->vendor!=null) {
+            # code...
+            if ($value->vendor->commssionrate_enabled==1) {
+                # code...  return $value;
+
+                if ($value->vendor->category==0) {
+                    # code...
+$value->commission_rate=$comm['commission_rate'];
+        $value->commission_cap=$comm['commission_cap'];
+
+                            array_push($result, $value);
+                }else{
+                     $commission_rate_subcategories=$value->vendor->commission_rate_subcategories;
+//return $commission_rate_subcategories;
+                 $array=json_decode($commission_rate_subcategories,true);
+
+                 $i=0;
+                 $valchanged=false;
+foreach ($array as $key1 => $comm) {
+    # code...
+
+    if ($comm['id']==$value->product->subcategory_id) {
+        # code...
+
+        $value->commission_rate=$comm['commission_rate'];
+        $value->commission_cap=$comm['commission_cap'];
+
+   
+
+    }
+ 
+
+}
+
+if (!$valchanged) {
+    # code...
+    $value->commission_rate=0;
+        $value->commission_cap=0;
+
+}
+array_push($result, $value);
+
+
+
+                }
+
+
+
+        
+            }
+        }
+      }
+$commissions=$result;
+
 
     //   return response()->json($commissions);
 
       return view('backoffice.commissions.index',compact('commissions'));
 
+    }
+    function fixedPayout(Request $request){
+
+        $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
+$result=[];
+
+      foreach ($commision as $key => $value) {
+          # code...
+        if ($value->vendor!=null) {
+            # code...
+
+            if ($value->vendor->commssionrate_enabled==0) {
+                # code...      
+
+      if ($value->vendor->category==0) {
+                    # code...
+$value->commission_rate=$comm['commission_rate'];
+        $value->commission_cap=$comm['commission_cap'];
+
+                $countbanktransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('bank')->count();
+                  $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('mobile')->count();
+                    $totalbanktransfers=$value->vendor->fixed_bank*($countbanktransfers);
+                  $totalmobiletransfers=$value->vendor->fixed_mobile_money*($countmobiletransfers);
+                  $vendor_payout=$value->booking->item_cost-($totalmobiletransfers+$totalbanktransfers);
+$value->vendor_payout=$vendor_payout;
+$value->fixed_mobile_money=$value->vendor->fixed_mobile_money;
+$value->fixed_bank=$value->vendor->fixed_bank;
+$value->countbanktransfers=$countbanktransfers;
+$value->countmobiletransfers=$countmobiletransfers;
+$value->totalbanktransfers=$totalbanktransfers;
+$value->totalmobiletransfers=$totalmobiletransfers;
+$value->commission=$totalbanktransfers+$totalmobiletransfers;
+                   array_push($result, $value);
+                }else{
+                   $countbanktransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('bank')->count();
+                  $countmobiletransfers=\App\commission_records::whereBooking_id($value->booking->id)->whereTransaction_origin('mobile')->count();
+                     $commission_rate_subcategories=$value->vendor->fixed_cost_subcategories;
+//return $commission_rate_subcategories;
+                 $array=json_decode($commission_rate_subcategories,true);
+    
+                 $i=0;
+                 $valchanged=false;
+foreach ($array as $key1 => $comm) {
+    # code...
+
+    if ($comm['id']==$value->product->subcategory_id) {
+        # code...
+
+           $totalbanktransfers=intval($comm['fixed_bank'])*($countbanktransfers);
+                  $totalmobiletransfers=intval($comm['fixed_mobile_money'])*($countmobiletransfers);
+                  $vendor_payout=$value->booking->item_cost-($totalmobiletransfers+$totalbanktransfers);
+$value->vendor_payout=$vendor_payout;
+$value->countbanktransfers=$countbanktransfers;
+$value->countmobiletransfers=$countmobiletransfers;
+$value->totalbanktransfers=$totalbanktransfers;
+$value->totalmobiletransfers=$totalmobiletransfers;
+$value->fixed_mobile_money=$comm['fixed_mobile_money'];
+$value->fixed_bank=$comm['fixed_bank'];
+$value->commission=$totalbanktransfers+$totalmobiletransfers;
+
+   $valchanged=true;
+
+    }
+ 
+
+}
+
+if (!$valchanged) {
+    # code...
+  $value->vendor_payout=$value->booking->amount_paid;
+$value->countbanktransfers=$countbanktransfers;
+$value->countmobiletransfers=$countmobiletransfers;
+$value->totalbanktransfers=0;
+$value->totalmobiletransfers=0;
+$value->fixed_mobile_money=0;
+$value->fixed_bank=0;
+$value->commission=$totalbanktransfers+$totalmobiletransfers;
+
+}
+
+
+array_push($result, $value);
+                }
+
+
+
+
+
+
+
+
+            }
+        }
+      }
+$commissions=$result;
+
+    //   return response()->json($commissions);
+
+      return view('backoffice.commissions.fixedpayout',compact('commissions'));
+
+    }
+
+    function showCommissions(Request $request,$id){
+$bank=\App\commission_records::whereTransaction_origin('bank')->whereBooking_id($id)->get();
+$mobile=\App\commission_records::whereTransaction_origin('mobile')->whereBooking_id($id)->get();
+
+return view('backoffice.commissions.show',compact('bank','mobile'));
     }
 
     public function influencer_commissions(){
@@ -3776,8 +4690,8 @@ if (intval($hours)>24) {
   
  $obj = new pushNotification();
     $data=Array("name"=>"discount", "value"=>"Get discount");
-   $title="Claim your KSh.100 gift 🤑🎁";
-$messages="Order today with the app and get KSh.100 welcome discount on your first order.";
+   $title="Claim your KSh.1000 gift 🤑🎁";
+$messages="Order today with the app and get up to KSh.1,000 welcome discount on your first order.";
     $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
 return 0;
   // $data=Array("name"=>"home","value"=>"home");
@@ -3856,20 +4770,20 @@ array_push($ids, $result[$i]->id);
 
 
     function updateunservicedoverdue(Request $request){
-        $result=Bookings::whereIn("status",["active","unserviced"])->get();
-for ($i=0; $i <count($result) ; $i++) {
-    # code..
-    $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
-   if ($res==1 || $res==0) {
-       # code...
-     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"unserviced"]);
-   }
-   else{
-     \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"overdue"]);
+            $result=Bookings::whereIn("status",["active","unserviced"])->get();
+            for ($i=0; $i <count($result) ; $i++) {
+                # code..
+                $res=DB::table("payments")->whereBooking_id($result[$i]->id)->count();
+            if ($res==1 || $res==0) {
+                # code...
+                \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"unserviced"]);
+            }
+            else{
+                \App\Bookings::where(DB::raw('DATEDIFF( DATE_ADD(created_at,INTERVAL 91 DAY), DATE(NOW()))'),"<",0)->whereId($result[$i]->id)->update(["status"=>"overdue"]);
 
-   }
+            }
 
-}
+        }
     }
 
     function monitorPayments(Request $request){
@@ -3912,7 +4826,7 @@ foreach ($topups as $key => $value) {
 return view("backoffice.topups.topups",compact('topups','title'));
     }
     function utilities(Request $request){
-              $topups= topups::whereNotIn("type",['topup','airtime'])->latest()->get();
+              $topups= topups::whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->latest()->get();
 foreach ($topups as $key => $value) {
     # code...
     $value->user=\App\User::whereId($value->sender)->first();
@@ -3954,7 +4868,8 @@ for ($i=0; $i <$days ; $i++) {
 
 
 
- $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->sum('amount');
+ $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->whereStatus('valid')->sum('amount');
+
 
   $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime','topup'])->sum('amount');
 
@@ -4005,7 +4920,9 @@ for ($i=0; $i <$days ; $i++) {
 
 
  $daypayment=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$currentday)->where("payment_logs.status","=","valid")->sum('TransAmount');
+  $newbookings = \App\Bookings::select(DB::raw('Date(created_at) as date_paid','amount_paid'))->whereDate('activated_at',"=",$currentday)->where("amount_paid",">",0)->whereStatus('active')->count();
 
+  $pendingbookings = \App\Bookings::select(DB::raw('Date(created_at) as date_paid','amount_paid'))->whereDate('created_at',"=",$currentday)->whereStatus('pending')->count();
   // $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->distinct('customer_id')->count();
 
   $validpaymentreferences=\App\PaymentLog::select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d") as TransTime_f'))->whereDate(DB::raw('DATE_FORMAT(TransTime, "%Y-%m-%d")'),"=",$currentday)->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
@@ -4014,7 +4931,7 @@ for ($i=0; $i <$days ; $i++) {
 
   $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->whereIn('id',$validmpesa)->distinct('customer_id')->count();
 
-$array=Array("date"=>$currentday,"total"=>$daypayment,"unique"=>$uniquecustomers);
+$array=Array("date"=>$currentday,"total"=>$daypayment,"unique"=>$uniquecustomers,"newbookings"=>$newbookings,"pendingbookings"=>$pendingbookings);
  array_push($payments, $array);
 }
 
@@ -4023,7 +4940,7 @@ $payments=array_reverse($payments, true);
 
 
 
-    return view('backoffice.aggregate.all',compact('payments','year','month'));
+    return view('backoffice.aggregate.bookings',compact('payments','year','month'));
 
 }
 
@@ -4056,11 +4973,11 @@ for ($i=0; $i <$days ; $i++) {
 
  // $daypayment=\App\Payments::select('transaction_amount',DB::raw('Date(created_at) as date_paid'))->whereDate('date_paid',"=",$currentday)->sum('transaction_amount');
 
- $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->sum('amount');
+ $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->whereStatus('valid')->sum('amount');
 
   // $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['airtime'])->sum('amount');
 
-  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->distinct('sender')->count();
+  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['airtime'])->whereStatus('valid')->distinct('sender')->count();
 
 $array=Array("date"=>$currentday,"total"=>$dayairtime,"unique"=>$uniquecustomers);
  array_push($payments, $array);
@@ -4107,9 +5024,9 @@ for ($i=0; $i <$days ; $i++) {
 
  // $dayairtime = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','bill'])->sum('amount');
 
-  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','airtime'])->sum('amount');
+  $dayutility = topups::select('amount',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->sum('amount');
 
-  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereNotIn("type",['topup','airtime'])->distinct('sender')->count();
+  $uniquecustomers=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$currentday)->whereIn("type",['Bills(GOTV)','Bills(kplc_postpaid)','Bills(kplc_prepaid)'])->distinct('sender')->count();
 
 $array=Array("date"=>$currentday,"total"=>$dayutility,"unique"=>$uniquecustomers);
  array_push($payments, $array);
@@ -4122,4 +5039,103 @@ $payments=array_reverse($payments, true);
 
     return view('backoffice.aggregate.utility',compact('payments','year','month'));
 }
+
+function bookingdetails(Request $request,$id){
+    $booking=\App\Bookings::whereId($id)->first();
+    $customer=\App\Customers::whereId($booking->customer_id)->first();
+    $user=\App\User::whereId($customer->user_id)->first();
+    $product=\App\Products::whereId($booking->product_id)->first();
+
+
+return view('backoffice.bookings.bookingsdetails', compact('booking','customer','user','product'));
+}
+function bookingpayments(Request $request,$id){
+  if($request->ajax()){ 
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->where("payments.booking_id","=",$id)->orderBy('payments.id', 'DESC');
+       
+            
+
+            return DataTables::of($payments)->make(true);
+
+        }
+}
+
+function setcommissions(Request $request,$id){
+    $vendor=\App\Vendor::with('user')->whereId($id)->first();
+//$subcategories=\App\Products::distinct('subcategory_id')->pluck('subcategory_id')->toArray();
+    $categories=\App\Categories::get();
+$subcats=\App\SubCategories::get();
+$commissions=json_decode($vendor->commission_rate_subcategories);
+
+
+foreach ($subcats as $key => $value) {
+ 
+$haskey=false;
+foreach ($commissions as $key1 => $value1) {
+    if ($value1->id==$value->id) {
+        # code...
+
+        $value->commission_rate=$value1->commission_rate;
+$value->commission_cap=$value1->commission_cap;
+ $value->fixed_bank=$value1->fixed_bank;
+$value->fixed_mobile_money=$value1->fixed_mobile_money;
+
+$haskey=true;
+break;
+    }
+    # code...
+}
+if (!$haskey) {
+    # code...
+
+        $value->commission_rate=0;
+    $value->commission_cap=0;
+     $value->fixed_bank=0;
+$value->fixed_mobile_money=0;
+unset($subcats[$key]);
+}
+
+
+}
+
+$fixedcommissions=json_decode($vendor->fixed_cost_subcategories);
+
+
+foreach ($subcats as $key => $value) {
+ 
+$haskey=false;
+foreach ($fixedcommissions as $key1 => $value1) {
+    if ($value1->id==$value->id) {
+        # code...
+
+//         $value->commission_rate=$value1->commission_rate;
+// $value->commission_cap=$value1->commission_cap;
+ $value->fixed_bank=$value1->fixed_bank;
+$value->fixed_mobile_money=$value1->fixed_mobile_money;
+
+$haskey=true;
+break;
+    }
+    # code...
+}
+if (!$haskey) {
+    # code...
+    //     $value->commission_rate=0;
+    // $value->commission_cap=0;
+     $value->fixed_bank=0;
+$value->fixed_mobile_money=0;
+}
+
+
+}
+
+
+
+
+
+    return view('backoffice.vendors.setcommissions',compact('vendor','subcats','categories'));
+}
+
 }

@@ -49,6 +49,7 @@
                                 <th class="thead">Balance</th>
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
+                                <th class="thead">Activation Date</th>
                                 <th class="thead">Progress</th>
                                 <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
@@ -58,6 +59,8 @@
 								@endif
 
 								<th>Action</th>
+                                <th style="width: 400px;">more</th>
+
 							</tr>
 						</thead>
 			<tbody>
@@ -80,7 +83,7 @@ var t =  $('#table1').DataTable({
 	processing: true,
 	serverSide: true,
 	searching:true,
-    order: [[ 0, "desc" ]],
+    order: [[ 16, "desc" ]],
 	ajax: url,
 	columns: [
 		{data: "id",name:"bookings.id"},
@@ -222,6 +225,18 @@ ${date}
 
             	}
             }
+              ,{
+        data:"activated_at","render": function(data, type, full, meta){
+                    var agent=full;
+                    var strdate = new Date(data);
+var date = moment(strdate).format('DD.MM.YYYY');
+ //07.02.2017
+return `
+${date}
+                                 `;
+
+                }
+            }
 
                 ,{
 		data:"due_date","render": function(data, type, full, meta){
@@ -263,6 +278,21 @@ return `
 
             	}
             },
+
+               {
+        data:"id","width": "400px","render": function(data, type, full, meta){
+       
+return `<div><a class="btn btn-outline-success mt-1" href="/admin/view-booking/${data}"><i class="fa fa-eye"> </i></a></div>
+
+                                 `;
+                
+
+
+                }
+            },
+
+
+
 
 
             // ,

@@ -71,6 +71,12 @@
                                 Product Code: <span class="p-code">{{$product->product_code}}</span>
                             </div>
 
+
+                            <div>
+                                <a style="color:#F68B1E !important;margin-top:10px;margin-bottom:10px" href="/vendors/{{$product->vendor->slug}}">Sold By : <span class="p-code" >{{$product->vendor->business_name}}</span></a>
+                            </div>
+
+
                             <div class="product-price">KSh. {{number_format($product->product_price)}}</div>
 
                            <div class="mb-3">
@@ -93,7 +99,9 @@
 
                             <div>
                                 <a href="/checkout/{{$product->slug}}" class="btn btn-block p-btn">Click to Order</a>
+                             
                             </div>
+                           
                             
                             <div class="highlights">
                                 <h5>Key Highlights</h5>
@@ -278,4 +286,24 @@
     </div>
     <!-- end products carousel -->
 </div>
+
+
+<script type="text/javascript">
+new mosmos(
+    {name:"Lipa Pole Pole",productName:"Dell Latitude E5420 Intel Core I5 4GB Ram 500GB HDD 14 Inches",imageSource:"https://mosmos.co.ke/storage/images/2021-03-09-09-25-05samsung-galaxy-tab-a7-10-4-lte-gold-32gb-and-3gb-ram-sm-t505n.jpg", productPrice:10,
+
+    onApprove: function(data){
+
+alert("approved");
+alert(JSON.stringify(data));
+},
+onDecline:function(data){
+    alert("declined");
+    alert(JSON.stringify(data))
+}
+
+
+});
+</script>
+
 @endsection

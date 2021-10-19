@@ -32,10 +32,28 @@ Route::get('/terms', function () {
 Route::get('/privacy-policy', function () {
     return view('privacy');
 });
+Route::get('/cardsuccess/{details}', 'autApi@cardsuccess')->name('cardsuccess');
+Route::get('/ipayfailed', function () {
+    return view('front.ipayfailed');
+});
 
 Route::get('/register-email', function (){
  return view('emails.registrationmail_test');
 });
+
+Route::any('/capturepayment', 'autApi@capturepayment')->name('admin.capturepayment');
+Route::any('/TravelCardTransaction', 'autApi@TravelCardTransaction')->name('admin.TravelCardTransaction');
+Route::any('/simulatetransaction', 'autApi@TravelMpesaTransaction')->name('admin.TravelMpesaTransaction');
+Route::prefix('payments')->group(function () {
+  Route::get('/{ordernumber}/invoice','InvoicePaymentController@index');
+  Route::get('/{ordernumber}/pay','InvoicePaymentController@pay');
+    Route::get('keysettings','InvoicePaymentController@keySettings');
+  
+
+});
+
+
+
 
 Route::get('/sendpromonotification', 'firebasetopics@promonotification')->name('admin.sendpromonotification');
 Route::get('/updateAccountNumbers', 'autApi@updateAccountNumbers')->name('admin.updateAccountNumbers');
@@ -46,6 +64,7 @@ Route::get('/scheduletasks1','AdminController@scheduletask1');
 Route::get('/scheduletasks2','AdminController@scheduletask2');
 Route::get('/scheduletasks3','AdminController@scheduletask3');
 Route::get('/updateunservicedoverdue','AdminController@updateunservicedoverdue');
+Route::get('/updatevendorslugs','AdminController@updatevendorslugs');
 
 
 
@@ -55,6 +74,9 @@ Route::get('/testSendSMS','FrontPageController@testSendSMS');
 Route::get('/update_bookings_agent_or_vendor','FrontPageController@update_bookings_agent_or_vendor');
 
 Route::post('/checkpayment','MpesaPaymentController@checkpayment');
+
+Route::get('/vendors/{slug}','FrontPageController@vendor');
+Route::post('/vendors/{slug}','FrontPageController@vendor_load_more');
 
 Route::prefix('c2b')->group(function () {
     Route::post('/confirm-7CavgY5gFFwzktQH6XjcS2','MpesaPaymentController@mpesapayment');
@@ -219,6 +241,16 @@ Route::prefix('influencer')->group(function () {
 
 Route::prefix('vendor')->group(function () {
     Route::group(['middleware' => ['auth']], function (){
+        Route::get('/view-booking/{id}','VendorController@bookingdetails')->name('vendor.bookingdetails');
+
+  Route::post('/view-booking/{id}/payments','VendorController@bookingpayments')->name('vendor.bookingpayments');
+        
+        Route::get('/key', 'VendorController@keySettings');
+        
+          Route::any('/payments', 'VendorController@payments');
+        Route::get('/vendor-booking', 'VendorController@manualBooking');
+        Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');
+          
         Route::get('/assigned-products', 'VendorController@assigned_products');
         Route::get('/product-view/{id}','VendorController@view_product');
         Route::get('/add-product', 'VendorController@add_product');
@@ -252,8 +284,78 @@ Route::prefix('vendor')->group(function () {
         Route::get('/revoked-bookings','VendorController@revoked_bookings');
         Route::get('/product-edit/{id}', 'VendorController@product_edit');
     Route::get('/product-delete/{id}', 'VendorController@product_delete');
+       Route::get('/branches', 'VendorController@branches')->name('branchvendor.branches');
+ Route::get('/add-branch', 'VendorController@add_vendor')->name('vendor.branchvendor.add');
+  Route::get('/view-branch/{id}', 'VendorController@view_branch')->name('vendor.branchvendor.view');
+    Route::post('/vendor-save', 'VendorController@save_vendor')->name('vendor.branchvendor.save');
+    Route::get('/view-vendor/{id}', 'VendorController@view_vendor')->name('vendor.branchvendor.view');
+
+
+
+
+ Route::prefix('branch')->group(function () {
+
+
+        Route::get('/delete-account/{id}','VendorController@vendor_delete_account');
+        Route::get('/products-report/{id}','ReportGenerator@vendor_products_report');
+        Route::get('/active-bookings-report/{id}','ReportGenerator@vendor_active_bookings_report');
+        Route::get('/pending-bookings-report/{id}','ReportGenerator@vendor_pending_bookings_report');
+        Route::get('/rejected-bookings-report/{id}','ReportGenerator@vendor_rejected_bookings_report');
+        Route::get('/unserviced-bookings-report/{id}','ReportGenerator@vendor_unserviced_bookings_report');
+        Route::get('/complete-bookings-report/{id}','ReportGenerator@vendor_complete_bookings_report');
+        Route::get('/overdue-bookings-report/{id}','ReportGenerator@vendor_overdue_bookings_report');
+        Route::get('/delivered-bookings-report/{id}','ReportGenerator@vendor_delivered_bookings_report');
+        Route::get('/rejected-products','AdminController@vendor_rejected_products');
+       
+
+      });
+
+
     });
 });
+
+
+Route::prefix('branch')->group(function () {
+    Route::group(['middleware' => ['auth']], function (){
+        Route::get('/view-booking/{id}','BranchVendorController@bookingdetails')->name('vendor.bookingdetails');
+
+  Route::post('/view-booking/{id}/payments','BranchVendorController@bookingpayments')->name('vendor.bookingpayments');
+     Route::get('/branch-booking', 'BranchVendorController@manualBooking');
+        
+          Route::any('/branchusers', 'BranchVendorController@branchusers');
+        Route::any('/adduser', 'BranchVendorController@adduser');
+    Route::any('/user-save', 'BranchVendorController@usersave');
+          
+          Route::any('/payments', 'BranchVendorController@payments');
+        Route::get('/vendor-booking', 'BranchVendorController@manualBooking');
+        Route::post('/vendor-savebooking', 'ApiBookingController@vendorbooking');
+        Route::get('/image-delete/{id}', 'BranchVendorController@image_delete');
+        Route::get('/create-bookings','BranchVendorController@create_bookings');
+          Route::post('/make-booking','BranchVendorController@make_booking');
+        
+        
+        Route::get('/active-bookings','BranchVendorController@active_bookings');
+        Route::get('/rejected-products','BranchVendorController@rejected_products');
+        Route::get('/overdue-bookings','BranchVendorController@overdue_bookings');
+        Route::get('/profile','BranchVendorController@profile');
+        Route::post('/update-profile', 'BranchVendorController@update_profile');
+        Route::get('/revoked-bookings','BranchVendorController@revoked_bookings');
+        Route::get('/delivered-bookings','BranchVendorController@delivered_bookings');
+        Route::get('/transfer-order','BranchVendorController@transfer_order');
+        Route::post('/transfer-order/{id}','BranchVendorController@transfer_orderID');
+        Route::get('/unserviced-bookings','BranchVendorController@unserviced_bookings');
+        Route::get('/pending-bookings','BranchVendorController@pending_bookings');
+       
+        Route::get('/complete-bookings','BranchVendorController@complete_bookings');
+        Route::get('/active-bookings','BranchVendorController@active_bookings');
+        Route::get('/revoked-bookings','BranchVendorController@revoked_bookings');
+
+    
+
+    });
+});
+
+
 
 Route::prefix('admin')->group(function () {
 Route::group(['middleware' => ['auth','admin']], function (){
@@ -273,7 +375,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/update-brand/{brand}', 'AdminController@update_brand')->name('admin.update_brand');
     Route::get('/view-category/{id}', 'AdminController@view_category')->name('admin.category.view');
     Route::get('/view-subcategory/{id}', 'AdminController@view_subcategory')->name('admin.subcategory.view');
-    Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
+    Route::get('/edit-vendor/{id}', 'AdminController@edit_vendor')->name('admin.vendor.edit');
+      Route::get('/view-vendor/{id}', 'AdminController@view_vendor')->name('admin.vendor.view');
+      Route::get('/setcommissions/{id}', 'AdminController@setcommissions')->name('setcommissions');
     Route::get('/view-influencer/{id}', 'AdminController@view_influencer')->name('admin.influencer.view');
     Route::get('/view-agent/{id}', 'AdminController@view_agent')->name('admin.agent.view');
     Route::get('/edit-category/{id}', 'AdminController@edit_category')->name('admin.category.edit');
@@ -282,7 +386,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/transfer-order','AdminController@transfer_order');
     Route::post('/transfer-order/{id}','AdminController@transfer_orderID');
     Route::post('/record-payment/{id}','AdminController@record_payment');
-      Route::post('/recordbill-payment/{id}','AdminController@recordbillpayment');
+    Route::post('/recordbill-payment/{id}','AdminController@recordbillpayment');
+      Route::post('/recordCreditedbill-payment/{id}','AdminController@recordCreditedbillpayment');
+    
 
     Route::get('/product-categories', 'AdminController@categories')->name('admin.categories');
     Route::post('/save-category', 'AdminController@save_category')->name('admin.save_category');
@@ -295,6 +401,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::get('/revoke-booking/{id}', 'AdminController@revoke_booking')->name('admin.revoke-booking');
 
     Route::get('/storepicking-booking/{id}','AdminController@storepicking_booking')->name('admin.storepicking-booking');
+    Route::get('/view-booking/{id}','AdminController@bookingdetails')->name('admin.bookingdetails');
+
+  Route::post('/view-booking/{id}/payments','AdminController@bookingpayments')->name('admin.bookingpayments');
     Route::get('/remove-booking/{id}', 'AdminController@remove_booking')->name('admin.remove-booking');
     Route::get('/complete_bookings', 'AdminController@complete_bookings')->name('admin.complete_bookings');
     Route::get('/delivered_bookings','AdminController@delivered_bookings');
@@ -330,6 +439,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
     Route::post('/save-city', 'AdminController@save_city')->name('admin.save-city');
     Route::post('/update-city/{id}', 'AdminController@update_city')->name('admin.update_city');
     Route::get('/commissions','AdminController@commissions')->name('commissions');
+    Route::get('/fixed-payout','AdminController@fixedPayout')->name('fixed-payout');
+    Route::get('/show-commissions/{id}','AdminController@showCommissions')->name('showcommissions');
+    
     Route::get('/influencer-commissions','AdminController@influencer_commissions')->name('influencer_commissions');
     Route::get('/influencer-products','AdminController@influencer_products');
     Route::get('/influencer-logs','AdminController@influencer_logs');
@@ -337,7 +449,9 @@ Route::group(['middleware' => ['auth','admin']], function (){
 
     Route::get('/add-vendor', 'AdminController@add_vendor')->name('admin.vendor.add');
     Route::post('/vendor-save', 'AdminController@save_vendor')->name('admin.vendor.save');
-
+    Route::post('/vendor-update/{id}', 'AdminController@update_vendor')->name('admin.vendor.update_vendor');
+    
+    Route::post('/update_vendor/{id}', 'AdminController@update_vendors')->name('admin.vendor.update');
     Route::get('/banners', 'AdminController@banners')->name('admin.banners');
     Route::get('/add_banner','AdminController@add_banner')->name('admin.adder-banner');
     Route::post('/banner_save','AdminController@save_banner')->name('admin.save-banner');
@@ -449,6 +563,8 @@ Route::post('/user/permission/{id}/update','UserController@updatePermission')->n
     });
 
     Route::prefix('vendor')->group(function () {
+
+
         Route::get('/delete-account/{id}','AdminController@vendor_delete_account');
         Route::get('/pending-products','AdminController@vendor_pending_products');
         Route::get('/approved-products','AdminController@vendor_approved_products');
@@ -465,6 +581,7 @@ Route::post('/user/permission/{id}/update','UserController@updatePermission')->n
         Route::get('/rejected-products','AdminController@vendor_rejected_products');
         Route::get('/product-reject/{id}','AdminController@reject_vendor_product');
         Route::get('/product-view/{id}','AdminController@view_vendor_product');
+
       });
       Route::prefix('influencer')->group(function () {
         Route::get('/delete-account/{id}','AdminController@influencer_delete_account');

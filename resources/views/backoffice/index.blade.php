@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         @if(auth()->user()->role == "admin")
-          @if(Sentinel::hasAccess('dashboard'))
+        @if(Sentinel::hasAccess('dashboard'))
 
         <?php 
 
@@ -23,7 +23,7 @@
         $pendingBookingAmount = \App\Bookings::where('status','=','pending')->sum('total_cost');
         $pendingBookingCount = \App\Bookings::where('status','=','pending')->count();
 
-$customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->pluck('customer_id')->toArray();
+        $customers=\App\Bookings::whereIn('status',['active','overdue','unserviced'])->pluck('customer_id')->toArray();
         $customersCount = \App\Customers::whereIn("id",$customers)->count();
         $vendorsCount = \App\Vendor::count();
                 
@@ -446,14 +446,125 @@ $hasbooking=false;
 
           $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->where('vendor_code',$vendor_code)->sum('total_cost');
           $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('vendor_code',$vendor_code)->count();
-          $activeBookingAmount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->sum('total_cost');
-          $activeBookingsCount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->count();
+          // $activeBookingAmount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->sum('total_cost');
+          // $activeBookingsCount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->count();
+
+             $activeBookingAmount = \App\Bookings::whereIn('status',['active','overdue','unserviced'])->where('vendor_code',$vendor_code)->sum('total_cost');
+        $activeBookingsCount = \App\Bookings::distinct('customer_id')->whereIn('status',['active','overdue','unserviced'])->where('vendor_code',$vendor_code)->count();
+
           $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('vendor_code',$vendor_code)->sum('total_cost');
           $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('vendor_code',$vendor_code)->count();
           $completeBookingAmount = \App\Bookings::where('status','=','complete')->where('vendor_code',$vendor_code)->sum('total_cost');
           $completeBookingCount = \App\Bookings::where('status','=','complete')->where('vendor_code',$vendor_code)->count();
           $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->sum('total_cost');
           $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('vendor_code',$vendor_code)->count();
+                  
+          ?>
+
+
+            <div class="row">
+
+
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                  <div class="inner">
+                    <h3>{{number_format($completeBookingCount)}}</h3>
+
+                    <h5>KES {{number_format($completeBookingAmount)}}</h5>
+
+
+                    <p>Complete Bookings</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-check-circle"></i>
+                  </div>
+                  <a href="/vendor/complete-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+
+
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-primary">
+                  <div class="inner">
+                    <h3>{{number_format($activeBookingsCount)}}</h3>
+
+                    <h5>KES {{number_format($activeBookingAmount)}}</h5>
+
+
+                    <p>Active Bookings</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-check-square"></i>
+                  </div>
+                  <a href="/vendor/active-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+
+
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-primary">
+                  <div class="inner">
+                    <h3>{{number_format($pendingBookingCount)}}</h3>
+
+                    <h5>KES {{number_format($pendingBookingAmount)}}</h5>
+
+
+                    <p>Pending Bookings</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-spinner"></i>
+                  </div>
+                  <a href="/vendor/pending-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                  <div class="inner">
+                    <h3>{{number_format($revokedBookingCount)}}</h3>
+
+                    <h5>KES {{number_format($revokedBookingAmount)}}</h5>
+
+
+                    <p>Revoked Bookings</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-times"></i>
+                  </div>
+                  <a href="/vendor/revoked-bookings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+
+
+            </div>
+
+        @elseif(auth()->user()->role == "branch_vendor")
+
+        
+        <?php 
+
+          $branch_user = Auth()->user()->branch_user;
+          
+          $branch_id = $branch_user->branch_id;
+
+          $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->where('branch_id',$branch_id)->sum('total_cost');
+          $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('branch_id',$branch_id)->count();
+          // $activeBookingAmount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->sum('total_cost');
+          // $activeBookingsCount = \App\Bookings::where('status','=','active')->where('vendor_code',$vendor_code)->count();
+
+             $activeBookingAmount = \App\Bookings::whereIn('status',['active','overdue','unserviced'])->where('branch_id',$branch_id)->sum('total_cost');
+        $activeBookingsCount = \App\Bookings::distinct('customer_id')->whereIn('status',['active','overdue','unserviced'])->where('branch_id',$branch_id)->count();
+
+          $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('branch_id',$branch_id)->sum('total_cost');
+          $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('branch_id',$branch_id)->count();
+          $completeBookingAmount = \App\Bookings::where('status','=','complete')->where('branch_id',$branch_id)->sum('total_cost');
+          $completeBookingCount = \App\Bookings::where('status','=','complete')->where('branch_id',$branch_id)->count();
+          $pendingBookingAmount = \App\Bookings::where('status','=','pending')->where('branch_id',$branch_id)->sum('total_cost');
+          $pendingBookingCount = \App\Bookings::where('status','=','pending')->where('branch_id',$branch_id)->count();
                   
           ?>
 

@@ -106,6 +106,7 @@ $bestSellers = \App\Products::with('category','subcategory')
                                 # code...
     $Products['description']="";
     $Products['highlights']="";
+    $Products['buying_price']=$Products->product_price;
 
                             }
     return $bestSellers;
@@ -121,6 +122,7 @@ $bestSellers = \App\Products::with('category','subcategory')
                                 # code...
     $Products['description']="";
     $Products['highlights']="";
+    $Products['buying_price']=$Products->product_price;
 
                             }
 
@@ -172,8 +174,8 @@ $customer=Customers::wherePhone($username)->first();
 $phone=$customer->phone;
         $totalBookingAmount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->sum('total_cost');
         $totalBookingCount = \App\Bookings::where('amount_paid','>',0)->where('customer_id',$customer_id)->count();
-        $activeBookingAmount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->sum('total_cost');
-        $activeBookingsCount = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->count();
+        $activeBookingAmount = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->sum('total_cost');
+        $activeBookingsCount = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->count();
 
         $revokedBookingAmount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->sum('total_cost');
         $revokedBookingCount = \App\Bookings::where('status','=','revoked')->where('customer_id',$customer_id)->count();
@@ -246,14 +248,14 @@ $bok = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status', 
 if ($bok!=null) {
   # code...
 
-  $completionDate = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
-         $createdat = \App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->created_at;
+  $completionDate = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setdate;
+         $createdat = \App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->created_at;
 
   $amountPaids=$bok->amount_paid;
-  $hastarget=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $bookingreference=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->booking_reference;
-  $setreminder=intval(\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setreminder);
-  $setdate=\App\Bookings::where('status','=','active')->where('customer_id',$customer_id)->first()->setdate;
+  $hastarget=intval(\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setreminder);
+  $bookingreference=\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->booking_reference;
+  $setreminder=intval(\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setreminder);
+  $setdate=\App\Bookings::whereIn('status', ['active','overdue','unserviced'])->where('customer_id',$customer_id)->first()->setdate;
 
 $bookingbalances=intval($bok->balance);
 $totalBookingAmounts=$bok->total_cost;
@@ -269,27 +271,30 @@ $cdate = Carbon::parse($completionDate);
 $createddate = Carbon::parse($createdat);
 
 $days=intval(($cdate->diffInDays($createddate)));
-
+$dayspassed=intval(($createddate->diffInDays($now)));
 if($days>0){
     if ($setreminder==1) {
         # code...
             $dailytarget=intval($totalBookingAmounts/$days);
+            $amountsbepaid=intval($dayspassed*$dailytarget);
             $targettype="Daily target";
     }
     else if ($setreminder==2) {
         # code...
             $dailytarget=intval($totalBookingAmounts/$days) * 7;
+            $amountsbepaid=intval($dayspassed*($dailytarget)/7);
              $targettype="Weekly target";
     }
     else if ($setreminder==3) {
         # code...
           $dailytarget=intval($totalBookingAmounts/$days) * 30;
+          $amountsbepaid=intval($dayspassed*($dailytarget)/30);
            $targettype="Monthly target";
     }
 
 }
-$dayspassed=intval(($createddate->diffInDays($now)));
-$amountsbepaid=intval($dayspassed*$dailytarget);
+
+
 $paymentbalance=$amountsbepaid-$amountPaids;
 if ($paymentbalance<0) {
   # code...
@@ -298,7 +303,17 @@ if ($paymentbalance<0) {
 }
 else{
    $daysdue=intval($paymentbalance/$dailytarget);
-   $progressmessage=$daysdue."-Days behind Ksh. ".number_format($paymentbalance);
+  if ($targettype=='Daily Ta
+    ') {
+ 
+  $progressmessage=$daysdue."-Days behind Ksh. ".number_format($paymentbalance);     # code...
+  }
+  else if($targettype=="Weekly target"){
+     $progressmessage=$daysdue."-Week behind Ksh. ".number_format($paymentbalance);
+  }
+  else{
+     $progressmessage=$daysdue."-Month behind Ksh. ".number_format($paymentbalance);
+  }
 }
 }
           # code...
@@ -404,7 +419,13 @@ return $allPayments;
         $username=$request->input("username");
         $status=$request->input("status");
         $customer = Customers::wherePhone($username)->first();
-        $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
+        if ($status=='active') {
+            $bookings = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','overdue','unserviced'])->latest()->get();
+            # code...
+        }
+        else{
+            $bookings = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=',$status)->latest()->get();
+        }
         foreach($bookings as $booking){
             $progress = round(($booking->amount_paid/$booking->total_cost)*100);
             $booking['progress'] = $progress;

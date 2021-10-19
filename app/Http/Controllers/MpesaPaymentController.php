@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendNotificationMail;
 use \App\Mail\SendPaymentEmail;
+use \App\Mail\SendTravelPaymentEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendBookingMail;
 use App\Mail\SendPaymentMailToAdmin;
@@ -105,8 +106,51 @@ class MpesaPaymentController extends Controller
                     if($vendor == null){
                         
                        }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
+                    if ($vendor->category=="1") {
+    # code...
+        $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+                 $checked=false;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+      $commission_rate=$value['commission_rate'];
+                    $commision_cap=$value['commission_cap'];
+$checked=true;
+
+    }
+
+}
+
+if (!$checked) {
+    $commission_rate=0;
+    $commision_cap=0;
+}
+
+}
+else{
+
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                   
+}
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                        // $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
 
                         DB::table('commissions')->insert([
                             'product_id' => $product->id,
@@ -158,6 +202,7 @@ class MpesaPaymentController extends Controller
                 $payment->customer_id = $booking->customer_id; 
                 $payment->product_id  = $booking->product_id;
                 $payment->transaction_amount = $transaction_amount;
+                $payment->branch_id=$booking->branch_id;
                 $payment->booking_status = 'active';
                 $payment->date_paid = $time;
                 $payment->save();
@@ -187,7 +232,7 @@ class MpesaPaymentController extends Controller
             $balance =number_format($balance,2);
 
             // Set your message
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             // Set your shortCode or senderId
             $from       = "Mosmos";
@@ -281,12 +326,13 @@ class MpesaPaymentController extends Controller
 
             $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
 
+            $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
 
             $travelPattern = "/t/i";
     
             $travelTrue = preg_match($travelPattern,$bill_ref_no);
 
-            if($travelTrue ==1 || !empty($sms_credit_payment)){
+            if($travelTrue ==1 || !empty($sms_credit_payment) || !empty($invoice_payment)){
 
                 $existingLog = \DB::connection('mysql2')->table('payment_logs')->where('TransID',$transaction_id)->first();
 
@@ -300,7 +346,7 @@ class MpesaPaymentController extends Controller
 
                     $paymentLog['TransactionType'] = "SMS Credit Topup";
       
-                  }
+                }
 
                 $paymentLog['created_at'] = now();
                 $paymentLog['updated_at'] = now();
@@ -308,22 +354,22 @@ class MpesaPaymentController extends Controller
                 \DB::connection('mysql2')->table('payment_logs')->insert( $paymentLog);
 
                 $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
-
-                $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id);
+                Log::info("checkpoint0");
+                $message = $this->validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id,$transaction_id);
 
                 return $message;
 
             }
                $mosmosaccountpattern="/MID/i";
-  $mosmosTrue = preg_match($mosmosaccountpattern,$bill_ref_no);
+               $mosmosTrue = preg_match($mosmosaccountpattern,$bill_ref_no);
 
-            if($mosmosTrue ==1){
-$user=\App\User::whereMosmosid($bill_ref_no);
-$obj=$user->first();
-if($obj!=null){
-    $balance=$obj->balance;
-$balance=$balance+$transaction_amount;
-$user->update(["balance"=>$balance]);
+    if($mosmosTrue ==1){
+        $user=\App\User::whereMosmosid($bill_ref_no);
+        $obj=$user->first();
+        if($obj!=null){
+            $balance=$obj->balance;
+        $balance=$balance+$transaction_amount;
+        $user->update(["balance"=>$balance]);
 
         for($i=0;$i<1000000;$i++){
             $transid = 'TT'.rand(10000,99999)."M";
@@ -500,7 +546,7 @@ if ($customer!=null) {
     # code...
 }
 if (($decdata->ResponseCode)=="000")  {
- $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime");
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"airtime","status"=>"valid");
  \App\BillpaymentLogs::whereId($log_id)->update(["status"=>"valid"]);
 \App\topups::create($credentials);
   $obj = new pushNotification();
@@ -535,7 +581,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn,"status"=>"valid");
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
@@ -852,6 +898,7 @@ else{
             $payment->product_id  = $booking->product_id;
             $payment->transaction_amount = $transaction_amount;
             $payment->booking_status = 'active';
+              $payment->branch_id=$booking->branch_id;
             $payment->date_paid = now();
             $payment->save();
 
@@ -950,9 +997,55 @@ else{
                     $vendor = \App\Vendor::where('vendor_code','=',$booking->vendor_code)->first();
                     if($vendor == null){
                         
-                       }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+                       }
+                       else {
+                    // $commission_rate=$vendor->commission_rate;
+                    // $commision_cap=$vendor->commission_cap;
+                        if ($vendor->category=="1") {
+    # code...
+        $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+                 $checked=false;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+      $commission_rate=$value['commission_rate'];
+                    $commision_cap=$value['commission_cap'];
+$checked=true;
+
+    }
+
+}
+
+if (!$checked) {
+    $commission_rate=0;
+    $commision_cap=0;
+}
+
+}
+else{
+
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                   
+}
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                        // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
 
                         $recipients = $vendor->phone;
 
@@ -975,9 +1068,38 @@ else{
                 
             }else{
 
+                $status= DB::table('bookings')
+                ->where('booking_reference','=',$bill_ref_no)->first()->status;
+
+                if ($status=='pending') {
+                    # code...
+                    $current_date_time = Carbon::now()->toDateTimeString();
+                    $newbalance=$balance-200;
+                    $total_cost=($booking->total_cost)-200;
+    $recipients = $booking->customer->phone;
                 DB::table('bookings')
                 ->where('booking_reference','=',$bill_ref_no)
-                ->update(['balance'=>$balance,'amount_paid'=>$amount_paid,'status'=>'active']);
+                ->update(['balance'=>$newbalance,'amount_paid'=>$amount_paid,'status'=>'active',"discount"=>200,"total_cost"=>$total_cost,"activated_at"=>$current_date_time]);
+                $message="Congratulations. You have received a KSh.200 discount on your Lipa Mos Mos order. Your new balance is KSh.{$newbalance}.";
+SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+  $token=\App\User::whereId($booking->customer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+       //return $message;
+    }
+       $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+        $obj = new pushNotification();
+    $obj->exceuteSendNotification($token,"You have received KSh.200 from us. Thanks for your order","Congratulations! ",$data);
+
+                }
+                else{
+
+
+                DB::table('bookings')
+                ->where('booking_reference','=',$bill_ref_no)
+                ->update(['balance'=>$balance,'amount_paid'=>$amount_paid]);
+                }
+
             }
             
 
@@ -1004,9 +1126,10 @@ else{
 
             if($payment_count<2){
                 $shipping_cost = $booking->shipping_cost;
-                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+                //$message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Incl delivery cost of KES .{$shipping_cost}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
-                $message="Payment of KSh.{$transaction_amount} for {$bill_ref_no} received. Txn. {$code}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                // $message="Payment of KSh.{$transaction_amount} for {$bill_ref_no} received. Txn. {$code}. Bal is KSh.{$balance} incl delivery cost. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                $message="{$code}. Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Your Bal is KES. {$balance}. Buy Airtime bila stress. Paybill: 4040299 AC: Your Phone number.";
 
                 $result=DB::table("monitorpay")->get();
                 if (count($result)==0) {
@@ -1021,8 +1144,9 @@ else{
 
             }else{
 
-                // $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
-                $message="Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Txn.{$code}. Bal is KSh. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                // $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+                // $message="Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Txn.{$code}. Bal is KSh. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp";
+                     $message="{$code}. Payment of KES. {$transaction_amount} for {$bill_ref_no} received. Your Bal is KES. {$balance}. Buy Airtime bila stress. Paybill: 4040299 AC: Your Phone number.";
                    $result=DB::table("monitorpay")->get();
                 if (count($result)==0) {
                     DB::table("monitorpay")->insert(["total"=>1,"mobile"=>0]);
@@ -1173,8 +1297,51 @@ else{
                     if($vendor == null){
                         
                        }else {
-                        $admin_commission = $product->product_price * ($product->subcategory->commision/100);
-                        $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
+                  if ($vendor->category=="1") {
+    # code...
+        $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
+
+                 $array=json_decode($fixed_cost_subcategories,true);
+        
+                 $i=0;
+                 $checked=false;
+foreach ($array as $key => $value) {
+    # code...
+
+    if ($value['id']==$request->subcategory) {
+        # code...
+      $commission_rate=$value['commission_rate'];
+                    $commision_cap=$value['commission_cap'];
+$checked=true;
+
+    }
+
+}
+
+if (!$checked) {
+    $commission_rate=0;
+    $commision_cap=0;
+}
+
+}
+else{
+
+                    $commission_rate=$vendor->commission_rate;
+                    $commision_cap=$vendor->commission_cap;
+                   
+}
+                    $admin_commission=floatval($product->product_price)*($commission_rate/100);
+                    if ($admin_commission>=$commision_cap) {
+                    $admin_commission=$commision_cap;
+                    # code...
+                    }
+                    $vendor_commission=floatval($product->product_price)-$admin_commission;
+
+                    // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                    // $vendor_commission = $product->product_price * ((100-$product->subcategory->commision)/100);
+
+                        // $admin_commission = $product->product_price * ($product->subcategory->commision/100);
+                        // $vendor_commission = $product->product_price - ($product->product_price * ($product->subcategory->commision/100));
 
                         DB::table('commissions')->insert([
                             'product_id' => $product->id,
@@ -1227,6 +1394,7 @@ else{
                 $payment->product_id  = $booking->product_id;
                 $payment->transaction_amount = $transaction_amount;
                 $payment->booking_status = 'active';
+                  $payment->branch_id=$booking->branch_id;
                 $payment->date_paid = $time;
                 $payment->save();
 
@@ -1251,7 +1419,7 @@ else{
             $transaction_amount = number_format($transaction_amount,2);
             $balance =number_format($balance,2);
             
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
+            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp." ;
            
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
 
@@ -1500,21 +1668,24 @@ else{
         return response()->json($out);
     }
 
-    public function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id){
-
+    public static function validateTravelPayments($bill_ref_no,$transaction_amount,$msisdn,$first_name,$middle_name,$last_name,$code,$log_id,$TransID='none'){
+       Log::info("checkpoint1");
        $sms_credit_payment = \DB::connection('mysql2')->table('travel_agents')->where('code',$bill_ref_no)->first();
+
+       $invoice_payment = \DB::connection('mysql2')->table('invoices')->where('ref',$bill_ref_no)->first();
 
        if(!empty($sms_credit_payment)){
 
-        // s_m_s_top_ups
+            // s_m_s_top_ups
+
             $top_up_data = [
-            'payment_log_id'=>$log_id,
-            'agent_id'=>$sms_credit_payment->id,
-            'amount'=>$transaction_amount,
-            'channel'=>"Mpesa",
-            'created_at'=>now(),
-            'updated_at'=>now()
-            ];
+                            'payment_log_id'=>$log_id,
+                            'agent_id'=>$sms_credit_payment->id,
+                            'amount'=>$transaction_amount,
+                            'channel'=>"Mpesa",
+                            'created_at'=>now(),
+                            'updated_at'=>now()
+                            ];
 
             \DB::connection('mysql2')->table('s_m_s_top_ups')->insert($top_up_data);
 
@@ -1522,7 +1693,7 @@ else{
             $n_sms_credits = $c_sms_credits+$transaction_amount;
 
             \DB::connection('mysql2')->table('travel_agents')
-                                     ->where('slug',$bill_ref_no)
+                                     ->where('code',$bill_ref_no)
                                      ->update([
                                           'sms_credits'=>$n_sms_credits, 
                                           'created_at'=>now(),
@@ -1533,6 +1704,31 @@ else{
 
        }
 
+
+       if(!empty($invoice_payment)){
+
+            $amount_paid = $transaction_amount;
+            $balance = $invoice_payment->amount - $amount_paid;
+
+            if($balance<1){
+                $status = "paid";
+            }else{
+                $status = "partially_paid";
+            }
+
+            \DB::connection('mysql2')->table('invoices')
+                                    ->where('id',$invoice_payment->id)
+                                    ->update([
+                                        'balance'=>$balance,
+                                        'amount_paid'=>$amount_paid,
+                                        'status'=>$status
+                                    ]);
+
+            return "Success";
+
+           
+       }
+Log::info("checkpoint2");
        $booking = DB::connection('mysql2')->table('bookings')->where('booking_reference','=',$bill_ref_no)->first();
        
        if($booking == null){
@@ -1541,9 +1737,43 @@ else{
            
             $customer = DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
 
+            $user_customer = DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
             $recipients = $customer->phone;
 
             $agent = DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)->first();
+
+            $a_user = DB::connection('mysql2')->table('users')->where('id',$agent->user_id)->first();
+
+            if($booking->status == "pending"){
+
+                //   Booking made Notification
+    
+                // self::send_booking_made_mails($customer = $user_customer->name, $user_email = $user_customer->email,
+                //                               $agent_email = $a_user->email,$package_name = $booking->package_name,
+                //                               $booking_reference = $booking->booking_reference, $total_cost = $booking->total_cost
+                //                             );
+                $data = [];
+                $data['customer'] = $user_customer->name;
+                $data['user_email'] = $user_customer->email;
+                $data['agent_email'] = $a_user->email;
+                $data['package_name'] = $booking->package_name;
+                $data['booking_reference'] = $booking->booking_reference;
+                $data['total_cost'] = $booking->total_cost;
+                
+
+                $url = "127.0.0.1:8000/api/send-booking-made-email";
+
+                $curl = curl_init($url);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($curl);
+                $response = json_decode($response);
+                // return array($response);
+                curl_close($curl);
+    
+            }
 
             $current_online_payments = $agent->online_payments;
             $current_offline_payments = $agent->offline_payments;
@@ -1552,41 +1782,163 @@ else{
             $new_online_payments = $current_online_payments + $transaction_amount;
             $new_total_payments = $agent->total_payments + $transaction_amount;
 
-            $n_wallet_balance = 0.965 * $current_online_payments;
+            $admin_commission = $agent->system_payment_cost;
 
-            DB::connection('mysql2')->table('travel_agents')->where('id',$booking->agent_id)
-                    ->update([
-                            'online_payments'=>$new_online_payments,
-                            'total_payments'=>$new_total_payments
-                            ]);
+            $payment_balance = $transaction_amount - $admin_commission;
+
+            DB::connection('mysql2')->table('travel_agents')
+                                    ->where('id',$booking->agent_id)
+                                    ->update([
+                                            'online_payments'=>$new_online_payments,
+                                            'wallet_balance'=>$agent->wallet_balance + $payment_balance,
+                                            'total_payments'=>$new_total_payments
+                                            ]);
+
+            $admin_wallet = DB::connection('mysql2')->table('admin_wallets')->first();
+            
+            if(empty($admin_wallet)){
+                DB::connection('mysql2')->table('admin_wallets')->insert(['previous_balance'=>0,'current_balance'=>$admin_commission]);
+            }else{
+                DB::connection('mysql2')->table('admin_wallets')->update(['previous_balance'=>$admin_wallet->previous_balance,'current_balance'=>($admin_wallet->current_balance + $admin_commission)]);
+            }
+
+           
+           $current_date = date('Y-m-d');
+
+           $date_from = date('Y-m-01', strtotime($current_date));
+
+           $date_to = date("Y-m-t", strtotime($date_from));
+
+           $period = date('M jS'.', '.'Y', strtotime($date_from))." to ".date('M jS'.', '.'Y', strtotime($date_to));
+
+           $commission = \DB::connection('mysql2')->table('system_commissions')->where('agent_id',$booking->agent_id)->where('period',$period)->first();
+
+           if(!empty($commission)){
+
+            $amount = $commission->transaction_amount + $admin_commission;
+
+            $transactions = $commission->transactions + 1;
+            $amount = $commission->transaction_amount + $admin_commission;
+
+            \DB::connection('mysql2')->table('system_commissions')->where('id',$commission->id)
+                         ->update([
+                                    'transactions'=>$transactions,
+                                    'transaction_amount'=>$commission->transaction_amount + $transaction_amount,
+                                    'commission_paid'=>$commission->commission_paid + $admin_commission,
+                                    'unit'=>$agent->system_payment_cost,
+                                ]);
+
+           }else{
+
+            $commission = [];
+            $commission['agent_id'] = $booking->agent_id;
+            $commission['period'] = $period;
+            $commission['unit'] = $agent->system_payment_cost;
+            $commission['transaction_amount'] = $transaction_amount;
+            $commission['commission_paid'] = $admin_commission;
+            $commission['date_from'] = $date_from;
+            $commission['date_to'] = $date_to;
+            $commission['transactions'] = 1;
+            $commission['created_at'] = now();
+            $commission['updated_at'] = now();
+
+            \DB::connection('mysql2')->table('system_commissions')->insert($commission);
+
+           }
+           Log::info("checkpoint3");
 
             $payment_data = [
-            'payment_log_id'=>$log_id,
-            'customer_id'=>$customer->id,
-            'agent_id'=>$agent->id,
-            'booking_id'=>$booking->id,
-            'amount'=>$transaction_amount,
-            'created_at'=>now(),
-            'updated_at'=>now()
-            ];
+                            'payment_log_id'=>$log_id,
+                            'customer_id'=>$customer->id,
+                            'agent_id'=>$agent->id,
+                            'booking_id'=>$booking->id,
+                            'transaction_type'=>"Pay Bill",
+                            'amount'=>$transaction_amount,
+                            'admin_commission'=>$admin_commission,
+                            'balance'=>$payment_balance,
+                            'created_at'=>now(),
+                            'updated_at'=>now()
+                            ];
 
             DB::connection('mysql2')->table('payments')->insert($payment_data);
 
             $amount_paid = $booking->amount_paid + $transaction_amount;
 
-            $balance = $booking->balance - $transaction_amount;
+            $balance = $booking->balance - $transaction_amount; 
+
+            $f_balance = number_format($balance,2);
+            $f_transaction_amount =  number_format($transaction_amount);
 
             $data = ['amount_paid'=>$amount_paid,'balance'=>$balance,'status'=>'active'];
 
-            $message    ="Payment of KES. {$transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$balance}.Download our app to easily track your payments - http://bit.ly/MosMosApp.";
+            $message    ="Payment of KES. {$f_transaction_amount} received for Booking Ref. {$bill_ref_no}, Payment reference {$code}. Balance KES. {$f_balance}. Download our app to easily track your payments - http://bit.ly/MosMosApp.";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_notification");
+
+
+            // Send Invoice
+
+            $payments = DB::connection('mysql2')->table('payments')
+                            ->leftJoin('payment_logs','payments.payment_log_id','payment_logs.id','')
+                            // ->where('booking_id',$booking->id)
+                            ->select('payments.*','payment_logs.*')
+                            ->orderBy('payments.id','DESC')
+                            ->get();
+
+            $latestPayment = DB::connection('mysql2')->table('payments')->where('booking_id',$booking->id)->latest()->first();
+
+        $ch = curl_init();
+
+        // set url
+        curl_setopt($ch, CURLOPT_URL, 'https://travelmosmos.co.ke/invoiceurl?booking_reference='.$booking->booking_reference);
+
+        //return the transfer as a string
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        // $output contains the output string
+        $output = curl_exec($ch);
+
+        // close curl resource to free up system resources
+        curl_close($ch); 
+
+
+            $details  = [
+                'customer'=>$user_customer,
+                'customer_name'=>$user_customer->name,
+                'agent'=>$agent,
+                'payments'=>$payments,
+                'product_name'=>$booking->package_name,
+                'booking_reference'=>$booking->booking_reference,
+                'total_cost'=>number_format($booking->total_cost,2),
+                'amount_paid'=>number_format($booking->amount_paid),
+                'balance'=>$balance,
+                'booking'=>$booking,
+                'latestPayment'=>$latestPayment,
+                'date'=>Now(),
+                'transcode'=>$TransID,
+                    "url" => "https://travelmosmos.co.ke/payments/".$output."/invoice"
+            ];
+            Log::info(json_encode($details));
+  
+
+            Mail::to($user_customer->email)->send(new SendTravelPaymentEmail($details));
+
+
+            // Send Invoice End
+Log::info("checkpoint4");
+Log::info($balance.".....".$bill_ref_no."...".json_encode($data));
 
             if($balance<1){
 
             $message = "Congratulations, You have completed Payment for ".$booking->package_name.".";
 
             SendSMSController::sendMessage($recipients,$message,$type="payment_completion_notification");
+
+            $user = \DB::connection('mysql2')->table('users')->where('id',$customer->user_id)->first();
+
+            $message = $user->name." has completed Payment for ".$booking->package_name.".";
+
+            SendSMSController::sendMessage($recipients = $agent->phone,$message,$type="travel_payment_completion_notification");
 
             $data['status'] = 'complete';
 
@@ -1599,6 +1951,16 @@ else{
        }
 
     }
+        /**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
+
 
     function CustomTopUpAccount($msisdn,$transaction_amount,$log_id){
         $customer=\App\Customers::wherePhone($msisdn)->first();
@@ -1627,7 +1989,7 @@ break;  }
           
         }
 
-$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id);
+$credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj->id,"status"=>"valid");
 \App\topups::create($credentials);
 
   $obj = new pushNotification();
@@ -1729,7 +2091,7 @@ if ($customer!=null) {
     $userid=$user->id;
     # code...
 }
- $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"Bills(".$biller_name.")","token"=>$token);
+ $credentials=Array("amount"=>$transaction_amount,"balance"=>0,"transid"=>$transaction_id,"sender"=>$userid,"type"=>"Bills(".$biller_name.")","token"=>$token,"status"=>"valid");
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");

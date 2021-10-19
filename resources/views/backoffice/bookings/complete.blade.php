@@ -47,8 +47,10 @@
 								<th class="thead">Total Price</th>
                                 <th class="thead">Amount Paid</th>
                                 <th class="thead">Balance</th>
+                                  <th class="thead">Sent to Wallet</th>
                                 <th class="thead">Booking Date</th>
                                 <th class="thead">Due Date</th>
+                                 <th class="thead">Count</th>
                                 <th class="thead">Progress</th>
                                 <th class="thead">Platform</th>
                                 <th class="thead">Status</th>
@@ -60,6 +62,7 @@
 								@if(auth()->user()->role=="agent")
 								<th class="thead">Action</th>
 								@endif
+								 <th style="width: 400px;">View</th>
 
 							
 							</tr>
@@ -203,6 +206,13 @@ return `
 		  "width": "400px",
 		  render: (data) => 'Ksh. ' + numberFormat(data)
 		},{
+		data:"balance","render": function(data, type, full, meta){
+            		var totalbalance=full.amount_paid-full.total_cost;
+            	
+return 'Ksh. ' + numberFormat(totalbalance);
+
+            	}
+            },{
 		data:"created_at","render": function(data, type, full, meta){
             		var agent=full;
             		var strdate = new Date(data);
@@ -225,7 +235,12 @@ ${date}
 								 `;
 
             	}
-            }
+            },
+            {
+		  data: "payments_count",name:'due_date',
+		  "width": "400px",
+		  render: (data) => numberFormat(data)
+		}
 
                 ,{
 		data:"due_date","render": function(data, type, full, meta){
@@ -263,6 +278,17 @@ ${date}
 								 `;
 
             	}
+            },
+            {
+        data:"id","width": "400px","render": function(data, type, full, meta){
+       
+return `<div><a class="btn btn-outline-success mt-1" href="/admin/view-booking/${data}"><i class="fa fa-eye"> </i></a></div>
+
+                                 `;
+                
+
+
+                }
             },
 
 

@@ -19,6 +19,8 @@ use File;
 use Exception;
 use AfricasTalking\SDK\AfricasTalking;
 use \App\Mail\SendRegistrationEmail;
+use DataTables;
+
 
 class VendorController extends Controller
 {
@@ -41,6 +43,7 @@ class VendorController extends Controller
     public function approved_products(){
 
         $vendor = Vendor::where('user_id','=',Auth::id())->first();
+
         
         $products = \App\Products::with('category')->where('status','=','approved')->where('vendor_id','=',$vendor->id)->orderBy('id', 'DESC')->get();
         
@@ -101,7 +104,7 @@ class VendorController extends Controller
                $payment = \App\Payments::where('booking_id','=',$booking->id)->latest()->first();
                $booking['date_completed'] = $payment->date_paid;
            }
-           return view('backoffice.bookings.complete',compact('bookings'));  
+           return view('backoffice.bookings.completeold',compact('bookings'));  
        }
 
        public function pending_bookings(){
@@ -115,7 +118,7 @@ class VendorController extends Controller
             $booking['progress'] = $progress;
         }
 
-        return view('backoffice.bookings.pending',compact('bookings'));  
+        return view('backoffice.bookings.pendingold',compact('bookings'));  
      }
 
      public function transfer_order(){
@@ -131,17 +134,18 @@ class VendorController extends Controller
 
         // $bookings = [];
 
-        return view('backoffice.bookings.transfer',compact('bookings')); 
+        return view('backoffice.bookings.transferold',compact('bookings')); 
         
        
 
-    }
-
-     public function transfer_orderID(Request $request, $id){
+    }   
+    public function transfer_orderID(Request $request, $id){
 
         $booking = \App\Bookings::where('id','=',$id)->first();
 
         $product = \App\Products::find($booking->product_id);
+
+
 
         if($product->product_code == $request->product_code){
             return back()->with('error','You cannot exchange with the same item');
@@ -149,44 +153,73 @@ class VendorController extends Controller
 
         $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
 
+$user_id=Auth()->user()->id;
+$vendor_id=\App\Vendor::whereUser_id($user_id)->first()->id;
+if ($vendor_id!=$newProduct->vendor_id) {
+    # code...
+    return back()->with('error','You are not authorized to make this order transfer');
+}
+
+
+
+
+
+
         if($newProduct == null){
             return back()->with('error','Sorry Product Code does not exist.');
         }
 
-        if($newProduct->weight != 0){
-            $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
-        }else{
-            $weight_array = (['0','g']);
-        }
+            if($newProduct->weight != 0){
+                $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
+            }else{
+                $weight_array = (['0','g']);
+            }
 
-        $product_weight = $weight_array;
+            $product_weight = $weight_array;
 
-        if($product_weight[1] == 'g'){
-            $shipping_cost = 500;
-        }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
-            $shipping_cost = 500;
-        }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
-        $extra_kg = $product_weight[0] - 5;
-        $extra_cost = (30 * $extra_kg);
-        $vat = 0.16*$extra_cost;
-        $shipping_cost = 500 + $extra_cost + $vat;
-        }
-
-        $booking = \App\Bookings::where('product_id','=',$id)->first();
+            if($product_weight[1] == 'g'){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+            $extra_kg = $product_weight[0] - 5;
+            $extra_cost = (30 * $extra_kg);
+            $vat = 0.16*$extra_cost;
+            $shipping_cost = 500 + $extra_cost + $vat;
+            }
 
         $total_cost = ($newProduct->product_price + $shipping_cost);
 
         $balance = $total_cost - $booking->amount_paid;
+          $customer = \App\Customers::where('id',$booking->customer_id)->first();
 
-        \App\Bookings::where('id','=',$booking->id)->update([
-                                    "product_id"=>$newProduct->id,
-                                    "balance"=>$balance,
-                                    "shipping_cost"=>$shipping_cost,
-                                    "item_cost"=>$newProduct->product_price,
-                                    "total_cost"=>$total_cost
-                                    ]);
+       if ($balance>0) {
+           # code...
+         \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>$balance,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        "total_cost"=>$total_cost
+                        ]);
+       }
+       else{
+ \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>0,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        'status'=>"complete",
+                        "total_cost"=>$total_cost
+                        ]);
 
-        $customer = \App\Customers::where('id',$booking->customer_id)->first();
+$objuser=\App\User::whereId($customer->user_id);
+$firstobjuser=$objuser->first();
+$totalbal=intval($firstobjuser->balance)+ ($balance *-1);
+$objuser->update(['balance'=>$totalbal]);
+       }
+
+      
 
         $message = "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).". Use Paybill 4040299 and Account Number ".$booking->booking_reference.". Thank you.";
 
@@ -207,10 +240,8 @@ class VendorController extends Controller
 
         return back()->with('success', "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).".");
 
-        
 
     }
-
        public function product_edit($id)
         {
             $product = \App\Products::with('category','gallery')->find($id);
@@ -345,7 +376,7 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.overdue',compact('bookings'));  
+           return view('backoffice.bookings.overdueold',compact('bookings'));  
        }
 
        public function delivered_bookings(){
@@ -366,6 +397,31 @@ class VendorController extends Controller
      $vendor = Vendor::where('user_id','=',Auth::id())->first();
 
      $categories = DB::table('categories')->get();
+       $categories = DB::table('categories')->orderBy('id', 'DESC')->get();
+$arr=[];
+        $commissions=json_decode($vendor->commission_rate_subcategories);
+foreach ($categories as $key => $category) {
+    # code...
+
+foreach ($commissions as $key1 => $value1) {
+  $cat=\App\SubCategories::whereId($value1->id)->first();
+  if ($cat!=null) {
+      # code...
+    $category_id=$cat->category_id;
+
+    if ($category->id==$category_id) {
+        # code...
+array_push($arr, $category);
+    }
+
+  }
+
+
+}
+}
+$categories=$arr;
+  
+
 
      $subcategories = DB::table('sub_categories')->get();
 
@@ -428,6 +484,7 @@ class VendorController extends Controller
         $data['product_code'] = 'P'.rand(10,1000000);
         $data['product_image'] = $image;
         $data['slug'] = $slug;
+        $data['status']="approved";
         $data['vendor_id'] = $vendor->id;
         $data['created_at'] = now();
         $data['updated_at'] = now();
@@ -464,7 +521,7 @@ class VendorController extends Controller
 
         }
 
-        return redirect('/vendor/pending-products')->with('success','Product Added.');
+        return Back()->with('success','Product Added.');
 
     }
    
@@ -478,7 +535,7 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.revoked',compact('bookings'));  
+           return view('backoffice.bookings.revokedold',compact('bookings'));  
        }
    
        public function unserviced_bookings(){
@@ -491,7 +548,7 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.unserviced',compact('bookings'));  
+           return view('backoffice.bookings.unservicedold',compact('bookings'));  
        }
    
        public function active_bookings(){
@@ -506,7 +563,9 @@ class VendorController extends Controller
                $progress = round(($booking->amount_paid/$booking->total_cost)*100);
                $booking['progress'] = $progress;
            }
-           return view('backoffice.bookings.active',compact('bookings'));  
+
+      
+           return view('backoffice.bookings.activeold',compact('bookings'));  
        }
 
        public function profile()
@@ -714,6 +773,18 @@ if ($level==4) {
         $message = $obj->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+               $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+            'total_cost'=>$total_cost,
+        'productname'=>$product->product_name,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 return Back()->with("success",$stkMessage);
             
         }
@@ -774,6 +845,18 @@ return Back()->with("success",$stkMessage);
         $message = $obj->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+               $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'productname'=>$product->product_name,
+        'total_cost'=>$total_cost,
+        'booking_reference'=>$booking_reference,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
       return Back()->with("success",$stkMessage);
             
@@ -828,19 +911,34 @@ return Back()->with("success",$stkMessage);
 
        $recipients = $valid_phone;
 
-       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+       $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking->booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+       // $details = [
+       //  'email' => $request->email,
+       //  'name'=>$request->name,
+       //  'booking_reference'=>$booking_reference,
+       //  'initial_deposit'=>number_format($request->initial_deposit),
+       //  'password'=>$request->input('phone'),
+       //  'url'=>encrypt($booking->booking_reference, "mosmos#$#@!89&^");
+       //  ];
+
+       //  Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
        $details = [
         'email' => $request->email,
         'name'=>$request->name,
+        'productname'=>$product->product_name,
         'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone')
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
+
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -854,4 +952,167 @@ return Back()->with("success",$stkMessage);
 return Back()->with("success",$stkMessage);
 
     }
+
+    function keySettings(Request $request){
+        $string=Vendor::whereUser_id(Auth()->user()->id)->first()->vendor_code;
+
+ $encrypted = encrypt($string, "mosmos#$#@!89&^");
+
+
+
+
+return view('backoffice.vendors.keysettings',compact('encrypted'));
+    }
+
+
+/**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
+
+function manualBooking(Request $request){
+    $product_quantity=1;
+    return view('backoffice.vendors.manualBooking',compact('product_quantity'));
+}
+
+function bookingdetails(Request $request,$id){
+    $booking=\App\Bookings::whereId($id)->first();
+    $customer=\App\Customers::whereId($booking->customer_id)->first();
+    $user=\App\User::whereId($customer->user_id)->first();
+    $product=\App\Products::whereId($booking->product_id)->first();
+
+
+return view('backoffice.bookings.bookingsdetails', compact('booking','customer','user','product'));
+}
+function bookingpayments(Request $request,$id){
+  if($request->ajax()){ 
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->where("payments.booking_id","=",$id)->orderBy('payments.id', 'DESC');
+       
+            
+
+            return DataTables::of($payments)->make(true);
+
+        }
+}
+
+function payments(Request $request){
+    // $payments =  DB::table('payments')->get();
+        $payments=[];
+        $validpaymentreferences=[];
+        $validmpesa=[];
+if ($request->validmpesa!=null) {
+    # code...$vali
+    $validmpesa=json_decode($request->validmpesa, true);
+}
+
+             if($request->ajax()){ 
+
+
+        $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereHas('product', function($q){
+            $vendor=\App\Vendor::whereUser_id(Auth()->user()->id)->first()->id;
+    $q->where('vendor_id', '=', $vendor);
+})->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
+       
+
+            return DataTables::of($payments)->make(true);
+
+        }
+        else{
+            $validpaymentreferences=\App\PaymentLog::select('payment_logs.*')->where("payment_logs.status","=","valid")->pluck('TransID')->toArray();
+  $validmpesa=json_encode(\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray());
+        }
+
+
+
+        return view('backoffice.vendors.payments.index',compact('payments','validmpesa'));
+}
+  public function view_vendor($id){
+         $vendor = \App\Vendor::with('user','city')->where('id','=',$id)->first();
+
+         $products = \App\Products::where('vendor_id','=',$vendor->id)->get();
+
+         return view('backoffice.branchvendors.view-vendor',compact('vendor','products'));
+
+     }
+
+ public function add_vendor(){
+
+
+        return view('backoffice.branchvendors.add');
+
+    }
+        public function vendors(){
+            $main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->vendor_code;
+
+        $vendors =  \App\Vendor::with('user')->whereMain_vendor_code($main_vendor_code)->orderBy('id', 'DESC')->get();
+
+        return view('backoffice.branchvendors.index',compact('vendors'));
+    }
+
+    public function branches(Request $request){
+       $vendor_id= \App\Vendor::whereUser_id(Auth::user()->id)->first()->id;
+       $branches=\App\Branch::whereVendor_id($vendor_id)->orderBy('id', 'DESC')->get();
+
+          return view('backoffice.branchvendors.index',compact('branches'));
+    }
+    function view_branch(Request $request,$id){
+$branch_users=\App\BranchUser::with('user')->whereBranch_id($id)->get();
+  return view('backoffice.branchvendors.branch_users',compact('branch_users'));
+    }
+
+       public function save_vendor(Request $request){
+$main_vendor_code= \App\Vendor::whereUser_id(Auth::user()->id)->first()->id;
+    if(\App\User::where('email',$request->email)->exists()){
+        return back()->with('error','Email Exists');
+    }elseif(\App\BranchUser::where('phone','254'.ltrim($request->input('phone'), '0'))->exists()){
+        return back()->with('error','Phone Exists');
+    }
+
+    $user = new \App\User();
+    $user->email = $request->input('email');
+    $user->name = $request->input('name');
+    $user->role ='branch_vendor';
+    $user->email_verified_at = now();
+    $user->password = Hash::make($request->input('password'));
+    $user->save();
+
+    $user_id = DB::getPdo()->lastInsertId();
+
+    $slug =  str_replace(' ', '-', $request->branch_name);
+
+    $slug =  str_replace('/','-',$slug);
+
+    $slug = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $slug);
+
+    $branch = new \App\Branch();
+    $branch->name=$request->branch_name;
+    $branch->slug=$slug;
+    $branch->vendor_id=$main_vendor_code;
+    $branch->save();
+$branch_id = DB::getPdo()->lastInsertId();
+
+
+ $branch_user = new \App\BranchUser();
+ $branch_user->user_id = $user_id;
+    $branch_user->branch_id = $branch_id;
+    $branch_user->status = "approved";
+    $branch_user->phone  = '254'.ltrim($request->input('phone'), '0');
+    $branch_user->location  = $request->input('location');
+    $branch_user->city  = $request->input('city');
+    $branch_user->country  = $request->input('country');
+
+    $branch_user->save();
+
+return Back()->with('success','branch created');
+
+    }
+
+
 }

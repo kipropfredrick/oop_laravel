@@ -44,5 +44,7 @@ class User extends Authenticatable
     public function vendor(){
         return $this->hasOne(Vendor::class, 'user_id');
     }
-
+  public function branch_user(){
+        return $this->hasOne(BranchUser::class, 'user_id');
+    }
 }

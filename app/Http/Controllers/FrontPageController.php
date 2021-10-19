@@ -724,6 +724,188 @@ class FrontPageController extends Controller
 
     }
 
+
+    public function vendor(Request $request, $slug){
+
+        $categories = \App\Categories::all();
+
+        $sub_slug = $request->sub;
+
+        $vendor = \App\Vendor::where('slug','=',$slug)->first();
+
+        $c_vendor = $vendor;
+
+        $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
+
+        $brand = \App\Brand::where('slug','=',$request->brand)->first();
+
+        $current_b = $brand;
+
+        $cat_ids = DB::table('products')->where('brand_id',$brand->id)->distinct('category_id')->pluck('category_id')->toArray();
+
+        $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                    ->where('quantity','>',0)
+                                    ->where('vendor_id',$vendor->id)
+                                    ->inRandomOrder()
+                                    ->take(10)->get();
+
+        $sort_by = $request->sort_by;
+
+        if($sort_by !=null){
+
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }elseif($sort_by == "id"){
+                $p = "id";
+                $o = "DESC";
+            }elseif($sort_by == "best-sellers"){
+
+                $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
+
+                $product_ids = [];
+        
+                foreach($bookings as $booking){
+                    array_push($product_ids,$booking->product_id);
+                }
+        
+                $products = \App\Products::with('category','subcategory')->where('status','=','approved')
+                                            ->where('vendor_id',$vendor->id)
+                                            ->where('quantity','>',0)
+                                            ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                            })
+                                            ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
+                                            ->inRandomOrder()
+                                            ->paginate(20);
+                                            
+
+                return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','sort_by','sort_by','categories','trendingProducts'));
+            }
+
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('vendor_id',$vendor->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                        })
+                                        ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
+                                        ->orderBy($p,$o)
+                                        ->paginate(20);
+
+        }else{
+            $sort_by = "id";
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('vendor_id',$vendor->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                         })
+                                         ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                            })
+                                        ->inRandomOrder()
+                                        ->paginate(20);
+        }
+
+        
+        
+        return view('front.show_vendor',compact('products','current_sub','c_vendor','current_b','sort_by','categories','brand','trendingProducts'));
+        
+    }
+
+
+    public function vendor_load_more(Request $request,$slug){
+
+        $sort_by = $request->sort_by;
+        
+        $categories = \App\Categories::all();
+        
+        $sub_slug = $request->sub;
+
+        $brand = \App\Brand::where('slug','=',$request->brand)->first();
+        
+        $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
+        
+        $vendor = \App\Vendor::where('slug','=',$slug)->first();
+        
+        if($request->ajax()){
+        
+            $skip=$request->skip;
+            $take=12;
+        
+            if($sort_by == "price-asc"){
+                $p = "product_price";
+                $o = "ASC";
+            }elseif($sort_by == "price-desc"){
+                $p = "product_price";
+                $o = "DESC";
+            }else{
+                $p = "id";
+                $o = "DESC";
+            }
+        
+        
+            $products =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('vendor_id',$vendor->id)
+                                        ->where('quantity','>',0)
+                                        ->where('status','=','approved')
+                                        ->where(function($query) use ($current_sub)
+                                            {
+                                                    if (!empty($current_sub)) {
+                                                        $query->where('subcategory_id', $current_sub->id);
+                                                    }
+                                        })
+                                        ->where(function($query) use ($brand)
+                                            {
+                                                    if (!empty($brand)) {
+                                                        $query->where('brand_id', $brand->id);
+                                                    }
+                                        })
+                                        ->orderBy($p,$o)
+                                        ->skip($skip)
+                                        ->take($take)
+                                        ->get();
+        
+            foreach($products as $product){
+        
+                $product->product_price = number_format($product->product_price);
+                
+            }
+        
+            return response()->json($products);
+        }else{
+            return response()->json('Direct Access Not Allowed!!');
+        }
+    }
+
     public function search_brand(Request $request){
 
         $searchTerm = $request->searchTerm;
@@ -1397,7 +1579,13 @@ break;
 
         $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
 
+        
+        $existingUser = \App\User::where('email',  $request->input('email'))->first();
+        $booking_reference = $this->get_booking_reference();
+
+
         $existingUser         = \App\User::where('email',  $request->input('email'))->first();
+
 
         if($existingUser!=null)
         {
@@ -1415,7 +1603,7 @@ break;
 
         \Auth::login($user);
 
-        $booking_reference = $this->get_booking_reference();
+
 
         $booking_date = now();
 
@@ -1431,7 +1619,8 @@ break;
 
         }
 
-        $balance=$existingUser->balance;
+        $balance=0;
+        //$existingUser->balance;
 
         $booking = new \App\Bookings();
         $recipients = $valid_phone;
@@ -1466,7 +1655,7 @@ break;
 
         $booking->customer_id = $existingCustomer->id;
         $booking->product_id  = $request->product_id;
-        $booking->booking_reference = $this->get_booking_reference();
+        $booking->booking_reference = $booking_reference;
         $booking->quantity  = '1';
 
         $booking->item_cost = $product->product_price;
@@ -1505,9 +1694,25 @@ break;
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
+
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+         $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'productname'=>$product->product_name,
+        'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
+
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".       $booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','cate       gories','message','amount'));
+
 
         }
 
@@ -1536,7 +1741,7 @@ break;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
-        $booking->booking_reference = $this->get_booking_reference();
+        $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->amount_paid = "0";
         $booking->balance = $total_cost;
@@ -1560,13 +1765,28 @@ break;
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "            Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
+
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+         $details = [
+        'email' => $request->email,
+        'name'=>$request->name,
+        'productname'=>$product->product_name,
+        'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
+        'initial_deposit'=>number_format($request->initial_deposit),
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
+        ];
+
+        Mail::to($request->email)->send(new SendRegistrationEmail($details));
         $stkMessage          = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount  : ".number_format($amount,2).", Thank you.";
+
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
 
@@ -1603,7 +1823,7 @@ break;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
-        $booking->booking_reference = $this->get_booking_reference();
+        $booking->booking_reference = $booking_reference;
         $booking->quantity  = "1";
         $booking->status = "pending";
         $booking->vendor_code = $vendor_code;
@@ -1625,12 +1845,25 @@ break;
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
-       $details = [
+       // $details = [
+       //  'email' => $request->email,
+       //  'name'=>$request->name,
+       //  'booking_reference'=>$booking_reference,
+       //  'initial_deposit'=>number_format($request->initial_deposit),
+       //  'password'=>$request->input('phone')
+       //  ];
+
+       //  Mail::to($request->email)->send(new SendRegistrationEmail($details));
+
+         $details = [
         'email' => $request->email,
         'name'=>$request->name,
+        'productname'=>$product->product_name,
         'booking_reference'=>$booking_reference,
+            'total_cost'=>$total_cost,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone')
+        'password'=>$request->input('phone'),
+        "url" => env('baseurl').encrypt($booking->booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
@@ -1648,6 +1881,16 @@ break;
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
 
     }
+
+    /**
+ * Returns an encrypted & utf8-encoded
+ */
+function encrypt($pure_string, $encryption_key) {
+    $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    $encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+    return $encrypted_string;
+}
 
 
     /**

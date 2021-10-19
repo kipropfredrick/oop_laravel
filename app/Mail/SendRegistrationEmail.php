@@ -34,7 +34,7 @@ class SendRegistrationEmail extends Mailable
     public function build()
     {
         return $this->from('order@mosmos.co.ke')
-                    ->subject('Account Created')
+                    ->subject('Booking Made')
                     ->view('emails.registrationmail');
     }
 }

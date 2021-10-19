@@ -124,6 +124,7 @@
 								<th class="thead">Total Amount</th>
 								<th class="thead">Unique Accounts</th>
 								
+								
 							</tr>
 						</thead>
 						<tbody>
@@ -143,6 +144,7 @@
 									<td>
 											{{$payment['unique']}}
 									</td>
+									
 
 
 								

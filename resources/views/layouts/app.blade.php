@@ -368,7 +368,7 @@
     <!-- copyrights -->
     <div class="copyrights">
         <div class="container">
-            &copy; <span id="currentYear"></span>. <span style="color: white; font-weight: bold;">MosMos Payments. All Rights Reserved.</span>
+            &copy; <span id="currentYear"></span>. <span style="color: white;">Mosmos Payments. All Rights Reserved.</span>
         </div>
     </div>
     <!-- end -->
@@ -513,6 +513,10 @@
     
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    
+
+ <!--    <script type="text/javascript" src="https://mosmos.co.ke/js/mosmossmart.js?vendor_id=1&secret_key=xxxxxxxx"></script> -->
 
     <!-- GetButton.io widget -->
     <!-- <script type="text/javascript">

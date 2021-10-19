@@ -61,6 +61,8 @@
 	</div>
 @endsection
 
+
+
 @section('extra-js')
 
 <script>
@@ -142,6 +144,14 @@ var t =  $('#table1').DataTable({
 						<form action="/admin/record-payment/${full.id}" method="post">
 							@csrf
 							<div class="modal-body">
+
+							<label for="">Select Payment type</label>
+
+							<select class="form-control" name="type" id="" required>
+								<option value="shopping">Shopping</option>
+								<option  value="travel">Travel</option>
+							</select>
+
 								<label for="">Amount</label>
 									<input type="number" name="amount" readonly="readonly" value=${full.TransAmount} class="form-control">
 								<label for="">Correct Account No.</label>

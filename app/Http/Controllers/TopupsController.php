@@ -13,6 +13,7 @@ use App\Http\Controllers\pushNotification;
 use Carbon\Carbon;
 use App\Http\Controllers\paybills;
 use App\Http\Controllers\AES;
+use Illuminate\Support\Facades\Log;
 class TopupsController extends Controller
 {
     //
@@ -76,7 +77,7 @@ return Array("data"=>Array("response"=>"An error occurred processing your reques
 
 }
 
-public function redeem(Request $request){
+public function redeem(Request $request){             
 
   $type=$request->type;
 $amount=intval($request->input("amount"));
@@ -234,23 +235,8 @@ else{
 }
 
 }
+//update acccount balances 
 
-
-$paybillobj = new paybills();
-$array=Array("PhoneNumber"=>$mobilerec,"Amount"=>$amount*100,"ProductCode"=>$productcode);
-
-$res=$paybillobj->AirtimeTopUp($array);
-
-
- $decdata=json_decode($res);
-
-if ($decdata==null) {
-  # code...
-  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
-}
-
- if (($decdata->ResponseCode)=="000") {
-    //return $array['TransID'];
   $main->update(["balance"=>intval($balance)-$amount]);
 
 $balance=\App\User::whereId($sender)->first();
@@ -267,6 +253,31 @@ break;  }
 
  $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"airtime");
 \App\topups::create($credentials);
+
+
+//end of updating account balances
+
+
+$paybillobj = new paybills();
+$array=Array("PhoneNumber"=>$mobilerec,"Amount"=>$amount*100,"ProductCode"=>$productcode);
+
+$res=$paybillobj->AirtimeTopUp($array);
+
+
+ $decdata=json_decode($res);
+
+if ($decdata==null) {
+  # code...
+
+  return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
+}
+  Log::info("error".json_encode($res));
+
+ if (($decdata->ResponseCode)=="000") {
+    //return $array['TransID'];
+  $credentials=Array("status"=>'valid');
+  \App\topups::whereTransid($transid)->update($credentials);
+
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
     $obj->exceuteSendNotification(\App\User::whereId($sender)->first()->token,"Thank you for topping up KSh. ".$sendamount." airtime with us.","Transaction successful. ",$data);
@@ -275,6 +286,31 @@ break;  }
   # code...
 }
 else{
+  //update acccount balances 
+ $credentials=Array("status"=>'reversed');
+  \App\topups::whereTransid($transid)->update($credentials);
+$main=DB::table('users')->whereId($customers->user_id);
+$balance=$main->first()->balance;
+  $main->update(["balance"=>intval($balance)+$amount]);
+
+$balance=\App\User::whereId($sender)->first();
+$balance=intval($main->first()->balance);
+
+
+        for($i=0;$i<1000000;$i++){
+            $transid = 'TP'.rand(10000,99999)."M";
+            $res=\App\topups::whereTransid($transid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+
+ $credentials=Array("amount"=>$request->amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"type"=>"topup","status"=>"valid");
+\App\topups::create($credentials);
+
+
+//end of updating account balances
+
     return Array("data"=>Array("response"=>"An error occured processing your request."),"error"=>true);
 }
 
@@ -627,7 +663,7 @@ break;  }
           
         }
 
- $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"token"=>$token,"type"=>"Bills(".$biller_name.")");
+ $credentials=Array("amount"=>$amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$sender,"token"=>$token,"type"=>"Bills(".$biller_name.")","status"=>"valid");
 \App\topups::create($credentials);
   $obj = new pushNotification();
     $data=Array("name"=>"home","value"=>"home");
@@ -650,6 +686,35 @@ break;  }
              }
              return [false, false];
          }
+
+         function generateMosmosid(Request $request){
+
+$unassignedusers=\App\User::whereNull('mosmosid')->limit(500)->get();
+
+foreach ($unassignedusers as $key => $value) {
+  $count=0;
+  # code...
+       for($i=0;$i<1000000;$i++){
+            $mosmosid = 'MID'.rand(10000,99999);
+            $res= \App\User::whereMosmosid($mosmosid)->first();
+            if ($res==null) {             # code...
+break;  }
+          
+        }
+$array=Array("mosmosid"=>$mosmosid);
+        \App\User::whereId($value->id)->update($array);
+        $count++;
+        if ($count>500) {
+          # code...
+          break;
+        }
+}
+
+return $count;
+
+         }
+
+
 
 
    

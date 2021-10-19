@@ -72,8 +72,15 @@
   </label>
 </div>
 
+ <div class="form-check">
+  <input class="form-check-input" name="category[]" type="checkbox" value="pending" id="defaultCheck1">
+  <label class="form-check-label" for="defaultCheck1" >
+   Pending Bookings 
+  </label>
+</div>
+
 <div class="form-check">
-  <input class="form-check-input" name="category[]" type="checkbox" value="pending" id="defaultCheck3">
+  <input class="form-check-input" name="category[]" type="checkbox" value="nobooking" id="defaultCheck3">
   <label class="form-check-label" for="defaultCheck2" >
     No Bookings
   </label>

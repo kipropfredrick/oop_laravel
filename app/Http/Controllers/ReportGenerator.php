@@ -106,8 +106,16 @@ public function influencer_confirmed_deliveries_report($id){
 }
 
 
-    public function vendor_active_bookings_report($id){
-         $vendor = \App\Vendor::with('user')->find($id);
+    public function vendor_active_bookings_report(Request $request,$id){
+      if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
+         
          $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','active')->get();
          $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','active')->sum('total_cost');
          $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','active')->sum('amount_paid');
@@ -116,8 +124,15 @@ public function influencer_confirmed_deliveries_report($id){
          return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
     }
 
-    public function vendor_pending_bookings_report($id){
+    public function vendor_pending_bookings_report(Request $request,$id){
+       if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
         $vendor = \App\Vendor::with('user')->find($id);
+      }
         $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','pending')->get();
         $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','pending')->sum('total_cost');
         $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','pending')->sum('amount_paid');
@@ -126,8 +141,15 @@ public function influencer_confirmed_deliveries_report($id){
         return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
    }
 
-   public function vendor_complete_bookings_report($id){
-    $vendor = \App\Vendor::with('user')->find($id);
+   public function vendor_complete_bookings_report(Request $request,$id){
+        if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
     $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','complete')->get();
     $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','complete')->sum('total_cost');
     $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','complete')->sum('amount_paid');
@@ -136,8 +158,15 @@ public function influencer_confirmed_deliveries_report($id){
     return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
 }
 
-public function vendor_revoked_bookings_report($id){
-    $vendor = \App\Vendor::with('user')->find($id);
+public function vendor_revoked_bookings_report(Request $request,$id){
+     if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
     $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','revoked')->get();
     $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','revoked')->sum('total_cost');
     $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','revoked')->sum('amount_paid');
@@ -146,8 +175,15 @@ public function vendor_revoked_bookings_report($id){
     return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
 }
 
-public function vendor_unserviced_bookings_report($id){
-    $vendor = \App\Vendor::with('user')->find($id);
+public function vendor_unserviced_bookings_report(Request $request,$id){
+        if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
     $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','unserviced')->get();
     $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','unserviced')->sum('total_cost');
     $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','unserviced')->sum('amount_paid');
@@ -156,8 +192,15 @@ public function vendor_unserviced_bookings_report($id){
     return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
 }
 
-public function vendor_overdue_bookings_report($id){
-    $vendor = \App\Vendor::with('user')->find($id);
+public function vendor_overdue_bookings_report(Request $request,$id){
+    if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
     $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','overdue')->get();
     $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','overdue')->sum('total_cost');
     $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','overdue')->sum('amount_paid');
@@ -166,8 +209,15 @@ public function vendor_overdue_bookings_report($id){
     return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
 }
 
-public function vendor_delivered_bookings_report($id){
-    $vendor = \App\Vendor::with('user')->find($id);
+public function vendor_delivered_bookings_report(Request $request,$id){
+    if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
     $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','agent-delivered')->get();
     $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','agent-delivered')->sum('total_cost');
     $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','agent-delivered')->sum('amount_paid');
@@ -176,8 +226,15 @@ public function vendor_delivered_bookings_report($id){
     return view('backoffice.vendors.bookings_report',compact('bookings','vendor','status','amount_paid_total','bookings_total','balance_total'));
 }
 
-public function vendor_confirmed_deliveries_report($id){
-    $vendor = \App\Vendor::with('user')->find($id);
+public function vendor_confirmed_deliveries_report(Request $request,$id){
+    if ($request->type=='branch') {
+        # code...
+        $vendor = \App\Vendor::with('user')->find($id)->main_vendor_code;
+        $vendor=\App\Vendor::with('user')->whereVendor_code($vendor)->first();
+      }
+      else{
+        $vendor = \App\Vendor::with('user')->find($id);
+      }
     $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','delivered')->get();
     $bookings_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','delivered')->sum('total_cost');
     $amount_paid_total =  \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('vendor_code','=', $vendor->vendor_code)->where('status','=','delivered')->sum('amount_paid');

@@ -119,7 +119,7 @@
             <div style="padding: 10px;max-width: 600px;margin: auto;text-align: center;" class="email-footer">
                 <div style="text-align: center;" class="ftr-socials">
                     <a href="https://facebook.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/fb.png" alt=""></a>
-                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://mosmos.co.ke/assets/img/social/insta.png" alt=""></a>
+                    <a href="https://instagram.com/lipamosmoske" target="_blank"><img  style="height:35px;width:35px;object-fit:contain" src="https://travelmosmos.co.ke/assets/img/social/insta.png" alt=""></a>
                 </div>
                 <div>
                     <span>

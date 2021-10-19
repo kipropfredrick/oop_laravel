@@ -398,9 +398,28 @@
 
 @endif
 @if(Sentinel::hasAccess('commission'))
-		<li class="nav-item">
-			<a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
-		</li>
+
+
+    <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="fas fa-bookmark"></i>
+              <p>
+             Earnings
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+            
+                <li class="nav-item">
+      <a href="/admin/commissions" class="nav-link {{ (request()->is('admin/commissions')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Commissions</p></a>
+    </li>
+                <li class="nav-item">
+      <a href="/admin/fixed-payout" class="nav-link {{ (request()->is('admin/fixed-payout')) ? 'active' : '' }}"><i class="fa fa-gift"></i> <p>&nbsp;Fixed Payouts</p></a>
+    </li>
+              
+              
+            </ul>
+          </li>
     @endif
 
 
@@ -668,19 +687,33 @@
           </li>
 
          @elseif(auth()->user()->role =='vendor')
-          <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li>
+
+         <?php 
+
+$vendor=\App\Vendor::whereUser_id(auth()->user()->id)->first();
+
+
+         ?>
+         @if($vendor->add_product==1)
+ <li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Create New Booking</span></a></li>
+ @endif
+        @if($vendor->add_product==1)
+          <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Product Booking</span></a></li>
+@endif
+                 <li class="nav-item"><a href="/vendor/vendor-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i><span>Direct Booking
+</span></a></li>
 		 <li class="nav-item">
-			<a href="#" class="nav-link">&nbsp   <i class="fa fa-shopping-basket"></i> <span>  Products</span><i class="right fas fa-angle-left"></i></a>
+			<a href="#" class="nav-link"><i class="fa fa-shopping-basket"></i><span>&nbsp   Products</span><i class="right fas fa-angle-left"></i></a>
 
 			<ul class="nav nav-treeview" data-submenu-title="Products">
         <li class="nav-item"><a href="/vendor/approved-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Approved Products</span></a></li>
 				<li class="nav-item"><a href="/vendor/pending-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Rejected Products</span></a></li>
-				<li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Add Product</span></a></li>
+				<li class="nav-item"><a href="/vendor/rejected-products" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Inactive Products</span></a></li>
+			<!-- 	<li class="nav-item"><a href="/vendor/add-product" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Add Product</span></a></li> -->
 			</ul>
 		</li>
 		<li class="nav-item">
-			<a href="#" class="nav-link">&nbsp   <i class="fa fa-bookmark"></i> <span>Bookings</span><i class="right fas fa-angle-left"></i></a>
+			<a href="#" class="nav-link"><i class="fa fa-bookmark"></i>  <span>&nbsp Bookings</span><i class="right fas fa-angle-left"></i></a>
 
 			<ul class="nav nav-treeview" data-submenu-title="Bookings">
   <!--       <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li> -->
@@ -689,12 +722,93 @@
 				<li class="nav-item"><a href="/vendor/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Complete Bookings</span></a></li>
 				<li class="nav-item"><a href="/vendor/overdue-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Overdue Bookings</span></a></li>
 				<li class="nav-item"><a href="/vendor/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Revoked Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Delivered Bookings</span></a></li>
-				<li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
+			<!-- 	<li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Delivered Bookings</span></a></li> -->
+			
 				<!-- <li class="nav-item"><a href="/vendor/confirmed-deliveries" class="nav-link"><span>Confirmed Deliveries</span></a></li> -->
 				<li class="nav-item"><a href="/vendor/unserviced-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Unserviced Bookings</span></a></li>
+
+          <li class="nav-item"><a href="/vendor/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
 			</ul>
 		</li>
+  <li class="nav-item"><a href="/vendor/payments" class="nav-link"><i class="fas fa-wallet nav-icon"></i><span>Payments</span></a></li>
+      <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="fas fa-store"></i>
+        <p>
+          &nbsp Branches
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="/vendor/branches" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>All Branches</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/vendor/add-branch" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Add Branch</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    </li>
+      <li class="nav-item"><a href="/vendor/key" class="nav-link"><i class="fas fa-cogs nav-icon"></i><span>Settings</span></a></li>
+        @elseif(auth()->user()->role =='branch_vendor')
+
+
+                 <li class="nav-item"><a href="/branch/branch-booking" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Direct Booking
+</span></a></li>
+
+    <li class="nav-item">
+      <a href="#" class="nav-link">&nbsp   <i class="fa fa-bookmark"></i>&nbsp &nbsp <span>Bookings</span><i class="right fas fa-angle-left"></i></a>
+
+      <ul class="nav nav-treeview" data-submenu-title="Bookings">
+  <!--       <li class="nav-item"><a href="/vendor/create-bookings" class="nav-link"><i class="fas fa-plus-square nav-icon"></i> <span>Create Bookings</span></a></li> -->
+        <li class="nav-item"><a href="/branch/pending-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Pending Bookings</span></a></li>
+        <li class="nav-item"><a href="/branch/active-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Active Bookings</span></a></li>
+        <li class="nav-item"><a href="/branch/complete-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Complete Bookings</span></a></li>
+        <li class="nav-item"><a href="/branch/overdue-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Overdue Bookings</span></a></li>
+        <li class="nav-item"><a href="/branch/revoked-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Revoked Bookings</span></a></li>
+      <!--  <li class="nav-item"><a href="/vendor/delivered-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Delivered Bookings</span></a></li> -->
+      
+        <!-- <li class="nav-item"><a href="/vendor/confirmed-deliveries" class="nav-link"><span>Confirmed Deliveries</span></a></li> -->
+        <li class="nav-item"><a href="/branch/unserviced-bookings" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Unserviced Bookings</span></a></li>
+
+          <li class="nav-item"><a href="/branch/transfer-order" class="nav-link"><i class="far fa-circle nav-icon"></i> <span>Transfer Order</span></a></li>
+      </ul>
+    </li>
+  <li class="nav-item"><a href="/branch/payments" class="nav-link"><i class="fas fa-wallet nav-icon"></i> <span>Payments</span></a></li>
+  @if(auth()->user()->branch_user->role=='admin')
+  <li class="nav-item">
+      <a href="#" class="nav-link">&nbsp  
+        <i class="fas fa-store"></i>
+        <p> &nbsp
+        Users
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="/branch/branchusers" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>All Users</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/branch/adduser" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Add User</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    @endif
+
+
+
 		@elseif(auth()->user()->role =='user')
 			<li class="nav-item nav-item-submenu">
 				<a href="#" class="nav-link"><i class="fa fa-bookmark"></i> <span>My Bookings</span>   <i class="right fas fa-angle-left"></i></a>

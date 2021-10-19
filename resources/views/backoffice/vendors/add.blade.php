@@ -98,7 +98,73 @@
 				
 				</div>
 
+<div class="row">
+<div class="md-col-6 col-lg-6 col-sm-12">
+		<label>Commission Type</label>
+		<div class="form-check">
+  <input class="form-check-input" type="radio" id="flexRadioDefault1" checked="" value="1" name="commissionrate_enabled">
+  <label class="form-check-label" for="flexRadioDefault1">
+    Commission Rate
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="commissionrate_enabled" id="flexRadioDefault2" value="0"  >
+  <label class="form-check-label" for="flexRadioDefault2" >
+    Fixed Commission
+  </label>
+</div>
+</div>
+<div class="md-col-6 col-lg-6 col-sm-12">
+		<label>Categories Types</label>
+		<div class="form-check">
+  <input class="form-check-input" type="radio" name="category" id="flexRadioDefault12" value="1"  >
+  <label class="form-check-label" for="flexRadioDefault12" >
+   Specific categories
+  </label>
+</div>
+		<div class="form-check">
+  <input class="form-check-input" type="radio" id="flexRadioDefault11" checked="" value="0" name="category">
+  <label class="form-check-label" for="flexRadioDefault11">
+  General Categories
+  </label>
+</div>
+
+</div>
+</div>
+
+		
+<!-- 
+					   <div class="row" id="fixed">
+
+			   <div class="col-md-6">
+
+			   <div class="form-group">
+				<label>Mobile Money</label>
+					<input  value="{{ old('fixed_mobile_money') }}" tclass="form-control" name="fixed_mobile_money" placeholder="3" type="number" class="form-control @if($errors->has('fixed_mobile_money')) invalid_field @endif"  step="1">
 				
+					@error('fixed_mobile_money')
+								<div class="invalid-feedback">
+									{{ $message }}
+								</div>
+					@enderror
+				</div>
+			   
+			   </div>
+
+				<div class="col-md-6">
+				<div class="form-group">
+					<label>Bank/Card Payments</label>
+						<input  value="{{ old('fixed_bank') }}"  class="form-control" name="fixed_bank" placeholder="5000" type="number" class="form-control @if($errors->has('fixed_bank')) invalid_field @endif" >
+					
+						@error('fixed_bank')
+									<div class="invalid-feedback">
+										{{ $message }}
+									</div>
+						@enderror
+				</div>
+				</div>
+			   
+			   </div> -->
 				<div class="row">
 
 				 <div class="col-md-6">
@@ -161,6 +227,17 @@
 						@enderror
 				</div>
 				</div>
+
+
+				<div class="col-md-6">
+				<div class="form-group">
+					
+					
+<input type="checkbox" id="pd1" name="add_product" value="1">
+<label for="pd1">Can add product <a href="" title="vendor can add products">?</a></label><br>
+
+				</div>
+				</div>
 				
 				</div>
 
@@ -175,4 +252,28 @@
 		
         
 		</div>
-@endsection
+		
+
+@endsection()
+
+
+@section('extra-js')
+
+
+<script type="text/javascript">
+		
+
+			window.addEventListener("load", function(){
+    	$("#fixed").hide();
+		
+});
+				function updateWidget(item){
+			 	$("#fixed").toggle();
+			 	 	$("#commissionrate").toggle();
+			}
+		</script>
+
+
+
+
+@endsection()

@@ -92,21 +92,30 @@
                 <div style="background-color: #1e22a9;padding: 10px;" class="email-header">
                     <img style="width: 200px;" src="https://mosmos.co.ke/assets/img/logo/web-logo.png" alt="Lipa Mos Mos">
                 </div>
+             
+
 
                 <div class="email-text" style="padding:10px;">
-                    <p>Hello, {{ $details['name'] }}</p>
                     
-                    <p>Your <strong>Lipa Mos Mos</strong> account has been created successfully.</p>
+                    
+                    <p>Hello, <strong>{{ $details['name'] }}</strong>,you have successfully booked <strong>{{$details['productname']}}</strong>.</p>
 
-                    <p>Your email address is: <strong>{{ $details['email'] }}</strong> and the password 
-                        is <strong>{{ $details['password'] }}</strong>.</p>
+                    <p> Your booking reference is <strong>{{$details['booking_reference']}}</strong> and the total cost for your order is <strong>KSh. {{$details['total_cost']}}</strong>.</p>
 
                         <hr>
 
-                    <p>Please Complete your booking. Use Paybill 4040299, account number <strong> {{$details['booking_reference']}}</strong> and amount <strong>Ksh. {{$details['initial_deposit']}}</strong></p>
+                  <p>
+View your invoice and pay conveniently with your card or bank here: {{$details['url']}}
+<p>
+        <hr>
+To pay via M-Pesa, use Paybill: <strong>4040299</strong> and Account Number <strong>{{$details['booking_reference']}}</strong>.</p>
+<!-- <strong>
+Thank you.</strong> -->
+</p>
 
-                    <div  class="email-btn">
-                        <a style="background-color: #1e22a9;color: #ffffff;padding: 5px 10px;border-radius: 5px;text-decoration: none;" href="https://mosmos.co.ke/login">Visit Dashboard</a>
+                    <div>
+                        Download our app to manage your bookings and pay conveniently - https://bit.ly/MosMosApp
+                       <!--  <a style="background-color: #1e22a9;color: #ffffff;padding: 5px 10px;border-radius: 5px;text-decoration: none;" href="https://mosmos.co.ke/login">Visit Dashboard</a> -->
                     </div>
                     
                     <p>Thank you,<br/>
