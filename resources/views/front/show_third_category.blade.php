@@ -74,6 +74,7 @@
                     <div class="ht mb-3">
 
                     <?php
+
                      $count = App\Products::where('quantity','>',0)
                                            ->where('status','=','approved')
                                            ->where('third_level_category_id',$current_tlc->id)
@@ -84,12 +85,13 @@
                                                }
                                            })
                                            ->count();
+                                           //dd($c);
                     ?>
 
                         <div>
                             <div class="filters">
                                 <div class="p-count">
-                                    <label class="col-form-label">{{number_format(count($products))}} product(s) found</label>
+                                    <label class="col-form-label">{{number_format($productcount)}} product(s) found</label>
                                 </div>
 
                                 <div class="p-filter">
