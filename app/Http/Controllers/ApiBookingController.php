@@ -176,7 +176,7 @@ $data=Array();
     }
 
     public function make_booking(Request $request,$source){
-
+return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
 
  $product_id=$this->addProduct($request,$source);
 
@@ -350,7 +350,7 @@ $data=Array();
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
        // $booking->booking_reference = $this->get_booking_reference();
-return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
+
         $booking->save();
         
         
