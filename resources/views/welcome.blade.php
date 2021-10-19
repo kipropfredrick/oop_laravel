@@ -24,6 +24,7 @@
 
 <!-- page content -->
 <div class="bg-gray">
+    @include('front.explore')
     <!-- products carousel -->
     <div class="container">
         <div class="mb-3">
@@ -61,7 +62,7 @@
     <!-- end products carousel -->
 
     <!-- products carousel -->
-    <div class="container">
+    {{-- <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
                 <h5>&#x1F4AF; Weekly Best Sellers</h5>
@@ -91,7 +92,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- end products carousel -->
 
     <!-- products carousel -->
@@ -130,7 +131,7 @@
     <!-- end products carousel -->
 </div>
 <!-- end -->
-
+{{--
 <div class="bg-white">
     <!-- categories -->
     <div class="container">
@@ -139,7 +140,7 @@
                 <h5>&#128293; Explore all categories</h5>
             </div>
 
-            <?php $categories = \App\Categories::all(); ?>
+            <//?php $categories = \App\Categories::all(); ?>
 
             <div class="c-grid">
                 @forelse($categories as $category)
@@ -162,7 +163,7 @@
     </div>
     <!-- end categories -->
 
-</div>
+</div> --}}
 
 <div class="bg-gray">
 
