@@ -1,10 +1,10 @@
 <div class="mdg-top"></div>
-<!-- space at the top of a bage without breadcrumbs -->
+<!-- space at the top of a bgdgdage without breadcrumbs -->
 
 <div class="bg-white-alt">
     <div class="">
         <div class="home-banner">
-            <img src="assets/img/extra/mm-hb.jpg" alt="Lipa Mos Mos">
+            <img src="" alt="Lipa Mos Mos">
         </div>
     </div>
 </div>
