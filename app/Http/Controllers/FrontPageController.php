@@ -878,7 +878,7 @@ class FrontPageController extends Controller
                                     ->where('subcatego                        ry_id',$subcategory->id)
                                             ->where('quantity','>',0)
                                     ->whereNotNull('brand_id')
-                                    ->pluck('brand_i d'        )
+                                    ->pluck('brand_id'        )
                                     ->toArray();
 
 
