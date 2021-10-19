@@ -1,14 +1,14 @@
-<div class="mdg-top"></div>
+<!-- <div class="mdg-top"></div> -->
 <!-- space at the top of a bage without breadcrumbs -->
 
-<div class="bg-white-alt">
+<!-- <div class="bg-white-alt">
     <div class="">
         <div class="home-banner">
             <img src="assets/img/extra/mm-hb.jpg" alt="Lipa Mos Mos">
         </div>
     </div>
 </div>
-
+ -->
 <!-- page content -->
 <div class="bg-white">
     <!-- categories -->
