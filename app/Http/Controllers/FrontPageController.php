@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use File;
-use DB;
+use \DB;
 use Carbon\Carbon;
 use Hash;
 use Exception;
@@ -29,29 +29,29 @@ class FrontPageController extends Controller
         return $value+($mod<($roundTo/2)?-$mod:$roundTo-$mod);
     }
 
-     
+
     public function update_categories(){
-        
-        $subs = DB::table('sub_categories')->get();
+
+        $subs = \DB::table('sub_c        ategories')->get();
 
         foreach($subs as $sub){
             $slug =  str_replace(' ', '-', $sub->subcategory_name);
             $slug =  str_replace('/','-',$slug);
             $slug = strtolower($slug);
 
-            DB::table('sub_categories')->where('id',$sub->id)->update(['slug'=>$slug]);
+            \DB::table('sub_categories')->where('id',$sub->id)->update(['slug'=>$slug]);
         };
 
 
         return "Success";
-       
+
 
     }
 
     public function index()
     {
 
-       $third_level_categories = \App\ThirdLevelCategory::all();
+              $third_level_categories = \App\ThirdLevelCategory::all();
 
        foreach($third_level_categories as $category){
 
@@ -122,61 +122,61 @@ class FrontPageController extends Controller
             $sort_by = $request->sort_by;
 
             if($sort_by !=null){
-    
+
                 if($sort_by == "price-asc"){
                     $p = "product_price";
                     $o = "ASC";
-                }elseif($sort_by == "price-desc"){
+                    }elseif($sort_by == "price-desc"){
                     $p = "product_price";
                     $o = "DESC";
                 }elseif($sort_by == "id"){
                     $p = "id";
                     $o = "DESC";
                 }elseif($sort_by == "best-sellers"){
-    
+
                     $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
-    
+
                     $product_ids = [];
-            
-                    foreach($bookings as $booking){
+
+                        foreach($bookings as $booking){
                         array_push($product_ids,$booking->product_id);
-                    }
+                                }
 
                     $products =   \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
                                     ->where('quantity','>',0)->where('status','=','approved')->inRandomOrder()->paginate(20);
-            
-    
+
+
                         return view('front.search_results',compact('products','categories','search','sort_by'));
                 }
-    
-            }else{
+
+                        }else{
                 $sort_by = "id";
                 $p = "id";
                 $o = "DESC";
             }
 
-            $products =   \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
+            $products =       \App\Products::with('category','subcategory','gallery')->where ( 'product_name', 'LIKE', '%' . $search . '%' )
                             ->where('quantity','>',0)->where('status','=','approved')->orderBy($p,$o)->paginate(20);
-                        
+
 
         return view('front.search_results',compact('products','categories','search','sort_by'));
-       
+
 
     }
 
     public function search_load_more(Request $request){
 
         $sort_by = $request->sort_by;
-        
+
         $search =  $request->search;
 
-        if($request->ajax()){
+        if($request       ->ajax()){
 
             $skip=$request->skip;
             $take=12;
 
             if($sort_by == "price-asc"){
-                $p = "product_price";
+                        $p = "product_price";
                 $o = "ASC";
             }elseif($sort_by == "price-desc"){
                 $p = "product_price";
@@ -199,7 +199,7 @@ class FrontPageController extends Controller
             foreach($products as $product){
 
                 $product->product_price = number_format($product->product_price);
-                
+
             }
 
             return response()->json($products);
@@ -209,7 +209,7 @@ class FrontPageController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for crea                ting a new resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -266,7 +266,7 @@ class FrontPageController extends Controller
     public function category(Request $request,$slug){
 
         $sort_by = $request->sort_by;
-        
+
         $brand_slug = $request->brand;
 
         $brand  = [];
@@ -275,23 +275,23 @@ class FrontPageController extends Controller
 
         $category = \App\Categories::with('subcategories')->where('slug','=',$slug)->first();
 
-        $brand_ids = \App\Products::where('status','=','approved')
+        $brand_ids = \App\Products::where('status','=','approv        ed')
                 ->distinct('brand_id')
                 ->where('category_id',$category->id)
                 ->where('quantity','>',0)
                 ->whereNotNull('brand_id')
                 ->pluck('brand_id')
                 ->toArray();
-        
 
-        $brands  = DB::table('brands')
+
+        $brands  = \DB::table('brands')
                                 ->whereIn("id",$brand_ids)
                                 ->orderBy('id', 'DESC')
                                 ->get();
 
         $brand = \App\Brand::where('slug',$brand_slug)->first();
 
-        $current_b = $brand;
+        $current_b =         $brand;
 
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
@@ -322,13 +322,13 @@ class FrontPageController extends Controller
                 $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
 
                 $product_ids = [];
-        
+
                 foreach($bookings as $booking){
                     array_push($product_ids,$booking->product_id);
                 }
-        
+
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
-                                            ->where('category_id','=',$category->id)
+                                            ->where('category_id','=',$category->id        )
                                             ->where('quantity','>',0)
                                             ->where(function($query) use ($brand)
                                             {
@@ -462,7 +462,7 @@ class FrontPageController extends Controller
             foreach($products as $product){
 
                 $product->product_price = number_format($product->product_price);
-                
+
             }
 
             return response()->json($products);
@@ -474,14 +474,14 @@ class FrontPageController extends Controller
     public function thirdlevelcategory(Request $request,$subcategory,$slug){
 
         $sort_by = $request->sort_by;
-        
+
         $categories = \App\Categories::all();
 
-       
+
         $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
 
 
-        $subcategory = \App\SubCategories::where('slug','=',$subcategory)->first();
+        $subcategory =                 \App\SubCategories::where('slug','=',$subcategory)->first();
 
 
         $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
@@ -507,25 +507,24 @@ class FrontPageController extends Controller
                                     ->whereNotNull('brand_id')
                                     ->pluck('brand_id')
                                     ->toArray();
-        
 
-        $brands  = DB::table('brands')
+
+        $brands  = \DB::table('brands')
                                 ->whereIn("id",$brand_ids)
                                 ->orderBy('id', 'DESC')
                                 ->get();
-        
-        
+
+
         $trendingProducts = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('quantity','>',0)
                                             ->where('subcategory_id',$subcategory->id)
-                                            ->where('third_level_category_id',$thirdlevel_category->id)
+                                                    ->where('third_level_category_id',$thirdlevel_category->id)
                                             ->inRandomOrder()
-                                            ->take(10)->get();
-        
-        
+                                                            ->take(10)->get();
+
         if($sort_by !=null){
-        
+
             if($sort_by == "price-asc"){
                 $p = "product_price";
                 $o = "ASC";
@@ -536,48 +535,70 @@ class FrontPageController extends Controller
                 $p = "id";
                 $o = "DESC";
             }elseif($sort_by == "best-sellers"){
-        
+
                 $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
-        
+
                 $product_ids = [];
-        
-                foreach($bookings as $booking){
+
+                                foreach($bookings as $booking){
                     array_push($product_ids,$booking->product_id);
                 }
-        
+
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id','=',$thirdlevel_category->id)
-                                            ->where(function($query) use ($brand)
-                                                {
+                                            ->where(function($query)         use ($brand)
+                                                        {
                                                     if (!empty($brand)) {
-                                                        $query->where('brand_id', $brand->id);
+                                                                $query->where('brand_id', $brand->id);
                                                     }
                                             })
                                             ->where('quantity','>',0)
                                             ->inRandomOrder()
-                                            ->paginate(20);
-        
-                return view('front.show_third_category',compact('products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
+                                            ->paginate();
+                $productcount =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('subcategory_id',$subcategory->id)
+                                        ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                                ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                            $query->where('brand_id', $brand->id);
+                                                }
+                                        })
+                                    ->where('quantity','>',0)->where('status','=','approved')
+                                    ->count();
+                return view('front.show_third_category',compact('productcount','products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
             }
-        
+
         }else{
             $sort_by = "id";
             $products =   \App\Products::with('category','subcategory','gallery')
                                             ->where('subcategory_id',$subcategory->id)
                                             ->where('third_level_category_id','=',$thirdlevel_category->id)
-                                            ->where(function($query) use ($brand)
+                                                    ->where(function($query) use ($brand)
                                                 {
                                                     if (!empty($brand)) {
-                                                        $query->where('brand_id', $brand->id);
+                                                                $query->where('brand_id', $brand->id);
                                                     }
                                             })
                                         ->where('quantity','>',0)->where('status','=','approved')
                                         ->paginate(20);
-            return view('front.show_third_category',compact('products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
+            $productcount =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('subcategory_id',$subcategory->id)
+                                        ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                                ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                            $query->where('brand_id', $brand->id);
+                                                }
+                                        })
+                                    ->where('quantity','>',0)->where('status','=','approved')
+                                    ->count();
+                                        //dd($productcount);
+            return view('front.show_third_category',compact('productcount','products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
         }
-        
-        
+
+
         $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('subcategory_id',$subcategory->id)
                                     ->where('third_level_category_id','=',$thirdlevel_category->id)
@@ -585,14 +606,25 @@ class FrontPageController extends Controller
                                         {
                                             if (!empty($brand)) {
                                                 $query->where('brand_id', $brand->id);
-                                            }
+                                                            }
                                     })
                                     ->where('quantity','>',0)
                                     ->orderBy($p,$o)
                                     ->paginate(20);
-        
-        return view('front.show_third_category',compact('products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
-        
+        $productcount =   \App\Products::with('category','subcategory','gallery')
+                                        ->where('subcategory_id',$subcategory->id)
+                                        ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                                ->where(function($query) use ($brand)
+                                            {
+                                                if (!empty($brand)) {
+                                                            $query->where('brand_id', $brand->id);
+                                                }
+                                        })
+                                    ->where('quantity','>',0)->where('status','=','approved')
+                                    ->count();
+
+        return view('front.show_third_category',compact('productcount','products','brands','current_b','thirdlevel_category','subcategory','sort_by','categories','category','trendingProducts'));
+
         }
 
     public function brand(Request $request, $slug){
@@ -602,20 +634,20 @@ class FrontPageController extends Controller
         $sub_slug = $request->sub;
 
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
-        
+
         $brand = \App\Brand::where('slug','=',$slug)->first();
 
         $current_b = $brand;
 
         $brands = \App\Brand::where('id','!=',$brand->id)->get();
 
-        $cat_ids = DB::table('products')->where('brand_id',$brand->id)->distinct('category_id')->pluck('category_id')->toArray();
+        $cat_ids = \DB::table('products')->where('brand_id',$brand->id)->distinct('category_id')->pluck('category_id')->toArray();
 
-        $b_categories = \App\Categories::with('subcategories')->whereIn('id',$cat_ids)->get();
+        $b_categories = \App\Categories::with('subcategories')->whereIn('id'        ,$cat_ids)->get();
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('quantity','>',0)
-                                    ->where('brand_id',$brand->id)
+                                    ->where('br        and_id',$brand->id)
                                     ->inRandomOrder()
                                     ->take(10)->get();
 
@@ -637,23 +669,23 @@ class FrontPageController extends Controller
                 $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
 
                 $product_ids = [];
-        
+
                 foreach($bookings as $booking){
                     array_push($product_ids,$booking->product_id);
                 }
-        
+
                 $products = \App\Products::with('category','subcategory')->where('status','=','approved')
                                             ->where('brand_id','=',$brand->id)
                                             ->where('quantity','>',0)
                                             ->where(function($query) use ($current_sub)
                                             {
                                                     if (!empty($current_sub)) {
-                                                        $query->where('subcategory_id', $current_sub->id);
+                                                                $query->where('subcategory_id', $current_sub->id);
                                                     }
-                                            })
+                                                    })
                                             ->inRandomOrder()
                                             ->paginate(20);
-                                            
+
 
                 return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','sort_by','categories','brand','trendingProducts'));
             }
@@ -664,7 +696,7 @@ class FrontPageController extends Controller
                                         ->where('status','=','approved')
                                         ->where(function($query) use ($current_sub)
                                             {
-                                                    if (!empty($current_sub)) {
+                                                                                                if (!empty($current_sub)) {
                                                         $query->where('subcategory_id', $current_sub->id);
                                                     }
                                         })
@@ -687,10 +719,10 @@ class FrontPageController extends Controller
                                         ->paginate(20);
         }
 
-        
-        
+
+
         return view('front.show_brand',compact('products','current_sub','current_b','brands','b_categories','sort_by','categories','brand','trendingProducts'));
-        
+
     }
 
 
@@ -890,12 +922,12 @@ class FrontPageController extends Controller
         $sort_by = $request->sort_by;
 
         $categories = \App\Categories::all();
-        
+
         $sub_slug = $request->sub;
 
         $current_sub = \App\SubCategories::where('slug',$sub_slug)->first();
 
-        $brand = \App\Brand::where('slug','=',$slug)->first();
+        $brand = \App\Brand::where('slug        ',        '=',$slug)->first();
 
         if($request->ajax()){
 
@@ -903,7 +935,7 @@ class FrontPageController extends Controller
             $take=12;
 
             if($sort_by == "price-asc"){
-                $p = "product_price";
+                        $p = "product_price";
                 $o = "ASC";
             }elseif($sort_by == "price-desc"){
                 $p = "product_price";
@@ -915,7 +947,7 @@ class FrontPageController extends Controller
 
 
             $products =   \App\Products::with('category','subcategory','gallery')
-                                        ->where('brand_id','=',$brand->id)
+                                        ->where('        brand_id','=',$brand->id)
                                         ->where('quantity','>',0)
                                         ->where('status','=','approved')
                                         ->where(function($query) use ($current_sub)
@@ -932,7 +964,7 @@ class FrontPageController extends Controller
             foreach($products as $product){
 
                 $product->product_price = number_format($product->product_price);
-                
+
             }
 
             return response()->json($products);
@@ -956,22 +988,22 @@ class FrontPageController extends Controller
 
     public function thirdlevelcategory_load_more(Request $request,$subcategory,$slug){
 
-        $sort_by = $request->sort_by;
+                        $sort_by = $request->sort_by;
 
         $categories = \App\Categories::all();
-            
+
             $thirdlevel_category = \App\ThirdLevelCategory::with('subcategory')->where('slug','=',$slug)->first();
-        
+
             $subcategory = \App\SubCategories::where('id','=',$thirdlevel_category->subcategory_id)->first();
-            
-        
+
+
             $category = \App\Categories::where('id','=',$subcategory->category_id)->first();
-        
+
                 if($request->ajax()){
-        
+
                     $skip=$request->skip;
                     $take=12;
-        
+
                     if($sort_by == "price-asc"){
                         $p = "product_price";
                         $o = "ASC";
@@ -980,31 +1012,31 @@ class FrontPageController extends Controller
                         $o = "DESC";
                     }else{
                         $p = "id";
-                        $o = "DESC";
+                                    $o = "DESC";
                     }
-        
-        
-                    $products =   \App\Products::with('category','subcategory','gallery')
+
+
+                    $products =   \App\Products::with('category','subc        ategory','gallery')
                                                 ->where('subcategory_id',$subcategory->id)
-                                                ->where('third_level_category_id','=',$thirdlevel_category->id)
-                                                ->where('quantity','>',0)
-                                                ->where('status','=','approved')
+                                                                    ->where('third_level_category_id','=',$thirdlevel_category->id)
+                                                        ->where('quantity','>',0)
+                                                        ->where('status','=','approved')
                                                 ->orderBy($p,$o)
                                                 ->skip($skip)
                                                 ->take($take)
                                                 ->get();
-        
+
                     foreach($products as $product){
-        
+
                         $product->product_price = number_format($product->product_price);
-                        
+
                     }
-        
+
                     return response()->json($products);
                 }else{
                     return response()->json('Direct Access Not Allowed!!');
-                } 
-        
+                }
+
     }
 
     public function subcategory(Request $request, $slug){
@@ -1024,15 +1056,15 @@ class FrontPageController extends Controller
         $current_b = $brand;
 
         $brand_ids = \App\Products::where('status','=','approved')
-                                    ->distinct('brand_id')
+                                            ->distinct('brand_id')
                                     ->where('subcategory_id',$subcategory->id)
-                                    ->where('quantity','>',0)
+                                            ->where('quantity','>',0)
                                     ->whereNotNull('brand_id')
                                     ->pluck('brand_id')
                                     ->toArray();
-        
 
-        $brands  = DB::table('brands')
+
+        $brands  = \DB::table('brands')
                                 ->whereIn("id",$brand_ids)
                                 ->orderBy('id', 'DESC')
                                 ->get();
@@ -1051,7 +1083,7 @@ class FrontPageController extends Controller
         if($sort_by !=null){
 
             if($sort_by == "price-asc"){
-                $p = "product_price";
+                        $p = "product_price";
                 $o = "ASC";
             }elseif($sort_by == "price-desc"){
                 $p = "product_price";
@@ -1064,11 +1096,11 @@ class FrontPageController extends Controller
                 $bookings = \App\Bookings::orderBy('id','DESC')->take(20)->get();
 
                 $product_ids = [];
-        
+
                 foreach($bookings as $booking){
                     array_push($product_ids,$booking->product_id);
                 }
-        
+
                 $products = \App\Products::with('category','subcategory')
                                             ->where('status','=','approved')
                                             ->where('subcategory_id',$subcategory->id)
@@ -1079,7 +1111,7 @@ class FrontPageController extends Controller
                                                 if (!empty($brand)) {
                                                     $query->where('brand_id', $brand->id);
                                                 }
-                                            })
+                                                    })
                                             ->orderBy('id','DESC')
                                             ->paginate(20);
 
@@ -1149,7 +1181,7 @@ class FrontPageController extends Controller
                                         ->count();
         }
 
-       
+
 
         return view('front.show_subcategory',compact('products','productsCount','current_b','brands','sort_by','trendingProducts','categories','category','subcategory'));
 
@@ -1166,7 +1198,7 @@ class FrontPageController extends Controller
             $brand_slug = $request->brand;
 
             $brand = [];
-    
+
             $brand = \App\Brand::where('slug',$brand_slug)->first();
 
             $skip=$request->skip;
@@ -1181,7 +1213,7 @@ class FrontPageController extends Controller
                         }elseif($sort_by == "price-desc"){
                             $p = "product_price";
                             $o = "DESC";
-                        }else{
+                               }else{
                             $p = "id";
                             $o = "DESC";
                         }
@@ -1191,7 +1223,7 @@ class FrontPageController extends Controller
                                                     ->where('subcategory_id','=',$subcategory->id)
                                                     ->where('quantity','>',0)
                                                     ->where('status','=','approved')
-                                                    ->where(function($query) use ($brand)
+                                                        ->where(function($query) use ($brand)
                                                         {
                                                             if (!empty($brand)) {
                                                                 $query->where('brand_id', $brand->id);
@@ -1205,7 +1237,7 @@ class FrontPageController extends Controller
                     foreach($products as $product){
 
                         $product->product_price = number_format($product->product_price);
-                        
+
                     }
 
                     return response()->json($products);
@@ -1250,7 +1282,7 @@ if ($existingUser->role == "user" ) {
         }
     }
 }
-        
+
 
         $categories = \App\Categories::all();
         $product_quantity = "1";
@@ -1282,7 +1314,7 @@ if ($existingUser->role == "user" ) {
 
         $product = \App\Products::with('category','subcategory','gallery')
                                   ->where('slug','=',$slug)
-                                  ->orWhere('slug', 'like', $slug . '%')
+                                          ->orWhere('slug', 'like', $slug . '%')
                                   ->first();
 
         if($product->status!='approved'){
@@ -1345,7 +1377,7 @@ if ($existingUser->role == "user" ) {
 
     }
 
-    
+
 
 
         public function get_msisdn_network($msisdn){
@@ -1355,7 +1387,7 @@ if ($existingUser->role == "user" ) {
                  'safaricom' => '/^\+?(254|0|)(?:7[01249]\d{7}|1[01234]\d{7}|75[789]\d{6}|76[89]\d{6})\b/',
                  'telkom' => '/^\+?(254|0|)7[7]\d{7}\b/',
              ];
-         
+
              foreach ($regex as $operator => $re ) {
                  if (preg_match($re, $msisdn)) {
                      return [preg_replace('/^\+?(254|0)/', "254", $msisdn), $operator];
@@ -1382,11 +1414,11 @@ if ($existingUser->role == "user" ) {
 
         if (!$msisdn){
 
-            return redirect()->back()->with('error',"Please enter a valid phone number!");
+            return redirect()->back()->with('error',"Please enter a valid phone number!")    ;
         }else{
             $valid_phone = $msisdn;
         }
-        
+
         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
 
         if($existingCustomer === null){
@@ -1394,14 +1426,14 @@ if ($existingUser->role == "user" ) {
         }else{
 
         $user = \App\User::find($existingCustomer->user_id);
-        
+
         $booking_date = now();
 
         $$booking_date = strtotime($booking_date);
-        
+
        $due_date = Carbon::now()->addMonths(3);
 
-        
+
        $product = \App\Products::find($request->product_id);
 
 
@@ -1428,7 +1460,7 @@ if ($existingUser->role == "user" ) {
                 $shipping_cost = 500;
             }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
                 $shipping_cost = 500;
-            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+                    }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
             $extra_kg = $product_weight[0] - 5;
             $extra_cost = (50 * $extra_kg);
             $shipping_cost = 500 + $extra_cost;
@@ -1438,8 +1470,8 @@ if ($existingUser->role == "user" ) {
 
            $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
 
-            $booking = new \App\Bookings();
-            $booking->customer_id = $existingCustomer->id; 
+                    $booking = new \App\Bookings();
+                    $booking->customer_id = $existingCustomer->id;
             $booking->product_id  = $request->product_id;
             $booking->county_id = $request->county_id;
             $booking->exact_location = $request->exact_location;
@@ -1458,12 +1490,12 @@ if ($existingUser->role == "user" ) {
             $booking->total_cost =  $total_cost;
             $booking->save();
 
-        $booking_id = DB::getPdo()->lastInsertId();
+        $booking_id = \DB::getPdo()->lastInsertId();
 
         $recipients = $valid_phone;
-       
+
         $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
-        
+
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
@@ -1473,15 +1505,15 @@ if ($existingUser->role == "user" ) {
          $message =  $this->stk_push($amount,$msisdn,$booking_ref);
 
          \Auth::login($user);
-        
+
         }
 
         $categories = \App\Categories::with('subcategories')->get();
-        
+
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
-        
+
 
     }
 
@@ -1510,7 +1542,7 @@ break;
         $vendor_code = $request->vendor_code;
 
         $categories = \App\Categories::all();
-        
+
         list($msisdn, $network) = $this->get_msisdn_network($request->phone);
 
         if (!$msisdn){
@@ -1520,8 +1552,8 @@ break;
             $valid_phone = $msisdn;
         }
         //Valid email
-        $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request->email, $e_matches);
-        
+        $valid_email = preg_match("/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/", $request        ->email, $e_matches);
+
         $product = \App\Products::find($request->product_id);
 
         if($product->weight != 0){
@@ -1534,7 +1566,7 @@ break;
 
         $product_weight = $weight_array;
 
-        if($product_weight[1] == 'g'){
+                if($product_weight[1] == 'g'){
             $shipping_cost = 500;
         }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
             $shipping_cost = 500;
@@ -1547,9 +1579,15 @@ break;
         $total_cost = $product->product_price + $shipping_cost;
 
         $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
+<<<<<<< HEAD
         
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
         $booking_reference = $this->get_booking_reference();
+=======
+
+        $existingUser         = \App\User::where('email',  $request->input('email'))->first();
+
+>>>>>>> origin/new-mosmosw
         if($existingUser!=null)
         {
 
@@ -1561,7 +1599,7 @@ break;
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-            return view('front.exists',compact('booking'));
+                    return view('front.exists',compact('booking'));
         }
 
         \Auth::login($user);
@@ -1572,14 +1610,14 @@ break;
 
         $due_date = Carbon::now()->addMonths(3);
 
-        
+
         $product = \App\Products::with('category','subcategory','gallery')->where('id','=',$request->product_id)->first();
 
-        
+
         if($request->initial_deposit<100){
 
           return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(100,0));
-         
+
         }
 
         $balance=0;
@@ -1588,7 +1626,7 @@ break;
         $booking = new \App\Bookings();
         $recipients = $valid_phone;
         if (intval($balance)==0) {
-        $booking->balance =   $total_cost; 
+        $booking->balance =   $total_cost;
         $booking->amount_paid = "0";
         $booking->status = "pending";
         }
@@ -1596,7 +1634,7 @@ break;
 
             if (intval($total_cost)<intval($balance)) {
                 # code...
-                \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
+                        \App\User::where('email',  $request->input('email'))->update(["balance"=>intval($balance)-intval($total_cost)]);
                 $booking->status = "complete";
                 $booking->amount_paid = $total_cost;
                 $booking->balance="0";
@@ -1606,27 +1644,27 @@ break;
             else{
 
                 \App\User::where('email',  $request->input('email'))->update(["balance"=>0]);
-                $booking->balance =   $total_cost-(intval($balance)); 
+                $booking->balance =   $total_cost-(intval($balance));
                 $booking->amount_paid = $balance;
                 $booking->status = "active";
                 $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
             }
-                
+
             SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
         }
 
-        
-        $booking->customer_id = $existingCustomer->id; 
+
+        $booking->customer_id = $existingCustomer->id;
         $booking->product_id  = $request->product_id;
         $booking->booking_reference = $booking_reference;
         $booking->quantity  = '1';
-       
+
         $booking->item_cost = $product->product_price;
-        
+
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
         $booking->due_date = $due_date;
-       
+
         $booking->vendor_code = $vendor_code;
         $booking->location_type = "Exact Location";
         $booking->item_cost = $product->product_price;
@@ -1637,13 +1675,13 @@ break;
        // $booking->booking_reference = $this->get_booking_reference();
 
         $booking->save();
-        
-        
-        $booking_id = DB::getPdo()->lastInsertId();
+
+
+        $booking_id = \DB::getPdo()->lastInsertId();
 
         $recipients = $valid_phone;
-      
-        $booking_id = DB::getPdo()->lastInsertId();
+
+        $booking_id = \DB::getPdo()->lastInsertId();
 
         $product = \App\Products::find($request->product_id);
 
@@ -1652,11 +1690,12 @@ break;
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
         $amount = $request->initial_deposit;
-        $msisdn = $valid_phone;
+        $msisdn =         $valid_phone;
         $booking_ref = $booking_reference;
-        
+
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
+<<<<<<< HEAD
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
          $details = [
         'email' => $request->email,
@@ -1670,17 +1709,20 @@ break;
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
+=======
+        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".       $booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
-        return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
-            
+        return view('front.processing',compact('product','customer','stkMessage','booking_reference','cate       gories','message','amount'));
+>>>>>>> origin/new-mosmosw
+
         }
 
-        
+
         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
 
         if($existingCustomer)
         {
-            
+
         $booking_date = now();
 
         $$booking_date = strtotime($booking_date);
@@ -1691,12 +1733,12 @@ break;
 
         if($request->initial_deposit<100){
 
-          return redirect()->back()->with('error',"The Minimum deposit for this product is : KES ".number_format(100));
-         
+          return redirect()->back()->with('error',"The Minim        um         deposit for this product is : KES ".number_format(100));
+
         }
 
         $booking = new \App\Bookings();
-        $booking->customer_id = $existingCustomer->id; 
+        $booking->customer_id = $existingCustomer->id;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
@@ -1706,7 +1748,7 @@ break;
         $booking->balance = $total_cost;
         $booking->item_cost = $product->product_price;
         $booking->shipping_cost = $shipping_cost;
-        $booking->payment_mode  = 'Mpesa';
+        $booking->payment_mode  = 'Mpesa        ';
         $booking->vendor_code = $vendor_code;
         $booking->date_started  = now();
         $booking->due_date = $due_date;
@@ -1714,22 +1756,23 @@ break;
         $booking->total_cost = $total_cost;
         $booking->save();
 
-        $booking_id = DB::getPdo()->lastInsertId();
+        $booking_id = \DB::getPdo()->lastInsertId();
 
         $recipients = $valid_phone;
-       
+
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
         $booking_ref = $booking_reference;
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+        $message =  "            Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
+<<<<<<< HEAD
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
          $details = [
         'email' => $request->email,
@@ -1743,9 +1786,12 @@ break;
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
+=======
+        $stkMessage          = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount  : ".number_format($amount,2).", Thank you.";
+>>>>>>> origin/new-mosmosw
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
-            
+
         }
 
         $user = new \App\User();
@@ -1754,14 +1800,14 @@ break;
         $user->password = Hash::make($request->input('phone'));
         $user->save();
 
-        $user_id = DB::getPdo()->lastInsertId();
+        $user_id = \DB::getPdo()->lastInsertId();
 
         $customer = new \App\Customers();
-        $customer->user_id = $user_id; 
+        $customer->user_id = $user_id;
         $customer->phone  = $valid_phone;
         $customer->save();
 
-        $customer_id = DB::getPdo()->lastInsertId();
+        $customer_id = \DB::getPdo()->lastInsertId();
 
         $booking_date = now();
 
@@ -1775,7 +1821,7 @@ break;
 
 
         $booking = new \App\Bookings();
-        $booking->customer_id = $customer_id; 
+        $booking->customer_id = $customer_id;
         $booking->product_id  = $request->product_id;
         $booking->county_id = $request->county_id;
         $booking->exact_location = $exact_location;
@@ -1789,17 +1835,17 @@ break;
         $booking->amount_paid = "0";
         $booking->payment_mode  = 'Mpesa';
         $booking->date_started  = now();
-        $booking->due_date = $due_date;
+        $booking->due_date = $due_date            ;
         $booking->total_cost = $total_cost;
         $booking->save();
 
-        $booking_id = DB::getPdo()->lastInsertId();
+        $booking_id = \DB::getPdo()->lastInsertId();
 
        $recipients = $valid_phone;
 
        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
-       SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
        // $details = [
        //  'email' => $request->email,
@@ -1857,8 +1903,8 @@ function encrypt($pure_string, $encryption_key) {
      */
     public function lipaNaMpesaPassword($lipa_time)
     {
-      
-        $passkey = env('STK_PASSKEY');  
+
+        $passkey = env('STK_PASSKEY');
         $BusinessShortCode = env('MPESA_SHORT_CODE');
         $timestamp =$lipa_time;
         $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
@@ -1866,7 +1912,7 @@ function encrypt($pure_string, $encryption_key) {
     }
 
     public function stk_push($amount,$msisdn,$booking_ref){
-       
+
         $consumer_key =  env('CONSUMER_KEY');
         $consume_secret = env('CONSUMER_SECRET');
         $headers = ['Content-Type:application/json','Charset=utf8'];
@@ -1901,7 +1947,7 @@ function encrypt($pure_string, $encryption_key) {
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Beare      r ' . $token)); //setting custom header
 
         $curl_post_data = array(
 
@@ -1953,7 +1999,7 @@ function encrypt($pure_string, $encryption_key) {
 
             $vendor_code = "VD".$vendor->id;
 
-            DB::table('vendors')->where('id',$vendor->id)->update(['vendor_code'=>$vendor_code]);
+            \DB::table('vendors')->where('id',$vendor->id)->update(['vendor_code'=>$vendor_code]);
 
         }
 
@@ -1966,27 +2012,27 @@ function encrypt($pure_string, $encryption_key) {
                 if($product->vendor_id!=null){
 
                     $vendor = \App\Vendor::where('id','=',$product->vendor_id)->first();
-        
+
                     $vendor_code = $vendor->vendor_code;
-        
+
                 }
 
-                DB::table('bookings')->where('id',$booking->id)->update(['vendor_code'=>$vendor_code]);
-            
+                \DB::table('bookings')->where('id',$booking->id)->update(['vendor_code'=>$vendor_code]);
+
         }
 
         $out = ['Success'=>'True'];
 
          return response()->json( $out);
 
-            
+
     }
 
 
     public function testSendSMS(){
 
         $message =  "Please Complete your booking. Use Paybill 4040299, account number BKG5126 And amount Ksh. 500";
-        
+
        $recipients = "254725569054";
 
        if(SendSMSController::sendMessage($recipients,$message,$type="Test")){
@@ -1998,17 +2044,17 @@ function encrypt($pure_string, $encryption_key) {
     }
 
     public function payments(){
-        // $payments =  DB::table('payments')->get();
+        // $payments =  \DB::table('payments')->get();
         if ((auth()->user())==null) {
             # code...
             return back();
         }
 $id=auth()->user()->id;
 
-$customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
+$customer_id=\DB::table("customers")->whereUser_id($id)->first()->id;
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product')->whereCustomer_id($customer_id)->orderBy('id', 'DESC')->get();
 
-         
+
 
         return view('backoffice.payments.indexold',compact('payments'));
     }
@@ -2024,6 +2070,6 @@ $customer_id=DB::table("customers")->whereUser_id($id)->first()->id;
  return $message;
     }
 
-    
+
 
 }
