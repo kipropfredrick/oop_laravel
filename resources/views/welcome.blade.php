@@ -12,7 +12,7 @@
         <div class="home-banner">
              <?php $banner = \App\Banners::latest()->first(); ?>
              @if(empty($banner))
-                <img src="" alt="Lipa Mos Mos">
+                <img src="assets/img/extra/mm-hb.jpg" alt="Lipa Mos Mos">
             @else
              <a href="{{$banner->link}}">
                 <img src="/storage/banners/{{$banner->image}}" alt="Lipa Mos Mos">

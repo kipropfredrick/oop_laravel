@@ -1,13 +1,3 @@
-<div class="mdg-top"></div>
-<!-- space at the top of a bgdgdage without breadcrumbs -->
-
-<div class="bg-white-alt">
-    <div class="">
-        <div class="home-banner">
-            <img src="" alt="Lipa Mos Mos">
-        </div>
-    </div>
-</div>
 
 <!-- page content -->
 <div class="bg-white">
