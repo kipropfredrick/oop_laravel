@@ -23,7 +23,8 @@
 
 		<div class="card">
               <div class="card-header">
-                <h3 class="card-title">Add Product</h3>
+                <h3 class="card-title">Create New Booking
+</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
