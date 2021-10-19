@@ -259,7 +259,7 @@ $data=Array();
 
 
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
-return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
+
         if($booking!=null){
          	return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
         }
@@ -350,7 +350,7 @@ return Array("status"=>false,"data"=>"","message"=>"You already have an existing
         $booking->exact_location = $request->exact_location;
         $booking->total_cost =  $total_cost;
        // $booking->booking_reference = $this->get_booking_reference();
-
+return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
         $booking->save();
         
         
