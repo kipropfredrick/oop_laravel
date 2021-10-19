@@ -60,9 +60,27 @@
 
 
                         </div>
+                        <!-- brand filter -->
+                        <div class="lmmsb-sec">
+                            <div class="lmmsbt">
+                                <h5>Brands</h5>
+                                <!-- brands listed are only the ones associated with the category selected -->
+                            </div>
 
-                        
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="brandSearch" placeholder="Type to search live...">
+                            </div>
 
+                            <div id="brandList" class="lmmsbfilter lmmsb-sec-scr">
+                                @foreach($brands as $brand)
+                                <div class="form-check">
+                                    <input type="checkbox" <?php if(!empty($current_b) && $current_b->id === $brand->id){echo "checked";} ?> class="form-check-input" onclick="brandClicked('{{$brand->slug}}')" id="briPhone">
+                                    <label class="form-check-label" for="briPhone">{{$brand->brand_name}}</label>
+                                </div>
+                                @endforeach
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 

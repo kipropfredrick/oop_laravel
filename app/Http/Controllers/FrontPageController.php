@@ -491,7 +491,6 @@ class FrontPageController extends Controller
         $brand = [];
 
         $brand = \App\Brand::where('slug',$brand_slug)->first();
-
         $current_b = $brand;
 
         $brand_ids = \App\Products::where('status','=','approved')
@@ -507,7 +506,7 @@ class FrontPageController extends Controller
                                     ->whereNotNull('brand_id')
                                     ->pluck('brand_id')
                                     ->toArray();
-
+//dd($brand_ids,$current_b);
 
         $brands  = \DB::table('brands')
                                 ->whereIn("id",$brand_ids)
