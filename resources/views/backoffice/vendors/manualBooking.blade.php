@@ -54,8 +54,8 @@
 
                                   <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="checkout-first-name">Weight(Kg)</label><span style="color:red">*</span>
-                                        <input required name="weight" type="number" class="form-control" id="" value="{{ old('weight') }}" placeholder="Product Name" >
+                                        <label for="checkout-first-name">Delivery cost</label><span style="color:red">*</span>
+                                        <input required name="delivery_cost" type="number" class="form-control" id="" value="{{ old('deleuevery_cost') }}" placeholder="delivery_cost(KSh)" >
                                     </div>
                               
                                 </div>
@@ -117,17 +117,6 @@
                                         </div>
                                     </div>
 
-                                 <!-- terms -->
-                                 <div class="mb-2">
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" checked id="terms" required>
-                                        <label class="form-check-label" for="terms">
-                                            I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>.*
-                                        </label>
-                                        </div>
-                                    </div>
-                                </div>
                                 <button type="submit" class="btn btn-primary">Make Booking</button>
                             </form>
                

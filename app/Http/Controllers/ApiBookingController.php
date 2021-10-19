@@ -110,7 +110,7 @@ break;
     }
 
 
-    function addProduct($request){
+    function addProduct($request,$category='api'){
 
     	 // $main_vendor_code = Vendor::whereVendor_code($request->vendor_code)->first()->main_vendor_code;
       //    $vendor=Vendor::whereMain_vendor_code($main_vendor_code)->first();
@@ -124,7 +124,13 @@ break;
 
         //$data = $request->except('_token','image_path');
 $data=Array();
-        $weight = $request->weight."kg";
+       if ($category=='direct') {
+           # code...
+         $weight = "0"."kg";
+       }
+       else{
+         $weight = $request->weight."kg";
+       }
 
         $data['weight'] = $weight;
         $data['subcategory_id']=0;
@@ -172,7 +178,7 @@ $data=Array();
     public function make_booking(Request $request,$source){
 
 
- $product_id=$this->addProduct($request);
+ $product_id=$this->addProduct($request,$source);
 
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
@@ -229,6 +235,11 @@ $data=Array();
             $extra_kg = $product_weight[0] - 5;
             $extra_cost = (50 * $extra_kg);
             $shipping_cost = 500 + $extra_cost;
+        }
+
+        if ($source=='direct') {
+            # code...
+              $shipping_cost =$request->delivery_cost;
         }
 
         $total_cost = $product->product_price + $shipping_cost;

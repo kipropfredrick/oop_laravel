@@ -158,7 +158,45 @@ var t =  $('#table1').DataTable({
 					</div>
 
 			`;
-			}else{
+			}
+			else if(status=="credited"){
+	return `
+				<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#recordPaymentModal${full.id}">
+					Correct Payment
+				</button>
+
+				<!-- Modal -->
+					<div class="modal fade" id="recordPaymentModal${full.id}" tabindex="-1" role="dialog" aria-labelledby="recordPaymentModal${full.id}Label" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="recordPaymentModal${full.id}Label">Record Payment</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form action="/admin/recordCreditedbill-payment/${full.id}" method="post">
+							@csrf
+							<input type="text" name="wallet" value="wallet" hidden="">
+							<div class="modal-body">
+								<label for="">Amount</label>
+									<input type="number" name="amount" value=${full.TransAmount} class="form-control">
+								<label for="">Correct Account No.</label>
+									<input type="" name="reference" required class="form-control" value="${full.BillRefNumber}">
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+
+						</form>
+
+						</div>
+					</div>
+					</div>
+
+			`;
+}
+				else{
 				return `
 					<div>${full.status}</div>
 				`;
