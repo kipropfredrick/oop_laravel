@@ -1,6 +1,9 @@
 @extends('backoffice.app')
 
 @section('content')
+<title>Create New Booking
+
+</title>
 
 <div class="">
 		         @if (session()->has('success'))
@@ -39,7 +42,7 @@
                                 }
                                 ?>
                                 <input name="vendor_code" value="@if(isset($vendor_code)){{$vendor_code}}@endif" type="hidden">
-                                <h4>Personal Details</h4>
+                                <h4>Order Details</h4>
       <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="checkout-first-name">Product Name</label><span style="color:red">*</span>
@@ -55,7 +58,7 @@
                                   <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="checkout-first-name">Delivery cost</label><span style="color:red">*</span>
-                                        <input required name="delivery_cost" type="number" class="form-control" id="" value="{{ old('deleuevery_cost') }}" placeholder="delivery_cost(KSh)" >
+                                        <input required name="delivery_cost" type="number" class="form-control" id="" value="{{ old('deleuevery_cost') }}" placeholder="Delivery cost(KSh)" >
                                     </div>
                               
                                 </div>
