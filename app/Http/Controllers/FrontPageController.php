@@ -1579,15 +1579,15 @@ break;
         $total_cost = $product->product_price + $shipping_cost;
 
         $total_cost = $this->roundToTheNearestAnything($total_cost, 5);
-<<<<<<< HEAD
+
         
         $existingUser = \App\User::where('email',  $request->input('email'))->first();
         $booking_reference = $this->get_booking_reference();
-=======
+
 
         $existingUser         = \App\User::where('email',  $request->input('email'))->first();
 
->>>>>>> origin/new-mosmosw
+
         if($existingUser!=null)
         {
 
@@ -1695,7 +1695,7 @@ break;
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-<<<<<<< HEAD
+
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
          $details = [
         'email' => $request->email,
@@ -1709,11 +1709,11 @@ break;
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
-=======
+
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".       $booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','cate       gories','message','amount'));
->>>>>>> origin/new-mosmosw
+
 
         }
 
@@ -1766,13 +1766,13 @@ break;
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "            Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
-<<<<<<< HEAD
+
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
          $details = [
         'email' => $request->email,
@@ -1786,9 +1786,8 @@ break;
         ];
 
         Mail::to($request->email)->send(new SendRegistrationEmail($details));
-=======
         $stkMessage          = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount  : ".number_format($amount,2).", Thank you.";
->>>>>>> origin/new-mosmosw
+
 
         return view('front.processing',compact('product','customer','stkMessage','booking_reference','categories','message','amount'));
 
