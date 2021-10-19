@@ -263,6 +263,7 @@ $data=Array();
         if($booking!=null){
          	return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
         }
+        return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
 
        // \Auth::login($user);
 
