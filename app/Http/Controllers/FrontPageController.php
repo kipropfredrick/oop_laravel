@@ -875,10 +875,10 @@ class FrontPageController extends Controller
 
         $brand_ids = \App\Products::where('status','=','approved')
                                             ->distinct('brand_id')
-                                    ->where('subcatego                        ry_id',$subcategory->id)
+                                    ->where('subcategory_id',$subcategory->id)
                                             ->where('quantity','>',0)
                                     ->whereNotNull('brand_id')
-                                    ->pluck('brand_id'        )
+                                    ->pluck('brand_id')
                                     ->toArray();
 
 
