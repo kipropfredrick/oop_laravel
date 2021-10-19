@@ -6,7 +6,7 @@
 
 <div class="mdg-top"></div>
 <!-- space at the top of a bage without breadcrumbs -->
-
+<!-- 
 <div class="bg-white-alt">
     <div class="">
         <div class="home-banner">
@@ -20,7 +20,7 @@
             @endif
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- page content -->
 <div class="bg-gray">
