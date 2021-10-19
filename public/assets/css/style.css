@@ -347,6 +347,7 @@ span.bc-sep::before {
     background: #ffffff;
     padding: 10px;
     margin: 15px 5px;
+    height: 170px;
     box-shadow: 1px 1px 5px #dddddd;
 }
 
