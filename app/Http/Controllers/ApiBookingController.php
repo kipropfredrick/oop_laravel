@@ -352,8 +352,7 @@ $data=Array();
        // $booking->booking_reference = $this->get_booking_reference();
 
         $booking->save();
-        return Array("status"=>false,"data"=>"","message"=>"You already have an existing booking with Lipa Mos Mos.");
-        
+       
         
         $booking_id = DB::getPdo()->lastInsertId();
 
