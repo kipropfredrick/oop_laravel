@@ -34,7 +34,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="method" id="card" value="1" checked>
                                 <label class="form-check-label" for="card">
-                                    Pay with Card (Visa, Mastercard)
+                                    Pay with Visa, MasterCard, Pesalink
                                 </label>
                             </div>
 
