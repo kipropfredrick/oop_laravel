@@ -8,7 +8,7 @@
         <meta name="keywords" content="Travel Mos Mos, Lipa Mos Mos, Lipa Pole Pole, Lipia Pole Pole, Magical Kenya">
         <meta name="author" content="Nelmasoft Limited">
         
-        <title>Travel Mos Mos - Digital is your super power</title>
+        <title>Mosmos Express</title>
         <link rel="icon" href="assets/img/logo/favicon.png" type="image/png"/>
 
         <!-- Fontawesome -->

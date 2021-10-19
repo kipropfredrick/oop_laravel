@@ -48,7 +48,7 @@
                                 <div class="pay-form">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <input type="email" class="form-control" placeholder="Email Address*" required>
+                                        <input type="email" value="{{$booking->customer->user->email}}" class="form-control" placeholder="Email Address*" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <input type="number" class="form-control" value="" min="50" placeholder="Amount*" name="amount" required>
