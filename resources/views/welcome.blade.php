@@ -62,7 +62,7 @@
     <!-- end products carousel -->
 
     <!-- products carousel -->
-    <div class="container">
+    {{-- <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
                 <h5>&#x1F4AF; Weekly Best Sellers</h5>
@@ -92,11 +92,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- end products carousel -->
 
     <!-- products carousel -->
-    <div class="container">
+    {{-- <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
                 <h5>&#9889; Top Trending</h5>
@@ -127,7 +127,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- end products carousel -->
 </div>
 <!-- end -->

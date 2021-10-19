@@ -4,11 +4,11 @@
 
 @section('content')
 
-<?php 
+<?php
     $current_tlc = $thirdlevel_category;
 ?>
 
-<!-- breadcrumb --> 
+<!-- breadcrumb -->
 <div class="bc-bg">
     <div class="container">
         <div class="bc-link">
@@ -52,7 +52,7 @@
                             @foreach(\App\ThirdLevelCategory::where('subcategory_id',$subcategory->id)->get() as $tlc)
 
                             <div <?php if($current_tlc->id == $tlc->id){echo 'style="background-color:#F68B1E;color: #fff !important;padding:5px"';} ?>  class="lmmsbt">
-                                <span <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <span <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span>
                                 <a <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> href="/tlc/{{$subcategory->subcategory_name}}/{{$tlc->slug}}">{{$tlc->name}}</a>
                             </div>
 
@@ -73,7 +73,7 @@
 
                     <div class="ht mb-3">
 
-                    <?php 
+                    <?php
                      $count = App\Products::where('quantity','>',0)
                                            ->where('status','=','approved')
                                            ->where('third_level_category_id',$current_tlc->id)
@@ -83,7 +83,7 @@
                                                    $query->where('brand_id', $current_b->id);
                                                }
                                            })
-                                           ->count(); 
+                                           ->count();
                     ?>
 
                         <div>
@@ -98,16 +98,16 @@
                                         <div class="form-group row">
                                             <label class="col-3 col-form-label">Sort by:</label>
                                             <div class="col-7">
-                                            
+
                                             <form action="/tlc/{{$subcategory->slug}}/{{$thirdlevel_category->slug}}" id="filter-form">
                                                 <select onchange="filter(this);" name="sort_by" id="sort_by" class="form-control">
                                                     <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                                     <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
                                                     <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
-                                                    <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
+                                                    <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option>
                                                 </select>
                                             </form>
-                                            
+
                                             </div>
                                             <input type="hidden" name="url" id="url" value="{{Request::url()}}">
                                         </div>
@@ -119,10 +119,10 @@
                     </div>
 
                     <div>
-                        
+
 
                         <div class="p-grid product-list">
-                            @foreach($products as $product)
+                            @foreach($products->take(20) as $product)
                                 <div class="p-cat product-box">
                                     <div class="p-c-sec">
                                         <div class="p-c-inner">
@@ -139,7 +139,7 @@
                                 @endforeach
                         </div>
 
-                    
+
                         @if($count==0)
                             <div class="text-center">
                                 <img class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
@@ -147,7 +147,7 @@
                             </div>
                         @endif
 
-                        <?php 
+                        <?php
                             $currentP = $products->currentPage();
                             $nextP = $currentP+1;
                             $lastp = $products->lastPage();
@@ -163,7 +163,7 @@
                         </div>
                         @endif
 
-                        
+
                     </div>
                 </div>
             </div>
@@ -191,16 +191,16 @@
                                 <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
                                 <div class="p-c-name">{{$product->product_name}}</div>
                                 <div class="p-c-price">KSh.{{number_format($product->product_price)}}</div>
-                                
+
                                 <div class="text-center">
                                     <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
                                 </div>
-                                
+
                             </a>
                         </div>
                     </div>
                     @empty
-                    
+
                     <div class="text-center">
                         <img style="margin-right:auto;margin-left:auto;" class="img-fluid" src="{{asset('images/crying-face.png')}}" alt="">
                         <h6 style="margin-right:auto;margin-left:auto;" class="text-center">No Products Found!</h6>
@@ -215,7 +215,7 @@
     <!-- end products carousel -->
 </div>
 
-<!-- handheld filter toggle --> 
+<!-- handheld filter toggle -->
 <div class="lmm-filter-toggle">
     <div>
         <div class="hh-ft-sec">
@@ -228,7 +228,7 @@
                                 <option <?php if($sort_by == "id"||$sort_by == ""){echo "selected";} ?> value="id">Sort by ID</option>
                                 <option <?php if($sort_by == "best-sellers"){echo "selected";} ?> value="best-sellers">Best sellers</option>
                                 <option <?php if($sort_by == "price-asc"){echo "selected";} ?> value="price-asc">Low to high price</option>
-                                <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option> 
+                                <option <?php if($sort_by == "price-desc"){echo "selected";} ?> value="price-desc">High to low price</option>
                             </select>
                         </form>
                     </div>
@@ -275,15 +275,15 @@
                             @foreach(\App\ThirdLevelCategory::where('subcategory_id',$subcategory->id)->get() as $tlc)
 
                             <div <?php if($current_tlc->id == $tlc->id){echo 'style="background-color:#F68B1E;color: #fff !important;padding:5px"';} ?>  class="lmmsbt">
-                                <span <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span> 
+                                <span <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> class="far <?php if($current_tlc->id == $tlc->id){echo 'fa-arrow-alt-circle-right';}else{echo 'fa-arrow-alt-circle-left';} ?>"></span>
                                 <a <?php if($current_tlc->id == $tlc->id){echo 'style="color: #fff !important;"';} ?> href="/tlc/{{$subcategory->subcategory_name}}/{{$tlc->slug}}">{{$tlc->name}}</a>
                             </div>
 
                             @endforeach
-                            
+
                         </div>
 
-                        
+
                     </div>
                 </div>
 
@@ -296,7 +296,7 @@
         </div>
     </div>
 </div>
-<!-- end --> 
+<!-- end -->
 
 <!-- <input type="hidden" name ="url" id="url" value="/cat/{{$category->slug}}"> -->
 
@@ -331,7 +331,7 @@
                     $(".load-more-btn").html('Loading...');
                 },
                 success:function(response){
-                    
+
                     var _html='';
                     var image="/storage/images/";
                     var p_url ="/product/";
@@ -374,9 +374,9 @@
 
             $.ajax({
                 url : url,
-                type: "POST", 
+                type: "POST",
                 data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
-                async : false, 
+                async : false,
                 success: function(response, textStatus, jqXHR) {
                     // console.log(response);
                     var _html='';
@@ -401,7 +401,7 @@
                     console.log(errorThrown);
                 }
             });
-            
+
 
     });
 
@@ -412,9 +412,9 @@
 
             $.ajax({
                 url : url,
-                type: "POST", 
+                type: "POST",
                 data: {searchTerm: searchTerm,_token:"{{ csrf_token() }}"},
-                async : false, 
+                async : false,
                 success: function(response, textStatus, jqXHR) {
                     // console.log(response);
                     var _html='';
@@ -441,7 +441,7 @@
                     console.log(errorThrown);
                 }
             });
-            
+
 
     });
 

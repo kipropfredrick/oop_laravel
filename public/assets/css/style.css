@@ -281,7 +281,7 @@ span.cat-name {
 /* space at the top of a bage without breadcrumbs on large screens */
 @media screen and (min-width: 780px) {
     .mdg-top {
-        margin-top: 107px;
+        margin-top: 0px;
     }
 }
 

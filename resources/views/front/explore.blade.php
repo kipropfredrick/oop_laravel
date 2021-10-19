@@ -63,7 +63,7 @@
 
 </div>
 
-<div class="bg-gray">
+{{-- <div class="bg-gray">
 
     <!-- products carousel -->
     <div class="container">
@@ -153,4 +153,4 @@
     </div>
     <!-- end products carousel -->
 
-</div>
+</div> --}}
