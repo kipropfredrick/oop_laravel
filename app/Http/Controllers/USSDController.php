@@ -110,7 +110,7 @@ $isvendor=true;
         }
 
     }
-     else if ($ussd_string_exploded[0] == 2 && !$isvendor) {
+     else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==1) {
                 
                 $valid_phone = ltrim($phoneNumber, '+');
 
