@@ -2124,7 +2124,7 @@ break;
 
       public function transfer_orderID($id,$request){
 
-        $booking = \App\Bookings::where('id','=',$id)->first();
+        $booking = \App\Bookings::whereBooking_reference($id)->first();
 
         $product = \App\Products::find($booking->product_id);
 
