@@ -385,9 +385,16 @@ $product_code=$ussd_string_exploded[3];
             }
         }
        
+       else if($level==5){
+       $response  = "CON Choose payment method \n";
+                $response .= "1. Mpesa \n";
+                $response .= "2. Airtel \n";
+}
 
-          else if($level==5){
-list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+          else if($level==6){
+if ($ussd_string_exploded[5]==1) {
+    # code...
+    list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
             
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
@@ -412,6 +419,11 @@ Log::info("executed 1");
  $response = "END You Already have an ongoing booking. You can't make another booking."; 
 
                 }
+}
+else{
+$response="END payment method not yet supported";
+
+}
 
 
 }
@@ -460,9 +472,16 @@ $product_code=$ussd_string_exploded[2];
             }
         }
        
+else if($level==4){
+       $response  = "CON Choose payment method \n";
+                $response .= "1. Mpesa \n";
+                $response .= "2. Airtel \n";
+}
+          else if($level==5){
 
-          else if($level==4){
-list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+            if ($ussd_string_exploded[4]==1) {
+                # code...
+                list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
             
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
@@ -486,6 +505,11 @@ Log::info("executed 1");
  $response = "END You Already have an ongoing booking. You can't make another booking."; 
 
                 }
+            }
+            else{
+                $response="END payment method not yet supported";
+            }
+
 
 
 }
