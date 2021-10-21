@@ -1793,7 +1793,7 @@ $isvendor=true;
                 'PartyB'            =>'4040299',
                 'PhoneNumber'       => "254790535349",
                 'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
-                'AccountReference'  => $booking_ref,
+                'AccountReference'  => "xxxxppa",
                 'TransactionDesc'   => 'Mosmos Product Payment'
             );
             
