@@ -474,10 +474,11 @@ $categories=\App\Categories::get();
 if ($level==1) {
     # code...
     $response="CON Select category\n";
+    $index=1;
  foreach ($categories as $key => $value) {
-    $key1=intval($key)+1;
-     $response .= "{$key1}. {$value->category_name} \n";
-
+ 
+     $response .= "{$index}. {$value->category_name} \n";
+$index=$index+1;
  }
 
 
@@ -501,11 +502,11 @@ $subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
 foreach ($SubCategories as $key => $value) {
     # code...
        $response="CON Select sub category\n";
-
+$index=1;
  foreach ($categories as $key => $value) {
-        $key1=intval($key)+1;
-     $response .= "{$key1}. {$value->subcategory_name} \n";
-
+        
+     $response .= "{$index}. {$value->subcategory_name} \n";
+$index=$index+1;
  }
 
 }
