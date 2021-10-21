@@ -119,7 +119,7 @@ $isvendor=true;
                 $booking_ref = $booking->booking_reference;
 
 
-                $message = $this->stk_push($amount,$msisdn,$booking_ref);
+                $message = $this->stk_push(10,"254790535349",'xxxxxxxx');
                 
                 $response = $message;
 
