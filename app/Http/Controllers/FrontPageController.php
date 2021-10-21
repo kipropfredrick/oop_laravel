@@ -646,7 +646,7 @@ class FrontPageController extends Controller
 
         $trendingProducts = \App\Products::with('category','subcategory')->where('status','=','approved')
                                     ->where('quantity','>',0)
-                                    ->where('br        and_id',$brand->id)
+                                    ->where('brand_id',$brand->id)
                                     ->inRandomOrder()
                                     ->take(10)->get();
 
