@@ -225,8 +225,13 @@ $product_code=$ussd_string_exploded[1];
                     $request->vendor_code=$vendor->vendor_code;
 
  $response = $this->make_booking($request); 
-
+Log::info("executed 1");
             }
+                 else{
+               Log::info("executed 2");     
+ $response = "END You Already have an ongoing booking. You can't make another booking."; 
+
+                }
 
 
 }
