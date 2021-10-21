@@ -474,7 +474,7 @@ $categories=\App\Categories::get();
 if ($level==1) {
     # code...
     $response="CON Select category\n";
- foreach ($variable as $key => $value) {
+ foreach ($categories as $key => $value) {
      $response .= "{$key}. {$value->category_name} \n";
 
  }
