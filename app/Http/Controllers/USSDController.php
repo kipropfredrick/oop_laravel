@@ -683,7 +683,7 @@ foreach ($products as $key => $value) {
 }
 
 $vendor_id=\App\Products::whereId($product_id)->first()->vendor_id;
-$vendor=\App\Vendors::whereId($vendor_id)->first();
+$vendor=\App\Vendor::whereId($vendor_id)->first();
 
 
         $request=(object) Array();
