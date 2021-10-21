@@ -337,6 +337,92 @@ Log::info("executed 1");
 
          } 
 
+
+list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+$customer = \App\Customers::where('phone','=',$msisdn)->first();
+
+if ($customer==null) {
+    # code...
+if ($level==2) {
+    # code...
+      $response = "CON Enter customer full name.";
+}
+
+if ($level==3) {
+    # code...
+        $response  = "CON Enter Product code \n";
+}
+               
+if ($ussd_string_exploded[0]==2 && $level==4) {
+    # code...
+    //check if product exists
+$product_code=$ussd_string_exploded[3];
+       $product = \App\Products::where('product_code','=',$product_code)->first();
+
+            if($product === null){
+            $response = "END Product Code Entered does not exist.";
+            }
+            else{
+            list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+
+                $customer = \App\Customers::where('phone','=',$msisdn)->first();
+  $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
+                if($booking == null){
+                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial depoist amount \n";
+
+            }
+//check booking
+    
+                else{
+ $response = "END You Already have an ongoing booking. You can't make another booking."; 
+
+                }
+
+
+
+
+
+            }
+        }
+       
+
+          else if($level==4){
+list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+                $customer = \App\Customers::where('phone','=',$msisdn)->first();
+            
+                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
+$product_code=$ussd_string_exploded[3];
+       $product = \App\Products::where('product_code','=',$product_code)->first();
+       $vendor=\App\Vendor::whereId($product->vendor_id)->first();
+                if($booking == null){
+                    $request=(object) Array();
+                    $request->county_id=1;
+                    $request->exact_location='';
+                    $request->phone=$phoneNumber;
+                    $request->initial_deposit=$ussd_string_exploded[4];
+                    $request->name=$ussd_string_exploded[2];
+                    $request->product_id=$product->id;
+                    $request->vendor_code=$vendor->vendor_code;
+
+ $response = $this->make_booking($request); 
+Log::info("executed 1");
+            }
+                 else{
+               Log::info("executed 2");     
+ $response = "END You Already have an ongoing booking. You can't make another booking."; 
+
+                }
+
+
+}
+
+
+
+}
+else{
+
+
+
 if ($level==2) {
     # code...
         $response  = "CON Enter Product code \n";
@@ -402,6 +488,7 @@ Log::info("executed 1");
                 }
 
 
+}
 }
 
     }
