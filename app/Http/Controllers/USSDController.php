@@ -475,9 +475,38 @@ if ($level==1) {
     # code...
     $response="CON Select category\n";
  foreach ($categories as $key => $value) {
-     $response .= "{$key}. {$value->category_name} \n";
+     $response .= "{$key+1}. {$value->category_name} \n";
 
  }
+
+
+}
+if ($level==2) {
+    # code...
+    $value1=$ussd_string_exploded[1]-1;
+    $category_id=0;
+foreach ($variable as $key => $value) {
+    # code...
+    if ($key==$value1) {
+        # code...
+        $category_id=$value->id;
+    }
+
+}
+
+$subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
+
+
+foreach ($SubCategories as $key => $value) {
+    # code...
+       $response="CON Select sub category\n";
+ foreach ($categories as $key => $value) {
+     $response .= "{$key+1}. {$value->subcategory_name} \n";
+
+ }
+
+}
+
 
 
 }
