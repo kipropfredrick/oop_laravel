@@ -157,6 +157,7 @@ $product_code=$ussd_string_exploded[1];
 //check booking
 
                 $phone = ltrim($phoneNumber, '0');
+                $phone=substr($phone, 1);
 
                 $customer = \App\Customers::where('phone','=',$phone)->first();
                 Log::info(json_encode($customer));
