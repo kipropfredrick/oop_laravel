@@ -1785,7 +1785,7 @@ break;
     if ($token==null) {
         # code...
      
-      return "END ".$message;
+      return $message;
     }
     $obj = new pushNotification();
     $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
@@ -1794,7 +1794,7 @@ break;
     // $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
     // $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
 
-      return "END ".$message;
+      return $message;
 
         }
 
@@ -1881,13 +1881,13 @@ break;
    $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
     if ($token==null) {
         # code...
-        return "END ". $message;
+        return $message;
     }
     $obj = new pushNotification();
     $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
     $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
 
-        return "END ". $message;
+        return $message;
 
         }
 
