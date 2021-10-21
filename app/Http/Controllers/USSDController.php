@@ -165,7 +165,10 @@ else{
             }
 
              else if ($ussd_string_exploded[0]==1 && !$isvendor){
-    $response  = "CON Enter Product code \n";
+if ($level==1) {
+    # code...
+        $response  = "CON Enter Product code \n";
+}
                
 if ($ussd_string_exploded[0]==1 && $level==2) {
     # code...
@@ -199,9 +202,8 @@ $product_code=$ussd_string_exploded[1];
 
             }
         }
-    }
 
-            else if($level==3){
+          else if($level==3){
 
                 $phone = ltrim($phoneNumber, '0');
                 $phone=substr($phone, 1);
@@ -229,6 +231,9 @@ $product_code=$ussd_string_exploded[1];
 
 }
 
+    }
+
+          
              
 
 
