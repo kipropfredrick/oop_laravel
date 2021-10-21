@@ -403,6 +403,63 @@ Log::info("executed 1");
 
     }
 
+else if($ussd_string_exploded[0]==4 && $isvendor){
+$response="CON Enter booking reference";
+
+if ($level==2) {
+    $booking = \App\Bookings::whereBooking_reference($ussd_string_exploded[1])->whereIn('status',['active','pending','unserviced','overdue'])->first();
+
+    if ($booking==null) {
+        # code...
+        $response="END no booking reference found";
+    }
+
+    else{
+
+
+        $response="CON Enter new product code";
+
+    }
+
+}
+
+if ($level==3) {
+    $booking = \App\Bookings::whereBooking_reference($ussd_string_exploded[1])->whereIn('status',['active','pending','unserviced','overdue'])->first();
+  $product_name = \App\Products::where('id','=',$booking->product_id)->first()->product_name;
+
+  $product= \App\Products::where('product_code','=',$ussd_string_exploded[2])->first();
+  if ($product==null) {
+      # code...
+    $response="END Product Code Entered does not exist.";
+  }
+  else{
+$response="CON Confirm to exchange product from ".$product_name." to ".$product->product_name." \n";
+     $response .= "1. Confirm \n";
+    $response .= "2. Cancel \n";
+
+  }
+
+
+    # code...
+}
+if ($level==4) {
+    # code...
+    if ($ussd_string_exploded[3]==2) {
+        # code...
+        $response="END thank you for partnering with us";
+    }
+    else if($ussd_string_exploded[3]==1){
+   $response="END Thank you we are good to go";
+    }
+    else{
+        $response="END invalid choice try again";
+    }
+}
+
+
+
+
+}
 
           
              
@@ -2056,6 +2113,110 @@ break;
         return $message;
 
         }
+
+
+    }
+
+      public function transfer_orderID($id,$request){
+
+        $booking = \App\Bookings::where('id','=',$id)->first();
+
+        $product = \App\Products::find($booking->product_id);
+
+
+
+        if($product->product_code == $request->product_code){
+            return 'END You cannot exchange with the same item';
+        }
+
+        $newProduct = \App\Products::where('product_code',$request->product_code)->where('status','=','approved')->first();
+
+$user_id=Auth()->user()->id;
+$vendor_id=\App\Vendor::whereUser_id($user_id)->first()->id;
+if ($vendor_id!=$newProduct->vendor_id) {
+    # code...
+    return back()->with('error','You are not authorized to make this order transfer');
+}
+
+
+
+
+
+
+        if($newProduct == null){
+            return back()->with('error','Sorry Product Code does not exist.');
+        }
+
+            if($newProduct->weight != 0){
+                $weight_array = preg_split('#(?<=\d)(?=[a-z])#i', $newProduct->weight);
+            }else{
+                $weight_array = (['0','g']);
+            }
+
+            $product_weight = $weight_array;
+
+            if($product_weight[1] == 'g'){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]<=5){
+                $shipping_cost = 500;
+            }elseif($product_weight[1] == 'kg' && $product_weight[0]>5){
+            $extra_kg = $product_weight[0] - 5;
+            $extra_cost = (30 * $extra_kg);
+            $vat = 0.16*$extra_cost;
+            $shipping_cost = 500 + $extra_cost + $vat;
+            }
+
+        $total_cost = ($newProduct->product_price + $shipping_cost);
+
+        $balance = $total_cost - $booking->amount_paid;
+          $customer = \App\Customers::where('id',$booking->customer_id)->first();
+
+       if ($balance>0) {
+           # code...
+         \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>$balance,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        "total_cost"=>$total_cost
+                        ]);
+       }
+       else{
+ \App\Bookings::where('id','=',$booking->id)->update([
+                        "product_id"=>$newProduct->id,
+                        "balance"=>0,
+                        "shipping_cost"=>$shipping_cost,
+                        "item_cost"=>$newProduct->product_price,
+                        'status'=>"complete",
+                        "total_cost"=>$total_cost
+                        ]);
+
+$objuser=\App\User::whereId($customer->user_id);
+$firstobjuser=$objuser->first();
+$totalbal=intval($firstobjuser->balance)+ ($balance *-1);
+$objuser->update(['balance'=>$totalbal]);
+       }
+
+      
+
+        $message = "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).". Use Paybill 4040299 and Account Number ".$booking->booking_reference.". Thank you.";
+
+        $recipients = $customer->phone;
+
+        SendSMSController::sendMessage($recipients,$message,$type="booking_transfered_notification");
+
+        $details = [
+            'customer'=> $booking->customer->user->name,
+            'booking_reference'=>$booking->booking_reference,
+            'amount_paid'=>$request->amount,
+            'product'=>$newProduct->product_name,
+            'balance'=> $balance
+
+        ];
+
+       // Mail::to($booking->customer->user->email)->send(new SendOrderTransferedMail($details));
+
+       return "END Product exchanged successfully";
 
 
     }
