@@ -135,7 +135,14 @@ $isvendor=true;
                     $response = "CON Enter customer phone number.";
                 
                if ($level==2) {
-                 $valid_phone = $ussd_string_exploded[1];
+                  list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+
+        if (!$msisdn){
+$message="END Please enter a valid phone number provided!";
+        }else{
+            $valid_phone = $msisdn;
+        }
+
 
 Log::info("test 1");
                 $customer = \App\Customers::where('phone','=',$valid_phone)->first();
