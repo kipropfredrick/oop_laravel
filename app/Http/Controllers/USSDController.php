@@ -122,6 +122,8 @@ $isvendor=true;
                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
                 
                 $response = $message;
+
+
         
             }else if ($ussd_string_exploded[0] == 2  && $level == 3) {
 
@@ -1744,8 +1746,8 @@ $isvendor=true;
 
         public function stk_push($amount,$msisdn,$booking_ref){
 
-            $consumer_key = 'jm2Grv0ww5WnP72EgVxaSAmXu9yHeOWd';
-            $consume_secret = 'T3AbvwSCjky7IFx8';
+               $consumer_key =  env('CONSUMER_KEY');
+        $consume_secret = env('CONSUMER_SECRET');
             $headers = ['Content-Type:application/json','Charset=utf8'];
             $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
             
@@ -1768,7 +1770,7 @@ $isvendor=true;
             
             $BusinessShortCode = '4040299';
             
-            $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
+             $passkey = env('STK_PASSKEY');
             
             $lipa_time = Carbon::rawParse('now')->format('YmdHms');
             
@@ -1790,9 +1792,9 @@ $isvendor=true;
                 'PartyA'            => $msisdn,
                 'PartyB'            =>'4040299',
                 'PhoneNumber'       => $msisdn,
-                'CallBackURL'       => 'https://combine.co.ke/confirmation-url',
+                'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
                 'AccountReference'  => $booking_ref,
-                'TransactionDesc'   => 'Combine Product Payment'
+                'TransactionDesc'   => 'Mosmos Product Payment'
             );
             
             $data_string = json_encode($curl_post_data);
