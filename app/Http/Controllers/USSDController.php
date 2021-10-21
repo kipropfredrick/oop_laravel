@@ -609,6 +609,12 @@ $index=$index+1;
 
 }
 
+if ($level==5) {
+    # code...
+    $text="";
+    $response="CON invalid choice";
+}
+
 }
 
 
