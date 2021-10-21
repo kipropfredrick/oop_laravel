@@ -103,29 +103,47 @@ $isvendor=true;
 
              }
 
-            }else if ($ussd_string_exploded[0] == 2  && $level == 2) {
+            }else if ($ussd_string_exploded[0] == 2  && $level == 2 && !$isvendor) {
 
-                $amount = $ussd_string_exploded[1];
+              
+                 $response  = "CON Choose payment method \n";
+                $response .= "1. Mpesa \n";
+                $response .= "2. Airtel \n";
+        
+            }
+            else if($ussd_string_exploded[0] == 2  && $level == 3 && !$isvendor){
 
-                Log::info('AMOUNT : '.print_r($amount,true));
+                  $amount = $ussd_string_exploded[1];
+                  $paymentfrom= $ussd_string_exploded[2];
+
+if ($paymentfrom==1) {
+    # code...
+       Log::info('AMOUNT : '.print_r($amount,true));
 
                 $msisdn = ltrim($phoneNumber, '+');
 
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
 
-                $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
+                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
 
                
                 $booking_ref = $booking->booking_reference;
 
-
-                $message = $this->stk_push($amount,$msisdn,'xxxxxxxx');
+                $message = $this->stk_push($amount,$msisdn,$booking_ref);
                 
                 $response = $message;
+}
+else{
+   $response="END platform implementation is pending come back later"; 
+}
+             
+
+            }
 
 
-        
-            }else if ($ussd_string_exploded[0] == 2  && $level == 3) {
+
+
+            else if ($ussd_string_exploded[0] == 2  && $level == 3) {
 
 
                 $amount = $ussd_string_exploded[2];
