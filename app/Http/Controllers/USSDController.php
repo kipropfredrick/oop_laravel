@@ -198,6 +198,8 @@ $product_code=$ussd_string_exploded[1];
 
 
             }
+        }
+    }
 
             else if($level==3){
 
