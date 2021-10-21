@@ -134,7 +134,7 @@ $isvendor=true;
                  else if ($text == "5" && $isvendor) {
                     $response = "CON Enter customer phone number.";
                 
-               if ($level==2) {
+               if ($level==1) {
                  $valid_phone = $ussd_string_exploded[1];
 
 
@@ -157,7 +157,7 @@ $isvendor=true;
              }
                    # code...
                }
-               if ($level==3) {
+               if ($level==2) {
                    # code...
                  $response  = "CON Choose payment method \n";
                 $response .= "1. Mpesa \n";
@@ -166,7 +166,7 @@ $isvendor=true;
             
                }
 
-               if ($level==4) {
+               if ($level==3) {
                    # code...
                                   $amount = $ussd_string_exploded[2];
                   $paymentfrom= $ussd_string_exploded[3];
