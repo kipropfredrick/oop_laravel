@@ -140,66 +140,109 @@ else{
 
             }
 
-
-
-
-            else if ($ussd_string_exploded[0] == 2  && $level == 3) {
-
-
-                $amount = $ussd_string_exploded[2];
-                // $msisdn = $phoneNumber;
-                $msisdn = ltrim($phoneNumber, '+');
-                $booking_ref = $ussd_string_exploded[1];
-
-                Log::info('Phone : '.$phoneNumber);
-
-                $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                
-                $response = $message;
-
-            
-            }else if($text == "1*2") { 
+             else if ($ussd_string_exploded[0]==1 && !$isvendor){
+    $response  = "CON Enter Product code \n";
                
-                $response = "CON Enter your Full Name \n";
-
-             }elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 3) {
-
-                    $response = "CON Please enter your email address";
-
-
-             }elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 4){
-
-
-                    $response = "CON Please enter Agent/Vendor Code.";
-
-                
-            } elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 5){
-
-                $response = "CON Please enter product Code";
-
-        
-          } elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 6){
-
-            $product_code = $ussd_string_exploded[5];
-
-            $product = \App\Products::where('product_code','=',$product_code)->first();
+if ($ussd_string_exploded[0]==1 && $level==2) {
+    # code...
+    //check if product exists
+$product_code=$ussd_string_exploded[1];
+       $product = \App\Products::where('product_code','=',$product_code)->first();
 
             if($product === null){
             $response = "END Product Code Entered does not exist.";
-            }else{
+            }
+            else{
 
-            if($product->product_price < 5000){
-                $minDeposit = 0.2*$product->product_price;
-            }else {
-                $minDeposit = 0.1 *$product->product_price;
+//check booking
+
+                $phone = "254".ltrim($phone, '0');
+
+                $customer = \App\Customers::where('phone','=',$phone)->first();
+                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
+
+                if($booking == null){
+
+ $response = "END Proceed to make a new booking."; 
+
+                }
+
+                else{
+ $response = "END You Already have an ongoing booking. You can't make another booking."; 
+
+                }
+
+
+
+
+
             }
 
-            $response = "CON  Minimum Deposit Amount for this Product is : KES ".number_format($minDeposit,2)."\n"." Please enter Initial deposit.";
 
-        }
+}
+
+             }
+
+
+
+
+     //        else if ($ussd_string_exploded[0] == 2  && $level == 3) {
+
+
+     //            $amount = $ussd_string_exploded[2];
+     //            // $msisdn = $phoneNumber;
+     //            $msisdn = ltrim($phoneNumber, '+');
+     //            $booking_ref = $ussd_string_exploded[1];
+
+     //            Log::info('Phone : '.$phoneNumber);
+
+     //            $message = $this->stk_push($amount,$msisdn,$booking_ref);
+                
+     //            $response = $message;
+
+            
+     //        }else if($text == "1*2") { 
+               
+     //            $response = "CON Enter your Full Name \n";
+
+     //         }elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 3) {
+
+     //                $response = "CON Please enter your email address";
+
+
+     //         }elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 4){
+
+
+     //                $response = "CON Please enter Agent/Vendor Code.";
+
+                
+     //        } elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 5){
+
+     //            $response = "CON Please enter product Code";
+
+        
+     //      } elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 6){
+
+     //        $product_code = $ussd_string_exploded[5];
+
+     //        $product = \App\Products::where('product_code','=',$product_code)->first();
+
+     //        if($product === null){
+     //        $response = "END Product Code Entered does not exist.";
+     //        }else{
+
+     //        if($product->product_price < 5000){
+     //            $minDeposit = 0.2*$product->product_price;
+     //        }else {
+     //            $minDeposit = 0.1 *$product->product_price;
+     //        }
+
+     //        $response = "CON  Minimum Deposit Amount for this Product is : KES ".number_format($minDeposit,2)."\n"." Please enter Initial deposit.";
+
+     //    }
 
     
-     }
+     // }
 
         // elseif(empty($ussd_string_exploded[1])){
         //     $response  = "END Sorry we do not accept blank values";
