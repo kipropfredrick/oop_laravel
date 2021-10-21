@@ -342,7 +342,7 @@ if ($level==2) {
 if ($ussd_string_exploded[0]==2 && $level==3) {
     # code...
     //check if product exists
-$product_code=$ussd_string_exploded[1];
+$product_code=$ussd_string_exploded[2];
        $product = \App\Products::where('product_code','=',$product_code)->first();
 
             if($product === null){
@@ -385,7 +385,7 @@ $product_code=$ussd_string_exploded[1];
                     $request->county_id=1;
                     $request->exact_location='';
                     $request->phone=$phoneNumber;
-                    $request->initial_deposit=$ussd_string_exploded[2];
+                    $request->initial_deposit=$ussd_string_exploded[3];
                     $request->product_id=$product->id;
                     $request->vendor_code=$vendor->vendor_code;
 
