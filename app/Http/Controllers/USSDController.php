@@ -216,7 +216,7 @@ $product_code=$ussd_string_exploded[1];
        $product = \App\Products::where('product_code','=',$product_code)->first();
        $vendor_code=\App\Vendor::whereId($product->vendor_id)->first();
                 if($booking == null){
-                    $request=Array();
+                    $request=(object) Array();
                     $request->county_id=1;
                     $request->exact_location='';
                     $request->phone=$phoneNumber;
