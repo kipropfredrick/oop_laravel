@@ -160,6 +160,7 @@ $product_code=$ussd_string_exploded[1];
 
                 $customer = \App\Customers::where('phone','=',$phone)->first();
                 Log::info(json_encode($customer));
+                 Log::info(json_encode($phone));
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
 
                 if($booking == null){
