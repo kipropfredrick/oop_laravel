@@ -87,9 +87,12 @@ $isvendor=true;
                
            
         }
-        else if ($ussd_string_exploded[0] == 3) {
+        else if ($ussd_string_exploded[0] == 3 && $level==1) {
                 
-        $response = "CON Enter Booking Reference.";
+     if ($level==1) {
+         # code...
+           $response = "CON Enter Booking Reference.";
+     }
 
     }else if ($ussd_string_exploded[0] == 3  && $level == 2) {
 
@@ -100,7 +103,7 @@ $isvendor=true;
         if($booking === null){
             $response = "END Booking Reference Entered does not exist.";
         }else{
-  $message =  "Ksh ".$balance." from your mosmos wallet has been used to pay for ordered item partially remaining amount is Ksh.".number_format($total_cost-(intval($balance)));
+ 
 
   $response = "END Balance for booking reference ".$ussd_string_exploded[1]. " is ".$booking->balance ;
 
