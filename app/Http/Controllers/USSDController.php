@@ -468,6 +468,22 @@ if ($level==4) {
 
 
 }
+else if($isvendor && $ussd_string_exploded[0]==1){
+
+$categories=\App\Categories::get();
+if ($level==1) {
+    # code...
+    $response="CON Select category\n";
+ foreach ($variable as $key => $value) {
+     $response .= "{$key}. {$value->category_name} \n";
+
+ }
+
+
+}
+
+}
+
 
           
              
