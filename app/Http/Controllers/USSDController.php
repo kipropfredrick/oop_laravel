@@ -770,7 +770,7 @@ foreach ($products as $key => $value) {
 
 $vendor_id=\App\Products::whereId($product_id)->first()->vendor_id;
 $vendor=\App\Vendor::whereId($vendor_id)->first();
-
+list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[5]);
 
         $request=(object) Array();
                     $request->county_id=1;
@@ -780,6 +780,7 @@ $vendor=\App\Vendor::whereId($vendor_id)->first();
                     $request->product_id=$product_id;
                     $request->name=$ussd_string_exploded[6];
                     $request->vendor_code=$vendor->vendor_code;
+Log::info(json_encode($request));
 
  $response = $this->make_booking($request); 
 
