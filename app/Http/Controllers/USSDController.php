@@ -1700,15 +1700,7 @@ $isvendor=true;
 
         }
 
-        public function lipaNaMpesaPassword($lipa_time)
-        {
-           
-            $passkey = "e16ba1623f2708b2ef89970fa0aa822ec95bf16fe1e4d36a57fc53d6840883b5";
-            $BusinessShortCode = '4040299';
-            $timestamp =$lipa_time;
-            $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
-            return $lipa_na_mpesa_password;
-        }
+  
 
         public function sendMessage($AFmessage,$reciepient){
             $username   = "Combinesms";
@@ -1743,75 +1735,93 @@ $isvendor=true;
                 echo "Error: ".$e->getMessage();
             }
         }
+           /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function lipaNaMpesaPassword($lipa_time)
+    {
+
+        $passkey = env('STK_PASSKEY');
+        $BusinessShortCode = env('MPESA_SHORT_CODE');
+        $timestamp =$lipa_time;
+        $lipa_na_mpesa_password = base64_encode($BusinessShortCode.$passkey.$timestamp);
+        return $lipa_na_mpesa_password;
+    }
+
+
 
         public function stk_push($amount,$msisdn,$booking_ref){
 
-               $consumer_key =  env('CONSUMER_KEY');
+     
+        $consumer_key =  env('CONSUMER_KEY');
         $consume_secret = env('CONSUMER_SECRET');
-            $headers = ['Content-Type:application/json','Charset=utf8'];
-            $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
-            
-            $curl = curl_init($url);
-            curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            curl_setopt($curl,CURLOPT_USERPWD,$consumer_key.':'.$consume_secret);
-            
-            $curl_response = curl_exec($curl);
-            $result = json_decode($curl_response);
-            
-            $token = $result->access_token;
-            
-            $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
-            
-            Log::info("Generated access token " . $token);
-            
-            $timestamp = date("YmdHis");
-            
-            $BusinessShortCode = '4040299';
-            
-             $passkey = env('STK_PASSKEY');
-            
-            $lipa_time = Carbon::rawParse('now')->format('YmdHms');
-            
-            $apiPassword = $this->lipaNaMpesaPassword($lipa_time);
-            
-            Log::info("Generated Password " . $apiPassword);
-            
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
-            
-            $curl_post_data = array(
-            
-                'BusinessShortCode' => '4040299',
-                'Password'          => $apiPassword,
-                'Timestamp'         => $lipa_time,
-                'TransactionType'   => 'CustomerPayBillOnline',
-                'Amount'            =>10,
-                'PartyA'            => "254790535349",
-                'PartyB'            =>'4040299',
-                'PhoneNumber'       => "254790535349",
-                'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
-                'AccountReference'  => "xxxxppa",
-                'TransactionDesc'   => 'Mosmos Product Payment'
-            );
-            
-            $data_string = json_encode($curl_post_data);
-            
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-            
-            $curl_response = curl_exec($curl);
-            
-            Log::info('CURL RESPONSE: '.print_r($curl_response,true));
-            
-            $responseArray = json_decode($curl_response, true);
-            $status = 200;
-            $success = true;
-            $message = "STK Request Success";
-            $httpCode = 200;
+        $headers = ['Content-Type:application/json','Charset=utf8'];
+        $url = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+
+        $curl = curl_init($url);
+        curl_setopt($curl,CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl,CURLOPT_USERPWD,$consumer_key.':'.$consume_secret);
+
+        $curl_response = curl_exec($curl);
+        $result = json_decode($curl_response);
+
+        $token = $result->access_token;
+
+        $url = 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+
+        Log::info("Generated access token " . $token);
+
+        $timestamp = date("YmdHis");
+
+        $BusinessShortCode = env('MPESA_SHORT_CODE');
+
+        $passkey = env('STK_PASSKEY');
+
+        $lipa_time = Carbon::rawParse('now')->format('YmdHms');
+
+        $apiPassword = $this->lipaNaMpesaPassword($lipa_time);
+
+        Log::info("Generated Password " . $apiPassword);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization:Bearer ' . $token)); //setting custom header
+
+        $curl_post_data = array(
+
+            'BusinessShortCode' => env('MPESA_SHORT_CODE'),
+            'Password'          => $apiPassword,
+            'Timestamp'         => $lipa_time,
+            'TransactionType'   => 'CustomerPayBillOnline',
+            'Amount'            => $amount,
+            'PartyA'            => $msisdn,
+            'PartyB'            =>env('MPESA_SHORT_CODE'),
+            'PhoneNumber'       => $msisdn,
+            'CallBackURL'       => 'https://mosmos.co.ke/api/stk-callback',
+            'AccountReference'  => $booking_ref,
+            'TransactionDesc'   => 'Mosmos Product Payment'
+        );
+
+        $data_string = json_encode($curl_post_data);
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+
+        $curl_response = curl_exec($curl);
+
+        $responseArray = json_decode($curl_response, true);
+        $status = 200;
+        $success = true;
+        $message = "STK Request Success";
+        $httpCode = 200;
+
+        \Log::info('STK DATA => '.print_r(json_encode($responseArray),1));
             
             Log::info('RESPONSE ARRAY: '.print_r($responseArray,true));
             
