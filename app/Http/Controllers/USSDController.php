@@ -156,7 +156,7 @@ $product_code=$ussd_string_exploded[1];
 
 //check booking
 
-                $phone = "254".ltrim($phone, '0');
+                $phone = "254".ltrim($phoneNumber, '0');
 
                 $customer = \App\Customers::where('phone','=',$phone)->first();
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
