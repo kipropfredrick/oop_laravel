@@ -186,7 +186,7 @@ $product_code=$ussd_string_exploded[1];
                 $customer = \App\Customers::where('phone','=',$phone)->first();
   $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
                 if($booking == null){
-                              $response  = "CON  You are making a booking for ".$product->name."\nEnter Initial depoist amount \n";
+                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial depoist amount \n";
 
             }
 //check booking
