@@ -449,7 +449,12 @@ if ($level==4) {
         $response="END thank you for partnering with us";
     }
     else if($ussd_string_exploded[3]==1){
-   $response="END Thank you we are good to go";
+        $booking = \App\Bookings::whereBooking_reference($ussd_string_exploded[1])->whereIn('status',['active','pending','unserviced','overdue'])->first();
+
+     $request=(object) Array();
+     $request->product_code=$ussd_string_exploded[2];
+     $request->amount=$booking->amount_paid;
+   $response=$this->transfer_orderID($ussd_string_exploded[1],$request);
     }
     else{
         $response="END invalid choice try again";
