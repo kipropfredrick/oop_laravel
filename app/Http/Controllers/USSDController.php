@@ -558,6 +558,57 @@ $index=$index+1;
     # code...
 }
 
+if ($level==4) {
+    # code...
+  $value1=$ussd_string_exploded[1]-1;
+    $category_id=0;
+foreach ($categories as $key => $value) {
+    # code...
+    if ($key==$value1) {
+        # code...
+        $category_id=$value->id;
+    }
+
+}
+$subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
+  $value2=$ussd_string_exploded[2]-1;
+    $subcategory_id=0;
+foreach ($subcategories as $key => $value) {
+    # code...
+    if ($key==$value2) {
+        # code...
+        $subcategory_id=$value->id;
+    }
+
+}
+
+$tlc=\App\ThirdLevelCategory::whereSubcategory_id($subcategory_id)->get();
+$value3=$ussd_string_exploded[3]-1;
+    $tlc_id=0;
+foreach ($tlc as $key => $value) {
+    # code...
+    if ($key==$value3) {
+        # code...
+        $tlc_id=$value->id;
+    }
+
+}
+$products=\App\Products::whereThird_level_category_id($tlc_id)->get();
+$response="CON Select Product\n";
+       
+$index=1;
+
+foreach ($products as $key => $value) {
+    # code...
+
+     $response .= "{$index}. {$value->name} \n";
+$index=$index+1;
+ 
+
+}
+
+}
+
 }
 
 
