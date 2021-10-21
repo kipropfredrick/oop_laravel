@@ -498,16 +498,16 @@ foreach ($categories as $key => $value) {
 
 $subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
 
+$response="CON Select sub category\n";
+       
+$index=1;
 
 foreach ($subcategories as $key => $value) {
     # code...
-       $response="CON Select sub category\n";
-$index=1;
- foreach ($categories as $key => $value) {
-        
+
      $response .= "{$index}. {$value->subcategory_name} \n";
 $index=$index+1;
- }
+ 
 
 }
 
