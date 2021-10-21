@@ -23,7 +23,6 @@
 </div>
 
 <!-- page content -->
-<div class="bg-gray">
     @include('front.explore')
     <div class="bg-gray">
 
@@ -133,7 +132,7 @@
         </div>
     </div> --}}
     <!-- end products carousel -->
-</div>
+
 <!-- end -->
 {{--
 <div class="bg-white">
