@@ -620,8 +620,93 @@ if ($level>5) {
     list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[5]);
 $customer = \App\Customers::where('phone','=',$msisdn)->first();
 if ($customer==null) {
-    $response="END proceed to register customer";
+    $response="CON Enter customer full name";
     # code...
+    if ($level==7) {
+         $response="CON Enter initial deposit";
+    }
+
+if ($level==8) {
+        $response  = "CON Choose payment method \n";
+                $response .= "1. Mpesa \n";
+                $response .= "2. Airtel \n";
+}
+if ($level==9) {
+    # code...
+if ($ussd_string_exploded[8]==1) {
+    # code...
+ $value1=$ussd_string_exploded[1]-1;
+    $category_id=0;
+foreach ($categories as $key => $value) {
+    # code...
+    if ($key==$value1) {
+        # code...
+        $category_id=$value->id;
+    }
+
+}
+$subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
+  $value2=$ussd_string_exploded[2]-1;
+    $subcategory_id=0;
+foreach ($subcategories as $key => $value) {
+    # code...
+    if ($key==$value2) {
+        # code...
+        $subcategory_id=$value->id;
+    }
+
+}
+
+$tlc=\App\ThirdLevelCategory::whereSubcategory_id($subcategory_id)->get();
+$value3=$ussd_string_exploded[3]-1;
+    $tlc_id=0;
+foreach ($tlc as $key => $value) {
+    # code...
+    if ($key==$value3) {
+        # code...
+        $tlc_id=$value->id;
+    }
+
+}
+$products=\App\Products::whereThird_level_category_id($tlc_id)->get();
+
+$value4=$ussd_string_exploded[4]-1;
+    $product_id=0;
+foreach ($products as $key => $value) {
+    # code...
+    if ($key==$value4) {
+        # code...
+        $tlc_id=$value->id;
+    }
+
+}
+
+$vendor_id=\App\Products::whereId($product_id)->first()->vendor_id;
+$vendor=\App\Vendor::whereId($vendor_id)->first();
+
+
+        $request=(object) Array();
+                    $request->county_id=1;
+                    $request->exact_location='';
+                    $request->phone=$msisdn;
+                    $request->initial_deposit=$ussd_string_exploded[7];
+                    $request->product_id=$product_id;
+                    $request->name=$ussd_string_exploded[6];
+                    $request->vendor_code=$vendor->vendor_code;
+
+ $response = $this->make_booking($request); 
+
+}
+else{
+$response="END payment platform not supported";
+
+}
+
+}
+
+
+//end 
+
 }
 else{
 
@@ -2107,6 +2192,21 @@ $message="END Please enter a valid phone number provided!";
         if ($customer!=null) {
             # code...
             $userid=$customerdata->user_id;
+        }
+        else{
+            $user = new \App\User();
+        // $user->email = $email;
+        $user->name = $request->name;
+        $user->password = Hash::make(substr($valid_phone, 3));
+        $user->save();
+
+        $user_id = DB::getPdo()->lastInsertId();
+
+        $customer = new \App\Customers();
+        $customer->user_id = $user_id; 
+        $customer->phone  = $msisdn;
+        $customer->save();
+$userid=$user_id;
         }
 
         $existingUser = \App\User::where('id',  $userid)->first();
