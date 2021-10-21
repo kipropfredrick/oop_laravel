@@ -83,6 +83,8 @@ $isvendor=true;
                 $response .= "2. New direct booking \n";
                 $response .= "3. Check balance \n";
                 $response .= "4. Exchange order \n";
+                $response .= "5.  Make payment \n";
+               
            
         }
         else if ($text == "3") {
@@ -105,7 +107,7 @@ $isvendor=true;
         }
 
     }
-     else if ($text == "2" && !$isvendor) {
+     else if ($text == "2") {
                 
                 $valid_phone = ltrim($phoneNumber, '+');
 
@@ -127,7 +129,83 @@ $isvendor=true;
 
              }
 
-            }else if ($ussd_string_exploded[0] == 2  && $level == 2 && !$isvendor) {
+            }
+
+                 else if ($text == "5" && $isvendor) {
+                    $response = "CON Enter customer phone number.";
+                
+               if ($level==2) {
+                 $valid_phone = $ussd_string_exploded[1];
+
+
+                $customer = \App\Customers::where('phone','=',$valid_phone)->first();
+
+                if($customer == null){
+                    $response = "END You  have no account.";
+                   }else{
+
+                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
+                
+                if($booking == null){
+                 $response = "END You  have no active booking.";
+                }else{
+                  $product = \App\Products::where('id','=',$booking->product_id)->first();
+                  $booking_reference = $booking->booking_reference;
+                  $response = "CON Active booking : ".$booking_reference." Amount paid : KES ".number_format($booking->amount_paid,2)." Balance : KES ".number_format($booking->balance,2)." \n"."Enter Amount to Pay";
+                }
+
+             }
+                   # code...
+               }
+               if ($level==3) {
+                   # code...
+                 $response  = "CON Choose payment method \n";
+                $response .= "1. Mpesa \n";
+                $response .= "2. Airtel \n";
+        
+            
+               }
+
+               if ($level==4) {
+                   # code...
+                                  $amount = $ussd_string_exploded[2];
+                  $paymentfrom= $ussd_string_exploded[3];
+
+
+if ($paymentfrom==1) {
+    # code...
+       Log::info('AMOUNT : '.print_r($amount,true));
+
+              
+        list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+
+        if (!$msisdn){
+$message="END Please enter a valid phone number provided!";
+        }else{
+            $valid_phone = $msisdn;
+        }
+
+                $customer = \App\Customers::where('phone','=',$msisdn)->first();
+
+                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
+
+               
+                $booking_ref = $booking->booking_reference;
+
+                $message = $this->stk_push($amount,$msisdn,$booking_ref);
+                
+                $response = $message;
+}
+else{
+   $response="END platform implementation is pending come back later"; 
+}
+               }
+
+            }
+
+
+
+            else if ($ussd_string_exploded[0] == 2  && $level == 2 && !$isvendor) {
 
               
                  $response  = "CON Choose payment method \n";
