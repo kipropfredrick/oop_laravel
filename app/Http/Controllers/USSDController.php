@@ -311,7 +311,7 @@ $product_code=$ussd_string_exploded[1];
        $vendor=\App\Vendor::whereId($product->vendor_id)->first();
                 if($booking == null){
                     $request=(object) Array();
-                    $request->county_id=1;
+                    $request->county_id=2;
                     $request->exact_location='';
                     $request->phone=$phoneNumber;
                     $request->initial_deposit=$ussd_string_exploded[2];
@@ -414,7 +414,7 @@ $product_code=$ussd_string_exploded[3];
        $vendor=\App\Vendor::whereId($product->vendor_id)->first();
                 if($booking == null){
                     $request=(object) Array();
-                    $request->county_id=1;
+                    $request->county_id=2;
                     $request->exact_location='';
                     $request->phone=$msisdn;
                     $request->initial_deposit=$ussd_string_exploded[4];
@@ -501,7 +501,7 @@ $product_code=$ussd_string_exploded[2];
        $vendor=\App\Vendor::whereId($product->vendor_id)->first();
                 if($booking == null){
                     $request=(object) Array();
-                    $request->county_id=1;
+                    $request->county_id=2;
                     $request->exact_location='';
                     $request->phone=$msisdn;
                     $request->initial_deposit=$ussd_string_exploded[3];
@@ -798,7 +798,7 @@ foreach ($products as $key => $value) {
     # code...
     if ($key==$value4) {
         # code...
-        $tlc_id=$value->id;
+        $product_id=$value->id;
     }
 
 }
@@ -808,7 +808,7 @@ $vendor=\App\Vendor::whereId($vendor_id)->first();
 list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[5]);
 
         $request=(object) Array();
-                    $request->county_id=1;
+                    $request->county_id=2;
                     $request->exact_location='';
                     $request->phone=$msisdn;
                     $request->initial_deposit=$ussd_string_exploded[7];
@@ -885,7 +885,7 @@ foreach ($products as $key => $value) {
     # code...
     if ($key==$value4) {
         # code...
-        $tlc_id=$value->id;
+        $product_id=$value->id;
     }
 
 }
@@ -895,7 +895,7 @@ $vendor=\App\Vendor::whereId($vendor_id)->first();
 
 
         $request=(object) Array();
-                    $request->county_id=1;
+                    $request->county_id=2;
                     $request->exact_location='';
                     $request->phone=$msisdn;
                     $request->initial_deposit=$ussd_string_exploded[6];
