@@ -10,6 +10,16 @@ use Carbon\Carbon;
 use Hash;
 use AfricasTalking\SDK\AfricasTalking;
 
+use File;
+use Exception;
+use App\Http\Controllers\SendSMSController;
+use Illuminate\Support\Facades\Mail;
+use \App\Mail\SendRegistrationEmail;
+use App\Http\Controllers\pushNotification;
+use \App\Mail\SendPaymentEmail;
+use App\Mail\SendPaymentMailToAdmin;
+use App\Mail\SendBookingMail;
+
 class USSDController extends Controller
 {
     /**
