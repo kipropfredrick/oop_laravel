@@ -23,41 +23,44 @@
 </div>
 
 <!-- page content -->
-<div class="bg-gray">
     @include('front.explore')
-    <!-- products carousel -->
-    <div class="container">
-        <div class="mb-3">
-            <div class="ht mb-3">
-                <h5>&#128293;  Today's Hot Deals</i></h5>
-            </div>
+    <div class="bg-gray">
 
-            <div id="product-carousel">
-                <div class="slick">
-                    @forelse($products as $product)
-                    <div class="p-c-sec">
-                        <div class="p-c-inner">
-                            <a href="/product/{{$product->slug}}">
-                                <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
-                                <div class="p-c-name">{{$product->product_name}}</div>
-                                <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
-
-                               <div class="text-center">
-                                    <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
-                                </div>
-
-                            </a>
+        <!-- products carousel -->
+        <div class="container">
+            <div class="mb-3">
+                <div class="ht mb-3">
+                    <h5>Today's Hot Deals</i></h5>
+                </div>
+    
+                <div id="product-carousel">
+                    <div class="slick">
+                        @forelse($products as $product)
+                        <div class="p-c-sec">
+                            <div class="p-c-inner">
+                                <a href="/product/{{$product->slug}}">
+                                    <img src="/storage/images/{{$product->product_image}}" alt="{{$product->product_name}}">
+                                    <div class="p-c-name">{{$product->product_name}}</div>
+                                    <div class="p-c-price text-center">KSh.{{number_format($product->product_price)}}</div>
+    
+                                   <div class="text-center">
+                                        <a href="/checkout/{{$product->slug}}" class="btn btn-sm p-btn btn-block">Lipa Mos Mos</a>
+                                    </div>
+    
+                                </a>
+                            </div>
                         </div>
+                        @empty
+                        <div class="text-center">
+                          No Products
+                        </div>
+                        @endforelse
                     </div>
-                    @empty
-                    <div class="text-center">
-                      No Products
-                    </div>
-                    @endforelse
-
                 </div>
             </div>
         </div>
+        <!-- end products carousel -->
+    
     </div>
     <!-- end products carousel -->
 
@@ -96,7 +99,7 @@
     <!-- end products carousel -->
 
     <!-- products carousel -->
-    <div class="container">
+    {{-- <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
                 <h5>&#9889; Top Trending</h5>
@@ -127,9 +130,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- end products carousel -->
-</div>
+
 <!-- end -->
 {{--
 <div class="bg-white">
@@ -165,20 +168,17 @@
 
 </div> --}}
 
-<div class="bg-gray">
+<div class="bg-white">
 
     <!-- brands -->
     <div class="container">
         <div class="mb-3">
             <div class="ht mb-3">
-                <h5>&#x1f60d; The brands you love</h5>
+                <h5>The brands you love</h5>
             </div>
-
             <?php $brands = \App\Brand::all(); ?>
-
             <div id="brands-carousel">
                 <div class="slick">
-
                     @forelse($brands as $brand)
                     <div class="mdg-b">
                         <a href="/brand/{{$brand->slug}}">
@@ -188,7 +188,6 @@
                     @empty
                     <div class="text-center">No brands</div>
                     @endforelse
-
                 </div>
 
             </div>
@@ -198,4 +197,6 @@
     <!-- end brands -->
 
 </div>
+
+<!-- footer-->
 @endsection

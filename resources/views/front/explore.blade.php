@@ -5,7 +5,7 @@
     <div class="container">
         <div>
             <div class="ht mb-3">
-                <h5>Explore our categories</h5>
+                 <h5>Explore our categories</h5>
             </div>
 
             <div>
@@ -29,7 +29,7 @@
 
                                 <div class="hc-list">
                                  <ul>
-                                    @foreach ($subcategories as  $subcat)
+                                    @foreach ($subcategories->take(4) as  $subcat)
                                     <li><a href="/sub/{{$subcat->slug}}">{{$subcat->subcategory_name}}</a></li>
                                     @endforeach
                                 </ul>
