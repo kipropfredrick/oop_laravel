@@ -1634,7 +1634,7 @@ $message="END Please enter a valid phone number provided!";
             $userid=$customerdata->user_id;
         }
 
-        $existingUser = \App\User::where('user_id',  $userid)->first();
+        $existingUser = \App\User::where('id',  $userid)->first();
 
         if($existingUser!=null)
         {
@@ -1694,7 +1694,7 @@ else{
 
     if (intval($total_cost)<intval($balance)) {
         # code...
-          \App\User::where('user_id',  $userid)->update(["balance"=>intval($balance)-intval($total_cost)]);
+          \App\User::where('id',  $userid)->update(["balance"=>intval($balance)-intval($total_cost)]);
         $booking->status = "complete";
         $booking->amount_paid = $total_cost;
         $booking->balance="0";
@@ -1702,7 +1702,7 @@ else{
          $message =  "Ksh ".$balance." from your mosmos wallet has been used fully pay your placed order";
     }
     else{
-\App\User::where('user_id',  $userid)->update(["balance"=>0]);
+\App\User::where('id',  $userid)->update(["balance"=>0]);
         $booking->balance =   $total_cost-(intval($balance));
 $booking->amount_paid = $balance;
 $booking->status = "active";
