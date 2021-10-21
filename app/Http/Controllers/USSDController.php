@@ -377,7 +377,7 @@ list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
             
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
-$product_code=$ussd_string_exploded[1];
+$product_code=$ussd_string_exploded[2];
        $product = \App\Products::where('product_code','=',$product_code)->first();
        $vendor=\App\Vendor::whereId($product->vendor_id)->first();
                 if($booking == null){
