@@ -137,13 +137,14 @@ $isvendor=true;
                if ($level==2) {
                  $valid_phone = $ussd_string_exploded[1];
 
-
+Log::info("test 1");
                 $customer = \App\Customers::where('phone','=',$valid_phone)->first();
 
                 if($customer == null){
+                    Log::info("test 2");
                     $response = "END You  have no account.";
                    }else{
-
+Log::info("test 3");
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
                 
                 if($booking == null){
