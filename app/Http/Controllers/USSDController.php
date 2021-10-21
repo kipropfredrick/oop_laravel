@@ -177,12 +177,16 @@ $product_code=$ussd_string_exploded[1];
             $response = "END Product Code Entered does not exist.";
             }
             else{
+  $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
+                if($booking == null){
+                              $response  = "CON Enter Initial depoist amount \n";
 
+            }
 //check booking
-               $response  = "CON Enter Initial depoist amount \n";
+    
 
 
-                }
+                
 
                 else{
  $response = "END You Already have an ongoing booking. You can't make another booking."; 
@@ -223,7 +227,7 @@ $product_code=$ussd_string_exploded[1];
 
 }
 
-             }
+             
 
 
 
