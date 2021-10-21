@@ -21,6 +21,7 @@ class USSDController extends Controller
             $serviceCode = $_POST["serviceCode"];
             $phoneNumber = $_POST["phoneNumber"];
             $text        = $_POST["text"];
+             Log::info($text);
 
             $ussd_string_exploded = explode("*", $text);
             
@@ -28,41 +29,29 @@ class USSDController extends Controller
 
             $valid_phone = ltrim($phoneNumber, '+');
 
-            $existingAgent = \App\Agents::where('phone','=',$valid_phone)->first();
-
             $existingVendor = \App\Vendor::where('phone','=',$valid_phone)->first();
 
            
-            if ($text == "" && $existingAgent === null && $existingVendor === null ) {
+            if ($text == "" && $existingVendor === null ) {
                    
                     Log::info('Not Agent');
                     
-                    $response  = "CON Welcome to Combine \n";
-                    $response .= "1. Make booking \n";
-                    $response .= "2. Make Payment \n";
-                    $response .= "3. Exchange an Item";
+                    $response  = "CON Welcome to Lipa Mos Mos \n";
+                    $response .= "1. Place an order \n";
+                    $response .= "2. Make a payment \n";
+                    $response .= "3. Check balance";
                     
-                }elseif($text == "" && \App\Agents::where('phone','=',$valid_phone)->count() > 0){
-
-                    $existingAgent = \App\Agents::where('phone','=',$valid_phone)->first();
-
-                    Log::info('Is Agent : '.$text);
-    
-                    $response  = "CON Welcome to Combine Agent (".$existingAgent->agent_code.") \n";
-                    $response .= "4. Make booking \n";
-                    $response .= "6. Exchange an Item \n";
-                    $response .= "7. Confirm Delivery";
-               
-            }elseif($text == "" && \App\Vendor::where('phone','=',$valid_phone)->count() > 0){
+                }elseif($text == "" && \App\Vendor::where('phone','=',$valid_phone)->count() > 0){
 
                 $existingVendor = \App\Vendor::where('phone','=',$valid_phone)->first();
 
                 Log::info('Is Vendor : '.$text);
 
-                $response  = "CON Welcome to Combine Vendor (".$existingVendor->vendor_code.") \n";
-                $response .= "8. Make booking \n";
-                $response .= "9. Exchange an Item \n";
-                $response .= "10. Confirm Delivery";
+                $response  = "CON Welcome to Lipa Mos Mos \n";
+                $response .= "1. New product booking \n";
+                $response .= "2. New direct booking \n";
+                $response .= "3. Exchange order \n";
+                $response .= "4. Check balance \n";
            
         }
         // elseif(empty($ussd_string_exploded[1])){
