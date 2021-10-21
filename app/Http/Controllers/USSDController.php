@@ -539,7 +539,7 @@ foreach ($subcategories as $key => $value) {
 
 }
 
-$tlc=\App\ThirdLevelCategoryController::whereSubcategory_id($subcategory_id)->get();
+$tlc=\App\ThirdLevelCategory::whereSubcategory_id($subcategory_id)->get();
 
 
 $response="CON Select third level category\n";
