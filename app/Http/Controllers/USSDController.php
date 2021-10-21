@@ -2277,7 +2277,7 @@ $message="END Please enter a valid phone number provided!";
         $customerdata=\App\Customers::wherePhone($msisdn)->first();
         $userid=null;
 
-        if ($customer!=null) {
+        if ($customerdata!=null) {
             # code...
             $userid=$customerdata->user_id;
         }
