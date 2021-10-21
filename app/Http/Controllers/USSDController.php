@@ -91,7 +91,7 @@ $isvendor=true;
                     $response = "END You  have no account.";
                    }else{
 
-                $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
+                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
                 
                 if($booking == null){
                  $response = "END You  have no active booking.";
