@@ -259,7 +259,7 @@ if ($level==1) {
         $response  = "CON Enter Product code \n";
 }
                
-if ($ussd_string_exploded[0]==1 && $level==2) {
+if ($ussd_string_exploded[0]==1 && $level==2 && !$isvendor) {
     # code...
     //check if product exists
 $product_code=$ussd_string_exploded[1];
@@ -291,10 +291,15 @@ $product_code=$ussd_string_exploded[1];
 
             }
         }
-
-          else if($level==3){
-
-                $phone = ltrim($phoneNumber, '0');
+          else if($ussd_string_exploded[0]==1 && $level==3 && !$isvendor){
+             $response  = "CON Choose payment method \n";
+                $response .= "1. Mpesa \n";
+                $response .= "2. Airtel \n";
+}
+          else if($ussd_string_exploded[0]==1 && $level==4 && !$isvendor){
+      if ($ussd_string_exploded[3]==1) {
+          # code...
+          $phone = ltrim($phoneNumber, '0');
                 $phone=substr($phone, 1);
 
                 $customer = \App\Customers::where('phone','=',$phone)->first();
@@ -315,6 +320,12 @@ $product_code=$ussd_string_exploded[1];
 
  $response = $this->make_booking($request); 
 Log::info("executed 1");
+      }
+      else{
+        $response="END paayment platform not supported";
+      }
+
+              
             }
                  else{
                Log::info("executed 2");     
