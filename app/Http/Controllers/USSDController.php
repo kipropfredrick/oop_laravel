@@ -87,7 +87,7 @@ $isvendor=true;
                
            
         }
-        else if ($text == "3") {
+        else if ($ussd_string_exploded[0] == 3) {
                 
         $response = "CON Enter Booking Reference.";
 
@@ -107,7 +107,7 @@ $isvendor=true;
         }
 
     }
-     else if ($text == "2") {
+     else if ($ussd_string_exploded[0] == 2) {
                 
                 $valid_phone = ltrim($phoneNumber, '+');
 
@@ -131,7 +131,7 @@ $isvendor=true;
 
             }
 
-                 else if ($text == "5" && $isvendor) {
+        else if ($ussd_string_exploded[0] == 5 && $isvendor) {
                     $response = "CON Enter customer phone number.";
                 
                if ($level==2) {
