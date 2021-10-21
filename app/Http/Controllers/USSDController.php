@@ -798,7 +798,7 @@ foreach ($products as $key => $value) {
     # code...
     if ($key==$value4) {
         # code...
-        $tlc_id=$value->id;
+        $product_id=$value->id;
     }
 
 }
@@ -885,7 +885,7 @@ foreach ($products as $key => $value) {
     # code...
     if ($key==$value4) {
         # code...
-        $tlc_id=$value->id;
+        $product_id=$value->id;
     }
 
 }
