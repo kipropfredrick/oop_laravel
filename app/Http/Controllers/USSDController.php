@@ -499,7 +499,7 @@ foreach ($variable as $key => $value) {
 $subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
 
 
-foreach ($SubCategories as $key => $value) {
+foreach ($subcategories as $key => $value) {
     # code...
        $response="CON Select sub category\n";
 $index=1;
