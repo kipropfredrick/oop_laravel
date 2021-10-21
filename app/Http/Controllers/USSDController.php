@@ -386,7 +386,7 @@ $product_code=$ussd_string_exploded[3];
         }
        
 
-          else if($level==4){
+          else if($level==5){
 list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
             
