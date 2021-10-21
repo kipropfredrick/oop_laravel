@@ -601,7 +601,7 @@ $index=1;
 foreach ($products as $key => $value) {
     # code...
 
-     $response .= "{$index}. {$value->name} \n";
+     $response .= "{$index}. {$value->product_name} \n";
 $index=$index+1;
  
 
