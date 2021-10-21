@@ -214,7 +214,7 @@ $product_code=$ussd_string_exploded[1];
                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
 $product_code=$ussd_string_exploded[1];
        $product = \App\Products::where('product_code','=',$product_code)->first();
-       $vendor_code=\App\Vendor::whereId($product->vendor_id)->first();
+       $vendor=\App\Vendor::whereId($product->vendor_id)->first();
                 if($booking == null){
                     $request=(object) Array();
                     $request->county_id=1;
