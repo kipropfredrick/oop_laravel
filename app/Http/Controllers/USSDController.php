@@ -807,7 +807,8 @@ $vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_c
  $request->product_name=$ussd_string_exploded[5];
   $request->productPrice=$ussd_string_exploded[6];
  $request->initial_deposit=$ussd_string_exploded[8];
- $request->deleievry_cost=$ussd_string_exploded[7];
+ $request->delivery_cost=$ussd_string_exploded[7];
+ $request->name=$ussd_string_exploded[2];
 
 
 if ($ussd_string_exploded[9]==1) {
@@ -2288,7 +2289,7 @@ $data=Array();
         'name'=>$request->name,
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone'),
+        'password'=>$request->phone,
         'productname'=>$request->product_name,
         'total_cost'=>$total_cost,
 
@@ -2370,7 +2371,7 @@ $data=Array();
         'name'=>$request->name,
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone'),
+        'password'=>$request->phone,
         'productname'=>$request->product_name,
         'total_cost'=>$total_cost,
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
@@ -2385,9 +2386,9 @@ $data=Array();
         }
 
         $user = new \App\User();
-        $user->email = $request->input('email');
-        $user->name = $request->input('name');
-        $user->password = Hash::make($request->input('phone'));
+      
+        $user->name = $request->name;
+        $user->password = Hash::make($request->phone);
         $user->save();
 
         $user_id = DB::getPdo()->lastInsertId();
@@ -2451,7 +2452,7 @@ $data=Array();
         'productname'=>$request->product_name,
         'booking_reference'=>$booking_reference,
         'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->input('phone'),
+        'password'=>$request->phone,
         'total_cost'=>$total_cost,
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
