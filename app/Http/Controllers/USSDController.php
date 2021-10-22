@@ -3240,7 +3240,7 @@ public function getAirAccToken(){
         $client = new \GuzzleHttp\Client();
         // Define array of request body.
         $request_body = collect([
-            "reference"=>$booking_reference;,
+            "reference"=>$booking_reference,
             "subscriber"=>[
                 "country"=>"KE",
                 "currency"=>"KES",
