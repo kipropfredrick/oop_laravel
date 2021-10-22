@@ -151,7 +151,7 @@ if ($customer==null) {
 else{
 
 
-        $booking = \App\Bookings::where('customer_id','=',$customer->customer_id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
+        $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
 
         if($booking === null){
             $response = "END You do not have existing active booking.";
@@ -181,7 +181,7 @@ $message="END Please enter a valid phone number provided!";
   list($msisdn, $network) = $this->get_msisdn_network($phoneNumber);
 $customer=\App\Customers::wherePhone($msisdn)->first();
 
-        $booking = \App\Bookings::where('customer_id','=',$customer->customer_id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
+        $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
                 
                 if($booking == null){
                  $response = "END You  have no active booking.";
@@ -214,7 +214,7 @@ $customer=\App\Customers::wherePhone($msisdn)->first();
       list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
       $customer=\App\Customers::wherePhone($msisdn)->first();
 
-        $booking = \App\Bookings::where('customer_id','=',$customer->customer_id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
+        $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
 
         $booking_ref=$booking->booking_reference;
              
