@@ -3244,7 +3244,7 @@ public function getAirAccToken(){
             "subscriber"=>[
                 "country"=>"KE",
                 "currency"=>"KES",
-                "msisdn"=>substr($msisdn, 3);
+                "msisdn"=>substr($msisdn, 3)
             ],
             "transaction"=>[
                 "amount"=>$amount,
