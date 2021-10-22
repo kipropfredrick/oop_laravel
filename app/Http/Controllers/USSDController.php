@@ -2156,7 +2156,7 @@ $data=Array();
             $existingUser=null;
         }
         else{
-           $existingUser  = \App\User::where('id',  $customerdata->id)->first();
+           $existingUser  = \App\User::where('id',  $customerdata->user_id)->first();
         }
         
 
