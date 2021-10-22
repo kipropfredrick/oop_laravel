@@ -303,8 +303,11 @@ if ($paymentbalance<0) {
 }
 else{
    $daysdue=intval($paymentbalance/$dailytarget);
-  if ($targettype=='Daily Ta
-    ') {
+   if ($paymentbalance>($bok->balance)) {
+       # code...
+    $paymentbalance=$bok->balance;
+   }
+  if ($targettype=='Daily target') {
  
   $progressmessage=$daysdue."-Days behind Ksh. ".number_format($paymentbalance);     # code...
   }
