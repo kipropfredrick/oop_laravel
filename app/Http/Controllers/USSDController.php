@@ -20,6 +20,7 @@ use \App\Mail\SendPaymentEmail;
 use App\Mail\SendPaymentMailToAdmin;
 use App\Mail\SendBookingMail;
 use Illuminate\Support\Str;
+use App\Vendor;
 
 
 class USSDController extends Controller
