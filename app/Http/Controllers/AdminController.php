@@ -2510,7 +2510,7 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 
 }
 
-   return Back()->with('error',"Airtime topu was not successful. Amount has been credited to mosmos account.");
+   return Back()->with('error',"Airtime TOPUP was not successful. Amount has been credited to mosmos account.");
     
 }
 
@@ -2890,7 +2890,7 @@ break;  }
 
 }
 
-   return Back()->with('error',"Airtime topu was not successful. Amount has been credited to mosmos account.");
+   return Back()->with('error',"Airtime TOPUP was not successful. Amount has been credited to mosmos account.");
     
 }
 
