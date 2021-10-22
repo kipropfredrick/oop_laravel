@@ -139,43 +139,49 @@ $isvendor=true;
     }
 
 
-     else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==1) {
-                
-                $response="CON Enter Booking reference";
-            }
-
-  else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==2) {
 
 
- $booking_reference = $ussd_string_exploded[1];
+  else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==1) {
+   list($msisdn, $network) = $this->get_msisdn_network($phoneNumber);
+$customer=\App\Customers::wherePhone($msisdn)->first();
+if ($customer==null) {
+    # code...
+      $response = "END You have not registered with lipa mosmos."; 
+}
+else{
 
-        $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
+
+        $booking = \App\Bookings::where('customer_id','=',$customer->customer_id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
 
         if($booking === null){
-            $response = "END Booking Reference Entered does not exist.";
+            $response = "END You do not have existing active booking.";
         }else{
  
 
-  $response = "Enter Phone Number (making payment)" ;
+  $response = "CON Enter Phone Number (making payment)" ;
 
         }
+
+
+    }
 
      
 
             }
 
 
-  else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==3) {
+  else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==2) {
 
-        list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[2]);
+        list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
 
         if (!$msisdn){
 $message="END Please enter a valid phone number provided!";
         }else{
             $valid_phone = $msisdn;
+  list($msisdn, $network) = $this->get_msisdn_network($phoneNumber);
+$customer=\App\Customers::wherePhone($msisdn)->first();
 
-
-        $booking = \App\Bookings::where('booking_reference','=',$ussd_string_exploded[1])->first();
+        $booking = \App\Bookings::where('customer_id','=',$customer->customer_id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
                 
                 if($booking == null){
                  $response = "END You  have no active booking.";
@@ -191,7 +197,7 @@ $message="END Please enter a valid phone number provided!";
             }
 
 
-  else if ($ussd_string_exploded[0] == 2  && $level == 4 && !$isvendor) {
+  else if ($ussd_string_exploded[0] == 2  && $level == 3 && !$isvendor) {
 
               
                  $response  = "CON Choose payment option \n";
@@ -199,16 +205,19 @@ $message="END Please enter a valid phone number provided!";
                 $response .= "2. Airtel Money \n";
         
             }
-            else if($ussd_string_exploded[0] == 2  && $level == 5 && !$isvendor){
+            else if($ussd_string_exploded[0] == 2  && $level == 4 && !$isvendor){
 
-                  $amount = $ussd_string_exploded[3];
-                  $paymentfrom= $ussd_string_exploded[4];
+                  $amount = $ussd_string_exploded[2];
+                  $paymentfrom= $ussd_string_exploded[3];
     Log::info('AMOUNT : '.print_r($amount,true));
 
-      list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[2]);
-                $customer = \App\Customers::where('phone','=',$msisdn)->first();
+      list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+      $customer=\App\Customers::wherePhone($msisdn)->first();
 
-                $booking_ref=$ussd_string_exploded[1];
+        $booking = \App\Bookings::where('customer_id','=',$customer->customer_id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
+
+        $booking_ref=$booking->booking_reference;
+             
 if ($paymentfrom==1) {
     # code...
    
