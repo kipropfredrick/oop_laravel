@@ -751,22 +751,27 @@ $index=$index+1;
      }
       if ($level==6) {
 
+        $response="CON Enter product name";
+         # code...
+     }
+      if ($level==7) {
+
         $response="CON Enter Delivery cost";
          # code...
      }
 
-         if ($level==7) {
+         if ($level==8) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
-     if ($level==8) {
+     if ($level==9) {
          # code...
           $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level==9) {
+     if ($level==10) {
          # code...
           $value1=$ussd_string_exploded[3]-1;
     $category_id=0;
@@ -800,11 +805,12 @@ $vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_c
  $request->vendor_code=$vendor_code;
  $request->phone=$msisdn;
  $request->product_name=$ussd_string_exploded[5];
- $request->amount=$ussd_string_exploded[7];
+  $request->product_price=$ussd_string_exploded[6];
+ $request->amount=$ussd_string_exploded[8];
+ $request->deleievry_cost=$ussd_string_exploded[7];
 
 
-
-if ($ussd_string_exploded[8]==1) {
+if ($ussd_string_exploded[9]==1) {
     # code...
     $response=$this->makedirect_booking($request);
 }
@@ -873,25 +879,31 @@ $index=$index+1;
      if ($level==4) {
 
         $response="CON Enter product name";
+      
          # code...
      }
-      if ($level==5) {
+        if ($level==5) {
+
+        $response="CON Enter Product Price";
+         # code...
+     }
+      if ($level==6) {
 
         $response="CON Enter Delivery cost";
          # code...
      }
-         if ($level==6) {
+         if ($level==7) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
-     if ($level==7) {
+     if ($level==8) {
          # code...
           $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level==8) {
+     if ($level==9) {
             $value1=$ussd_string_exploded[2]-1;
     $category_id=0;
 foreach ($categories as $key => $value) {
@@ -925,8 +937,10 @@ $vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_c
  $request->phone=$msisdn;
  $request->product_name=$ussd_string_exploded[4];
  $request->amount=$ussd_string_exploded[6];
+ $request->delivery_cost=$ussd_string_exploded[6];
+ $request->product_price=$ussd_string_exploded[5];
          # code...
-if ($ussd_string_exploded[7]==1) {
+if ($ussd_string_exploded[8]==1) {
     # code...
     $response=$this->makedirect_booking($request);
 }
