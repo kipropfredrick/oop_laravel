@@ -799,6 +799,7 @@ $vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_c
  $request->subcategory_id=$subcategory_id;
  $request->vendor_code=$vendor_code;
  $request->phone=$msisdn;
+ $request->product_name=$ussd_string_exploded[5];
  $request->amount=$ussd_string_exploded[7];
 
 
@@ -922,6 +923,7 @@ $vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_c
  $request->subcategory_id=$subcategory_id;
  $request->vendor_code=$vendor_code;
  $request->phone=$msisdn;
+ $request->product_name=$ussd_string_exploded[4];
  $request->amount=$ussd_string_exploded[6];
          # code...
 if ($ussd_string_exploded[7]==1) {
