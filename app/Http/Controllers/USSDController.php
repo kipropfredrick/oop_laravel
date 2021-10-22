@@ -940,6 +940,8 @@ $vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_c
  $request->initial_deposit=$ussd_string_exploded[7];
  $request->delivery_cost=$ussd_string_exploded[6];
  $request->productPrice=$ussd_string_exploded[5];
+ $request->county_id=2;
+ $request->exact_location="";
          # code...
 if ($ussd_string_exploded[8]==1) {
     # code...
