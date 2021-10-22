@@ -803,7 +803,7 @@ $index=$index+1;
 
      if ($level==3) {
          # code...
-         $value1=$ussd_string_exploded[3]-1;
+         $value1=$ussd_string_exploded[2]-1;
     $category_id=0;
 foreach ($categories as $key => $value) {
     # code...
