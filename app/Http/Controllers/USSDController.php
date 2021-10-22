@@ -2172,7 +2172,7 @@ $data=Array();
         $booking = \App\Bookings::where('customer_id','=',$existingCustomer->id)->whereNotIn('status', ['complete','revoked'])->first();
 
         if($booking!=null){
-            return "Customer has already an existing booking with Lipa Mos Mos.";
+            return "END Customer has already an existing booking with Lipa Mos Mos.";
         }
 
 
