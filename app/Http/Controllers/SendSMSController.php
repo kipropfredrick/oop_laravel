@@ -21,7 +21,7 @@ class SendSMSController extends Controller
         // Get the SMS service
         $sms        = $AT->sms();
    
-       $from       = "RDFYNE";
+       $from       = "MOSMOS";
 
         try {
             // Thats it, hit send and we'll take care of the rest
