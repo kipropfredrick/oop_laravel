@@ -875,7 +875,7 @@ $index=$index+1;
      }
       if ($level==5) {
 
-        $response="CON Enter Delievry cost";
+        $response="CON Enter Delivery cost";
          # code...
      }
          if ($level==6) {
@@ -890,10 +890,42 @@ $index=$index+1;
      }
 
      if ($level==8) {
+            $value1=$ussd_string_exploded[2]-1;
+    $category_id=0;
+foreach ($categories as $key => $value) {
+    # code...
+    if ($key==$value1) {
+        # code...
+        $category_id=$value->id;
+    }
+
+}
+$subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
+
+          $value2=$ussd_string_exploded[3]-1;
+    $subcategory_id=0;
+foreach ($subcategories as $key => $value) {
+    # code...
+    if ($key==$value2) {
+        # code...
+        $subcategory_id=$value->id;
+    }
+
+}
+$vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_code;
+ list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+
+
+ $request=(object) Array();
+ $request->category_id=$category_id;
+ $request->subcategory_id=$subcategory_id;
+ $request->vendor_code=$vendor_code;
+ $request->phone=$msisdn;
+ $request->amount=$ussd_string_exploded[6];
          # code...
 if ($ussd_string_exploded[7]==1) {
     # code...
-    $response="END pay with mpesa";
+    $response=$this->makedirect_booking($request);
 }
 else{
         $response="END pay with airtel";
