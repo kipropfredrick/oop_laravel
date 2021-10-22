@@ -164,10 +164,25 @@ $isvendor=true;
             }
 
         else if ($ussd_string_exploded[0] == 3 && $isvendor) {
-                    $response = "CON Enter customer phone number.";
+            if ($level==1) {
+                 $response = "CON Enter Booking reference.";
+                # code...
+            }
+                   if ($level==2) {
+                       # code...
+$booking = \App\Bookings::where('booking_reference','=',$ussd_string_exploded[1])->whereIn('status',['active','pending','revoked','unservices'])->first();
+if ($booking==null) {
+    # code...
+    $response="END Booking reference does not exist";
+}
+else{
+    $response = "CON Enter customer Phone Number.";
+}
+                     
+                   }
                 
-               if ($level==2) {
-                  list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+               if ($level==3) {
+                  list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[2]);
 
         if (!$msisdn){
 $message="END Please enter a valid phone number provided!";
@@ -178,13 +193,7 @@ $message="END Please enter a valid phone number provided!";
 
 Log::info("test 1");
                 $customer = \App\Customers::where('phone','=',$valid_phone)->first();
-
-                if($customer == null){
-                    Log::info("test 2");
-                    $response = "END You  have no account.";
-                   }else{
-Log::info("test 3");
-                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
+               $booking = \App\Bookings::where('booking_reference','=',$ussd_string_exploded[1])->whereIn('status',['active','pending','revoked','unservices'])->first();
                 
                 if($booking == null){
                  $response = "END You  have no active booking.";
@@ -193,37 +202,33 @@ Log::info("test 3");
                   $booking_reference = $booking->booking_reference;
                   $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2)."\nEnter Amount to pay.";                }
 
-             }
+             
                    # code...
                }
-               if ($level==3) {
+               if ($level==4) {
                    # code...
-                 $response  = "CON Choose payment method \n";
+                 $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
         
             
                }
 
-               if ($level==4) {
+               if ($level==5) {
                    # code...
-                                  $amount = $ussd_string_exploded[2];
-                  $paymentfrom= $ussd_string_exploded[3];
+                                  $amount = $ussd_string_exploded[3];
+                  $paymentfrom= $ussd_string_exploded[4];
 
          
-        list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+        list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[2]);
 
         if (!$msisdn){
-$message="END Please enter a valid phone number provided!";
+$message="END Phone number entered is invalid!";
         }else{
             $valid_phone = $msisdn;
         }
 
-                $customer = \App\Customers::where('phone','=',$msisdn)->first();
-
-                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
-
-               
+               $booking = \App\Bookings::where('booking_reference','=',$ussd_string_exploded[1])->whereIn('status',['active','pending','revoked','unservices'])->first();
                 $booking_ref = $booking->booking_reference;
 
 if ($paymentfrom==1) {
@@ -251,7 +256,7 @@ else{
             else if ($ussd_string_exploded[0] == 2  && $level == 2 && !$isvendor) {
 
               
-                 $response  = "CON Choose payment method \n";
+                 $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
         
@@ -327,7 +332,7 @@ $product_code=$ussd_string_exploded[1];
             }
         }
           else if($ussd_string_exploded[0]==1 && $level==3 && !$isvendor){
-             $response  = "CON Choose payment method \n";
+             $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
 }
@@ -378,7 +383,7 @@ Log::info("executed 1");
 
    if($level==1){
 
-     $response = "CON Enter customer phone number.";
+     $response = "CON Enter customer Phone Number.";
 
 
          } 
@@ -391,7 +396,7 @@ if ($customer==null) {
     # code...
 if ($level==2) {
     # code...
-      $response = "CON Enter customer full name.";
+      $response = "CON Enter Enter customer Full Name.";
 }
 
 if ($level==3) {
@@ -432,7 +437,7 @@ $product_code=$ussd_string_exploded[3];
         }
        
        else if($level==5){
-       $response  = "CON Choose payment method \n";
+       $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
 }
@@ -519,7 +524,7 @@ $product_code=$ussd_string_exploded[2];
         }
        
 else if($level==4){
-       $response  = "CON Choose payment method \n";
+       $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
 }
@@ -768,7 +773,7 @@ $index=$index+1;
 
 if ($level==5) {
     # code...
-$response="CON Enter customer phone number";
+$response="CON Enter customer Phone Number";
 
 
 }
@@ -777,14 +782,14 @@ if ($level>5) {
     list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[5]);
 $customer = \App\Customers::where('phone','=',$msisdn)->first();
 if ($customer==null) {
-    $response="CON Enter customer full name";
+    $response="CON Enter Enter customer Full Name";
     # code...
     if ($level==7) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
 if ($level==8) {
-        $response  = "CON Choose payment method \n";
+        $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
 }
@@ -872,7 +877,7 @@ else{
     $response="CON Enter Initial Deposit (Minimum KSh.100)";
 
 if ($level==7) {
-        $response  = "CON Choose payment method \n";
+        $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
 }
