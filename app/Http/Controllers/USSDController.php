@@ -141,15 +141,41 @@ $isvendor=true;
 
      else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==1) {
                 
-                $valid_phone = ltrim($phoneNumber, '+');
+                $response="CON Enter Booking reference";
+            }
 
-                $customer = \App\Customers::where('phone','=',$valid_phone)->first();
+  else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==2) {
 
-                if($customer == null){
-                    $response = "END You  have no account.";
-                   }else{
 
-                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
+ $booking_reference = $ussd_string_exploded[1];
+
+        $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
+
+        if($booking === null){
+            $response = "END Booking Reference Entered does not exist.";
+        }else{
+ 
+
+  $response = "Enter Phone Number (making payment)" ;
+
+        }
+
+     
+
+            }
+
+
+  else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==3) {
+
+        list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[2]);
+
+        if (!$msisdn){
+$message="END Please enter a valid phone number provided!";
+        }else{
+            $valid_phone = $msisdn;
+
+
+        $booking = \App\Bookings::where('booking_reference','=',$ussd_string_exploded[1])->first();
                 
                 if($booking == null){
                  $response = "END You  have no active booking.";
@@ -159,9 +185,52 @@ $isvendor=true;
                   $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2)."\nEnter Amount to pay.";
                 }
 
-             }
+             
+              }
 
             }
+
+
+  else if ($ussd_string_exploded[0] == 2  && $level == 4 && !$isvendor) {
+
+              
+                 $response  = "CON Choose payment option \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
+        
+            }
+            else if($ussd_string_exploded[0] == 2  && $level == 5 && !$isvendor){
+
+                  $amount = $ussd_string_exploded[3];
+                  $paymentfrom= $ussd_string_exploded[4];
+    Log::info('AMOUNT : '.print_r($amount,true));
+
+      list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[2]);
+                $customer = \App\Customers::where('phone','=',$msisdn)->first();
+
+                $booking_ref=$ussd_string_exploded[1];
+if ($paymentfrom==1) {
+    # code...
+   
+
+                $message = $this->stk_push($amount,$msisdn,$booking_ref);
+                
+                $response = $message;
+}
+else{
+   
+                $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
+                
+                $response = $message;
+}
+             
+
+            }
+
+
+
+
+
 
         else if ($ussd_string_exploded[0] == 3 && $isvendor) {
             if ($level==1) {
@@ -253,46 +322,7 @@ else{
 
 
 
-            else if ($ussd_string_exploded[0] == 2  && $level == 2 && !$isvendor) {
-
-              
-                 $response  = "CON Choose payment option \n";
-                $response .= "1. M-Pesa \n";
-                $response .= "2. Airtel Money \n";
-        
-            }
-            else if($ussd_string_exploded[0] == 2  && $level == 3 && !$isvendor){
-
-                  $amount = $ussd_string_exploded[1];
-                  $paymentfrom= $ussd_string_exploded[2];
-    Log::info('AMOUNT : '.print_r($amount,true));
-
-                $msisdn = ltrim($phoneNumber, '+');
-
-                $customer = \App\Customers::where('phone','=',$msisdn)->first();
-
-                $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending'])->first();
-
-               
-                $booking_ref = $booking->booking_reference;
-if ($paymentfrom==1) {
-    # code...
-   
-
-                $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                
-                $response = $message;
-}
-else{
-   
-                $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
-                
-                $response = $message;
-}
-             
-
-            }
-
+          
              else if ($ussd_string_exploded[0]==1 && !$isvendor){
 if ($level==1) {
     # code...
@@ -1978,7 +2008,7 @@ public function getAirAccToken(){
             );
             $result=json_decode($response->getBody());
             if ($result->status->success) {
-                return "END A Payment Prompt has been sent to the provided Phone No. Enter Airtel PIN if Prompted.";
+                return "END A Payment Prompt has been sent to the provided Phone Number. Enter Airtel PIN if Prompted.";
                 # code...
             }
             else{
