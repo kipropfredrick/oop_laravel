@@ -156,7 +156,7 @@ $isvendor=true;
                 }else{
                   $product = \App\Products::where('id','=',$booking->product_id)->first();
                   $booking_reference = $booking->booking_reference;
-                  $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2).\n" Enter Amount to pay.";
+                  $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2)."\nEnter Amount to pay.";
                 }
 
              }
@@ -191,8 +191,7 @@ Log::info("test 3");
                 }else{
                   $product = \App\Products::where('id','=',$booking->product_id)->first();
                   $booking_reference = $booking->booking_reference;
-                  $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2).\n" Enter Amount to pay.";
-                }
+                  $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2)."\nEnter Amount to pay.";                }
 
              }
                    # code...
