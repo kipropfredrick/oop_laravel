@@ -81,22 +81,23 @@ $isvendor=true;
                 Log::info('Is Vendor : '.$text);
 
                 $response  = "CON Welcome to Lipa Mos Mos \n";
-                $response .= "1. New product booking \n";
-                $response .= "2. New direct booking \n";
-                $response .= "3. Check balance \n";
+                $response .= "1. New direct booking\n";
+                $response .= "2. New product booking \n";
+                 $response .= "3.  Make payment \n";
                 $response .= "4. Exchange order \n";
-                $response .= "5.  Make payment \n";
+                $response .= "5. Check balance \n";
+               
                
            
         }
-        else if ($ussd_string_exploded[0] == 3 && $level==1) {
+        else if ($ussd_string_exploded[0] == 3 && $level==1 && !$isvendor) {
                 
      if ($level==1) {
          # code...
            $response = "CON Enter Booking Reference.";
      }
 
-    }else if ($ussd_string_exploded[0] == 3  && $level == 2) {
+    }else if ($ussd_string_exploded[0] == 3  && $level == 2 && !$isvendor) {
 
         $booking_reference = $ussd_string_exploded[1];
 
@@ -107,11 +108,37 @@ $isvendor=true;
         }else{
  
 
-  $response = "END Balance for booking reference ".$ussd_string_exploded[1]. " is ".$booking->balance ;
+  $response = "END Balance for booking reference ".$ussd_string_exploded[1]. " is ".number_format($booking->balance) ;
 
         }
 
     }
+
+     else if ($ussd_string_exploded[0] == 5 && $level==1 && $isvendor) {
+                
+     if ($level==1) {
+         # code...
+           $response = "CON Enter Booking Reference.";
+     }
+
+    }else if ($ussd_string_exploded[0] == 5  && $level == 2 && $isvendor) {
+
+        $booking_reference = $ussd_string_exploded[1];
+
+        $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
+
+        if($booking === null){
+            $response = "END Booking Reference Entered does not exist.";
+        }else{
+ 
+
+  $response = "END Balance for booking reference ".$ussd_string_exploded[1]. " is ".number_format($booking->balance) ;
+
+        }
+
+    }
+
+
      else if ($ussd_string_exploded[0] == 2 && !$isvendor && $level==1) {
                 
                 $valid_phone = ltrim($phoneNumber, '+');
@@ -129,14 +156,14 @@ $isvendor=true;
                 }else{
                   $product = \App\Products::where('id','=',$booking->product_id)->first();
                   $booking_reference = $booking->booking_reference;
-                  $response = "CON Active booking : ".$booking_reference." Amount paid : KES ".number_format($booking->amount_paid,2)." Balance : KES ".number_format($booking->balance,2)." \n"."Enter Amount to Pay";
+                  $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2).\n" Enter Amount to pay.";
                 }
 
              }
 
             }
 
-        else if ($ussd_string_exploded[0] == 5 && $isvendor) {
+        else if ($ussd_string_exploded[0] == 3 && $isvendor) {
                     $response = "CON Enter customer phone number.";
                 
                if ($level==2) {
@@ -164,7 +191,7 @@ Log::info("test 3");
                 }else{
                   $product = \App\Products::where('id','=',$booking->product_id)->first();
                   $booking_reference = $booking->booking_reference;
-                  $response = "CON Active booking : ".$booking_reference." Amount paid : KES ".number_format($booking->amount_paid,2)." Balance : KES ".number_format($booking->balance,2)." \n"."Enter Amount to Pay";
+                  $response = "CON Booking ref ".$booking_reference.".  You have paid KSh.".number_format($booking->amount_paid,2).", your balance is KSh. ".number_format($booking->balance,2).\n" Enter Amount to pay.";
                 }
 
              }
@@ -173,8 +200,8 @@ Log::info("test 3");
                if ($level==3) {
                    # code...
                  $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
         
             
                }
@@ -226,8 +253,8 @@ else{
 
               
                  $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
         
             }
             else if($ussd_string_exploded[0] == 2  && $level == 3 && !$isvendor){
@@ -284,13 +311,13 @@ $product_code=$ussd_string_exploded[1];
                 $customer = \App\Customers::where('phone','=',$phone)->first();
   $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
                 if($booking == null){
-                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial depoist amount \n";
+                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial Deposit (Minimum KSh.100) \n";
 
             }
 //check booking
     
                 else{
- $response = "END You Already have an ongoing booking. You can't make another booking."; 
+ $response = "END You already have an existing booking. You can't place another order."; 
 
                 }
 
@@ -302,8 +329,8 @@ $product_code=$ussd_string_exploded[1];
         }
           else if($ussd_string_exploded[0]==1 && $level==3 && !$isvendor){
              $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
 }
           else if($ussd_string_exploded[0]==1 && $level==4 && !$isvendor){
    
@@ -335,7 +362,7 @@ else{
 Log::info("executed 1");
       }
       else{
-         $response = "END You Already have an ongoing booking. You can't make another booking."; 
+         $response = "END You already have an existing booking. You can't place another order."; 
 
       }
 
@@ -388,13 +415,13 @@ $product_code=$ussd_string_exploded[3];
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
   $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
                 if($booking == null){
-                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial depoist amount \n";
+                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial Deposit (Minimum KSh.100) \n";
 
             }
 //check booking
     
                 else{
- $response = "END You Already have an ongoing booking. You can't make another booking."; 
+ $response = "END Customer has already have an existing booking. You can't place another order."; 
 
                 }
 
@@ -407,8 +434,8 @@ $product_code=$ussd_string_exploded[3];
        
        else if($level==5){
        $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
 }
 
           else if($level==6){
@@ -436,7 +463,7 @@ Log::info("executed 1");
             }
                  else{
                Log::info("executed 2");     
- $response = "END You Already have an ongoing booking. You can't make another booking."; 
+ $response = "END Customer has already have an existing booking. You can't place another order."; 
 
                 }
 }
@@ -475,13 +502,13 @@ $product_code=$ussd_string_exploded[2];
                 $customer = \App\Customers::where('phone','=',$msisdn)->first();
   $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','pending','unserviced','overdue'])->first();
                 if($booking == null){
-                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial depoist amount \n";
+                              $response  = "CON  You are making a booking for ".$product->product_name."\nEnter Initial Deposit (Minimum KSh.100) \n";
 
             }
 //check booking
     
                 else{
- $response = "END You Already have an ongoing booking. You can't make another booking."; 
+ $response = "END Cujstomer has already have an existing booking. You can't place another order."; 
 
                 }
 
@@ -494,8 +521,8 @@ $product_code=$ussd_string_exploded[2];
        
 else if($level==4){
        $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
 }
           else if($level==5){
 
@@ -522,7 +549,7 @@ Log::info("executed 1");
             }
                  else{
                Log::info("executed 2");     
- $response = "END You Already have an ongoing booking. You can't make another booking."; 
+ $response = "END Customer has already have an existing booking. You can't place another order."; 
 
                 }
             }
@@ -754,13 +781,13 @@ if ($customer==null) {
     $response="CON Enter customer full name";
     # code...
     if ($level==7) {
-         $response="CON Enter initial deposit";
+         $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
 if ($level==8) {
         $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
 }
 if ($level==9) {
     # code...
@@ -843,12 +870,12 @@ else{
 }
 else{
 
-    $response="CON Enter initial deposit";
+    $response="CON Enter Initial Deposit (Minimum KSh.100)";
 
 if ($level==7) {
         $response  = "CON Choose payment method \n";
-                $response .= "1. Mpesa \n";
-                $response .= "2. Airtel \n";
+                $response .= "1. M-Pesa \n";
+                $response .= "2. Airtel Money \n";
 }
 if ($level==8) {
     # code...
@@ -932,1320 +959,6 @@ else{
 }
 
 
-          
-             
-
-
-
-
-     //        else if ($ussd_string_exploded[0] == 2  && $level == 3) {
-
-
-     //            $amount = $ussd_string_exploded[2];
-     //            // $msisdn = $phoneNumber;
-     //            $msisdn = ltrim($phoneNumber, '+');
-     //            $booking_ref = $ussd_string_exploded[1];
-
-     //            Log::info('Phone : '.$phoneNumber);
-
-     //            $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                
-     //            $response = $message;
-
-            
-     //        }else if($text == "1*2") { 
-               
-     //            $response = "CON Enter your Full Name \n";
-
-     //         }elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 3) {
-
-     //                $response = "CON Please enter your email address";
-
-
-     //         }elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 4){
-
-
-     //                $response = "CON Please enter Agent/Vendor Code.";
-
-                
-     //        } elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 5){
-
-     //            $response = "CON Please enter product Code";
-
-        
-     //      } elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 6){
-
-     //        $product_code = $ussd_string_exploded[5];
-
-     //        $product = \App\Products::where('product_code','=',$product_code)->first();
-
-     //        if($product === null){
-     //        $response = "END Product Code Entered does not exist.";
-     //        }else{
-
-     //        if($product->product_price < 5000){
-     //            $minDeposit = 0.2*$product->product_price;
-     //        }else {
-     //            $minDeposit = 0.1 *$product->product_price;
-     //        }
-
-     //        $response = "CON  Minimum Deposit Amount for this Product is : KES ".number_format($minDeposit,2)."\n"." Please enter Initial deposit.";
-
-     //    }
-
-    
-     // }
-
-        // elseif(empty($ussd_string_exploded[1])){
-        //     $response  = "END Sorry we do not accept blank values";
-        //  }elseif(empty($ussd_string_exploded[2])){
-        //     $response  = "END Sorry we do not accept blank values";
-        //  }elseif(empty($ussd_string_exploded[3])){
-        // $response  = "END Sorry we do not accept blank values";
-        // }elseif(empty($ussd_string_exploded[4])){
-        //     $response  = "END Sorry we do not accept blank values";
-        // }elseif(empty($ussd_string_exploded[5])){
-        //     $response  = "END Sorry we do not accept blank values";
-        //  }elseif(empty($ussd_string_exploded[6])){
-        //     $response  = "END Sorry we do not accept blank values";
-        //  }
-//          else if ($text == "4") {
-
-//                 Log::info('Make booking');
-
-//                 $response  = "CON Please Select One \n";
-//                 $response .= "1. Customer has an account \n";
-//                 $response .= "2.  Customer does not have an account";
-                    
-//             }else if ($ussd_string_exploded[0] == "" && \App\Agents::where('phone','=',$valid_phone)->count() > 0){
-
-//                     $existingAgent = \App\Agents::where('phone','=',$valid_phone)->first();
-
-
-//                     Log::info('Is Agent : '.$text);
-
-//                     $text = '';
-
-//                     $ussd_string_exploded = [];
-    
-//                     $response  = "CON Invalid Choice,Please Enter a right value) \n";
-//                     $response .= "4. Make booking \n";
-//                     $response .= "6. Exchange an Item \n";
-//                     $response .= "7. Confirm Delivery";
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 1 && $level == 2) {
-
-//                 $response = "CON Please Enter Customer's Phone No \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 1 && $level == 3) {
-
-//                 $phone = $ussd_string_exploded[2];
-
-//                 $phone = "254".ltrim($phone, '0');
-
-//                 $customer = \App\Customers::where('phone','=',$phone)->first();
-
-//                 // AGENT EXISTING USER
-
-//                 if($customer === null){
-
-//                     $response = "END Customer has no account \n";  
-//                 }else{
-
-//                     $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
-
-//                     if($booking === null){
-//                         $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','pending')->first();
-//                         if($booking === null){
-//                             $response = "CON Please Enter Product Code \n";
-//                         }else{
-//                         $response = "END Customer has an existing booking. Advise them to Complete the current booking before making another one.";
-//                     }
-//                 }
-//              }
-
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 1 && $level == 4) {
-
-//                 $product_code = $ussd_string_exploded[3];
-
-//                 $product = \App\Products::where('product_code','=',$product_code)->first();
-    
-//                 if($product === null){
-
-//                   $response = "END Product Code Entered does not exist.Please Enter a valid product code";
-//                 }else{
-    
-//                     // if($product->product_price < 5000){
-//                     //     $minDeposit = 0.2*$product->product_price;
-//                     // }else {
-//                     //     $minDeposit = 0.1 *$product->product_price;
-//                     // }
-        
-//                     $response = "CON  Minimum Deposit Amount for this Product is : KES ".number_format(200,2)."\n"." Please enter Initial deposit.";
-    
-//             }      
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 1 && $level == 5) {
-
-//                 $deposit = $ussd_string_exploded[4];
-
-//                 if($deposit < 1){
-
-//                     $response = "END The minimum deposit for this item is KES 200.00";
-//                   }else{
-
-//                 $booking_date = now();
-
-//                 $booking_date = strtotime($booking_date);
-
-//                 $product_code = $ussd_string_exploded[3];
-
-//                 $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//                 Log::info('PRODUCT : '.print_r($product,1));
-
-//                 $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-
-//                 $booking_reference = 'BKG'.rand(10,1000000);
-
-//                 $valid_phone = ltrim($phoneNumber, '+');
-
-//                 $agent = \App\Agents::where('phone','=',$valid_phone)->first();
-
-//                 $phone = "254".ltrim($ussd_string_exploded[2], '0');
-
-//                 $customer = \App\Customers::where('phone','=',$phone)->first();
-
-//                 $booking = new \App\Bookings();
-//                 $booking->customer_id = $customer->id; 
-//                 $booking->product_id  = $product->id;
-//                 $booking->booking_reference = $booking_reference;
-//                 $booking->quantity  = "1";
-//                 $booking->agent_code = $agent->agent_code;
-//                 $booking->balance = $product->product_price;
-//                 $booking->amount_paid = '0';
-//                 $booking->payment_mode  = 'Mpesa';
-//                 $booking->status = "pending";
-//                 $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                 $booking->due_date = $due_date;
-//                 $booking->total_cost = $product->product_price;
-//                 $booking->save();
-
-//                 $amount = $deposit;
-
-//                 $msisdn = $phone;
-                
-//                 $booking_ref = $booking->booking_reference;
-                
-//                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
-        
-//                 $response = $message;
-
-//                  }
-
-                
-//             }//AGENT NEW USER
-//             else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 2 && $level == 2) {
-
-//                 $response = "CON Please Enter Customer's Full Name \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 2 && $level == 3) {
-
-//                 $response = "CON Please Enter Customer's Phone Number \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 2 && $level == 4) {
-
-//                 $response = "CON Please Enter Customer's Email Adress \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 2 && $level == 5) {
-
-//                 $response = "CON Please Enter Product Code \n";
-
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 2 && $level == 6) {
-
-//                 $product_code = $ussd_string_exploded[5];
-                
-//                 $product = \App\Products::where('product_code','=',$product_code)->first();
-                
-//                 if($product === null){
-                
-//                   $response = "END Product Code Entered does not exist.Please Enter a valid product code";
-//                 }else{
-//                     $response = "CON Please Enter Customer's Initial Deposit \n";
-//                 }
-                    
-//             }else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 2 && $level == 7) {
-
-//                 $name =$ussd_string_exploded[2];
-//                 $phone = '254'.ltrim($ussd_string_exploded[3], '0');
-//                 $email = $ussd_string_exploded[4];
-//                 $product_code = $ussd_string_exploded[5];
-//                 $deposit = $ussd_string_exploded[6];
-
-//                 $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
-
-
-//                 if($existingCustomer == null){
-
-//                     //here
-
-//                     // $user = new \App\User();
-//                     // $user->email = $email;
-//                     // $user->name = $name;
-//                     // $user->password = Hash::make($phone);
-//                     // $user->save();
-
-//                     $existingUser = \App\User::where('email','=',$email)->first();
-
-//                     if($existingUser === null){
-//                         $user = new \App\User();
-//                         $user->email = $email;
-//                         $user->name = $name;
-//                         $user->password = Hash::make($phone);
-//                         $user->save();
-
-//                         $user_id = DB::getPdo()->lastInsertId();
-
-//                         Log::info('USER DOES NOT EXIST');
-                        
-//                     }else{
-//                         $user_id =  $existingUser->id;
-//                         Log::info('USER EXISTS : '.print_r($existingUser,1));
-//                     }
-
-//                     // $user_id = DB::getPdo()->lastInsertId();
-
-//                     $customer = new \App\Customers();
-//                     $customer->user_id = $user_id; 
-//                     $customer->phone  = $phone;
-//                     $customer->save();
-
-//                     $customer_id = DB::getPdo()->lastInsertId();
-
-//                     $booking_date = now();
-
-//                     $booking_date = strtotime($booking_date);
-
-//                     $product = \App\Products::where('product_code','=',$product_code)->first();
-
-
-//                     if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-//                         $discount = 200;
-//                     }elseif($product->price >20000) {
-//                         $discount = 500;
-//                     }else {
-//                         $discount = 0;
-//                     }
-
-//                     if($discount>0){
-//                         $showDiscount = 1;
-//                     }else {
-//                         $showDiscount = 0;
-//                     }
-
-
-//                     $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-        
-//                     $booking_reference = 'BKG'.rand(10,1000000);
-
-//                     $valid_phone = ltrim($phoneNumber, '+');
-
-//                     $agent = \App\Agents::where('phone','=',$valid_phone)->first();
-
-//                     $booking = new \App\Bookings();
-//                     $booking->customer_id = $customer_id; 
-//                     $booking->product_id  = $product->id;
-//                     $booking->booking_reference = $booking_reference;
-//                     $booking->quantity  = "1";
-//                     $booking->agent_code = $agent->agent_code;
-//                     $booking->balance = $product->product_price - $discount;
-//                     $booking->amount_paid = '0';
-//                     $booking->payment_mode  = 'Mpesa';
-//                     $booking->status = "pending";
-//                     $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                     $booking->due_date = $due_date;
-//                     $booking->total_cost = $product->product_price - $discount;
-//                     $booking->discount = $discount;
-//                     $booking->save();
-
-//                     $amount = $deposit;
-                    
-//                     $msisdn = $phone;
-                    
-//                     $booking_ref = $booking->booking_reference;
-
-//                     $reciepient = $msisdn;
-
-
-//                     if($showDiscount == 1){
-            
-//                         $AFmessage = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($deposit,2);
-//                         $this->sendMessage($AFmessage,$reciepient);
-                    
-//                     }elseif($showDiscount == 0){
-            
-//                         $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($deposit,2);
-//                         $this->sendMessage($AFmessage,$reciepient);
-            
-//                     }
-
-
-//                     $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                    
-//                     $response = $message;
-
-//                 }else{
-
-//                 //  IF CUSTOMER  EXISTS
-
-//                 $customer = $existingCustomer;
-
-//                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
-
-//                 if($booking == null){
-
-//                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','pending')->first();
-
-//                 if($booking == null){
-
-//                 Log::info('Phone Number : '.$phone);
-
-//                 $booking_reference = 'BKG'.rand(10,1000000);
-
-//                 $booking_date = now();
-                
-//                 $booking_date = strtotime($booking_date);
-
-//                 $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//                 $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-
-//                 if($deposit<200){
-//                     $response = "END Minimum Deposit for this product is  KES".number_format(200,2);
-//                 }else {
-
-//                $valid_phone = ltrim($phoneNumber, '+');
-
-//                $agent = \App\Agents::where('phone','=',$valid_phone)->first();
-
-//                 $booking = new \App\Bookings();
-//                 $booking->customer_id = $existingCustomer->id; 
-//                 $booking->product_id  = $product->id;
-//                 $booking->booking_reference = $booking_reference;
-//                 $booking->quantity  = '1';
-//                 $booking->agent_code = $agent->agent_code;
-//                 $booking->amount_paid = '0';
-//                 $booking->balance = $product->product_price;
-//                 $booking->payment_mode  = 'Mpesa';
-//                 $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                 $booking->due_date = $due_date;
-//                 $booking->status = "pending";
-//                 $booking->total_cost = $product->product_price;
-//                 $booking->save();
-
-//                 $amount = $deposit;
-//                 $msisdn = $valid_phone;
-//                 $booking_ref = $booking_reference;
-
-//                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                    
-//                 $response = $message;
-
-//                     }
-                        
-//                     }else{
-//                         $response = "END Customer has an existing booking. Advise them to Complete the current booking before making another one.";
-//                     }
-//                 }
-
-
-//                 }
-
-                    
-//             }
-
-            
-//             //VENDOR EXISTING USER
-//             else if ($text == "8") {
-
-//                 Log::info('Make booking');
-                
-//                 $response  = "CON Please Select One \n";
-//                 $response .= "1. Customer has an account \n";
-//                 $response .= "2.  Customer does not have an account";
-                    
-//                 }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 1 && $level == 2) {
-                
-//                 $response = "CON Please Enter Customer's Phone No \n";
-                    
-//                 }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 1 && $level == 3) {
-                
-//                 $phone = $ussd_string_exploded[2];
-                
-//                 $phone = "254".ltrim($phone, '0');
-                
-//                 $customer = \App\Customers::where('phone','=',$phone)->first();
-                
-//                 if($customer === null){
-                
-//                     $response = "END Customer has no account \n";  
-//                 }else{
-                
-//                     $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
-                
-//                     if($booking === null){
-//                         $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','pending')->first();
-//                         if($booking === null){
-//                             $response = "CON Please Enter Product Code \n";
-//                         }else{
-//                         $response = "END Customer has an existing booking. Advise them to Complete the current booking before making another one.";
-//                     }
-//                 }
-//                 }
-                
-//                 }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 1 && $level == 4) {
-                
-//                 $product_code = $ussd_string_exploded[3];
-                
-//                 $product = \App\Products::where('product_code','=',$product_code)->first();
-                
-//                 if($product === null){
-                
-//                   $response = "END Product Code Entered does not exist.Please Enter a valid product code";
-//                 }else{
-//                     $response = "CON  Minimum Deposit Amount for this Product is : KES ".number_format(200,2)."\n"." Please enter Initial deposit.";
-                
-//                 }      
-//                 }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 1 && $level == 5) {
-                
-//                 $deposit = $ussd_string_exploded[4];
-                
-//                 if($deposit < 1){
-                
-//                     $response = "END The minimum deposit for this item is KES 200.00";
-//                   }else{
-                
-//                 $booking_date = now();
-                
-//                 $booking_date = strtotime($booking_date);
-                
-//                 $product_code = $ussd_string_exploded[3];
-                
-//                 $product = \App\Products::where('product_code','=',$product_code)->first();
-                
-//                 $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-                
-//                 $booking_reference = 'BKG'.rand(10,1000000);
-                
-//                 $valid_phone = ltrim($phoneNumber, '+');
-                
-//                 $vendor = \App\Vendor::where('phone','=',$valid_phone)->first();
-                
-//                 $phone = "254".ltrim($ussd_string_exploded[2], '0');
-                
-//                 $customer = \App\Customers::where('phone','=',$phone)->first();
-                
-//                 $booking = new \App\Bookings();
-//                 $booking->customer_id = $customer->id; 
-//                 $booking->product_id  = $product->id;
-//                 $booking->booking_reference = $booking_reference;
-//                 $booking->quantity  = "1";
-//                 $booking->vendor_code = $vendor->vendor_code;
-//                 $booking->balance = $product->product_price;
-//                 $booking->amount_paid = '0';
-//                 $booking->payment_mode  = 'Mpesa';
-//                 $booking->status = "pending";
-//                 $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                 $booking->due_date = $due_date;
-//                 $booking->total_cost = $product->product_price;
-//                 $booking->save();
-                
-//                 $amount = $deposit;
-                
-//                 $msisdn = $phone;
-                
-//                 $booking_ref = $booking->booking_reference;
-                
-//                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                    
-//                 $response = $message;
-                
-//                  }
-                
-                
-//                 }
-//                 else if ($ussd_string_exploded[0] == 4  && $ussd_string_exploded[1] == 1 && $level == 4) {
-
-//                 $response = "END A payment prompt has been sent to the customer. Inform them to enter MPesa PIN if prompted.";
-                    
-//             }//VENDOR NEW USER
-//             else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 2 && $level == 2) {
-
-//                 $response = "CON Please Enter Customer's Full Name \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 2 && $level == 3) {
-
-//                 $response = "CON Please Enter Customer's Phone Number \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 2 && $level == 4) {
-
-//                 $response = "CON Please Enter Customer's Email Adress \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 2 && $level == 5) {
-
-//                 $response = "CON Please Enter Product Code \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 2 && $level == 6) {
-
-//                 $response = "CON Please Enter Customer's Initial Deposit \n";
-                    
-//             }else if ($ussd_string_exploded[0] == 8  && $ussd_string_exploded[1] == 2 && $level == 7) {
-
-//                 // $response = "END A payment prompt has been sent to the customer. Inform them to enter MPesa PIN if prompted.";
-//                 //here
-//                 $name =$ussd_string_exploded[2];
-//                 $phone = '254'.ltrim($ussd_string_exploded[3], '0');
-//                 $email = $ussd_string_exploded[4];
-//                 $product_code = $ussd_string_exploded[5];
-//                 $deposit = $ussd_string_exploded[6];
-
-//                 $existingCustomer = \App\Customers::where('phone','=',$phone)->first();
-
-
-//                 if($existingCustomer == null){
-
-//                     // $user = new \App\User();
-//                     // $user->email = $email;
-//                     // $user->name = $name;
-//                     // $user->password = Hash::make($phone);
-//                     // $user->save();
-
-//                     // $user_id = DB::getPdo()->lastInsertId();
-
-
-//                     if($existingUser === null){
-//                         $user = new \App\User();
-//                         $user->email = $email;
-//                         $user->name = $name;
-//                         $user->password = Hash::make($phone);
-//                         $user->save();
-    
-//                         $user_id = DB::getPdo()->lastInsertId();
-    
-//                         Log::info('USER DOES NOT EXIST');
-                        
-//                     }else{
-//                         $user_id=  $existingUser->id;
-//                         Log::info('USER EXISTS : '.print_r($existingUser));
-//                     }
-
-//                     $customer = new \App\Customers();
-//                     $customer->user_id = $user_id; 
-//                     $customer->phone  = $phone;
-//                     $customer->save();
-
-//                     $customer_id = DB::getPdo()->lastInsertId();
-
-//                     $booking_date = now();
-
-//                     $booking_date = strtotime($booking_date);
-
-//                     $product = \App\Products::where('product_code','=',$product_code)->first();
-
-
-//                     $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-        
-//                     $booking_reference = 'BKG'.rand(10,1000000);
-
-//                     $valid_phone = ltrim($phoneNumber, '+');
-
-//                     $vendor = \App\Vendor::where('phone','=',$valid_phone)->first();
-
-//                     if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-//                         $discount = 200;
-//                     }elseif($product->price >20000) {
-//                         $discount = 500;
-//                     }else {
-//                         $discount = 0;
-//                     }
-
-//                     if($discount>0){
-//                         $showDiscount = 1;
-//                     }else {
-//                         $showDiscount = 0;
-//                     }
-
-//                     $booking = new \App\Bookings();
-//                     $booking->customer_id = $customer_id; 
-//                     $booking->product_id  = $product->id;
-//                     $booking->booking_reference = $booking_reference;
-//                     $booking->quantity  = "1";
-//                     $booking->vendor_code = $vendor->vendor_code;
-//                     $booking->balance = $product->product_price - $discount;
-//                     $booking->amount_paid = '0';
-//                     $booking->payment_mode  = 'Mpesa';
-//                     $booking->status = "pending";
-//                     $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                     $booking->due_date = $due_date;
-//                     $booking->total_cost = $product->product_price - $discount;
-//                     $booking->discount = $discount;
-//                     $booking->save();
-
-//                     $amount = $deposit;
-                    
-//                     $msisdn = $phone;
-                    
-//                     $booking_ref = $booking->booking_reference;
-
-
-//                     if($showDiscount == 1){
-            
-//                         $message = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($minDeposit,2);
-//                         $this->sendMessage($AFmessage,$reciepient);
-                    
-//                     }elseif($showDiscount == 0){
-            
-//                         $message = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, Select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount : KES ".number_format($minDeposit,2);
-//                         $this->sendMessage($AFmessage,$reciepient);
-            
-//                     }
-                    
-//                     $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                    
-//                     $response = $message;
-
-//                 }else{
-
-//                 //  IFF CUSTOMER  EXISTS
-
-//                 $customer = $existingCustomer;
-
-//                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
-
-//                 if($booking == null){
-
-//                 $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','pending')->first();
-
-//                 if($booking == null){
-
-//                 Log::info('Phone Number : '.$phone);
-
-//                 $booking_reference = 'BKG'.rand(10,1000000);
-
-//                 $booking_date = now();
-                
-//                 $booking_date = strtotime($booking_date);
-
-//                 $product = \App\Products::where('product_code','=',$product_id)->first();
-
-//                 $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-
-
-//                 if($deposit<200){
-//                     $response = "END Minimum Deposit for this product is  KES".number_format(200,2);
-//                 }else {
-
-//                 $booking = new \App\Bookings();
-//                 $booking->customer_id = $existingCustomer->id; 
-//                 $booking->product_id  = $product->id;
-//                 $booking->booking_reference = $booking_reference;
-//                 $booking->quantity  = '1';
-//                 $booking->vendor_code = $vendor_code;
-//                 $booking->amount_paid = '0';
-//                 $booking->balance = $product->product_price;
-//                 $booking->payment_mode  = 'Mpesa';
-//                 $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                 $booking->due_date = $due_date;
-//                 $booking->status = "pending";
-//                 $booking->total_cost = $product->product_price;
-//                 $booking->save();
-
-//                 $amount = $deposit;
-//                 $msisdn = $valid_phone;
-//                 $booking_ref = $booking_reference;
-
-//                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                    
-//                 $response = $message;
-//             }
-                
-//             }else{
-//                 $response = "END Customer has an existing booking. Advise them to Complete the current booking before making another one.";
-//                 }
-//             }
-
-
-//             }
-
-                    
-//             } else if ($text == "1") {
-
-//                 // $valid_phone = ltrim($phoneNumber, '+');
-
-//                 // $customer = \App\Customers::where('phone','=',$valid_phone)->first();
-
-//                 // if($customer == null){
-
-//                 // }else{
-
-//                 // }
-//                 $response = "CON Do you have an account? \n";
-//                 $response .= "1. Yes \n";
-//                 $response .= "2. No ";
-
-//             }
-// elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 7){
-
-//         $email = $ussd_string_exploded[3];
-//         $name = $ussd_string_exploded[2];
-//         $agent_code = $ussd_string_exploded[4];
-//         $product_id = $ussd_string_exploded[5];
-//         $deposit = $ussd_string_exploded[6];
-
-//         $pattern = "/ag/i";
-
-//         $agentTrue = preg_match($pattern,$agent_code);
-
-//         $vpattern = "/vd/i";
-
-//         $vendorTrue = preg_match($vpattern,$agent_code);
-
-//         $valid_phone = ltrim($phoneNumber, '+');
-
-//         $phone = "0".ltrim($phoneNumber, '+254');
-
-//         $existingCustomer = \App\Customers::where('phone','=',$valid_phone)->first();
-        
-//         // If Customer doesnt exist
-
-//         if($existingCustomer === null){
-
-//                 $existingUser = \App\User::where('email','=',$email)->first();
-
-//                 if($existingUser === null){
-//                     $user = new \App\User();
-//                     $user->email = $email;
-//                     $user->name = $name;
-//                     $user->password = Hash::make($phone);
-//                     $user->save();
-
-//                     $user_id = DB::getPdo()->lastInsertId();
-
-//                     Log::info('USER DOES NOT EXIST');
-                    
-//                 }else{
-//                     $user_id=  $existingUser->id;
-//                     Log::info('USER EXISTS : '.print_r($existingUser));
-//                 }
-
-//                 $customer = new \App\Customers();
-//                 $customer->user_id = $user_id; 
-//                 $customer->phone  = '254'.ltrim($phone, '0');
-//                 $customer->save();
-
-//                 $customer_id = DB::getPdo()->lastInsertId();
-
-//                 $booking_date = now();
-
-//                 $booking_date = strtotime($booking_date);
-
-//                 $product = \App\Products::where('product_code','=',$product_id)->first();
-
-
-//                 if($product->product_price < 5000){
-//                     $minDeposit = 0.2*$product->product_price;
-//                 }else {
-//                     $minDeposit = 0.1 *$product->product_price;
-//                 }
-
-//                 if($deposit<200){
-//                     $response = "END Minimum Deposit for this product is  KES".number_format(200,2);
-//                 }else {
-//                     if((10000 <= $product->product_price) && ($product->product_price <= 20000)){
-//                         $discount = 200;
-//                     }elseif($product->price >20000) {
-//                         $discount = 500;
-//                     }else {
-//                         $discount = 0;
-//                     }
-
-//                     if($discount>0){
-//                         $showDiscount = 1;
-//                     }else {
-//                         $showDiscount = 0;
-//                     }
-    
-//                     $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-    
-//                     $booking_reference = 'BKG'.rand(10,1000000);
-
-//                     if($agentTrue == 1){
-    
-//                     $booking = new \App\Bookings();
-//                     $booking->customer_id = $customer_id; 
-//                     $booking->product_id  = $product->id;
-//                     $booking->booking_reference = $booking_reference;
-//                     $booking->quantity  = "1";
-//                     $booking->agent_code = $agent_code;
-//                     $booking->balance = $product->product_price - $discount;
-//                     $booking->amount_paid = '0';
-//                     $booking->payment_mode  = 'Mpesa';
-//                     $booking->status = "pending";
-//                     $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                     $booking->due_date = $due_date;
-//                     $booking->total_cost = $product->product_price - $discount;
-//                     $booking->discount = $discount;
-//                     $booking->save();
-
-//                     }elseif($vendorTrue == 1){
-
-//                     $booking = new \App\Bookings();
-//                     $booking->customer_id = $customer_id; 
-//                     $booking->product_id  = $product->id;
-//                     $booking->booking_reference = $booking_reference;
-//                     $booking->quantity  = "1";
-//                     $booking->vendor_code = $agent_code;
-//                     $booking->balance = $product->product_price - $discount;
-//                     $booking->amount_paid = '0';
-//                     $booking->payment_mode  = 'Mpesa';
-//                     $booking->status = "pending";
-//                     $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//                     $booking->due_date = $due_date;
-//                     $booking->total_cost = $product->product_price - $discount;
-//                     $booking->discount = $discount;
-//                     $booking->save();
-
-//                     }
-    
-//                     if($showDiscount == 1){
-
-//                         $reciepient = $phoneNumber;
-//                         $AFmessage = "Booking of : ".$product->product_name." was successful. "."You recieved a discount of ".number_format($discount,2)." Total Price is KES ".number_format(($product->product_price - $discount),2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
-//                         $this->sendMessage($AFmessage,$reciepient);
-
-//                     }else {
-//                         $reciepient = $phoneNumber;
-//                         $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
-//                         $this->sendMessage($AFmessage,$reciepient);
-//                    }
-    
-//                     $amount = $deposit;
-//                     $msisdn = $valid_phone;
-//                     $booking_ref = $booking_reference;
-
-//                     $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                
-//                     $response = $message;
-//                 }
-//         // If Customer  exists
-
-//         }else{ 
-
-//             $msisdn = ltrim($phoneNumber, '+');
-
-//             $customer = \App\Customers::where('phone','=',$msisdn)->first();
-
-//             $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
-
-//             if($booking == null){
-
-//             $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','pending')->first();
-
-//             if($booking == null){
-
-//             Log::info('Phone Number : '.$phone);
-
-//             $booking_reference = 'BKG'.rand(10,1000000);
-
-//             $booking_date = now();
-            
-//             $booking_date = strtotime($booking_date);
-
-//             $product = \App\Products::where('product_code','=',$product_id)->first();
-
-//             $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-
-//             if($deposit<200){
-//                 $response = "END Minimum Deposit for this product is  KES".number_format(200,2);
-//             }else {
-
-
-//             if($agentTrue == 1){
-//             $booking = new \App\Bookings();
-//             $booking->customer_id = $existingCustomer->id; 
-//             $booking->product_id  = $product->id;
-//             $booking->booking_reference = $booking_reference;
-//             $booking->quantity  = '1';
-//             $booking->agent_code = $agent_code;
-//             $booking->amount_paid = '0';
-//             $booking->balance = $product->product_price;
-//             $booking->payment_mode  = 'Mpesa';
-//             $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//             $booking->due_date = $due_date;
-//             $booking->status = "pending";
-//             $booking->total_cost = $product->product_price;
-//             $booking->save();
-//             }
-
-//             if($vendorTrue == 1){
-
-//             $booking = new \App\Bookings();
-//             $booking->customer_id = $existingCustomer->id; 
-//             $booking->product_id  = $product->id;
-//             $booking->booking_reference = $booking_reference;
-//             $booking->quantity  = '1';
-//             $booking->vendor_code = $agent_code;
-//             $booking->amount_paid = '0';
-//             $booking->balance = $product->product_price;
-//             $booking->payment_mode  = 'Mpesa';
-//             $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//             $booking->due_date = $due_date;
-//             $booking->status = "pending";
-//             $booking->total_cost = $product->product_price;
-//             $booking->save();
-
-//             }
-
-//             $amount = $deposit;
-//             $msisdn = $valid_phone;
-//             $booking_ref = $booking_reference;
-
-//             $message = $this->stk_push($amount,$msisdn,$booking_ref);
-                
-//             $response = $message;
-//           }
-            
-//         }else{
-//             $response = "END You Already have an ongoing booking. You can't make another booking."; 
-//         }
-//      }
-//     }
-
-        
-
-//     } else if($text == "1*1") { 
-
-//         $msisdn = ltrim($phoneNumber, '+');
-
-//         $customer = \App\Customers::where('phone','=',$msisdn)->first();
-
-//        if($customer == null){
-//          $response = "END Sorry you don't have an account. Please Use Option 2."; 
-//        }else{
-//         $booking = \App\Bookings::where('customer_id','=',$customer->id)->where('status','=','active')->first();
-
-//         if($booking == null){
-//          $response = "CON Enter Agent/Vendor Code. \n";
-//         }else{
-//             $response = "END You Already have an ongoing booking. You can't make another booking."; 
-//         }
-//     }
-
-//     }else if ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 1 && $level == 3) {
-
-//         $agent_code = $ussd_string_exploded[2];
-
-//         $pattern = "/ag/i";
-
-//         $agentTrue = preg_match($pattern,$agent_code);
-    
-//         $vpattern = "/vd/i";
-    
-//         $vendorTrue = preg_match($vpattern,$agent_code);
-
-//                 if($agentTrue == 1){
-//                     $existingAgent = \App\Agents::where('agent_code','=',$agent_code)->first();
-                
-//                     if($existingAgent === null){
-
-//                         $response = "END Agent Code entered does not exist.";
-                    
-//                     }else{
-
-//                         $response = "CON Enter Product Code. \n";
-//                     }
-//                 }
-
-//                 if($vendorTrue == 1){
-
-//                     $existingVendor = \App\Vendor::where('vendor_code','=',$agent_code)->first();
-                
-//                     if($existingAgent === null){
-        
-//                         $response = "END Vendor Code entered does not exist.";
-                    
-//                     }else{
-        
-//                         $response = "CON Enter Product Code. \n";
-//                     }
-//                 }
-    
-//         }else if ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 1 && $level == 4) {
-
-//             $product_code = $ussd_string_exploded[3];
-
-//             $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//         if($product === null){
-//           $response = "END Product Code Entered does not exist.";
-//         }else{
-
-//             if($product->product_price < 5000){
-//                 $minDeposit = 0.2*$product->product_price;
-//             }else {
-//                 $minDeposit = 0.1 *$product->product_price;
-//             }
-
-//             $response = "CON  Minimum Deposit Amount for this Product is : KES ".number_format($minDeposit,2)."\n"." Please enter Initial deposit.";
-//         }
-
-//     }else if ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 1 && $level == 5) {
-
-
-//     $booking_reference = 'BKG'.rand(10,1000000);
-
-//     $deposit = $ussd_string_exploded[4];
-
-//     $booking_date = now();
-
-//     $phone =  $phoneNumber;
-
-//     $agent_code = $ussd_string_exploded[2];
-
-//     $pattern = "/ag/i";
-
-//     $agentTrue = preg_match($pattern,$agent_code);
-
-//     $vpattern = "/vd/i";
-
-//     $vendorTrue = preg_match($vpattern,$agent_code);
-
-//     $booking_date = strtotime($booking_date);
-
-//     $product_code = $ussd_string_exploded[3];
-
-//     $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//     $due_date = Carbon::createFromTimestamp($booking_date)->addMonths(3);
-
-
-//     $valid_phone = ltrim($phoneNumber, '+');
-
-
-//     $customer = \App\Customers::where('phone','=',$valid_phone)->first();
-
-//     if($product->product_price < 5000){
-//         $minDeposit = 0.2*$product->product_price;
-//     }else {
-//         $minDeposit = 0.1 *$product->product_price;
-//     }
-
-//     if($deposit<200){
-//         $response = "END Minimum Deposit for this product is  KES".number_format(200,2);
-//     }else {
-
-//     if($agentTrue == 1){
-//         $booking = new \App\Bookings();
-//         $booking->customer_id = $customer->id; 
-//         $booking->product_id  = $product->id;
-//         $booking->booking_reference = $booking_reference;
-//         $booking->quantity  = '1';
-//         $booking->agent_code = $agent_code;
-//         $booking->amount_paid = '0';
-//         $booking->balance = $product->product_price;
-//         $booking->payment_mode  = 'Mpesa';
-//         $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//         $booking->due_date = $due_date;
-//         $booking->status = "pending";
-//         $booking->total_cost = $product->product_price;
-
-//         $booking->save();
-//     }
-
-//     if($vendorTrue == 1){
-//         $booking = new \App\Bookings();
-//         $booking->customer_id = $customer->id; 
-//         $booking->product_id  = $product->id;
-//         $booking->booking_reference = $booking_reference;
-//         $booking->quantity  = '1';
-//         $booking->vendor_code = $agent_code;
-//         $booking->amount_paid = '0';
-//         $booking->balance = $product->product_price;
-//         $booking->payment_mode  = 'Mpesa';
-//         $booking->date_started  = Carbon::createFromTimestamp($booking_date)->format('Y-m-d H:i:s');
-//         $booking->due_date = $due_date;
-//         $booking->status = "pending";
-//         $booking->total_cost = $product->product_price;
-
-//         $booking->save();
-//     }
-
-//     $reciepient = $phoneNumber;
-//     $AFmessage = "Booking of : ".$product->product_name." was successful. Total Price is KES ".number_format($product->product_price,2)." And the Payment period is 90 Days"." Incase direct payment fails Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference.", Enter Amount you wish to pay. Thank you. Terms & Conditions Apply";
-//     $this->sendMessage($AFmessage,$reciepient);
-
-//     $amount = $deposit;
-//     $msisdn = $valid_phone;
-//     $booking_ref = $booking_reference;
-
-//     $message = $this->stk_push($amount,$msisdn,$booking_ref);
-            
-//     $response = $message;
-     
-//      }
-
-
-//     } else if ($text == "7") {
-                
-//         $response = "CON Enter Booking Reference of an item you have delivered.";
-
-//     }else if ($ussd_string_exploded[0] == 7  && $level == 2) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->where('status','=','completed')->first();
-
-//         if($booking === null){
-//           $response = "END Booking with provided code does not exist or is not complete.";
-//         }else{
-//             \App\Bookings::where('booking_reference','=',$booking_reference)
-//                     ->update(["status"=>"agent-delivered"]);
-        
-//         $response = "END Delivery Submitted successfully, Please wait for admin to approve. Thanks";
-//         }
-
-//      }else if ($text == "10") {
-                
-//         $response = "CON Enter Booking Reference of an item you have delivered.";
-
-//     }else if ($ussd_string_exploded[0] == 10  && $level == 2) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->where('status','=','completed')->first();
-
-//         if($booking === null){
-//           $response = "END Booking with provided code does not exist or is not complete.";
-//         }else{
-//             \App\Bookings::where('booking_reference','=',$booking_reference)
-//                     ->update(["status"=>"agent-delivered"]);
-        
-//         $response = "END Delivery Submitted successfully, Please wait for admin to approve. Thanks";
-//         }
-
-//      } else if ($text == "6") {
-                
-//         $response = "CON Enter Booking Reference.";
-
-//     }else if ($ussd_string_exploded[0] == 6  && $level == 2) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
-
-//         if($booking === null){
-//             $response = "END Booking Reference Entered does not exist.";
-//         }else{
-
-//             $product = \App\Products::where('id','=',$booking->product_id)->first();
-
-//                 $response  = "CON The product that had booked is ".$product->product_name.". Amount paid is KES ".number_format($booking->amount_paid,2).". \n";
-//                 $response .= "Enter Product Code of Item you wish to exchange with.";
-
-//         }
-
-//     }else if ($ussd_string_exploded[0] == 6  && $level == 3) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $product_code = $ussd_string_exploded[2];
-
-//         $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//         if($product === null){
-//           $response = "END Product Code Entered does not exist.";
-//         }else{
-//             $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
-
-//         $balance = $product->product_price - $booking->amount_paid;
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->update([
-//                         "product_id"=>$product->id,
-//                         "balance"=>$balance,
-//                         "total_cost"=>$product->product_price
-//                         ]);
-
-//         $response = "END Product exchanged successfully to ".$product->product_name.". New Balance is KES ".number_format($balance,2).".";
-//         }
-//     }else if ($text == "9") {
-                
-//         $response = "CON Enter Booking Reference.";
-
-//     }else if ($ussd_string_exploded[0] == 9  && $level == 2) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
-
-//         if($booking === null){
-//             $response = "END Booking Reference Entered does not exist.";
-//         }else{
-
-//             $product = \App\Products::where('id','=',$booking->product_id)->first();
-
-//                 $response  = "CON The product that had booked is ".$product->product_name.". Amount paid is KES ".number_format($booking->amount_paid,2).". \n";
-//                 $response .= "Enter Product Code of Item you wish to exchange with.";
-
-//         }
-
-//     }else if ($ussd_string_exploded[0] == 9  && $level == 3) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $product_code = $ussd_string_exploded[2];
-
-//         $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//         if($product === null){
-//           $response = "END Product Code Entered does not exist.";
-//         }else{
-//             $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
-
-//         $balance = $product->product_price - $booking->amount_paid;
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->update([
-//                         "product_id"=>$product->id,
-//                         "balance"=>$balance,
-//                         "total_cost"=>$product->product_price
-//                         ]);
-
-//         $response = "END Product exchanged successfully to ".$product->product_name.". New Balance is KES ".number_format($balance,2).".";
-//         }
-//     }else if ($ussd_string_exploded[0] == 3  && $level == 3) {
-
-//         $booking_reference = $ussd_string_exploded[1];
-
-//         $product_code = $ussd_string_exploded[2];
-
-//         $product = \App\Products::where('product_code','=',$product_code)->first();
-
-//         if($product === null){
-//           $response = "END Product Code Entered does not exist.";
-//         }else{
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->first();
-
-//         $balance = $product->product_price - $booking->amount_paid;
-
-//         $booking = \App\Bookings::where('booking_reference','=',$booking_reference)->update([
-//                         "product_id"=>$product->id,
-//                         "balance"=>$balance,
-//                         "total_cost"=>$product->product_price
-//                         ]);
-
-//         $response = "END Product exchanged successfully to ".$product->product_name.". New Balance is KES ".number_format($balance,2).".";
-//         }
-
-//     }
     header('Content-type: text/plain');
     echo $response;
 
@@ -3134,7 +1847,7 @@ $objuser->update(['balance'=>$totalbal]);
             if(array_key_exists("errorCode", $responseArray)){
                 $message = "END Automatic payment failed. Go to your MPESA, select Paybill Enter : (4040299) and Account Number : ".$booking_reference." Enter Amount : ".number_format($amount,2)." Thank you.";
             }else{
-                $message = "END A Payment Prompt has been sent to the provided Phone No. Enter MPesa PIN if Prompted.";
+                $message = "END  A Payment Prompt has been sent to the provided Phone Number. Enter M-Pesa PIN if Prompted.";
             }
 
             return $message;
