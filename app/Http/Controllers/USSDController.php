@@ -750,7 +750,7 @@ $index=$index+1;
      }
       if ($level==6) {
 
-        $response="CON Enter Delievry cost";
+        $response="CON Enter Delivery cost";
          # code...
      }
 
