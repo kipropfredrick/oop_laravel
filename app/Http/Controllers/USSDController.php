@@ -786,26 +786,22 @@ else{
             $response = "END Customer has an existing booking.";
         }else{
  
-
- 
-
-        }
-         # code...
-     }
-
-     if ($level==3) {
-         # code...
-            # code...
-    $response="CON Select category\n";
+   $response="CON Select category\n";
     $index=1;
  foreach ($categories as $key => $value) {
  
      $response .= "{$index}. {$value->category_name} \n";
 $index=$index+1;
  }
+ 
+
+        }
+         # code...
      }
 
-     if ($level==4) {
+  
+
+     if ($level==3) {
          # code...
          $value1=$ussd_string_exploded[3]-1;
     $category_id=0;
@@ -834,25 +830,25 @@ $index=$index+1;
 }
 
      }
-     if ($level==5) {
+     if ($level==4) {
 
         $response="CON Enter product name";
          # code...
      }
-         if ($level==6) {
+         if ($level==5) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
-     if ($level==7) {
+     if ($level==6) {
          # code...
           $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level==8) {
+     if ($level==7) {
          # code...
-if ($ussd_string_exploded[7]==1) {
+if ($ussd_string_exploded[6]==1) {
     # code...
     $response="END pay with mpesa";
 }
