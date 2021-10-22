@@ -109,11 +109,11 @@ class AdminController extends Controller
 
     public function dashboard(){
 
- 
+
 //        $credentials = [
 //       'email'    => 'test3@example.com',
 //     'password' => 'foobar3',
-//     'name'=>"test brian" 
+//     'name'=>"test brian"
 // ];
 // // Register a new user
 //  $res=Sentinel::registerAndActivate($credentials);
@@ -121,7 +121,7 @@ class AdminController extends Controller
 //$res=Sentinel::authenticate($credentials);
 
 // return $res;
-        
+
 //         $credentials = [
 //     'email'    => 'admin@mosmos.co.ke',
 //     'password' => '11111111',
@@ -142,7 +142,7 @@ class AdminController extends Controller
 //     # code...
 //    $role->users()->detach($user);
 // }
-// 
+//
 
 // $role->users()->attach($user);
 
@@ -178,7 +178,7 @@ $airtimepayments=[];
 $utilitypayments=[];
 $uniqueairtimecustomers=[];
 $uniquebillcustomers=[];
-for ($i=1; $i <=7 ; $i++) { 
+for ($i=1; $i <=7 ; $i++) {
     $minus=-7+$i;
 $lastWeek = date("Y-m-d", strtotime($minus." days"));
 
@@ -196,7 +196,7 @@ $lastWeek = date("Y-m-d", strtotime($minus." days"));
   $validmpesa=\App\Mpesapayments::whereIn("transac_code",$validpaymentreferences)->pluck('payment_id')->toArray();
 
 
-  $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereIn('id',$validmpesa)->distinct('customer_id')->count(); 
+  $uniquecustomers=\App\Payments::select('customer_id',DB::raw('Date(created_at) as date_paid'))->whereIn('id',$validmpesa)->distinct('customer_id')->count();
 
 
   $uc=\App\topups::select('sender','type',DB::raw('Date(created_at) as date_paid'))->whereDate('created_at',"=",$lastWeek)->whereIn("type",['airtime'])->whereStatus('valid')->distinct('sender')->count();
@@ -329,7 +329,7 @@ $products=[];
 
 
           }
-  
+
         return view('backoffice.products.vendor',compact('products','status'));
      }
 
@@ -348,7 +348,7 @@ $products=[];
 
 
           }
-  
+
         return view('backoffice.products.vendor',compact('products','status'));
       }
 
@@ -692,7 +692,7 @@ $products=[];
 // }
 // }
 // $categories=$arr;
-  
+
 // return 0;
 
         $subcategories = DB::table('sub_categories')->orderBy('id', 'DESC')->get();
@@ -726,11 +726,11 @@ $products=[];
                         ->get();
 $commissions=json_decode($vendor->commission_rate_subcategories);
         foreach($subcategories as $subcategory){
-   
+
 if ($vendor->commssionrate_enabled==1) {
     # code...
-    
- 
+
+
 $haskey=false;
 foreach ($commissions as $key1 => $value1) {
     if ($value1->id==$subcategory->id) {
@@ -1044,7 +1044,7 @@ else{
 
     }
     public function update_vendor(Request $request,$id){
-  
+
         if ($request->type=='g_commissionrate') {
             # code...
                 $details=Array("commission_rate"=>$request->commission_rate?$request->commission_rate:0,"commission_cap"=>$request->commission_cap?$request->commission_cap:0,"fixed_mobile_money"=>$request->fixed_mobile_money?$request->fixed_mobile_money:0,"fixed_bank"=>$request->fixed_bank?$request->fixed_bank:0);
@@ -1056,13 +1056,13 @@ else{
 
         if ($request->type=='g_sub_rate') {
               $vendor=\App\Vendor::whereId($id)->first();
-        
-           
+
+
             # code...
                 $commission_rate_subcategories=$vendor->commission_rate_subcategories;
 //return $commission_rate_subcategories;
                  $array=json_decode($commission_rate_subcategories,true);
-        
+
                  $i=0;
 foreach ($array as $key => $value) {
     # code...
@@ -1077,12 +1077,12 @@ foreach ($array as $key => $value) {
 }
 //return $array;
 
-    
+
             $details=Array("commission_rate"=>$request->commission_rate,"commission_cap"=>$request->commission_cap,"fixed_bank"=>0,"fixed_mobile_money"=>0,"id"=>$request->subcategory);
-       
+
             array_push($array, $details);
 
- 
+
                       $en_commission_rate_subcategories=json_encode($array);
                       // return $en_commission_rate_subcategories;
             \App\Vendor::whereId($id)->update(Array("commission_rate_subcategories"=>$en_commission_rate_subcategories));
@@ -1092,13 +1092,13 @@ foreach ($array as $key => $value) {
 
         if ($request->type=='g_sub_fixed') {
               $vendor=\App\Vendor::whereId($id)->first();
-        
-          
+
+
             # code...
                 $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
 
                  $array=json_decode($fixed_cost_subcategories,true);
-        
+
                  $i=0;
 foreach ($array as $key => $value) {
     # code...
@@ -1113,12 +1113,12 @@ foreach ($array as $key => $value) {
 }
 
 
-    
+
             $details=Array("commission_rate"=>0,"commission_cap"=>0,"fixed_bank"=>$request->fixed_bank,"fixed_mobile_money"=>$request->fixed_mobile_money,"id"=>$request->subcategory);
-       
+
             array_push($array, $details);
 //return $array;
- 
+
                       $en_fixed_cost_subcategories=json_encode($array);
                       // return $en_commission_rate_subcategories;
             \App\Vendor::whereId($id)->update(Array("fixed_cost_subcategories"=>$en_fixed_cost_subcategories));
@@ -1168,12 +1168,12 @@ foreach ($array as $key => $value) {
     $vendor->phone  = '254'.ltrim($request->input('phone'), '0');
     $vendor->location  = $request->input('location');
     $vendor->city_id  = $request->input('city_id');
- 
+
     $vendor->commssionrate_enabled= $request->input('commissionrate_enabled');
     $vendor->category= $request->input('category');
     $vendor->commission_rate_subcategories='[]';
     $vendor->fixed_cost_subcategories='[]';
-    
+
 
     // if ($request->input('commissionrate_enabled')==1) {
     //     # code...
@@ -1185,7 +1185,7 @@ foreach ($array as $key => $value) {
     // $vendor->fixed_bank= $request->input('fixed_bank');
     // }
 
-    
+
     $vendor->country  = $request->input('country');
 
     $vendor->save();
@@ -1214,7 +1214,7 @@ foreach ($array as $key => $value) {
        $user=User::whereId($vendor->first()->user_id)->update($user_details);
 
 
-   
+
 
     $slug =  str_replace(' ', '-', $request->business_name);
 
@@ -1237,12 +1237,12 @@ foreach ($array as $key => $value) {
     $vendor_details['phone']  = $request->input('phone');
     $vendor_details['location']  = $request->input('location');
     $vendor_details['city_id']  = $request->input('city_id');
- 
+
     $vendor_details['commssionrate_enabled']= $request->input('commissionrate_enabled');
     $vendor_details['category']= $request->input('category');
     // $vendor->commission_rate_subcategories='[]';
     // $vendor->fixed_cost_subcategories='[]';
-    
+
 
     // if ($request->input('commissionrate_enabled')==1) {
     //     # code...
@@ -1254,7 +1254,7 @@ foreach ($array as $key => $value) {
     // $vendor->fixed_bank= $request->input('fixed_bank');
     // }
 
-    
+
     $vendor_details['country']  = $request->input('country');
 
     $vendor->update($vendor_details);
@@ -1269,7 +1269,7 @@ foreach ($array as $key => $value) {
         $vendors = \App\Vendor::all();
 
         foreach($vendors as $vendor){
-            
+
             $slug =  str_replace(' ', '-', $vendor->business_name);
 
             $slug =  str_replace('/','-',$slug);
@@ -1473,7 +1473,7 @@ foreach ($array as $key => $value) {
 
         }
 
-        
+
 
         if(!empty($image_paths)){
 
@@ -1650,7 +1650,7 @@ $message = "Congratulations, You have completed Payment for ".$product->product_
     $obj = new pushNotification();
     $data=Array("name"=>"complete","value"=>"View Orders");
     $obj->exceuteSendNotification($user->token,"You have completed payment for ".$product->product_name,"Congratulations",$data);
-        
+
 
         return back()->with('success','Item marked as complete.');
 
@@ -1939,7 +1939,7 @@ $myrole="";
 
     public function overdue_bookings(Request $request){
 
-       
+
         // $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','overdue')->orderBy('id', 'DESC')->get();
 
         // foreach($bookings as $booking){
@@ -2303,7 +2303,7 @@ $totalbal=intval($firstobjuser->balance)+ ($balance *-1);
 $objuser->update(['balance'=>$totalbal]);
        }
 
-      
+
 
         $message = "Product exchanged successfully to ".$newProduct->product_name.". New Balance is KES ".number_format($balance,2).". Use Paybill 4040299 and Account Number ".$booking->booking_reference.". Thank you.";
 
@@ -2355,7 +2355,7 @@ $air="/AIR/i";
 $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
       if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
 
- 
+
             $log_id =$result->id;
 
 
@@ -2375,9 +2375,9 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
                 return Back()->with("error","Invalid phone number");
         }else{
             $mobilerec = "0".substr($msisdn, 3);
-            
+
             $valid_phone=$msisdn;
-         
+
         }
 
 
@@ -2498,7 +2498,7 @@ $user->update(["balance"=>$balance]);
             $res=\App\topups::whereTransid($transid)->first();
             if ($res==null) {             # code...
 break;  }
-          
+
         }
 
 $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
@@ -2511,11 +2511,11 @@ $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>
 }
 
    return Back()->with('error',"Airtime TOPUP was not successful. Amount has been credited to mosmos account.");
-    
+
 }
 
 
-            }    
+            }
 
 $pp="/PP/i";
 $ps="/PS/i";
@@ -2690,7 +2690,7 @@ else{
 return Back()->with("success","Transaction success");
 
 
-       } 
+       }
 
        return $result;
     }
@@ -2734,7 +2734,7 @@ $air="/AIR/i";
 $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
       if ($ismobiletopuptrue || preg_match($mob,$bill_ref_no) || preg_match($saf,$bill_ref_no) || preg_match($tel,$bill_ref_no)|| preg_match($air,$bill_ref_no) ||  preg_match($mob1,$bill_ref_no)) {
 
- 
+
             $log_id =$result->id;
 
 
@@ -2754,9 +2754,9 @@ $ismobiletopuptrue = preg_match($ismobiletopup,$bill_ref_no);
                 return Back()->with("error","Invalid phone number");
         }else{
             $mobilerec = "0".substr($msisdn, 3);
-            
+
             $valid_phone=$msisdn;
-         
+
         }
 
 
@@ -2878,7 +2878,7 @@ $balance=$balance+$transaction_amount;
             $res=\App\topups::whereTransid($transid)->first();
             if ($res==null) {             # code...
 break;  }
-          
+
         }
 
 // $credentials=Array("amount"=>$transaction_amount,"balance"=>$balance,"transid"=>$transid,"sender"=>$obj?$obj->id:$msisdn);
@@ -2891,11 +2891,11 @@ break;  }
 }
 
    return Back()->with('error',"Airtime TOPUP was not successful. Amount has been credited to mosmos account.");
-    
+
 }
 
 
-            }    
+            }
 
 $pp="/PP/i";
 $ps="/PS/i";
@@ -3073,7 +3073,7 @@ else{
 return Back()->with("success","Transaction success");
 
 
-       } 
+       }
 
        return $result;
     }
@@ -3099,7 +3099,7 @@ return Back()->with("success","Transaction success");
             }else{
 
             \App\PaymentLog::where('id',$id)->update(['status'=>'verified']);
-                
+
             \DB::connection('mysql2')->table('payment_logs')->insert([
                                                 'TransactionType' => $log->TransactionType,
                                                 'TransID'=>$log->TransID,
@@ -3120,7 +3120,7 @@ return Back()->with("success","Transaction success");
                                                 'created_at'=>now(),
                                                 'updated_at'=>now(),
                                             ]);
-            
+
             $log_id = DB::connection('mysql2')->getPdo()->lastInsertId();
 
             $customer = \DB::connection('mysql2')->table('customers')->where('id',$booking->customer_id)->first();
@@ -3237,7 +3237,7 @@ if ($vendor->category=="1") {
         $fixed_cost_subcategories=$vendor->fixed_cost_subcategories;
 
                  $array=json_decode($fixed_cost_subcategories,true);
-        
+
                  $i=0;
                  $checked=false;
 foreach ($array as $key => $value) {
@@ -3263,7 +3263,7 @@ else{
 
                     $commission_rate=$vendor->commission_rate;
                     $commision_cap=$vendor->commission_cap;
-                   
+
 }
  $admin_commission=floatval($product->product_price)*($commission_rate/100);
                     if ($admin_commission>=$commision_cap) {
@@ -3387,7 +3387,7 @@ else{
 
     public function unserviced_bookings(Request $request){
 
-            
+
 
             // $bookings = \App\Bookings::with('customer','customer.user','product','county','location','zone','dropoff')->where('status','=','unserviced')->orderBy('id', 'DESC')->get();
 
@@ -3584,12 +3584,12 @@ if ($request->validmpesa!=null) {
     $validmpesa=json_decode($request->validmpesa, true);
 }
 
-             if($request->ajax()){ 
+             if($request->ajax()){
 
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->whereIn("payments.id",$validmpesa)->orderBy('payments.id', 'DESC');
-       
-            
+
+
 
             return DataTables::of($payments)->make(true);
 
@@ -3606,7 +3606,7 @@ if ($request->validmpesa!=null) {
 
     public function payments_callbacks(Request $request){
         $payments=[];
-        
+
         if($request->ajax()){
 
             $payments = DB::table('payment_logs')->select('payment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
@@ -3621,7 +3621,7 @@ if ($request->validmpesa!=null) {
 
     function billpayments_callbacks(Request $request){
         $payments=[];
-        
+
         if($request->ajax()){
 
             $payments = DB::table('billpayment_logs')->select('billpayment_logs.*',DB::raw('DATE_FORMAT(TransTime, "%M %d %Y %H:%I %S") as TransTime_f'))->orderBy('id','DESC');
@@ -3630,11 +3630,11 @@ if ($request->validmpesa!=null) {
 
         }
 
-        return view('backoffice.payments.billlogs',compact('payments'));  
+        return view('backoffice.payments.billlogs',compact('payments'));
     }
 
     public function update_callback(Request $request){
-        
+
 
             $refs = DB::table('bookings')->pluck('booking_reference')->toArray();
 
@@ -3662,9 +3662,9 @@ if ($request->validmpesa!=null) {
         $customers=[];
         $users=$request->users?$request->users:"[]";
 
-     
-       
-        
+
+
+
 
               if($request->ajax()){
 
@@ -3763,7 +3763,7 @@ $users=json_decode($users,true);
 
         }
 
-        
+
 
 
 
@@ -3789,7 +3789,7 @@ $users=json_decode($users,true);
     public function delete_customer($id){
 
         \App\Bookings::where('customer_id',$id)->where('status','revoked')->delete();
- 
+
         $customer  = DB::table('customers')
                         ->where('id',$id)
                         ->first();
@@ -3819,7 +3819,7 @@ $users=json_decode($users,true);
 
     public function vendors(){
         $vendors =  \App\Vendor::with('user')->orderBy('id', 'DESC')->get();
-
+     // dd($vendors->toArray());
         return view('backoffice.vendors.index',compact('vendors'));
     }
 
@@ -4006,7 +4006,7 @@ $users=json_decode($users,true);
 
 
       $commision =   \App\Commission::with('booking','product','vendor','vendor.user','agent','agent.user')->orderBy('commissions.id','DESC')->get();
- 
+
 $result=[];
 
       foreach ($commision as $key => $value) {
@@ -4039,10 +4039,10 @@ foreach ($array as $key1 => $comm) {
         $value->commission_rate=$comm['commission_rate'];
         $value->commission_cap=$comm['commission_cap'];
 
-   
+
 
     }
- 
+
 
 }
 
@@ -4060,7 +4060,7 @@ array_push($result, $value);
 
 
 
-        
+
             }
         }
       }
@@ -4083,7 +4083,7 @@ $result=[];
             # code...
 
             if ($value->vendor->commssionrate_enabled==0) {
-                # code...      
+                # code...
 
       if ($value->vendor->category==0) {
                     # code...
@@ -4110,7 +4110,7 @@ $value->commission=$totalbanktransfers+$totalmobiletransfers;
                      $commission_rate_subcategories=$value->vendor->fixed_cost_subcategories;
 //return $commission_rate_subcategories;
                  $array=json_decode($commission_rate_subcategories,true);
-    
+
                  $i=0;
                  $valchanged=false;
 foreach ($array as $key1 => $comm) {
@@ -4134,7 +4134,7 @@ $value->commission=$totalbanktransfers+$totalmobiletransfers;
    $valchanged=true;
 
     }
- 
+
 
 }
 
@@ -4522,16 +4522,16 @@ if (intval($hours)==24 && $result[$i]->scheduled=="0") {
   $data=Array("name"=>"makepayment","value"=>"Make Payment");
    $title="Please make your payment.";
 $messages="Start paying for your order.";
-    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
-
-
-
-  
+    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data);
 
 
 
 
-  
+
+
+
+
+
 
 
 
@@ -4561,7 +4561,7 @@ if (intval($hours)>36) {
 
     }
     else{
-   
+
    array_push($devices1, $token);
     $coun=$coun+1;
        if ($coun==990) {
@@ -4586,7 +4586,7 @@ if (intval($hours)>36) {
     $data=Array("name"=>"paymentreminder","value"=>"Make Payment");
    $title="You can pay any amount.";
 $messages="Keep up with your payments to have your order delivered faster.";
-    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
+    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data);
 
 }
 
@@ -4603,8 +4603,8 @@ $insertnotify=[];
 $phones=[];
 $coun=0;
  $today =  Carbon::now();
-   
- 
+
+
 
    for ($i=0; $i <count($result) ; $i++) {
        # code...
@@ -4624,7 +4624,7 @@ if ($checkifexists==null) {
 // //         array_push($devices1, $token);
 
 
-// } 
+// }
      $coun=$coun+1;
        if ($coun==990) {
            # code...
@@ -4656,7 +4656,7 @@ if (intval($hours)>24) {
 //    //  $data=Array("name"=>"discount","value"=>"Get discount");
 //    // $obj->exceuteSendNotification($token,"Order today with the app and get KSh.100 welcome discount on your first order.","Get KSh.100 welcome discount",$data);
 //         array_push($devices, $token);
-   
+
 // }
     array_push($phones, $result[$i]->customer->phone);
     array_push($devices1,$result[$i]->token);
@@ -4671,7 +4671,7 @@ if (intval($hours)>24) {
 
 
 }
-     
+
 
 
 
@@ -4684,24 +4684,24 @@ if (intval($hours)>24) {
 
    }
 
-   
+
 
    DB::table("discountnotification")->insert($insertnotify);
 
     DB::table("discountnotification")->whereIn('phone',$phones)->update(["notified_at"=>Now()]);
 
-  
+
  $obj = new pushNotification();
     $data=Array("name"=>"discount", "value"=>"Get discount");
    $title="Claim your KSh.1000 gift 🤑🎁";
 $messages="Order today with the app and get up to KSh.1,000 welcome discount on your first order.";
-    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data); 
+    $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data);
 return 0;
   // $data=Array("name"=>"home","value"=>"home");
   //   //$messages = str_replace('{customerName}',$value->name, $message);
   //    $messages= "Order today with the app and get KSh.100 welcome discount on your first order.";
   //    $title="Get KSh.100 welcome discount";
-  //   $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);  
+  //   $obj->exceuteSendNotificationGroup($devices,$messages,$title,$data);
 
 
 
@@ -4731,7 +4731,7 @@ if (intval($hours)>48) {
 //     // $obj = new pushNotification();
 //     // $data=Array("name"=>"home","value"=>"home");
 //     // $obj->exceuteSendNotification($token,"","",$data);
- 
+
 
 // }
        array_push($devices1, $token);
@@ -4742,7 +4742,7 @@ if (intval($hours)>48) {
        }
 
 array_push($ids, $result[$i]->id);
-    
+
 }
 
 
@@ -4766,7 +4766,7 @@ array_push($ids, $result[$i]->id);
     //$messages = str_replace('{customerName}',$value->name, $message);
      $messages= "Buy airtime and pay utility bills for yourself or your loved ones bila stress with the Lipa Mos Mos app.";
      $title="Buy Airtime & Pay Bills Instantly.";
-    return $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data);  
+    return $obj->exceuteSendNotificationGroup($devices1,$messages,$title,$data);
     return  0;
 }
 
@@ -4857,7 +4857,7 @@ $year=$request->year;
 $days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 
 $firstday=$year."-".$month."-"."00";
-for ($i=0; $i <$days ; $i++) { 
+for ($i=0; $i <$days ; $i++) {
     $j=$i+1;
   $currentday=date('Y-m-d', strtotime($firstday. ' + '.$j.' days'));
 
@@ -4912,7 +4912,7 @@ $year=$request->year;
 $days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 
 $firstday=$year."-".$month."-"."00";
-for ($i=0; $i <$days ; $i++) { 
+for ($i=0; $i <$days ; $i++) {
     $j=$i+1;
   $currentday=date('Y-m-d', strtotime($firstday. ' + '.$j.' days'));
 
@@ -4964,7 +4964,7 @@ $year=$request->year;
 $days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 
 $firstday=$year."-".$month."-"."00";
-for ($i=0; $i <$days ; $i++) { 
+for ($i=0; $i <$days ; $i++) {
     $j=$i+1;
   $currentday=date('Y-m-d', strtotime($firstday. ' + '.$j.' days'));
 
@@ -5013,7 +5013,7 @@ $year=$request->year;
 $days=cal_days_in_month(CAL_GREGORIAN, intval($month), intval($year));
 
 $firstday=$year."-".$month."-"."00";
-for ($i=0; $i <$days ; $i++) { 
+for ($i=0; $i <$days ; $i++) {
     $j=$i+1;
   $currentday=date('Y-m-d', strtotime($firstday. ' + '.$j.' days'));
 
@@ -5053,12 +5053,12 @@ function bookingdetails(Request $request,$id){
 return view('backoffice.bookings.bookingsdetails', compact('booking','customer','user','product'));
 }
 function bookingpayments(Request $request,$id){
-  if($request->ajax()){ 
+  if($request->ajax()){
 
 
         $payments = \App\Payments::with('customer','mpesapayment','customer.user','product:id,product_name,product_code','booking')->where("payments.booking_id","=",$id)->orderBy('payments.id', 'DESC');
-       
-            
+
+
 
             return DataTables::of($payments)->make(true);
 
@@ -5074,7 +5074,7 @@ $commissions=json_decode($vendor->commission_rate_subcategories);
 
 
 foreach ($subcats as $key => $value) {
- 
+
 $haskey=false;
 foreach ($commissions as $key1 => $value1) {
     if ($value1->id==$value->id) {
@@ -5107,7 +5107,7 @@ $fixedcommissions=json_decode($vendor->fixed_cost_subcategories);
 
 
 foreach ($subcats as $key => $value) {
- 
+
 $haskey=false;
 foreach ($fixedcommissions as $key1 => $value1) {
     if ($value1->id==$value->id) {
