@@ -779,7 +779,7 @@ else{
 else{
 
 
-     if ($level==3) {
+     if ($level==2) {
            $booking = \App\Bookings::where('customer_id','=',$customer->id)->whereIn('status',['active','revoked','unserviced','pending'])->first();
 
         if($booking != null){
@@ -793,7 +793,7 @@ else{
          # code...
      }
 
-     if ($level==4) {
+     if ($level==3) {
          # code...
             # code...
     $response="CON Select category\n";
@@ -805,9 +805,9 @@ $index=$index+1;
  }
      }
 
-     if ($level==5) {
+     if ($level==4) {
          # code...
-         $value1=$ussd_string_exploded[4]-1;
+         $value1=$ussd_string_exploded[3]-1;
     $category_id=0;
 foreach ($categories as $key => $value) {
     # code...
@@ -834,25 +834,25 @@ $index=$index+1;
 }
 
      }
-     if ($level==6) {
+     if ($level==5) {
 
         $response="CON Enter product name";
          # code...
      }
-         if ($level==7) {
+         if ($level==6) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
-     if ($level==8) {
+     if ($level==7) {
          # code...
           $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level==9) {
+     if ($level==8) {
          # code...
-if ($ussd_string_exploded[8]==1) {
+if ($ussd_string_exploded[7]==1) {
     # code...
     $response="END pay with mpesa";
 }
