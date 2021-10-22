@@ -850,7 +850,7 @@ $index=$index+1;
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level=9) {
+     if ($level==9) {
          # code...
 if ($ussd_string_exploded[8]==1) {
     # code...
