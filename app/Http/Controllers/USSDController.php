@@ -748,22 +748,63 @@ $index=$index+1;
         $response="CON Enter product name";
          # code...
      }
-         if ($level==6) {
+      if ($level==6) {
+
+        $response="CON Enter Delievry cost";
+         # code...
+     }
+
+         if ($level==7) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
-     if ($level==7) {
+     if ($level==8) {
          # code...
           $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level==8) {
+     if ($level==9) {
          # code...
-if ($ussd_string_exploded[7]==1) {
+          $value1=$ussd_string_exploded[3]-1;
+    $category_id=0;
+foreach ($categories as $key => $value) {
     # code...
-    $response="END pay with mpesa";
+    if ($key==$value1) {
+        # code...
+        $category_id=$value->id;
+    }
+
+}
+$subcategories=\App\SubCategories::whereCategory_id($category_id)->get();
+
+          $value2=$ussd_string_exploded[4]-1;
+    $subcategory_id=0;
+foreach ($subcategories as $key => $value) {
+    # code...
+    if ($key==$value2) {
+        # code...
+        $subcategory_id=$value->id;
+    }
+
+}
+$vendor_code=\App\Vendor::wherePhone(substr($phoneNumber, 1))->first()->vendor_code;
+ list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
+
+
+ $request=(object) Array();
+ $request->category_id=$category_id;
+ $request->subcategory_id=$subcategory_id;
+ $request->vendor_code=$vendor_code;
+ $request->phone=$msisdn;
+ $request->amount=$ussd_string_exploded[7];
+
+
+
+if ($ussd_string_exploded[8]==1) {
+    # code...
+    $response=$this->makedirect_booking($request);
 }
 else{
         $response="END pay with airtel";
@@ -832,20 +873,25 @@ $index=$index+1;
         $response="CON Enter product name";
          # code...
      }
-         if ($level==5) {
+      if ($level==5) {
+
+        $response="CON Enter Delievry cost";
+         # code...
+     }
+         if ($level==6) {
          $response="CON Enter Initial Deposit (Minimum KSh.100)";
     }
 
-     if ($level==6) {
+     if ($level==7) {
          # code...
           $response  = "CON Choose payment option \n";
                 $response .= "1. M-Pesa \n";
                 $response .= "2. Airtel Money \n";
      }
 
-     if ($level==7) {
+     if ($level==8) {
          # code...
-if ($ussd_string_exploded[6]==1) {
+if ($ussd_string_exploded[7]==1) {
     # code...
     $response="END pay with mpesa";
 }
@@ -1983,7 +2029,7 @@ $data=Array();
         return $product_id;
     }
 
-    public function makedirect_booking(Request $request,$source='direct'){
+    public function makedirect_booking($request,$source='direct'){
 
 
  $product_id=$this->addProduct($request,$source);
@@ -2281,7 +2327,7 @@ $data=Array();
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
-        Mail::to($request->email)->send(new SendRegistrationEmail($details));
+        //Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
 
@@ -2361,7 +2407,7 @@ $data=Array();
         "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
         ];
 
-        Mail::to($request->email)->send(new SendRegistrationEmail($details));
+        //Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
         $amount = $request->initial_deposit;
         $msisdn = $valid_phone;
@@ -2372,8 +2418,8 @@ $data=Array();
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
 
         $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
-    return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
-
+    //return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
+return $message;
     }
 
 }
