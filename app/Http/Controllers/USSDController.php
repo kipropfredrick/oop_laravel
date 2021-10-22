@@ -19,6 +19,8 @@ use App\Http\Controllers\pushNotification;
 use \App\Mail\SendPaymentEmail;
 use App\Mail\SendPaymentMailToAdmin;
 use App\Mail\SendBookingMail;
+use Illuminate\Support\Str;
+
 
 class USSDController extends Controller
 {
@@ -182,12 +184,7 @@ Log::info("test 3");
                                   $amount = $ussd_string_exploded[2];
                   $paymentfrom= $ussd_string_exploded[3];
 
-
-if ($paymentfrom==1) {
-    # code...
-       Log::info('AMOUNT : '.print_r($amount,true));
-
-              
+         
         list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[1]);
 
         if (!$msisdn){
@@ -203,12 +200,21 @@ $message="END Please enter a valid phone number provided!";
                
                 $booking_ref = $booking->booking_reference;
 
+if ($paymentfrom==1) {
+    # code...
+       Log::info('AMOUNT : '.print_r($amount,true));
+
+     
+
                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
                 
                 $response = $message;
 }
 else{
-   $response="END platform implementation is pending come back later"; 
+  
+                $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
+                
+                $response = $message;
 }
                }
 
@@ -228,10 +234,7 @@ else{
 
                   $amount = $ussd_string_exploded[1];
                   $paymentfrom= $ussd_string_exploded[2];
-
-if ($paymentfrom==1) {
-    # code...
-       Log::info('AMOUNT : '.print_r($amount,true));
+    Log::info('AMOUNT : '.print_r($amount,true));
 
                 $msisdn = ltrim($phoneNumber, '+');
 
@@ -241,13 +244,19 @@ if ($paymentfrom==1) {
 
                
                 $booking_ref = $booking->booking_reference;
+if ($paymentfrom==1) {
+    # code...
+   
 
                 $message = $this->stk_push($amount,$msisdn,$booking_ref);
                 
                 $response = $message;
 }
 else{
-   $response="END platform implementation is pending come back later"; 
+   
+                $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
+                
+                $response = $message;
 }
              
 
@@ -297,7 +306,7 @@ $product_code=$ussd_string_exploded[1];
                 $response .= "2. Airtel \n";
 }
           else if($ussd_string_exploded[0]==1 && $level==4 && !$isvendor){
-      if ($ussd_string_exploded[3]==1) {
+   
           # code...
           $phone = ltrim($phoneNumber, '0');
                 $phone=substr($phone, 1);
@@ -317,21 +326,21 @@ $product_code=$ussd_string_exploded[1];
                     $request->initial_deposit=$ussd_string_exploded[2];
                     $request->product_id=$product->id;
                     $request->vendor_code=$vendor->vendor_code;
-
+   if ($ussd_string_exploded[3]==1) {
  $response = $this->make_booking($request); 
+}
+else{
+    $response = $this->make_booking($request,$payment_type="airtel");  
+}
 Log::info("executed 1");
       }
       else{
-        $response="END paayment platform not supported";
+         $response = "END You Already have an ongoing booking. You can't make another booking."; 
+
       }
 
               
-            }
-                 else{
-               Log::info("executed 2");     
- $response = "END You Already have an ongoing booking. You can't make another booking."; 
-
-                }
+          
 
 
 }
@@ -755,7 +764,7 @@ if ($level==8) {
 }
 if ($level==9) {
     # code...
-if ($ussd_string_exploded[8]==1) {
+
     # code...
  $value1=$ussd_string_exploded[1]-1;
     $category_id=0;
@@ -816,12 +825,13 @@ list($msisdn, $network) = $this->get_msisdn_network($ussd_string_exploded[5]);
                     $request->name=$ussd_string_exploded[6];
                     $request->vendor_code=$vendor->vendor_code;
 Log::info(json_encode($request));
-
+if ($ussd_string_exploded[8]==1) {
  $response = $this->make_booking($request); 
 
 }
 else{
-$response="END payment platform not supported";
+     $response = $this->make_booking($request,$payment_type="airtel"); 
+
 
 }
 
@@ -842,7 +852,7 @@ if ($level==7) {
 }
 if ($level==8) {
     # code...
-if ($ussd_string_exploded[7]==1) {
+
     # code...
  $value1=$ussd_string_exploded[1]-1;
     $category_id=0;
@@ -901,12 +911,13 @@ $vendor=\App\Vendor::whereId($vendor_id)->first();
                     $request->initial_deposit=$ussd_string_exploded[6];
                     $request->product_id=$product_id;
                     $request->vendor_code=$vendor->vendor_code;
-
+if ($ussd_string_exploded[7]==1) {
  $response = $this->make_booking($request); 
 
 }
 else{
-$response="END payment platform not supported";
+ $response = $this->make_booking($request,$payment_type='airtel'); 
+
 
 }
 
@@ -2258,7 +2269,7 @@ $response="END payment platform not supported";
 
 
 
-      public function make_booking($request){
+      public function make_booking($request, $payment_type="mpesa"){
         $county_id = $request->county_id;
         $exact_location = $request->exact_location;
         $vendor_code = $request->vendor_code;
@@ -2468,7 +2479,10 @@ break;
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+        if ($payment_type=="mpesa") {
+            # code...
+
+     $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
@@ -2493,6 +2507,40 @@ break;
     // $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
 
       return $message;
+
+        }else{
+
+
+     $message =  "Please Complete your booking. Your account number is ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+
+        $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
+
+        
+    $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
+    if ($token==null) {
+        # code...
+     
+      return $message;
+    }
+    $obj = new pushNotification();
+    $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    $obj->exceuteSendNotification($token,"You have successfully booked ".$product->product_name,"Booking Successful",$data);
+
+    // $data=Array("name"=>"bookingsuccess","value"=>"Bookings");
+    // $obj->exceuteSendNotification($token,"You have received KSh.100 from us. Thanks for your order","Congratulations! ",$data);
+
+      return $message;
+
+
+        }
+
+   
 
         }
 
@@ -3163,6 +3211,65 @@ $objuser->update(['balance'=>$totalbal]);
 
 
     
+
+
+public function getAirAccToken(){
+        $headers = array(
+            'Content-Type' => 'application/json',
+        );
+        $client = new \GuzzleHttp\Client();
+        // Define array of request body.
+        $request_body = array("client_id"=>"deb82d7f-4b9d-427a-a45c-015fe68b0c8f",
+        "client_secret"=>"3fcf15c8-9de4-480b-b129-daca54d865b3",
+        "grant_type"=>"client_credentials");
+            $response = $client->request('POST','https://openapiuat.airtel.africa/auth/oauth2/token', array(
+                'headers' => $headers,
+                'json' => $request_body,
+               )
+            );
+            $to=json_decode($response->getBody());
+            return 'Bearer '.$to->access_token;//json_encode([$to->token_type,$to->access_token]);
+      }
+      public function AirtelussdPush($amount,$msisdn,$booking_reference){
+        $headers = array(
+            'Content-Type' => 'application/json',
+            'X-Country' => 'KE',
+             'X-Currency' => 'KES',
+            'Authorization'  =>  $this->getAirAccToken(),
+        );
+        $client = new \GuzzleHttp\Client();
+        // Define array of request body.
+        $request_body = collect([
+            "reference"=>$booking_reference;,
+            "subscriber"=>[
+                "country"=>"KE",
+                "currency"=>"KES",
+                "msisdn"=>substr($msisdn, 3);
+            ],
+            "transaction"=>[
+                "amount"=>$amount,
+                "country"=>"KE",
+                "currency"=>"KES",
+                "id"=>Str::random(10)
+            ]
+        ]);
+        //return $request_body;
+            $response = $client->request('POST','https://openapiuat.airtel.africa/merchant/v1/payments/', array(
+                'headers' => $headers,
+                'json' => $request_body,
+               )
+            );
+            $result=json_decode($response->getBody());
+            if ($result->status->success) {
+                return "END A Payment Prompt has been sent to the provided Phone No. Enter Airtel PIN if Prompted.";
+                # code...
+            }
+            else{
+                      return "END Automatic payment failed contact support for more details.";
+
+            }
+
+      }
 
 
 }

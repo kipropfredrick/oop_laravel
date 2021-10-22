@@ -106,6 +106,7 @@ Route::post('/simulate_payment','MpesaPaymentController@simulate_payment');
 Route::post('/stkPush','MpesaPaymentController@stkPush');
 
 Route::post('/USSD-Q7NMAqYVcdCNmVgE','USSDController@sessions');
+Route::get('/AirtelussdPush','USSDController@AirtelussdPush');
 
 
 Route::post('/USSD-test-Q7NMAqY34','USSDController@test_combine');
