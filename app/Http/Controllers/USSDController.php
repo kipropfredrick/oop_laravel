@@ -816,7 +816,7 @@ if ($ussd_string_exploded[9]==1) {
     $response=$this->makedirect_booking($request);
 }
 else{
-        $response="END pay with airtel";
+           $response=$this->makedirect_booking($request,$payment_type='airtel');
 }
 
      }
@@ -946,7 +946,7 @@ if ($ussd_string_exploded[8]==1) {
     $response=$this->makedirect_booking($request);
 }
 else{
-        $response="END pay with airtel";
+      $response=$this->makedirect_booking($request,$payment_type='airtel');
 }
 
      }
@@ -1338,13 +1338,28 @@ break;
 
         $product = \App\Products::find($request->product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." And amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+        if($payment_type=='mpesa'){
+            $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+        
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
+    }
+    else{
+            $message =  "Please Complete your booking. Your account number is ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
-        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+        
+        $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
+    }
 
 
    $token=\App\User::whereId($existingCustomer->user_id)->first()->token;
@@ -2079,7 +2094,7 @@ $data=Array();
         return $product_id;
     }
 
-    public function makedirect_booking($request,$source='direct'){
+    public function makedirect_booking($request,$source='direct',$payment_type="mpesa"){
 
 
  $product_id=$this->addProduct($request,$source);
@@ -2273,7 +2288,8 @@ $data=Array();
 
         $product = \App\Products::find($product_id);
 
-        $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+    if($payment_type=='mpesa'){
+            $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
         SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
@@ -2282,19 +2298,19 @@ $data=Array();
         $booking_ref = $booking_reference;
         
         $message = $this->stk_push($amount,$msisdn,$booking_ref);
+    }
+    else{
+            $message =  "Please Complete your booking. Your account number is ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
-        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
-              $details = [
-        'email' => $request->email,
-        'name'=>$request->name,
-        'booking_reference'=>$booking_reference,
-        'initial_deposit'=>number_format($request->initial_deposit),
-        'password'=>$request->phone,
-        'productname'=>$request->product_name,
-        'total_cost'=>$total_cost,
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
 
-        "url" => env('baseurl').encrypt($booking_reference, "mosmos#$#@!89&^")."/invoice"
-        ];
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+        
+        $message = $this->AirtelussdPush($amount,$msisdn,$booking_ref);
+    }
+
 
         //Mail::to($request->email)->send(new SendRegistrationEmail($details));
 
@@ -2465,11 +2481,28 @@ $data=Array();
 
         $product = \App\Products::find($product_id);
 
-        $message = $this->stk_push($amount,$msisdn,$booking_ref);
+        if($payment_type=='mpesa'){
+            $message =  "Please Complete your booking. Use Paybill 4040299, account number ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
 
-        $stkMessage = "Go to your MPESA, Select Paybill Enter : 4040299 and Account Number : ".$booking_reference.", Enter Amount : ".number_format($amount,2).", Thank you.";
-    //return Array("status"=>true,"data"=>'',"message"=>$stkMessage,"booking_reference"=>$booking_reference);
-return $message;
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+        
+        $message = $this->stk_push($amount,$msisdn,$booking_ref);
+    }
+    else{
+            $message =  "Please Complete your booking. Your account number is ".$booking_reference." and amount Ksh.".number_format($request->initial_deposit).". For inquiries, Call/App 0113980270";
+
+        SendSMSController::sendMessage($recipients,$message,$type="after_booking_notification");
+
+        $amount = $request->initial_deposit;
+        $msisdn = $valid_phone;
+        $booking_ref = $booking_reference;
+        
+        $message = $this->Airtel($amount,$msisdn,$booking_ref);
+    }
     }
 
 }
