@@ -108,7 +108,7 @@ $isvendor=true;
         }else{
  
 
-  $response = "END Balance for booking reference ".$ussd_string_exploded[1]. " is ".number_format($booking->balance) ;
+  $response = "END Balance for booking reference ".$ussd_string_exploded[1]. " is KSh.".number_format($booking->balance) ;
 
         }
 
