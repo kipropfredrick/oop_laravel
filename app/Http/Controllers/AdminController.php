@@ -228,8 +228,7 @@ array_push($uniquebillcustomers, $ub);
         $airtimecustomers=json_encode($uniqueairtimecustomers);
         $billcustomers=json_encode($uniquebillcustomers);
         $obj=new TopupsController();
-        $utiliybalance=0;
-        //$obj->getBalance();
+        $utiliybalance=$obj->getBalance();
 
 
 
