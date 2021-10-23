@@ -1,7 +1,7 @@
 @extends('backoffice.app')
 
 @section('content')
-
+<link rel="stylesheet" href="{{asset('assets/css/pdfcsv.css')}}">
 <!-- Traffic sources -->
 <div class="card">
 <div class="table-responsive padding">
@@ -25,12 +25,12 @@
 
 		 <div class="padding">
 		 
-		 <table id="myTable" class="table table-bordered table-striped">
+		 <table id="myTable" class="table table-bordered table-striped myTable">
 						<thead>
 							<tr>
                                 <th class="thead">No.</th>
 								<th class="thead">Full Name</th>
-									<th class="thead">Business Name</th>
+								<th class="thead">Business Name</th>
 								<th class="thead">Phone</th>
 								<th>Email</th>
 								<th class="thead">Location</th>
@@ -90,3 +90,57 @@
 		</div>
 		</div>
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: "Blfrtip",
+                buttons: [
+                    {
+                        text: 'csv',
+                        extend: 'csvHtml5',
+                        title: "Vendors",
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    {
+                        text: 'excel',
+                        extend: 'excelHtml5',
+                        title: "Vendors",
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    {
+                        text: 'pdf',
+                        extend: 'pdfHtml5',
+                        title: "Vendors",
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    {
+                        text: 'print',
+                        extend: 'print',
+                        title: "Vendors",
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+
+                ],
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                }]
+            });
+        });
+    </script>
